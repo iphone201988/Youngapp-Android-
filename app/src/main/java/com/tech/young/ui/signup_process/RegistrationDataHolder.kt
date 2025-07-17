@@ -29,4 +29,6 @@ object RegistrationDataHolder {
     var financialExperience: String? = null
     var investments: String? = null
     var servicesInterested: String? = null
+
+
 }

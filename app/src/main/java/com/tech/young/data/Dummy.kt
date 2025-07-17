@@ -1,6 +1,7 @@
 package com.tech.young.data
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 import java.util.Date
 
@@ -57,3 +58,12 @@ data class SortingItem(
     val title: String
 )
 
+
+data class DiditItems(
+    var title : String
+)
+
+data class AuthResponse(
+    @SerializedName("access_token") val accessToken: String,
+    @SerializedName("expires_in") val expiresIn: Long
+)

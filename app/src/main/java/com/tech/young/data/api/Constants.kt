@@ -53,6 +53,7 @@ object Constants {
     const val LIKE_DISLIKE_COMMENT = "comment/"
     const val CREATE_SHARE = "post/"
     const val DELETE_POST = "post/"
+    const val UN_AUTH = "user/getUnauthUser"
     /*************** Temp value store****************/
        var chooseAccountType = ""
 

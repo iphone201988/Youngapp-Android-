@@ -40,69 +40,156 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvLoginTopText"
-                    style="@style/TextView_800_ExtraBold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_23sdp"
-                    android:text="@string/add_license"
-                    android:textSize="@dimen/_20ssp"
-                    app:layout_constraintStart_toStartOf="@+id/ivBack"
-                    app:layout_constraintTop_toBottomOf="@+id/ivBack" />
-
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvDes"
-                    style="@style/TextView_400_Regular"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:text="@string/you_can_add_license_for_user_verification"
-                    android:textColor="@color/text_gray"
-                    app:layout_constraintStart_toStartOf="@+id/tvLoginTopText"
-                    app:layout_constraintTop_toBottomOf="@+id/tvLoginTopText" />
-
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/ivFrame"
-                    android:layout_width="@dimen/_200sdp"
-                    android:layout_height="@dimen/_200sdp"
-                    android:layout_marginTop="@dimen/_30sdp"
-                    android:src="@drawable/iv_scan_frame"
-                    app:layout_constraintEnd_toEndOf="parent"
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:fillViewport="true"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ivBack"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvDes" />
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvLoginTopText"
+                            style="@style/TextView_800_ExtraBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_20sdp"
+                            android:text="@string/licence_verification"
+                            android:textSize="@dimen/_20ssp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/iv_addLicence"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_100sdp"
-                    android:src="@drawable/card_icon"
-                    android:onClick="@{v -> vm.onClick(v)}"
-                    app:layout_constraintBottom_toBottomOf="@+id/ivFrame"
-                    app:layout_constraintEnd_toEndOf="@+id/ivFrame"
-                    app:layout_constraintStart_toStartOf="@+id/ivFrame"
-                    app:layout_constraintTop_toTopOf="@+id/ivFrame" />
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvDes"
+                            style="@style/TextView_400_Regular"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:text="@string/secure_identy_verification_powered_by_digit"
+                            android:textColor="@color/text_gray"
+                            app:layout_constraintStart_toStartOf="@+id/tvLoginTopText"
+                            app:layout_constraintTop_toBottomOf="@+id/tvLoginTopText" />
 
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvUpload"
-                    style="@style/TextView_500_Medium"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_42sdp"
-                    android:layout_marginTop="@dimen/_40sdp"
-                    android:background="@drawable/corner_radius_10"
-                    android:gravity="center"
-                    android:onClick="@{v ->vm.onClick(v)}"
-                    android:text="@string/upload"
-                    android:textColor="@color/white"
-                    app:layout_constraintTop_toBottomOf="@+id/ivFrame" />
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/consDigit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/_10sdp"
+                            android:background="@drawable/bg_cons"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:backgroundTint="@color/colorPrimary"
+                            app:layout_constraintTop_toBottomOf="@id/tvDes"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent">
+
+                            <ImageView
+                                android:id="@+id/ivDgint"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_80sdp"
+                                android:src="@drawable/iv_digit"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"/>
+
+                            <TextView
+                                android:id="@+id/tvPoweredByDidit"
+                                style="@style/TextView_700_Bold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_16ssp"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:text="@string/powered_by_didit"
+                                app:layout_constraintTop_toBottomOf="@id/ivDgint"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"/>
 
 
+                            <TextView
+                                android:id="@+id/description"
+                                android:layout_width="0dp"
+                                style="@style/TextView_400_Regular"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/_12ssp"
+                                android:textColor="@color/white"
+                                android:gravity="center"
+                                android:layout_marginTop="10sp"
+                                android:text="@string/we_ll_redirect_you_to_our_trusted_partner_didit_for_secure_licence_verification_the_process_is_quick_safe_and_your_data_is_protected"
+                                app:layout_constraintTop_toBottomOf="@id/tvPoweredByDidit"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvPoints"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            android:orientation="vertical"
+                            tools:listitem="@layout/item_layout_dedit"
+                            tools:itemCount="3"
+                            android:layout_marginBottom="@dimen/_10sdp"
+                            android:layout_marginHorizontal="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_20sdp"
+                            app:layout_constraintBottom_toTopOf="@id/tvContinueToDidit"
+                            app:layout_constraintTop_toBottomOf="@id/consDigit"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvContinueToDidit"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_42sdp"
+                            android:layout_marginBottom="@dimen/_10sdp"
+                            android:background="@drawable/corner_radius_10"
+                            android:gravity="center"
+                            android:onClick="@{v ->vm.onClick(v)}"
+                            android:text="Continue to didit"
+                            android:textColor="@color/white"
+                            android:visibility="visible"
+                            app:layout_constraintBottom_toTopOf="@id/tvCancel"/>
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvCancel"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_42sdp"
+                            android:background="@drawable/bg_cons_stroke"
+                            android:gravity="center"
+                            android:onClick="@{v ->vm.onClick(v)}"
+                            android:text="Cancel"
+                            android:textColor="@color/colorPrimary"
+                            android:visibility="visible"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.core.widget.NestedScrollView>
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

@@ -45,27 +45,80 @@ class AddYourPersonalInfoFragment : BaseFragment<FragmentAddYourPersonalInfoBind
                 }
 
                 R.id.tvNext -> {
-                    val age = binding.edtAge.text.toString().trim()
-                    val gender = binding.edtGender.text.toString().trim()
-                    val marital = binding.edtMarital.text.toString().trim()
-                    val children = binding.edtChildren.text.toString().trim()
-                    val homeOwnership = binding.edtHomeOwnership.text.toString().trim()
+                    when(Constants.chooseAccountType){
+                        "General Member" ->{
+                            val age = binding.edtAge.text.toString().trim()
+                            val gender = binding.edtGender.text.toString().trim()
+                            val marital = binding.edtMarital.text.toString().trim()
+                            val children = binding.edtChildren.text.toString().trim()
+                            val homeOwnership = binding.edtHomeOwnership.text.toString().trim()
 
-                    when {
-                        age.isEmpty() -> showToast("Please enter your age")
-                        gender.isEmpty() -> showToast("Please select your gender")
-                        marital.isEmpty() -> showToast("Please select your marital status")
-                        children.isEmpty() -> showToast("Please enter number of children")
-                        homeOwnership.isEmpty() -> showToast("Please select home ownership")
-                        else -> {
-                            RegistrationDataHolder.age = age
-                            RegistrationDataHolder.gender = gender
-                            RegistrationDataHolder.maritalStatus = marital
-                            RegistrationDataHolder.children = children
-                            RegistrationDataHolder.homeOwnership = homeOwnership
+                            when {
+                                age.isEmpty() -> showToast("Please enter your age")
+                                gender.isEmpty() -> showToast("Please select your gender")
+                                marital.isEmpty() -> showToast("Please select your marital status")
+                                children.isEmpty() -> showToast("Please enter number of children")
+                                homeOwnership.isEmpty() -> showToast("Please select home ownership")
+                                else -> {
+                                    RegistrationDataHolder.age = age
+                                    RegistrationDataHolder.gender = gender
+                                    RegistrationDataHolder.maritalStatus = marital
+                                    RegistrationDataHolder.children = children
+                                    RegistrationDataHolder.homeOwnership = homeOwnership
 
-                            findNavController().navigate(R.id.navigateToSelectYourInterestFragment)
+                                    findNavController().navigate(R.id.navigateToSelectYourInterestFragment)
+                                }
                         }
+                    }
+                        "Financial Advisor", "Financial Firm" ->{
+                            val edtProductsServicesOffered = binding.edtProductsServicesOffered.text.toString().trim()
+                            val edtAreasOfExpertise = binding.edtAreasExpertise.text.toString().trim()
+
+                            when{
+                                edtProductsServicesOffered.isEmpty() -> showToast("Please select product/ services offered")
+                                edtAreasOfExpertise.isEmpty() -> showToast("Areas of expertise")
+                                else ->{
+                                    RegistrationDataHolder.areasOfExpertise = edtAreasOfExpertise
+                                    RegistrationDataHolder.productsServicesOffered = edtProductsServicesOffered
+
+                                    findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
+
+                                }
+                            }
+                        }
+                        "Investor/ VC" ->{
+                            val  edtIndustryInterestedIn = binding.edtIndustryInterestedIn.text.toString().trim()
+                            val edtAreasExpertise = binding.edtAreasExpertise.text.toString().trim()
+                            when{
+                                edtIndustryInterestedIn.isEmpty() -> showToast("Please select industry interested in ")
+                                edtAreasExpertise.isEmpty() -> showToast("Areas of expertise")
+                                else ->{
+                                    RegistrationDataHolder.interestedIn = edtIndustryInterestedIn
+                                    RegistrationDataHolder.areasOfExpertise = edtAreasExpertise
+
+                                    findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
+
+                                }
+                            }
+                        }
+                        "Small Business","Startup" ->{
+                            val  edtIndustry = binding.edtIndustry.text.toString().trim()
+                            val edtInterestedIn = binding.edtInterestedIn.text.toString().trim()
+
+                            when{
+                                edtIndustry.isEmpty() -> showToast("Please select industry")
+                                edtInterestedIn.isEmpty() -> showToast("Please select interested in")
+                                else ->{
+                                    RegistrationDataHolder.industry = edtIndustry
+                                    RegistrationDataHolder.interestedIn = edtInterestedIn
+
+                                    findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
+
+                                }
+                            }
+                        }
+
+
                     }
                     //
                 }
@@ -199,6 +252,12 @@ class AddYourPersonalInfoFragment : BaseFragment<FragmentAddYourPersonalInfoBind
                 binding.consStartupSmall.visibility = View.GONE
                 binding.consVCAccountRegistration.visibility = View.VISIBLE
 
+            }
+            "Small Business", "Startup" ->{
+                binding.consGeneralMember.visibility = View.GONE
+                binding.consFinancialAdvisorFirm.visibility = View.GONE
+                binding.consStartupSmall.visibility = View.VISIBLE
+                binding.consVCAccountRegistration.visibility = View.GONE
             }
 
         }
