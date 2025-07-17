@@ -178,6 +178,8 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                                             } else {
                                                 binding.playBtn.text = "Schedule: $dateTime"
                                             }
+
+
                                         }
                                     } else {
                                         if (!streamUrl.isNullOrEmpty()) {
