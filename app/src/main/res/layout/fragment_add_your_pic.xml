@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.tech.young.ui.auth.AuthCommonVM" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:paddingBottom="@dimen/_20sdp"
+            tools:context=".ui.auth.login_flow.LoginFragment">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/_18sdp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:background="@drawable/rounded_bg"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:padding="@dimen/_8sdp"
+                    android:src="@drawable/iv_back_symbol"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvLoginTopText"
+                    style="@style/TextView_800_ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_23sdp"
+                    android:text="@string/add_profile_pic"
+                    android:textSize="@dimen/_20ssp"
+                    app:layout_constraintStart_toStartOf="@+id/ivBack"
+                    app:layout_constraintTop_toBottomOf="@+id/ivBack" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvDes"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/add_photo_or_click_now"
+                    android:textColor="@color/text_gray"
+                    app:layout_constraintStart_toStartOf="@+id/tvLoginTopText"
+                    app:layout_constraintTop_toBottomOf="@+id/tvLoginTopText" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/ivUserImage"
+                    android:layout_width="@dimen/_120sdp"
+                    android:layout_height="@dimen/_120sdp"
+                    android:layout_marginTop="@dimen/_25sdp"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:padding="@dimen/_2sdp"
+                    android:src="@drawable/dummy_profile"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDes"
+                    app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                    app:strokeColor="@color/colorPrimary"
+                    app:strokeWidth="@dimen/_1sdp" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivAddNew"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginEnd="@dimen/_3sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:src="@drawable/iv_add"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivUserImage"
+                    app:layout_constraintEnd_toEndOf="@+id/ivUserImage" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvTakePicture"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_25sdp"
+                    android:background="@drawable/radius_border_green"
+                    android:gravity="center"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:text="@string/take_picture_now"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ivAddNew" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/consAddAdditionalPhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTakePicture">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvAddAdditionalPhoto"
+                        style="@style/TextView_700_Bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_25sdp"
+                        android:text="@string/add_additional_photos"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_18ssp"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvDesAdditionalPhoto"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="@string/you_can_add_max_5_pics"
+                        android:textColor="@color/text_gray"
+                        app:layout_constraintStart_toStartOf="@+id/tvAddAdditionalPhoto"
+                        app:layout_constraintTop_toBottomOf="@+id/tvAddAdditionalPhoto" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivImage1"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_150sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:src="@drawable/additional_photo"
+                        app:layout_constraintEnd_toStartOf="@+id/ivImage2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvDesAdditionalPhoto" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivImage2"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_150sdp"
+                        android:src="@drawable/additional_photo"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ivImage1"
+                        app:layout_constraintTop_toTopOf="@+id/ivImage1" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="@string/add_more"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintEnd_toEndOf="@+id/ivImage2"
+                        app:layout_constraintTop_toBottomOf="@+id/ivImage2" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvNext"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:background="@drawable/corner_radius_10"
+                    android:gravity="center"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:text="@string/next"
+                    android:textColor="@color/white"
+                    app:layout_constraintTop_toBottomOf="@+id/consAddAdditionalPhoto" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

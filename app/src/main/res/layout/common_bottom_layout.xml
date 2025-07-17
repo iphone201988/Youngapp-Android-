@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <data>
+
+        <variable
+            name="callback"
+            type="com.tech.young.base.utils.BaseCustomBottomSheet.Listener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:background="@drawable/bg_bottom_sheet"
+        android:clipToPadding="false"
+        android:padding="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_20sdp">
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="@dimen/_45sdp"
+            android:layout_height="@dimen/_4sdp"
+            android:background="@drawable/radius_border_gray"
+            android:backgroundTint="@color/text_gray"
+            android:alpha="0.4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCommonSelection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@+id/view"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_layout_age" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

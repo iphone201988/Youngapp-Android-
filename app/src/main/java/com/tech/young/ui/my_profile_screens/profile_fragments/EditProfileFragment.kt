@@ -1,0 +1,377 @@
+package com.tech.young.ui.my_profile_screens.profile_fragments
+
+import android.content.Intent
+import android.util.Log
+import android.view.View
+import androidx.fragment.app.viewModels
+import com.tech.young.BR
+import com.tech.young.R
+import com.tech.young.base.BaseFragment
+import com.tech.young.base.BaseViewModel
+import com.tech.young.base.SimpleRecyclerViewAdapter
+import com.tech.young.data.model.EditProfileListModel
+import com.tech.young.databinding.EditProfileItemViewBinding
+import com.tech.young.databinding.FragmentEditProfileBinding
+import com.tech.young.ui.common.CommonActivity
+import com.tech.young.ui.my_profile_screens.YourProfileVM
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
+class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
+    private val viewModel: YourProfileVM by viewModels()
+
+    // adapter
+    private lateinit var editProfileAdapter: SimpleRecyclerViewAdapter<EditProfileListModel, EditProfileItemViewBinding>
+    // menu list
+    private var editMenuList=ArrayList<EditProfileListModel>()
+    override fun onCreateView(view: View) {
+        // view
+        initView()
+        // click
+        initOnClick()
+        // observer
+        initObserver()
+    }
+
+    override fun getLayoutResource(): Int {
+        return R.layout.fragment_edit_profile
+    }
+
+    override fun getViewModel(): BaseViewModel {
+        return viewModel
+    }
+
+    /**handle view **/
+    private fun initView() {
+        // handle list
+        val role = sharedPrefManager.getLoginData()?.role
+        Log.i("dsadasdas", "initView: $role")
+        if (role != null) {
+            when (role) {
+                "admin" -> {
+                    // Handle admin-specific logic
+                    Log.d("RoleCheck", "Admin user")
+                }
+
+                "general_member" -> {
+                    // Handle general member logic
+                    Log.d("RoleCheck", "General member")
+                    editMenuList=showList()
+                }
+
+                "financial_advisor" -> {
+                    // Advisor-specific logic
+                    Log.d("RoleCheck", "Financial advisor")
+                    editMenuList=showListForFinancialAdvisor()
+
+
+                }
+
+                "financial_firm" -> {
+                    Log.d("RoleCheck", "Financial firm")
+                    editMenuList=showListForFinancialAdvisor()
+
+                }
+
+                "small_business" -> {
+                    Log.d("RoleCheck", "Small business")
+                    editMenuList=showListForStartUp()
+                }
+
+                "startup" -> {
+                    Log.d("RoleCheck", "Startup")
+                    editMenuList=showListForStartUp()
+                }
+
+                "investor" -> {
+                    Log.d("RoleCheck", "Investor")
+                    editMenuList=showListForStartUp()
+
+                }
+
+                else -> {
+                    Log.w("RoleCheck", "Unknown role: $role")
+                }
+            }
+        }
+        // handle adapter
+        initAdapter()
+    }
+
+    /**handle click **/
+    private fun initOnClick() {
+        viewModel.onClick.observe(requireActivity()){
+            when(it?.id){
+                R.id.tabEcosystem->{
+                    // handle click
+                }
+                R.id.tabExchange->{
+                    // handle click
+                }
+            }
+        }
+
+    }
+
+    /** handle observer **/
+    private fun initObserver() {
+
+    }
+
+    /** handle adapter **/
+    private fun initAdapter() {
+        editProfileAdapter =
+            SimpleRecyclerViewAdapter(R.layout.edit_profile_item_view, BR.bean) { v, m, pos ->
+                when (v.id) {
+                    R.id.clMain -> {
+                        when(m.listType){
+                            0->{
+                                when (m.subTitle) {
+                                    // edit profile
+                                    getString(R.string.profile_details) -> {
+                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("from","edit_profile")
+                                        startActivity(intent)
+                                    }
+                                    // other profile details
+                                    getString(R.string.family_education) -> {
+                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("from","normal_family")
+                                        startActivity(intent)
+                                    }
+
+                                    getString(R.string.financial_information) -> {
+                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("from","normal_finance_detail")
+                                        startActivity(intent)
+                                    }
+
+                                    "Investment Summary (Optional)" -> {
+                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("from","normal_investment")
+                                        startActivity(intent)
+                                    }
+
+                                    getString(R.string.additional_information) -> {
+                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("from","account_detail")
+                                        startActivity(intent)
+                                    }
+
+                                    getString(R.string.account_verification) -> {
+                                        val intent =
+                                            Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("from", "account_verify")
+                                        startActivity(intent)
+                                    }
+                                }
+                            }
+                            1->{
+                                when(m.subTitle){
+                                    getString(R.string.profile_details) -> {
+                                        val intent =
+                                            Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("from", "edit_profile")
+                                        startActivity(intent)
+                                    }
+
+                                    getString(R.string.account_verification) -> {
+                                        val intent =
+                                            Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("from", "account_verify")
+                                        startActivity(intent)
+                                    }
+                                    getString(R.string.form_upload)->{
+                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("from","form_upload")
+                                        startActivity(intent)
+                                    }
+                                }
+
+                            }
+                            2->{
+                                when(m.subTitle){
+                                    getString(R.string.profile_details) -> {
+                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("from","edit_profile")
+                                        startActivity(intent)
+                                    }
+                                    getString(R.string.business_financial_information)->{
+                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("from","business_info")
+                                        startActivity(intent)
+
+                                    }
+                                    getString(R.string.additional_information)->{
+                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("from","account_detail")
+                                        startActivity(intent)
+                                    }
+                                    getString(R.string.form_upload)->{
+                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("from","form_upload")
+                                        startActivity(intent)
+                                    }
+                                    getString(R.string.account_verification) -> {
+                                        val intent =
+                                            Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("from", "account_verify")
+                                        startActivity(intent)
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+            }
+        editProfileAdapter.list = editMenuList
+        binding.rvEdit.adapter = editProfileAdapter
+    }
+
+    /** for normal profile **/
+    private fun showList(): ArrayList<EditProfileListModel> {
+        val list = ArrayList<EditProfileListModel>()
+        list.add(
+            EditProfileListModel(
+                "Account", getString(R.string.profile_details), R.drawable.ic_arrow_forward,0, true
+            )
+        )
+        list.add(
+            EditProfileListModel("Account",
+                getString(R.string.family_education), R.drawable.ic_arrow_forward,0))
+        list.add(
+            EditProfileListModel("Account",
+                getString(R.string.financial_information), R.drawable.ic_arrow_forward,0)
+        )
+        list.add(
+            EditProfileListModel(
+                "Account", "Investment Summary (Optional)", R.drawable.ic_arrow_forward,0
+            )
+        )
+
+        list.add(
+            EditProfileListModel(
+                "Account", getString(R.string.additional_information), R.drawable.ic_arrow_forward,0
+            )
+        )
+//        list.add(
+//            EditProfileListModel(
+//                "Account Management",
+//                getString(R.string.member_agreement),
+//                R.drawable.ic_arrow_forward,
+//                true
+//            )
+//        )
+        list.add(
+            EditProfileListModel(
+                "Account Management",
+                getString(R.string.account_verification),
+                R.drawable.ic_arrow_forward,
+                0,
+                true
+            )
+        )
+        list.add(
+            EditProfileListModel("Account Management", "Last Login", 0,0)
+        )
+        list.add(
+            EditProfileListModel("Account Management", "Delete Account", R.drawable.ic_delete,0)
+        )
+        list.add(
+            EditProfileListModel("Account Management", "Logout", R.drawable.ic_logout,0)
+        )
+        return list
+    }
+
+    /**for finance advisor**/
+    private fun showListForFinancialAdvisor(): ArrayList<EditProfileListModel> {
+        val list = ArrayList<EditProfileListModel>()
+        list.add(
+            EditProfileListModel(
+                "Account", getString(R.string.profile_details), R.drawable.ic_arrow_forward,1, true
+            )
+        )
+        list.add(
+            EditProfileListModel("Account",
+                getString(R.string.professional_information), R.drawable.ic_arrow_forward,1)
+        )
+        list.add(
+            EditProfileListModel("Account",
+                getString(R.string.personal_preferences), R.drawable.ic_arrow_forward,1)
+        )
+        list.add(
+            EditProfileListModel(
+                "Account", getString(R.string.form_upload), R.drawable.ic_arrow_forward,1
+            )
+        )
+//        list.add(
+//            EditProfileListModel(
+//                "Account Management",
+//                getString(R.string.member_agreement),
+//                R.drawable.ic_arrow_forward,
+//                true
+//            )
+//        )
+        list.add(
+            EditProfileListModel(
+                "Account Management",
+                getString(R.string.account_verification),
+                R.drawable.ic_arrow_forward,1,
+                true
+            )
+        )
+        list.add(
+            EditProfileListModel("Account Management", "Last Login", 0,1)
+        )
+        list.add(
+            EditProfileListModel("Account Management", "Delete Account", R.drawable.ic_delete,1)
+        )
+        list.add(
+            EditProfileListModel("Account Management", "Logout", R.drawable.ic_logout,1)
+        )
+        return list
+    }
+
+    /**for startup & small business & investor/VC  & insurance **/
+    private fun showListForStartUp(): ArrayList<EditProfileListModel> {
+        val list = ArrayList<EditProfileListModel>()
+        list.add(
+            EditProfileListModel(
+                "Account", getString(R.string.profile_details), R.drawable.ic_arrow_forward, 2,true
+            )
+        )
+        list.add(
+            EditProfileListModel("Account",
+                getString(R.string.business_financial_information), R.drawable.ic_arrow_forward,2)
+        )
+        list.add(
+            EditProfileListModel("Account",
+                getString(R.string.additional_information), R.drawable.ic_arrow_forward,2)
+        )
+        list.add(
+            EditProfileListModel(
+                "Account", getString(R.string.form_upload), R.drawable.ic_arrow_forward,2
+            )
+        )
+        list.add(
+            EditProfileListModel(
+                "Account Management",
+                getString(R.string.account_verification),
+                R.drawable.ic_arrow_forward,2,
+                true
+            )
+        )
+        list.add(
+            EditProfileListModel("Account Management", "Last Login", 0,2)
+        )
+        list.add(
+            EditProfileListModel("Account Management", "Delete Account", R.drawable.ic_delete,2)
+        )
+        list.add(
+            EditProfileListModel("Account Management", "Logout", R.drawable.ic_logout,2)
+        )
+        return list
+    }
+}

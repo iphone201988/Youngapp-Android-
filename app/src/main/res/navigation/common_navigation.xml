@@ -1,0 +1,138 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/common_navigation"
+    tools:ignore="InvalidNavigation">
+
+    <fragment
+        android:id="@+id/fragmentViewMore"
+        android:name="com.tech.young.ui.home.ViewMoreFragment"
+        tools:layout="@layout/fragment_view_more"/>
+    <fragment
+        android:id="@+id/fragmentViewMessage"
+        android:name="com.tech.young.ui.inbox.view_message.ViewMessageFragment"
+        tools:layout="@layout/fragment_view_message"/>
+
+    <fragment
+        android:id="@+id/fragmentNewMessage"
+        android:name="com.tech.young.ui.inbox.new_message.NewMessageFragment"
+        tools:layout="@layout/fragment_new_message"/>
+    <fragment
+        android:id="@+id/fragmentEditProfile"
+        android:name="com.tech.young.ui.my_profile_screens.common_ui.EditProfileDetailFragment"
+        tools:layout="@layout/fragment_edit_profile_detail"/>
+
+    <fragment
+        android:id="@+id/fragmentVerifyProfile"
+        android:name="com.tech.young.ui.my_profile_screens.common_ui.AgreementAndVerificationFragment"
+        tools:layout="@layout/fragment_agreement_and_verification"/>
+    <fragment
+        android:id="@+id/fragmentAdditionalInfo"
+        android:name="com.tech.young.ui.my_profile_screens.common_ui.AdditionalInfoFragment"
+        tools:layout="@layout/fragment_additional_info"/>
+    <fragment
+        android:id="@+id/fragmentFamilyDetails"
+        android:name="com.tech.young.ui.my_profile_screens.forNormal.FamilyDetailsFragment"
+        tools:layout="@layout/fragment_family_details"/>
+    <fragment
+        android:id="@+id/fragmentFinanceInfo"
+        android:name="com.tech.young.ui.my_profile_screens.forNormal.FinanceInfoFragment"
+        tools:layout="@layout/fragment_finance_info"/>
+    <fragment
+        android:id="@+id/fragmentInvestmentInfo"
+        android:name="com.tech.young.ui.my_profile_screens.forNormal.InvestmentInfoFragment"
+        tools:layout="@layout/fragment_investment_info"/>
+    <fragment
+        android:id="@+id/fragmentPaymentDetails"
+        android:name="com.tech.young.ui.payment.PaymentDetailsFragment"
+        tools:layout="@layout/fragment_payment_details"/>
+    <fragment
+        android:id="@+id/fragemntPaymentHistory"
+        android:name="com.tech.young.ui.payment.payment_history.PaymentHistoryFragment"
+        tools:layout="@layout/fragment_payment_history"/>
+    <fragment
+        android:id="@+id/fragmentPaymentSetUp"
+        android:name="com.tech.young.ui.payment.PaymentSetupFragment"
+        tools:layout="@layout/fragment_payment_setup"/>
+    <fragment
+        android:id="@+id/fragmentReport"
+        android:name="com.tech.young.ui.report_user.ReportUserFragment"
+        tools:layout="@layout/fragment_report_user"/>
+    <fragment
+        android:id="@+id/fragmentUserProfile"
+        android:name="com.tech.young.ui.user_profile.UserProfileFragment"
+        tools:layout="@layout/fragment_user_profile"/>
+    <fragment
+        android:id="@+id/fragmentShareConfirmation"
+        android:name="com.tech.young.ui.share_screen.share_confirmation.ShareConfirmationFragment"
+        tools:layout="@layout/fragment_share_confirmation"/>
+    <fragment
+        android:id="@+id/fragmentCommonShare"
+        android:name="com.tech.young.ui.share_screen.CommonShareFragment"
+        tools:layout="@layout/fragment_common_share"/>
+    <fragment
+        android:id="@+id/fragmentCommonStream"
+        android:name="com.tech.young.ui.stream_screen.CommonStreamFragment"
+        tools:layout="@layout/fragment_common_stream"/>
+    <fragment
+        android:id="@+id/fragmentStreamConfirmation"
+        android:name="com.tech.young.ui.stream_screen.stream_confirmation.StreamConfirmationFragment"
+        tools:layout="@layout/fragment_stream_confirmation"/>
+    <fragment
+        android:id="@+id/fragmentVaultConfirmation"
+        android:name="com.tech.young.ui.vault_screen.vault_confirmation.VaultConfirmationFragment"
+        tools:layout="@layout/fragment_vault_confirmation"/>
+    <fragment
+        android:id="@+id/fragmentVaultRoom"
+        android:name="com.tech.young.ui.vault_screen.vault_room.VaultRoomFragment"
+        tools:layout="@layout/fragment_vault_room"/>
+    <fragment
+        android:id="@+id/fragmentCommonVault"
+        android:name="com.tech.young.ui.vault_screen.CommonVaultFragment"
+        tools:layout="@layout/fragment_common_vault"/>
+    <fragment
+        android:id="@+id/fragmentBusinessInfo"
+        android:name="com.tech.young.ui.my_profile_screens.common_ui.BusinessInfoFragment"
+        tools:layout="@layout/fragment_business_info"/>
+    <fragment
+        android:id="@+id/fragmentFormUpload"
+        android:name="com.tech.young.ui.my_profile_screens.common_ui.FormUploadFragment"
+        tools:layout="@layout/fragment_form_upload"/>
+    <fragment
+        android:id="@+id/fragmentPeople"
+        android:name="com.tech.young.ui.vault_screen.people_screen.PeopleFragment"
+        tools:layout="@layout/fragment_people"/>
+
+    <fragment
+        android:id="@+id/fragmentExchangeShareDetails"
+        android:name="com.tech.young.ui.exchange.exchange_share_detail.ExchangeShareDetailFragment"
+        tools:layout="@layout/fragment_exchange_share_detail"/>
+
+    <fragment
+        android:id="@+id/fragmentNewsDetails"
+        android:name="com.tech.young.ui.news.NewsDetailFragment"
+        tools:layout="@layout/fragment_news_detail"/>
+
+    <fragment
+        android:id="@+id/fragmentLiveStream"
+        android:name="com.tech.young.ui.stream_screen.LiveStreamFragment"
+        tools:layout="@layout/fragment_live_stream"/>
+
+    <fragment
+        android:id="@+id/fragmentConsumerLiveStream"
+        android:name="com.tech.young.ui.stream_screen.ConsumerStreamFragment"
+        tools:layout="@layout/fragment_consumer_stream"/>
+
+    <fragment
+        android:id="@+id/fragmentStreamDetail"
+        android:name="com.tech.young.ui.exchange.stream_detail_fragment.StreamDetailFragment"
+        tools:layout="@layout/fragment_stream_detail"/>
+
+
+    <fragment
+        android:id="@+id/fragmentRecordedStream"
+        android:name="com.tech.young.ui.stream_screen.RecordedStreamFragment"
+        tools:layout="@layout/fragment_recorded_stream"/>
+
+
+</navigation>

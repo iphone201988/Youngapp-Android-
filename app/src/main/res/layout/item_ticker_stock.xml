@@ -1,0 +1,40 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:paddingEnd="@dimen/_16sdp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvStock"
+        style="@style/TextView_500_Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AAPL +1.23%"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_16ssp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivArrow"
+        android:layout_width="@dimen/_24sdp"
+        android:layout_height="@dimen/_24sdp"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:src="@drawable/arrow_up"
+        app:layout_constraintBottom_toBottomOf="@id/tvStock"
+        app:layout_constraintStart_toEndOf="@+id/tvStock"
+        app:layout_constraintTop_toTopOf="@id/tvStock" />
+
+    <!-- Vertical Divider -->
+    <View
+        android:id="@+id/viewDivider"
+        android:layout_width="@dimen/_1sdp"
+        android:layout_height="@dimen/_32sdp"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:background="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivArrow"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

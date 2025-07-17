@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:padding="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@drawable/unselected_side_menu_bg"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvPlans"
+            style="@style/TextView_600_SemiBold"
+            android:layout_width="0dp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_12ssp"
+            android:singleLine="true"
+            app:layout_constraintEnd_toStartOf="@id/tvDateTime"
+            android:textColor="@color/colorPrimary"
+            android:text="Monthly Subscription"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/planId"
+            style="@style/TextView_400_Regular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="PlanCFG-982374"
+            android:textSize="@dimen/_10ssp"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="@id/tvPlans"
+            app:layout_constraintStart_toStartOf="@id/tvPlans"
+            app:layout_constraintTop_toBottomOf="@id/tvPlans"/>
+
+        
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDateTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Apr 05, 2025"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvPlans"
+            app:layout_constraintBottom_toBottomOf="@id/tvPlans"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

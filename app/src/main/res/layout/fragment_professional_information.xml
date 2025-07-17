@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.tech.young.ui.my_profile_screens.forFinance.FinanceAccountVm" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.my_profile_screens.forFinance.ProfessionalInformationFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clTopBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_18sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivBack"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:background="@drawable/rounded_bg"
+                android:onClick="@{v ->vm.onClick(v)}"
+                android:padding="@dimen/_8sdp"
+                android:src="@drawable/iv_back_symbol"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvHeading"
+                style="@style/TextView_600_SemiBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="@id/ivBack"
+                app:layout_constraintStart_toEndOf="@id/ivBack"
+                app:layout_constraintTop_toTopOf="@id/ivBack" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/actionToggleBtn"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:onClick="@{v -> vm.onClick(v)}"
+                android:src="@drawable/iv_drawer"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/clTopBar"
+            app:layout_constraintStart_toStartOf="@id/clTopBar"
+            app:layout_constraintTop_toBottomOf="@id/clTopBar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvCrdNumber"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:text="@string/crd_number"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/ifApplicable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:text="@string/if_applicable"
+                    android:textColor="@color/grey"
+                    android:textSize="@dimen/_12ssp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvCrdNumber"
+                    app:layout_constraintStart_toEndOf="@id/tvCrdNumber"
+                    app:layout_constraintTop_toTopOf="@id/tvCrdNumber" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etCrdNumber"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:enabled="false"
+                    android:gravity="start|center"
+                    android:hint="CRD Number"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvCrdNumber" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvLicence"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:text="@string/licenses_certifications"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etCrdNumber" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etLicence"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:enabled="false"
+                    android:gravity="start|center"
+                    android:hint="Securities"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvLicence" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etLicence"
+                    app:layout_constraintEnd_toEndOf="@+id/etLicence"
+                    app:layout_constraintTop_toTopOf="@+id/etLicence" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvOccupation"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:text="@string/occupation"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etLicence" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etOccupation"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:enabled="false"
+                    android:gravity="start|center"
+                    android:hint="Occupation"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvOccupation" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvYearInFinancial"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:text="@string/years_in_financial_industry"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etOccupation" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etYears"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:enabled="false"
+                    android:gravity="start|center"
+                    android:hint=""
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvYearInFinancial" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etYears"
+                    app:layout_constraintEnd_toEndOf="@+id/etYears"
+                    app:layout_constraintTop_toTopOf="@+id/etYears" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvServiceProvided"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:text="@string/services_provided"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etYears" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etServiceProvided"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:enabled="false"
+                    android:gravity="start|center"
+                    android:hint=""
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvServiceProvided" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etServiceProvided"
+                    app:layout_constraintEnd_toEndOf="@+id/etServiceProvided"
+                    app:layout_constraintTop_toTopOf="@+id/etServiceProvided" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvSubmit"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginBottom="@dimen/_30sdp"
+                    android:background="@drawable/corner_radius_10"
+                    android:gravity="center"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:text="@string/save_changes"
+                    android:textColor="@color/white"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

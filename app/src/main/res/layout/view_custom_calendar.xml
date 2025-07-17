@@ -1,0 +1,103 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <!-- Header Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingBottom="8dp">
+
+        <!-- Year Section -->
+        <ImageView
+            android:id="@+id/ivYearPrev"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_arrow_left"
+            app:tint="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/tvYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2024"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:paddingHorizontal="8dp"
+            android:textSize="@dimen/_14ssp" />
+
+        <ImageView
+            android:id="@+id/ivYearNext"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_arrow_right"
+            app:tint="@color/colorPrimary" />
+
+        <!-- Spacer between year and month -->
+        <View
+            android:layout_width="16dp"
+            android:layout_height="0dp"
+            android:layout_weight="0" />
+
+        <!-- Month Section -->
+        <ImageView
+            android:id="@+id/ivMonthPrev"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_arrow_left"
+            app:tint="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/tvMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="January"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:paddingHorizontal="8dp"
+            android:textSize="@dimen/_14ssp" />
+
+        <ImageView
+            android:id="@+id/ivMonthNext"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_arrow_right"
+            app:tint="@color/colorPrimary" />
+
+        <!-- Spacer -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- Add Button -->
+        <ImageView
+            android:id="@+id/ivAdd"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:scaleType="fitXY"
+            android:padding="6dp"
+            android:src="@drawable/iv_add_icon" />
+    </LinearLayout>
+
+    <include
+        android:id="@+id/legendLayout"
+        layout="@layout/calendar_day_legend_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerCalendar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp" />
+</LinearLayout>

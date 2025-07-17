@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.tech.young.ui.auth.AuthCommonVM" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            tools:context=".ui.auth.login_flow.LoginFragment">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/_18sdp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:background="@drawable/rounded_bg"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:padding="@dimen/_8sdp"
+                    android:src="@drawable/iv_back_symbol"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvLoginTopText"
+                    style="@style/TextView_800_ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_23sdp"
+                    android:text="@string/add_license"
+                    android:textSize="@dimen/_20ssp"
+                    app:layout_constraintStart_toStartOf="@+id/ivBack"
+                    app:layout_constraintTop_toBottomOf="@+id/ivBack" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvDes"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/you_can_add_license_for_user_verification"
+                    android:textColor="@color/text_gray"
+                    app:layout_constraintStart_toStartOf="@+id/tvLoginTopText"
+                    app:layout_constraintTop_toBottomOf="@+id/tvLoginTopText" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivFrame"
+                    android:layout_width="@dimen/_200sdp"
+                    android:layout_height="@dimen/_200sdp"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:src="@drawable/iv_scan_frame"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDes" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_addLicence"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_100sdp"
+                    android:src="@drawable/card_icon"
+                    android:onClick="@{v -> vm.onClick(v)}"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivFrame"
+                    app:layout_constraintEnd_toEndOf="@+id/ivFrame"
+                    app:layout_constraintStart_toStartOf="@+id/ivFrame"
+                    app:layout_constraintTop_toTopOf="@+id/ivFrame" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvUpload"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_40sdp"
+                    android:background="@drawable/corner_radius_10"
+                    android:gravity="center"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:text="@string/upload"
+                    android:textColor="@color/white"
+                    app:layout_constraintTop_toBottomOf="@+id/ivFrame" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

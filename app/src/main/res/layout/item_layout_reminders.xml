@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="bean"
+            type="com.tech.young.data.model.GetEventsApiResponse.Data.Event" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/_70sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@drawable/bg_reminder">
+
+
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:id="@+id/cons"
+           android:layout_width="@dimen/_50sdp"
+           android:layout_height="0dp"
+           android:paddingBottom="@dimen/_10sdp"
+           android:background="@drawable/bg_reminder_cons"
+           android:backgroundTint="@color/orange"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintStart_toStartOf="parent">
+
+           <TextView
+               android:id="@+id/date"
+               style="@style/TextView_600_SemiBold"
+               dayFromDate="@{bean.scheduledDate}"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textSize="@dimen/_20ssp"
+               android:textColor="@color/white"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"/>
+
+
+           <TextView
+               android:id="@+id/day"
+               style="@style/TextView_500_Medium"
+               setDayOfWeek="@{bean.scheduledDate}"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:visibility="visible"
+               android:maxLength="3"
+               android:textColor="@color/white"
+               app:layout_constraintTop_toBottomOf="@id/date"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"/>
+
+       </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <TextView
+            android:id="@+id/heading"
+            style="@style/TextView_600_SemiBold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginTop="16dp"
+            android:text="@{bean.title}"
+            android:textColor="@color/material_on_background_emphasis_high_type"
+            android:textSize="@dimen/_14ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/cons"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/description"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{bean.description}"
+            android:textSize="@dimen/_10ssp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintEnd_toEndOf="@id/heading"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/heading"
+            app:layout_constraintStart_toStartOf="@id/heading"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

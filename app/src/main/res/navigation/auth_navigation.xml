@@ -1,0 +1,182 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/auth_navigation"
+    tools:ignore="InvalidNavigation">
+
+    <action
+        android:id="@+id/navigateToLoginFragment"
+        app:destination="@id/fragmentLogin" />
+
+    <action
+        android:id="@+id/navigateToTowFactorAuthFragment"
+        app:destination="@id/fragmentTwoFactorAuth" />
+
+
+    <action
+        android:id="@+id/navigateToForgetPasswordFragment"
+        app:destination="@id/fragmentForgetPassword" />
+
+    <action
+        android:id="@+id/navigateToOtpFragment"
+        app:destination="@id/fragmentOtp" />
+
+
+    <action
+        android:id="@+id/navigateForNewPasswordFragment"
+        app:destination="@id/fragmentNewPassword" />
+
+
+    <action
+        android:id="@+id/navigateToPasswordChangedFragment"
+        app:destination="@id/fragmentPasswordChanged" />
+
+    <action
+        android:id="@+id/navigateToSignupMainFragment"
+        app:destination="@id/fragmentSignupMain" />
+
+
+    <action
+        android:id="@+id/navigateToEnterYourDetailsFragment"
+        app:destination="@id/fragmentEnterYourDetails" />
+
+    <action
+        android:id="@+id/navigateToSetupPasswordFragment"
+        app:destination="@id/fragmentSetupPassword" />
+
+    <action
+        android:id="@+id/navigateToAddLicenseFragment"
+        app:destination="@id/fragmentAddLicense" />
+
+    <action
+        android:id="@+id/navigateToAddLicenseCameraFragment"
+        app:destination="@id/fragmentAddLicenseCamera" />
+
+
+    <action
+        android:id="@+id/navigateToAddYourPicFragment"
+        app:destination="@id/fragmentAddYourPic" />
+
+    <action
+        android:id="@+id/navigateToCrdNumberVerificationFragment"
+        app:destination="@id/fragmentCrdNumberVerification" />
+
+    <action
+        android:id="@+id/navigateToAddYourPersonalInfoFragment"
+        app:destination="@id/fragmentAddYourPersonalInfo" />
+
+    <action
+        android:id="@+id/navigateToSelectYourInterestFragment"
+        app:destination="@id/fragmentSelectYourInterest" />
+
+    <action
+        android:id="@+id/navigateToSelectYourAccountPackageFragment"
+        app:destination="@id/fragmentSelectYourAccountPackage" />
+
+
+    <action
+        android:id="@+id/navigateToTermAndConditionsFragment"
+        app:destination="@id/fragmentTermAndConditions" />
+
+
+    <action
+        android:id="@+id/navigateToAddPaymentFragment"
+        app:destination="@id/fragmentAddPayment" />
+
+    <action
+        android:id="@+id/navigateToTwoFactorQrFragment"
+        app:destination="@id/fragmentTwoFactorQr" />
+
+
+    <fragment
+        android:id="@+id/fragmentLogin"
+        android:name="com.tech.young.ui.auth.login_flow.LoginFragment"
+        tools:layout="@layout/fragment_login" />
+
+    <fragment
+        android:id="@+id/fragmentTwoFactorAuth"
+        android:name="com.tech.young.ui.auth.login_flow.TwoFactorAuthFragment"
+        tools:layout="@layout/fragment_two_factor_auth" />
+    <fragment
+        android:id="@+id/fragmentForgetPassword"
+        android:name="com.tech.young.ui.auth.forget_flow.ForgetPasswordFragment"
+        tools:layout="@layout/fragment_forget_password" />
+    <fragment
+        android:id="@+id/fragmentOtp"
+        android:name="com.tech.young.ui.auth.forget_flow.OtpFragment"
+        tools:layout="@layout/fragment_otp" />
+    <fragment
+        android:id="@+id/fragmentNewPassword"
+        android:name="com.tech.young.ui.auth.forget_flow.NewPasswordFragment"
+        tools:layout="@layout/fragment_new_password" />
+
+
+    <fragment
+        android:id="@+id/fragmentPasswordChanged"
+        android:name="com.tech.young.ui.auth.forget_flow.PasswordChangedFragment"
+        tools:layout="@layout/fragment_password_changed" />
+
+    <fragment
+        android:id="@+id/fragmentSignupMain"
+        android:name="com.tech.young.ui.signup_process.SignupMainFragment"
+        tools:layout="@layout/fragment_signup_main" />
+
+    <fragment
+        android:id="@+id/fragmentEnterYourDetails"
+        android:name="com.tech.young.ui.signup_process.enter_details.EnterYourDeatilsFragment"
+        tools:layout="@layout/fragment_enter_your_details" />
+
+    <fragment
+        android:id="@+id/fragmentSetupPassword"
+        android:name="com.tech.young.ui.signup_process.SetupPasswordFragment"
+        tools:layout="@layout/fragment_setup_password" />
+
+    <fragment
+        android:id="@+id/fragmentAddLicense"
+        android:name="com.tech.young.ui.signup_process.AddLicenseFragment"
+        tools:layout="@layout/fragment_add_license" />
+
+    <fragment
+        android:id="@+id/fragmentAddLicenseCamera"
+        android:name="com.tech.young.ui.signup_process.AddLicenseCameraFragment"
+        tools:layout="@layout/fragment_add_license_camera" />
+
+    <fragment
+        android:id="@+id/fragmentAddYourPic"
+        android:name="com.tech.young.ui.signup_process.AddYourPicFragment"
+        tools:layout="@layout/fragment_add_your_pic" />
+
+    <fragment
+        android:id="@+id/fragmentCrdNumberVerification"
+        android:name="com.tech.young.ui.signup_process.CRDNumberVerificationFragment"
+        tools:layout="@layout/fragment_crd_numder_verification" />
+
+    <fragment
+        android:id="@+id/fragmentAddYourPersonalInfo"
+        android:name="com.tech.young.ui.signup_process.AddYourPersonalInfoFragment"
+        tools:layout="@layout/fragment_add_your_personal_info" />
+
+    <fragment
+        android:id="@+id/fragmentSelectYourInterest"
+        android:name="com.tech.young.ui.signup_process.SelectYourInterestFragment"
+        tools:layout="@layout/fragment_select_your_interest" />
+
+    <fragment
+        android:id="@+id/fragmentSelectYourAccountPackage"
+        android:name="com.tech.young.ui.signup_process.SelectYourAccountPackageFragment"
+        tools:layout="@layout/fragment_select_your_account_package" />
+    <fragment
+        android:id="@+id/fragmentTermAndConditions"
+        android:name="com.tech.young.ui.signup_process.TermAndConditionsFragment"
+        tools:layout="@layout/fragment_term_and_conditions" />
+
+    <fragment
+        android:id="@+id/fragmentAddPayment"
+        android:name="com.tech.young.ui.signup_process.AddPaymentFragment"
+        tools:layout="@layout/fragment_add_payment" />
+    <fragment
+        android:id="@+id/fragmentTwoFactorQr"
+        android:name="com.tech.young.ui.signup_process.TwoFactorQRFragment"
+        tools:layout="@layout/fragment_two_factor_qr" />
+
+</navigation>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10sdp"
+        android:background="@drawable/profile_share_bg"
+        android:layout_marginBottom="@dimen/_10sdp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivImage"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_150sdp"
+        android:src="@drawable/ic_dummy_2"
+        android:scaleType="centerCrop"
+        app:shapeAppearance="@style/Shape10"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:layout_marginTop="-20dp"
+            android:padding="@dimen/_5sdp"
+            app:layout_constraintTop_toBottomOf="@id/ivImage"
+            app:layout_constraintStart_toStartOf="@id/ivImage"
+            app:layout_constraintEnd_toEndOf="@id/ivImage">
+
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/TextView_700_Bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14ssp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="Grant Cardone’s Recent Move Could Mean Good News for Bitcoin: Is It Time To Invest?"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/heading"
+                style="@style/TextView_400_Regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="nasdaq.com"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:layout_constraintStart_toStartOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

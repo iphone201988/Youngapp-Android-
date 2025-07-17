@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="callback"
+            type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
+        <variable
+            name="bean"
+            type="com.tech.young.data.model.GetCommentApiResponsePost.Data.Comment" />
+        <variable
+            name="pos"
+            type="Integer" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:padding="@dimen/_10sdp"
+        android:background="@drawable/bg_standard"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_height="wrap_content">
+        
+        
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profileImage"
+            android:layout_width="@dimen/_45sdp"
+            android:layout_height="@dimen/_45sdp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/dummy_person"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+
+        <TextView
+            android:id="@+id/name"
+            style="@style/TextView_500_Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{bean.UserId.firstName +" " + bean.UserId.lastName}'
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14ssp"
+            android:layout_marginStart="@dimen/_5sdp"
+            app:layout_constraintTop_toTopOf="@id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/profileImage"/>
+
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/role"
+            style="@style/TextView_400_Regular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:text="@{bean.UserId.role}"
+            app:layout_constraintEnd_toStartOf="@id/likeBtn"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            app:layout_constraintStart_toStartOf="@id/name"/>
+        
+        <TextView
+            android:id="@+id/date"
+            setFormattedCreatedAt = "@{bean.createdAt}"
+            style="@style/TextView_400_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/gray"
+            android:text="dsadas"
+            app:layout_constraintTop_toBottomOf="@id/role"
+            app:layout_constraintStart_toStartOf="@id/role"/>
+        
+        
+        <TextView
+            android:id="@+id/tvLikes"
+            style="@style/TextView_400_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{bean.likesCount.toString() + " Booms"}'
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toTopOf="@id/name"
+            app:layout_constraintBottom_toBottomOf="@id/date"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/likeBtn"
+            setLikeIcon ="@{bean.isLiked()}"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_heart"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            android:layout_marginEnd="@dimen/_5sdp"
+            app:layout_constraintEnd_toStartOf="@id/tvLikes"
+            app:layout_constraintTop_toTopOf="@id/tvLikes"
+            app:layout_constraintBottom_toBottomOf="@id/tvLikes"/>
+
+        <TextView
+            android:id="@+id/tvComments"
+            style="@style/TextView_400_Regular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{bean.comment}"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/date"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

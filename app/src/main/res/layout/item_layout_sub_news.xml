@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="bean"
+            type="com.tech.young.data.NewsItem" />
+        <variable
+            name="callback"
+            type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
+        <variable
+            name="pos"
+            type="Integer" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{ v -> callback.onItemClick(v,bean,pos)}"
+        android:background="@drawable/unselected_side_menu_bg"
+        android:layout_marginBottom="@dimen/_10sdp">
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvName"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_42sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:gravity="start|center"
+            android:text="@{bean.title}"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:textColorHint="@color/text_black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/arrow"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/arrow"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:src="@drawable/iv_forword"
+            app:layout_constraintBottom_toBottomOf="@+id/tvName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvName" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

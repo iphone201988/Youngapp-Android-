@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="bean"
+            type="com.tech.young.data.model.GetUserApiResponse.Data.User" />
+        <variable
+            name="callback"
+            type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
+        <variable
+            name="pos"
+            type="Integer" />
+
+        <import type="android.view.View"/>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10sdp"
+       >
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/consMain"
+            android:layout_width="0dp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:background="@drawable/bg_standard"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:layout_constraintEnd_toStartOf="@id/selected"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/profileImage"
+                setUserImageFromBaseUrl="@{bean.profileImage}"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:src="@drawable/ic_dummy"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="@dimen/_10sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"/>
+
+            <TextView
+                android:id="@+id/personName"
+                style="@style/TextView_400_Regular"
+                android:layout_width="0dp"
+                android:text='@{bean.firstName + " " + bean.lastName}'
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                app:layout_constraintEnd_toStartOf="@id/ivStar"
+                app:layout_constraintStart_toEndOf="@id/profileImage"
+                app:layout_constraintTop_toTopOf="@id/profileImage"
+                app:layout_constraintBottom_toBottomOf="@id/profileImage"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivStar"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:src="@drawable/ic_star"
+                app:layout_constraintEnd_toStartOf="@id/tvRating"
+                app:layout_constraintTop_toTopOf="@id/personName"
+                app:layout_constraintBottom_toBottomOf="@id/personName"
+                android:layout_marginEnd="@dimen/_3sdp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextView_500_Medium"
+                android:text="0.0"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/ivStar"
+                app:layout_constraintBottom_toBottomOf="@id/ivStar"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/selected"
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:src="@drawable/iv_tick"
+            android:visibility='@{bean.isSelected ? View.VISIBLE : View.GONE}'
+            app:layout_constraintTop_toTopOf="@id/consMain"
+            app:layout_constraintBottom_toBottomOf="@id/consMain"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

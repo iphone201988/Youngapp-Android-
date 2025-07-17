@@ -1,0 +1,62 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_navigation"
+    app:startDestination="@id/homeFragment"
+    tools:ignore="InvalidNavigation">
+
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.tech.young.ui.home.HomeFragment"
+        android:label="Home" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.tech.young.ui.my_profile_screens.YourProfileFragment"
+        android:label="Profile" />
+    <fragment
+        android:id="@+id/inboxFragment"
+        android:name="com.tech.young.ui.inbox.InboxFragment"
+        android:label="Inbox" />
+    <fragment
+        android:id="@+id/exchangeFragment"
+        android:name="com.tech.young.ui.exchange.ExchangeFragment"
+        android:label="Exchange"/>
+    <fragment
+        android:id="@+id/ecosystemFragment"
+        android:name="com.tech.young.ui.ecosystem.EcosystemFragment"
+        android:label="Ecosystem"/>
+
+<!--    <fragment-->
+<!--        android:id="@+id/memberFragment"-->
+<!--        android:name="techawerapp.ui.MemberFragment"-->
+<!--        android:label="Member" />-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/financialAdvisorsFragment"-->
+<!--        android:name="techawerapp.ui.FinancialAdvisorsFragment"-->
+<!--        android:label="Financial Advisors" />-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/startupsFragment"-->
+<!--        android:name="techawerapp.ui.StartupsFragment"-->
+<!--        android:label="Startups" />-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/smallBusinessFragment"-->
+<!--        android:name="techawerapp.ui.SmallBusinessFragment"-->
+<!--        android:label="Small Business" />-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/investorFragment"-->
+<!--        android:name="techawerapp.ui.InvestorFragment"-->
+<!--        android:label="Investor/VC" />-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/ecosystemFragment"-->
+<!--        android:name="techawerapp.ui.EcosystemFragment"-->
+<!--        android:label="Ecosystem" />-->
+
+
+
+</navigation>

@@ -1,0 +1,9 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:bottom="10dp"> <!-- Adds padding from bottom -->
+        <shape android:shape="rectangle">
+            <size android:height="3dp" />
+            <solid android:color="@color/white" />
+            <corners android:radius="2dp" />
+        </shape>
+    </item>
+</layer-list>

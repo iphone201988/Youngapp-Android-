@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.tech.young.ui.inbox.view_message.ViewMessageVM" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.inbox.view_message.ViewMessageFragment">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clTopBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_18sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/_10sdp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivBack"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:background="@drawable/rounded_bg"
+                android:onClick="@{v->vm.onClick(v)}"
+                android:padding="@dimen/_8sdp"
+                android:src="@drawable/iv_back_symbol"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextView_600_SemiBold"
+                android:text="@string/view_message"
+                android:layout_marginStart="@dimen/_10sdp"
+                app:layout_constraintTop_toTopOf="@id/ivBack"
+                app:layout_constraintBottom_toBottomOf="@id/ivBack"
+                app:layout_constraintStart_toEndOf="@id/ivBack"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/actionToggleBtn"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:src="@drawable/iv_drawer"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profileImage"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/dummy_person"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginStart="@dimen/_15sdp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            app:layout_constraintTop_toBottomOf="@id/clTopBar"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvUserName"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            app:layout_constraintEnd_toStartOf="@id/dateTime"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:textSize="@dimen/_14ssp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:singleLine="true"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toTopOf="@id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/profileImage"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvRole"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_10ssp"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:text="Financial Advisor"
+            android:singleLine="true"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toEndOf="@id/tvUserName"
+            app:layout_constraintTop_toBottomOf="@id/tvUserName"
+            app:layout_constraintStart_toStartOf="@id/tvUserName"/>
+
+
+
+        <TextView
+            android:id="@+id/dateTime"
+            style="@style/TextView_400_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/_10ssp"
+            android:text="Apr 05, 2025"
+            android:layout_marginEnd="@dimen/_15sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvUserName"
+            app:layout_constraintBottom_toBottomOf="@id/tvUserName"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMessage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginVertical="@dimen/_10sdp"
+            app:layout_constraintBottom_toTopOf="@id/etChat"
+            app:layout_constraintTop_toBottomOf="@id/profileImage"
+            app:layout_constraintStart_toStartOf="@id/profileImage"
+            app:layout_constraintEnd_toEndOf="@id/dateTime"/>
+
+        <TextView
+            android:id="@+id/time"
+            style="@style/TextView_400_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/_10ssp"
+            android:text="10:00 AM"
+            app:layout_constraintTop_toTopOf="@id/tvRole"
+            app:layout_constraintBottom_toBottomOf="@id/tvRole"
+            app:layout_constraintEnd_toEndOf="@id/dateTime"/>
+
+
+        <ImageView
+            android:id="@+id/ivSendChat"
+            android:layout_width="@dimen/_42sdp"
+            android:layout_height="@dimen/_42sdp"
+            android:src="@drawable/iv_send_btn"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:onClick="@{v->vm.onClick(v)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/etChat"
+            app:layout_constraintBottom_toBottomOf="@id/etChat"/>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etChat"
+            style="@style/TextView_400_Regular"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_42sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:background="@drawable/radius_border_gray"
+            android:gravity="start|center"
+            android:hint="text here"
+            app:layout_constraintEnd_toStartOf="@id/ivSendChat"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:singleLine="true"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:textColorHint="@color/text_gray"
+            app:layout_constraintBottom_toTopOf="@id/tvAds"
+            app:layout_constraintStart_toStartOf="@id/tvAds"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAds"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/TextView_600_SemiBold"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:text="@string/ads"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintStart_toStartOf="@id/rvAds"
+            app:layout_constraintBottom_toTopOf="@id/rvAds"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAds"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:orientation="horizontal"
+            tools:itemCount="5"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            tools:listitem="@layout/ads_item_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <include
+                android:id="@+id/shareLayout"
+                layout="@layout/share_stream_layout"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

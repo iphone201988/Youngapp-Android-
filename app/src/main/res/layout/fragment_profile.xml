@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.tech.young.ui.my_profile_screens.YourProfileVM" />
+
+        <variable
+            name="bean"
+            type="com.tech.young.data.model.GetProfileApiResponse.Data" />
+
+        <import type="android.view.View" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.my_profile_screens.profile_fragments.ProfileFragment">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/ivImage"
+                    setUserImageFromBaseUrl="@{bean.user.profileImage}"
+                    android:layout_width="@dimen/_55sdp"
+                    android:layout_height="@dimen/_55sdp"
+                    android:layout_marginHorizontal="@dimen/_20sdp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/dummy_person"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearance="@style/Shape50" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvRating"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_20sdp"
+                    android:text="4.5 Rating"
+                    android:textSize="@dimen/_12ssp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/ivImage" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_3sdp"
+                    android:src="@drawable/ic_star"
+                    app:layout_constraintBottom_toBottomOf="@id/tvRating"
+                    app:layout_constraintEnd_toStartOf="@id/tvRating"
+                    app:layout_constraintTop_toTopOf="@id/tvRating" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvName"
+                    style="@style/TextView_600_SemiBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text='@{bean.user.firstName + " " + bean.user.lastName}'
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ivImage" />
+
+
+                <ImageView
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
+                    android:src="@drawable/iv_hand_image"
+                    android:visibility="@{bean.user.fairnessForward ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="@id/tvName"
+                    app:layout_constraintStart_toEndOf="@id/tvName"
+                    app:layout_constraintTop_toTopOf="@id/tvName" />
+
+                <LinearLayout
+                    android:id="@+id/llStats"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvName">
+
+                    <LinearLayout
+                        android:id="@+id/llShare"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvShareValue"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="3"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/_12ssp"
+                            android:textStyle="normal" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvShareStats"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/share"
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/_12ssp"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvFollowingStats"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{bean.user.following.toString()}"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/_12ssp"
+                            android:textStyle="normal" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvFollowing"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Following"
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/_12ssp"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvFollowerStats"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{bean.user.followers.toString()}"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/_12ssp"
+                            android:textStyle="normal" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvFollowingBy"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Followed by"
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/_12ssp"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llCustomers"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvCustomers"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{bean.user.customers.toString()}"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/_12ssp"
+                            android:textStyle="normal" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvCustomerStats"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/customers"
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/_12ssp"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/_20sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/llStats">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvFullName"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:text="Name"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintEnd_toStartOf="@id/etFullName"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/etFullName"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text='@{bean.user.lastName != null &amp; !bean.user.lastName.isEmpty() ? bean.user.firstName + " " + bean.user.lastName : bean.user.firstName}'
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintBottom_toBottomOf="@id/tvFullName"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvFullName"
+                        app:layout_constraintTop_toTopOf="@id/tvFullName" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvMemberName"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="Member Username"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintEnd_toStartOf="@id/etMemberName"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etFullName" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/etMemberName"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="@{bean.user.username}"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintBottom_toBottomOf="@id/tvMemberName"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvMemberName"
+                        app:layout_constraintTop_toTopOf="@id/tvMemberName" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvCity"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/city"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintEnd_toStartOf="@id/etCity"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etMemberName" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/etCity"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="@{bean.user.city}"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintBottom_toBottomOf="@id/tvCity"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvCity"
+                        app:layout_constraintTop_toTopOf="@id/tvCity" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvState"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/state"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintEnd_toStartOf="@id/etState"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etCity" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/etState"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="@{bean.user.state}"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintBottom_toBottomOf="@id/tvState"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvState"
+                        app:layout_constraintTop_toTopOf="@id/tvState" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvFinancialExperience"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/financial_experience"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etState" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/etFinancialExperience"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text=""
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintBottom_toBottomOf="@id/tvFinancialExperience"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvFinancialExperience"
+                        app:layout_constraintTop_toTopOf="@id/tvFinancialExperience" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvMembership"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="Member since"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintEnd_toStartOf="@id/etMembership"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etFinancialExperience" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/etMembership"
+                        style="@style/TextView_400_Regular"
+                        setFormattedDate="@{bean.user.createdAt}"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintBottom_toBottomOf="@id/tvMembership"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvMembership"
+                        app:layout_constraintTop_toTopOf="@id/tvMembership" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvYourPhotos"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/your_photos"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etMembership" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvYourPhotos"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvYourPhotos"
+                        tools:itemCount="5"
+                        tools:listitem="@layout/your_photos_item_view" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvAbout"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/about"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/rvYourPhotos" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/etAbout"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:text="@{bean.user.about}"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvAbout" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvInterest"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/interested"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintEnd_toStartOf="@id/etInterested"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etAbout" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/etInterested"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="@{bean.user.productsOffered}"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintBottom_toBottomOf="@id/tvInterest"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvInterest"
+                        app:layout_constraintTop_toTopOf="@id/tvInterest" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvGoals"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="Goals"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintEnd_toStartOf="@id/etGoals"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etInterested" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/etGoals"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text=""
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintBottom_toBottomOf="@id/tvGoals"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvGoals"
+                        app:layout_constraintTop_toTopOf="@id/tvGoals" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvShare"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/share"
+                        android:textColor="@color/colorPrimary"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etGoals" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvShare"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvShare"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/share_profile_item_view" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvRatings"
+                        style="@style/TextView_600_SemiBold"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/ratings"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/rvShare" />
+
+                    <per.wsj.library.AndRatingBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:isIndicator="true"
+                        android:numStars="5"
+                        android:rating="3.5"
+                        android:scaleX="1"
+                        android:scaleY="1"
+                        app:bgColor="@color/yellow_star"
+                        app:bgDrawable="@drawable/ic_star_unfilled"
+                        app:layout_constraintStart_toStartOf="@id/tvRatings"
+                        app:layout_constraintTop_toBottomOf="@id/tvRatings"
+                        app:starColor="@color/yellow_star"
+                        app:starDrawable="@drawable/ic_star"
+                        app:starSpacing="@dimen/_5sdp" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/icRatingArrow"
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:onClick="@{v->vm.onClick(v)}"
+                        android:src="@drawable/ic_arrow_forward"
+                        android:tint="@color/colorPrimary"
+                        app:layout_constraintBottom_toBottomOf="@id/ratingBar"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/ratingBar" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvAccount"
+                        style="@style/TextView_600_SemiBold"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/account"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ratingBar" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvAccountDetails"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="0dp"
+                        android:onClick="@{v -> vm.onClick(v)}"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_10sdp"
+                        android:text="@string/account_details"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvAccount" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/icAccount"
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:onClick="@{v->vm.onClick(v)}"
+                        android:src="@drawable/ic_arrow_forward"
+                        android:tint="@color/colorPrimary"
+                        app:layout_constraintBottom_toBottomOf="@id/tvAccountDetails"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvAccountDetails" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvAds"
+                        style="@style/TextView_600_SemiBold"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/ads"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvAccountDetails" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvAds"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvAds"
+                        tools:itemCount="5"
+                        tools:listitem="@layout/ads_item_view" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_20sdp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <include
+                android:id="@+id/includeShare"
+                layout="@layout/share_stream_layout" />
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

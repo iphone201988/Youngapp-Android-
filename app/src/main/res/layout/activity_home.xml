@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+
+        <variable
+            name="vm"
+            type="com.tech.young.ui.home.HomeActivityVM" />
+    </data>
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".ui.home.HomeActivity">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivAppLogoTop"
+                android:layout_width="@dimen/_38sdp"
+                android:layout_height="@dimen/_38sdp"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:onClick="@{v -> vm.onClick(v)}"
+                android:src="@drawable/app_logo"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/actionToggleBtn"
+                android:layout_width="@dimen/_38sdp"
+                android:layout_height="@dimen/_38sdp"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:onClick="@{v -> vm.onClick(v)}"
+                android:src="@drawable/iv_drawer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="@dimen/_38sdp"
+                    android:layout_height="@dimen/_38sdp"
+                    android:background="@drawable/rounded_bg"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:visibility="gone"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:padding="@dimen/_8sdp"
+                    android:src="@drawable/iv_back_symbol"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextView_600_SemiBold"
+                    android:visibility="gone"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    app:layout_constraintTop_toTopOf="@id/ivBack"
+                    app:layout_constraintBottom_toBottomOf="@id/ivBack"
+                    app:layout_constraintStart_toEndOf="@id/ivBack"/>
+            <FrameLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/actionToggleBtn"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+<!--            <fragment-->
+<!--                android:id="@+id/navHostFragment"-->
+<!--                android:name="androidx.navigation.fragment.NavHostFragment"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                app:defaultNavHost="true"-->
+<!--                app:navGraph="@navigation/home_navigation"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/actionToggleBtn"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"/>-->
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="@dimen/_225sdp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/white"
+            android:fillViewport="true">
+
+            <!-- Entire drawer UI here -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/_10sdp">
+                <!-- Include the custom header layout -->
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivAppLogo"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:src="@drawable/app_logo"
+                    app:layout_constraintStart_toStartOf="@+id/rvNav"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <!-- RecyclerView for navigation items -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvNav"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/ivAppLogo"
+                    tools:itemCount="2"
+                    tools:listitem="@layout/item_layout_side_nav" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvPolices"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:text="@string/info_policies"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="@+id/rvNav"
+                    app:layout_constraintTop_toBottomOf="@+id/rvNav" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/consInfo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/unselected_side_menu_bg"
+                    android:paddingBottom="@dimen/_10sdp"
+                    app:layout_constraintEnd_toEndOf="@+id/rvNav"
+                    app:layout_constraintStart_toStartOf="@+id/rvNav"
+                    app:layout_constraintTop_toBottomOf="@+id/tvPolices">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvAbout"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/about"
+                        android:onClick="@{v->vm.onClick(v)}"
+                        android:textColor="@color/text_black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvPoliciesAndAgreement"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{v->vm.onClick(v)}"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:text="@string/policies_and_agreement"
+                        android:textColor="@color/text_black"
+                        app:layout_constraintStart_toStartOf="@+id/tvAbout"
+                        app:layout_constraintTop_toBottomOf="@+id/tvAbout" />
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvMedia"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:text="@string/media"
+                        android:textColor="@color/text_black"
+                        app:layout_constraintStart_toStartOf="@+id/tvPoliciesAndAgreement"
+                        app:layout_constraintTop_toBottomOf="@+id/tvPoliciesAndAgreement" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvAdvertise"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:text="@string/advertise"
+                        android:onClick="@{v->vm.onClick(v)}"
+                        android:textColor="@color/text_black"
+                        app:layout_constraintStart_toStartOf="@+id/tvMedia"
+                        app:layout_constraintTop_toBottomOf="@+id/tvMedia" />
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvContactUs"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:text="@string/contact_us"
+                        android:onClick="@{v->vm.onClick(v)}"
+                        android:textColor="@color/text_black"
+                        app:layout_constraintStart_toStartOf="@+id/tvAdvertise"
+                        app:layout_constraintTop_toBottomOf="@+id/tvAdvertise" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvLogout"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:background="@drawable/unselected_side_menu_bg"
+                    android:backgroundTint="@color/cream"
+                    android:gravity="start|center"
+                    android:onClick="@{v -> vm.onClick(v)}"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:text="@string/logout"
+                    android:textColorHint="@color/text_black"
+                    app:layout_constraintEnd_toEndOf="@+id/rvNav"
+                    app:layout_constraintStart_toStartOf="@+id/rvNav"
+                    app:layout_constraintTop_toBottomOf="@+id/consInfo" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_forword"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvLogout"
+                    app:layout_constraintEnd_toEndOf="@+id/tvLogout"
+                    app:layout_constraintTop_toTopOf="@+id/tvLogout" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+
+</layout>

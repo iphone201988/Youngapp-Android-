@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/tab_share_stream_vault"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:background="@drawable/tab_bg"
+            android:backgroundTint="@color/gray"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <LinearLayout
+                android:id="@+id/tabShare"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="8dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivShare"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/ic_share"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvShare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextView_500_Medium"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:text="@string/share"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12ssp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+            <!-- Ecosystem Tab -->
+            <LinearLayout
+                android:id="@+id/tabStream"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="8dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivStream"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/ic_stream"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvStream"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextView_500_Medium"
+                    android:text="@string/stream"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/_12ssp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/tabVault"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="8dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivVault"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/ic_vault"/>
+
+                <TextView
+                    android:id="@+id/tvVault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextView_500_Medium"
+                    android:text="@string/vault"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/_12ssp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,110 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorSecondary2"
+        android:padding="@dimen/_20sdp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dialogCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_20sdp"
+            android:background="@drawable/unselected_side_menu_bg"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            <RelativeLayout
+                android:id="@+id/title_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextView_500_Medium"
+                    android:text="@string/rating_overview"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_14ssp"
+                    android:layout_centerHorizontal="true" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/close"
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_cancel" />
+            </RelativeLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/average_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextView_700_Bold"
+                android:text="4.3"
+                android:textSize="@dimen/_32ssp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/title_container"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/_12sdp" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/slash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="/5"
+                style="@style/TextView_500_Medium"
+                app:layout_constraintBottom_toBottomOf="@id/average_rating"
+                app:layout_constraintStart_toEndOf="@id/average_rating"
+                android:layout_marginBottom="@dimen/_5sdp" />
+            <per.wsj.library.AndRatingBar
+                android:id="@+id/rating_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_28sdp"
+                android:numStars="5"
+                android:stepSize="0.5"
+                android:isIndicator="true"
+                android:rating="4.3"
+                app:starSpacing="@dimen/_5sdp"
+                app:starColor="@color/yellow_star"
+                app:starDrawable="@drawable/ic_star"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:bgColor="@color/yellow_star"
+                app:bgDrawable="@drawable/ic_star_unfilled"
+                app:layout_constraintTop_toBottomOf="@id/average_rating"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="@dimen/_8sdp" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/total_ratings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextView_500_Medium"
+                android:text="2,115 ratings"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@id/rating_bar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="@dimen/_15sdp" />
+            <LinearLayout
+                android:id="@+id/rating_distribution_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/total_ratings"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

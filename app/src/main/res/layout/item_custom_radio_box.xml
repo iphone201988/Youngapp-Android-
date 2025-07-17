@@ -1,0 +1,25 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/boxContainer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="@dimen/_5sdp"
+    android:layout_marginEnd="@dimen/_10sdp">
+
+    <View
+        android:id="@+id/box"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:background="@drawable/ic_check_unselected" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/label"
+        style="@style/TextView_400_Regular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_gray"
+        android:layout_marginStart="@dimen/_5sdp"
+        />
+</LinearLayout>

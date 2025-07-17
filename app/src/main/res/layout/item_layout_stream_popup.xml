@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="check"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/_20sdp"
+        android:background="@color/colorSecondary2">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_popup"
+            android:padding="@dimen/_20sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/tvScheduleSuccess"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/_14ssp"
+            android:padding="@dimen/_10sdp"
+            android:textColor="@color/grey"
+            android:text="@string/your_stream_has_been_scheduled_successfully"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/streamTitle"
+            style="@style/TextView_600_SemiBold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Stream Title"
+
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/_16ssp"
+            app:layout_constraintTop_toBottomOf="@id/tvScheduleSuccess"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvStreamTime"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="April 10, 2025 – 4:00 PM EST"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintTop_toBottomOf="@id/streamTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+        
+        <TextView
+            android:id="@+id/userName"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_14ssp"
+            android:text="Username123"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/tvStreamTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivCheck"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@{check ? @drawable/ic_check_selected :@drawable/ic_check_unselected}"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            app:layout_constraintTop_toBottomOf="@id/userName"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/sendReminder"
+            style="@style/TextView_400_Regular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Send me reminder for this stream"
+            app:layout_constraintTop_toTopOf="@id/ivCheck"
+            app:layout_constraintBottom_toBottomOf="@id/ivCheck"
+            app:layout_constraintStart_toEndOf="@id/ivCheck"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvConfirm"
+            style="@style/TextView_500_Medium"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_42sdp"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:background="@drawable/corner_radius_10"
+            android:gravity="center"
+            android:text="@string/confirm"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/sendReminder"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

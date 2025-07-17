@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.tech.young.ui.auth.AuthCommonVM" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:paddingBottom="@dimen/_30sdp"
+            tools:context=".ui.auth.login_flow.LoginFragment">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/_18sdp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:background="@drawable/rounded_bg"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:padding="@dimen/_8sdp"
+                    android:src="@drawable/iv_back_symbol"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvSkip"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_premium"
+                    android:text="@string/skip"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivBack"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/ivBack"/>
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvLoginTopText"
+                    style="@style/TextView_800_ExtraBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_23sdp"
+                    android:text="@string/add_payment"
+                    android:textSize="@dimen/_20ssp"
+                    app:layout_constraintStart_toStartOf="@+id/ivBack"
+                    app:layout_constraintTop_toBottomOf="@+id/ivBack" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvDes"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/you_can_add_payment_now_or_skip_for_now"
+                    android:textColor="@color/text_gray"
+                    app:layout_constraintStart_toStartOf="@+id/tvLoginTopText"
+                    app:layout_constraintTop_toBottomOf="@+id/tvLoginTopText" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtFirstName"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="@string/first_name"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintEnd_toStartOf="@+id/edtLastName"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDes" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtLastName"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_42sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="@string/last_name"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/edtFirstName"
+                    app:layout_constraintTop_toTopOf="@+id/edtFirstName" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtBillingAddress"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="@string/billing_address"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/edtFirstName" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtCity"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="@string/city"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintEnd_toStartOf="@+id/edtState"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edtBillingAddress" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtState"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="@string/state"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintEnd_toStartOf="@+id/edtZip"
+                    app:layout_constraintStart_toEndOf="@+id/edtCity"
+                    app:layout_constraintTop_toTopOf="@+id/edtCity" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtZip"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="@string/zip_code"
+                    android:inputType="number"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/edtState"
+                    app:layout_constraintTop_toTopOf="@+id/edtCity" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtPhoneNumber"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="@string/phone_number"
+                    android:inputType="number"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/edtZip" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtCardNumber"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="@string/card_number"
+                    android:inputType="number"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/edtPhoneNumber" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtCardExp"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="@string/card_expiration_date"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintEnd_toStartOf="@+id/edtCvv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edtCardNumber" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtCvv"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="@string/cvv"
+                    android:inputType="number"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/edtCardExp"
+                    app:layout_constraintTop_toTopOf="@+id/edtCardExp" />
+
+
+                <RadioButton
+                    android:id="@+id/radioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edtCvv" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:text="By checking this box, you agree to our terms of service."
+                    android:textColor="@color/text_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/radioButton"
+                    app:layout_constraintTop_toTopOf="@+id/radioButton" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvAdd"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:background="@drawable/corner_radius_10"
+                    android:gravity="center"
+                    android:onClick="@{v ->vm.onClick(v)}"
+                    android:text="@string/add"
+                    android:textColor="@color/white"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@+id/radioButton" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

@@ -1,0 +1,59 @@
+package com.tech.young.data.api
+
+
+object Constants {
+    const val BASE_URL = "https://3.148.147.103:8000/api/v1/"
+//  //  const val BASE_URL_IMAGE = "https://3.148.147.103:8000"
+    const val BASE_URL_IMAGE = "https://youngappbucket.s3.us-east-2.amazonaws.com"
+
+//    const val BASE_URL = "http://192.168.1.60:8888/api/v1/"
+//    const val BASE_URL_IMAGE = "http://192.168.1.60:8888"
+
+    const val GOOGLE_API_KEY = "AIzaSyD5Jt2e9ocVmXovnsOsdmtdhPRkP8m9IhQ"
+
+    /**************** API LIST *****************/
+    const val HEADER_API = "X-API-Key:lkcMuYllSgc3jsFi1gg896mtbPxIBzYkEL"
+    const val LOGIN = "user/login"
+    const val REGISTER = "user/register"
+    const val VERIFY_OTP = "user/verifyOtp"
+    const val SENT_OTP  = "user/sendOtp"
+    const val COMPLETE_REGISTRATION = "user/completeRegistration"
+    const val VERIFY_2FA = "user/verify2FA"
+    const val GET_TRENDING_TOPICS = "post/getTrendingTopics"
+    const val GET_USER_PROFILE = "user/getUserProfile"
+    const val GET_EVENTS = "event"
+    const val CREATE_EVENT = "event"
+    const val CONTACT_US = "user/contactUs"
+    const val GET_SAVED_POST ="post/getSavedPosts"
+    const val GET_USERS= "user/getUsers"
+    const val GET_CHAT = "chat"
+    const val SEND_REPORT  = "report"
+    const val CHANGE_PASSWORD  = "user/changePassword"
+    const val CREATE_VAULT = "vault"
+    const val GET_CHAT_MESSAGE = "chat/"
+    const val GET_VAULT = "vault"
+    const val GET_SAVED_VAULT = "vault/getSavedVaults"
+    const val GET_VAULT_DETAIL = "vault/"
+    const val JOIN_LEAVE_VAULT = "vault/joinLeaveVault/"
+    const val GET_ALL_POST = "post"
+    const val SAVE_UNSAVE_POST = "post/saveUnsavePost/"
+    const val SAVE_UNSAVE_VAULT = "vault/saveUnsaveVault/"
+    const val VAULT_ADD_COMMENT = "vault/addComment"
+    const val POST_ADD_COMMENT = "post/addComments"
+    const val LIKE_DISLIKE_POST = "post/likeDislikePost/"
+    const val RESHARE_POST  = "post/reshare/"
+    const val UPDATE_USER = "user/updateUser"
+    const val LOG_OUT = "user/logout"
+    const val ECO_SYSTEM = "user/getLatestUsers"
+    const val FOLLOW_UNFOLLOW = "user/followUnfollowUser/"
+    const val  UPDATE_CUSTOMER = "user/updateCustomers/"
+    const val GET_POST_BY_ID = "post/"
+    const val ADD_COMMENT = "comment"
+    const val GET_COMMENT  = "comment"
+    const val LIKE_DISLIKE_COMMENT = "comment/"
+    const val CREATE_SHARE = "post/"
+    const val DELETE_POST = "post/"
+    /*************** Temp value store****************/
+       var chooseAccountType = ""
+
+}
