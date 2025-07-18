@@ -294,6 +294,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
         if (TextUtils.isEmpty(binding.etTopic.text.toString().trim())) {
             showToast("Please select topics")
             return false
+
         }
         if (TextUtils.isEmpty(binding.etDescription.text.toString().trim())) {
             showToast("Please enter description")
