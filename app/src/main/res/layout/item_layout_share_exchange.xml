@@ -29,6 +29,7 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivImage"
+            setUserImageFromBaseUrl="@{bean.image}"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_150sdp"
             android:src="@drawable/ic_dummy_2"
@@ -178,7 +179,7 @@
             app:layout_constraintStart_toEndOf="@id/tvSaves"
             app:layout_constraintTop_toTopOf="@id/ivHeart"
             app:layout_constraintBottom_toBottomOf="@id/ivHeart"
-            android:layout_marginStart="@dimen/_10sdp"/>
+            android:layout_marginStart="@dimen/_5sdp"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvComments"
@@ -204,7 +205,7 @@
             app:layout_constraintStart_toEndOf="@id/tvComments"
             app:layout_constraintTop_toTopOf="@id/ivHeart"
             app:layout_constraintBottom_toBottomOf="@id/ivHeart"
-            android:layout_marginStart="@dimen/_10sdp"/>
+            android:layout_marginStart="@dimen/_5sdp"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvSaveData"
@@ -229,7 +230,7 @@
             app:layout_constraintStart_toEndOf="@id/tvSaveData"
             app:layout_constraintTop_toTopOf="@id/ivHeart"
             app:layout_constraintBottom_toBottomOf="@id/ivHeart"
-            android:layout_marginStart="@dimen/_10sdp"/>
+            android:layout_marginStart="@dimen/_5sdp"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvReshare"

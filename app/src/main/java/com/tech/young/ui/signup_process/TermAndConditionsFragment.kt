@@ -51,45 +51,8 @@ class TermAndConditionsFragment : BaseFragment<FragmentTermAndConditionsBinding>
                 }
 
                 R.id.tvNext -> {
-                    val request = HashMap<String, RequestBody>()
-                    fun String.toBody(): RequestBody =
-                        this.toRequestBody("text/plain".toMediaTypeOrNull())
+                    findNavController().navigate(R.id.navigateToAddPaymentFragment)
 
-                    fun add(key: String, value: String?) {
-                        if (!value.isNullOrBlank()) {
-                            request[key] = value.toBody()
-                            Log.d("RequestMap", "$key = $value")
-                        }
-                    }
-
-                    add("userId", RegistrationDataHolder.userId)
-                    add("role", RegistrationDataHolder.role)
-                    add("crdNumber", RegistrationDataHolder.crdNumber)
-
-                    add("age", RegistrationDataHolder.age)
-                    add("gender", RegistrationDataHolder.gender)
-                    add("maritalStatus", RegistrationDataHolder.maritalStatus)
-                    add("children", RegistrationDataHolder.children)
-                    add("homeOwnerShip", RegistrationDataHolder.homeOwnership)
-
-                    add("objective", RegistrationDataHolder.objective)
-                    add("financialExperience", RegistrationDataHolder.financialExperience)
-                    add("investments", RegistrationDataHolder.investments)
-                    add("servicesInterested", RegistrationDataHolder.servicesInterested)
-
-                    add("productsOffered", RegistrationDataHolder.productsServicesOffered)
-                    add("areaOfExpertise", RegistrationDataHolder.areasOfExpertise)
-
-                    add("industry", RegistrationDataHolder.industry)
-                    add("interestedIn", RegistrationDataHolder.interestedIn)
-
-                    add("packageName", "standard")
-
-                    viewModel.completeRegistration(
-                        request,
-                        Constants.COMPLETE_REGISTRATION,
-                        RegistrationDataHolder.profileImage
-                    )
                 }
 
 
@@ -116,33 +79,6 @@ class TermAndConditionsFragment : BaseFragment<FragmentTermAndConditionsBinding>
     }
 
     private fun initObserver() {
-        viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
-            when (it?.status) {
-                Status.LOADING -> {
-                    showLoading()
-                }
 
-                Status.SUCCESS -> {
-                    hideLoading()
-                    val result: RegistrationCompleted? = BindingUtils.parseJson(it.data.toString())
-                    if (result != null) {
-                        showSuccessToast(result.message.toString())
-                        val bundle = Bundle()
-                        bundle.putString("Form", "AddPayment")
-                        bundle.putString("qrCodeUrl", result.data?.qrCodeUrl.toString())
-                        bundle.putString("secret", result.data?.secret.toString())
-                        findNavController().navigate(R.id.navigateToPasswordChangedFragment, bundle)
-                    }
-
-                }
-
-                Status.ERROR -> {
-                    hideLoading()
-                    showErrorToast(it.message.toString())
-                }
-
-                else -> {}
-            }
-        })
     }
 }

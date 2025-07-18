@@ -111,7 +111,7 @@
                             style="@style/TextView_500_Medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="3"
+                            android:text="@{bean.user.sharesCount.toString()}"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/_12ssp"
                             android:textStyle="normal" />

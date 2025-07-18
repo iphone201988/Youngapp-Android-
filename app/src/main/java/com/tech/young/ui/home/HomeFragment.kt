@@ -3,9 +3,11 @@ package com.tech.young.ui.home
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -18,6 +20,7 @@ import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
+import com.tech.young.data.api.StockQuoteService
 import com.tech.young.data.model.TrendingTopicApiResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentHomeBinding
@@ -26,22 +29,34 @@ import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.consumer_stream.ConsumerStreamActiivty
 import com.tech.young.ui.streaming_activity.StreamActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private val viewModel:HomeActivityVM by viewModels()
-
+    private var tickerScrollHandler: Handler? = null
+    private var tickerScrollRunnable: Runnable? = null
 
     private lateinit var adapterTrending: SimpleRecyclerViewAdapter<TrendingTopicApiResponse.Data.Topic, HolderTrendingTopicBinding>
     override fun onCreateView(view: View) {
         // view
         initView()
+
+        getAds()
         // click
         initOnClick()
 
         viewModel.getTrendingTopics(Constants.GET_TRENDING_TOPICS)
         // observer
         initObserver()
+    }
+
+    private suspend fun getQuotes() {
+        val quotes = StockQuoteService.fetchQuotes(listOf("AAPL", "TSLA", "BTC"))
+    }
+
+    private fun getAds() {
+        viewModel.getAds(Constants.GET_ADS)
     }
 
     override fun getLayoutResource(): Int {
@@ -78,6 +93,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     }
 
+
+
     private fun initOnClick(){
         viewModel.onClick.observe(requireActivity()){
             when(it?.id){
@@ -107,6 +124,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
 
     }
+
 
     private fun initObserver(){
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
@@ -141,36 +159,80 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         })
     }
 
+//    fun setupTickerRecycler() {
+//        val rvTicker = binding.rvTicker
+//        val stockList = listOf(
+//            StockItem("AAPL", "+1.23%", true),
+//            StockItem("TSLA", "-2.45%", false),
+//            StockItem("BTC", "-2.45%", false),
+//            StockItem("TSLA", "-2.45%", false),
+//            StockItem("BTC", "+0.78%", true),
+//            StockItem("BTC", "-2.45%", false),
+//            StockItem("AAPL", "-2.45%", false),
+//
+//            )
+//        val adapter = TickerAdapter(stockList)
+//        rvTicker.adapter = adapter
+//        val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+//        rvTicker.layoutManager = layoutManager
+//
+//        // Auto-scroll continuously
+//        val scrollSpeed = 2
+//        val handler = Handler(Looper.getMainLooper())
+//        val runnable = object : Runnable {
+//            override fun run() {
+//                rvTicker.scrollBy(scrollSpeed, 0)
+//                handler.postDelayed(this, 30)
+//            }
+//        }
+//        handler.post(runnable)
+//    }
+
+
+
     fun setupTickerRecycler() {
         val rvTicker = binding.rvTicker
-        val stockList = listOf(
-            StockItem("AAPL", "+1.23%", true),
-            StockItem("TSLA", "-2.45%", false),
-            StockItem("BTC", "-2.45%", false),
-            StockItem("TSLA", "-2.45%", false),
-            StockItem("BTC", "+0.78%", true),
-            StockItem("BTC", "-2.45%", false),
-            StockItem("AAPL", "-2.45%", false),
-
-            )
-        val adapter = TickerAdapter(stockList)
+        val adapter = TickerAdapter(emptyList())
         rvTicker.adapter = adapter
-        val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        rvTicker.layoutManager = layoutManager
+        rvTicker.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
-        // Auto-scroll continuously
-        val scrollSpeed = 2
-        val handler = Handler(Looper.getMainLooper())
-        val runnable = object : Runnable {
-            override fun run() {
-                rvTicker.scrollBy(scrollSpeed, 0)
-                handler.postDelayed(this, 30)
+        val symbols = listOf("AAPL", "TSLA", "BTC")
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            // Fetch data from API
+            val quotes = StockQuoteService.fetchQuotes(symbols)
+
+            // Convert to StockItem list
+            val stockItems = quotes.map { (symbol, quote) ->
+                val isUp = (quote.d ?: 0.0) >= 0
+                val percentChange = String.format("%.2f%%", quote.dp ?: 0.0)
+                StockItem(symbol, percentChange, isUp)
             }
+
+            // Tripled list for infinite effect
+            val loopedList = stockItems + stockItems + stockItems
+            adapter.setItems(loopedList)
+
+            // Scroll to middle
+            rvTicker.scrollToPosition(loopedList.size / 2)
+
+            // Start auto-scroll
+            startTickerAutoScroll(rvTicker)
         }
-        handler.post(runnable)
     }
 
 
+    private fun startTickerAutoScroll(recyclerView: RecyclerView) {
+        val scrollSpeed = 2
+        tickerScrollHandler = Handler(Looper.getMainLooper())
+        tickerScrollRunnable = object : Runnable {
+            override fun run() {
+                recyclerView.scrollBy(scrollSpeed, 0)
+                tickerScrollHandler?.postDelayed(this, 30)
+            }
+        }
+        tickerScrollHandler?.post(tickerScrollRunnable!!)
+    }
 
     private fun initAdapterTrending() {
         adapterTrending =

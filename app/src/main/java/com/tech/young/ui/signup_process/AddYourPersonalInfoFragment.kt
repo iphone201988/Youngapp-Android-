@@ -70,53 +70,53 @@ class AddYourPersonalInfoFragment : BaseFragment<FragmentAddYourPersonalInfoBind
                                 }
                         }
                     }
-                        "Financial Advisor", "Financial Firm" ->{
-                            val edtProductsServicesOffered = binding.edtProductsServicesOffered.text.toString().trim()
-                            val edtAreasOfExpertise = binding.edtAreasExpertise.text.toString().trim()
-
-                            when{
-                                edtProductsServicesOffered.isEmpty() -> showToast("Please select product/ services offered")
-                                edtAreasOfExpertise.isEmpty() -> showToast("Areas of expertise")
-                                else ->{
-                                    RegistrationDataHolder.areasOfExpertise = edtAreasOfExpertise
-                                    RegistrationDataHolder.productsServicesOffered = edtProductsServicesOffered
-
-                                    findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
-
-                                }
-                            }
-                        }
-                        "Investor/ VC" ->{
-                            val  edtIndustryInterestedIn = binding.edtIndustryInterestedIn.text.toString().trim()
-                            val edtAreasExpertise = binding.edtAreasExpertise.text.toString().trim()
-                            when{
-                                edtIndustryInterestedIn.isEmpty() -> showToast("Please select industry interested in ")
-                                edtAreasExpertise.isEmpty() -> showToast("Areas of expertise")
-                                else ->{
-                                    RegistrationDataHolder.interestedIn = edtIndustryInterestedIn
-                                    RegistrationDataHolder.areasOfExpertise = edtAreasExpertise
-
-                                    findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
-
-                                }
-                            }
-                        }
-                        "Small Business","Startup" ->{
-                            val  edtIndustry = binding.edtIndustry.text.toString().trim()
-                            val edtInterestedIn = binding.edtInterestedIn.text.toString().trim()
-
-                            when{
-                                edtIndustry.isEmpty() -> showToast("Please select industry")
-                                edtInterestedIn.isEmpty() -> showToast("Please select interested in")
-                                else ->{
-                                    RegistrationDataHolder.industry = edtIndustry
-                                    RegistrationDataHolder.interestedIn = edtInterestedIn
-
-                                    findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
-
-                                }
-                            }
-                        }
+//                        "Financial Advisor", "Financial Firm" ->{
+//                            val edtProductsServicesOffered = binding.edtProductsServicesOffered.text.toString().trim()
+//                            val edtAreasOfExpertise = binding.edtAreasExpertise.text.toString().trim()
+//
+//                            when{
+//                                edtProductsServicesOffered.isEmpty() -> showToast("Please select product/ services offered")
+//                                edtAreasOfExpertise.isEmpty() -> showToast("Areas of expertise")
+//                                else ->{
+//                                    RegistrationDataHolder.areasOfExpertise = edtAreasOfExpertise
+//                                    RegistrationDataHolder.productsServicesOffered = edtProductsServicesOffered
+//
+//                                    findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
+//
+//                                }
+//                            }
+//                        }
+//                        "Investor/ VC" ->{
+//                            val  edtIndustryInterestedIn = binding.edtIndustryInterestedIn.text.toString().trim()
+//                            val edtAreasExpertise = binding.edtAreasExpertise.text.toString().trim()
+//                            when{
+//                                edtIndustryInterestedIn.isEmpty() -> showToast("Please select industry interested in ")
+//                                edtAreasExpertise.isEmpty() -> showToast("Areas of expertise")
+//                                else ->{
+//                                    RegistrationDataHolder.interestedIn = edtIndustryInterestedIn
+//                                    RegistrationDataHolder.areasOfExpertise = edtAreasExpertise
+//
+//                                    findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
+//
+//                                }
+//                            }
+//                        }
+//                        "Small Business","Startup" ->{
+//                            val  edtIndustry = binding.edtIndustry.text.toString().trim()
+//                            val edtInterestedIn = binding.edtInterestedIn.text.toString().trim()
+//
+//                            when{
+//                                edtIndustry.isEmpty() -> showToast("Please select industry")
+//                                edtInterestedIn.isEmpty() -> showToast("Please select interested in")
+//                                else ->{
+//                                    RegistrationDataHolder.industry = edtIndustry
+//                                    RegistrationDataHolder.interestedIn = edtInterestedIn
+//
+//                                    findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
+//
+//                                }
+//                            }
+//                        }
 
 
                     }
@@ -198,7 +198,7 @@ class AddYourPersonalInfoFragment : BaseFragment<FragmentAddYourPersonalInfoBind
                         else -> {
                             RegistrationDataHolder.productsServicesOffered = productsServicesOffered
                             RegistrationDataHolder.areasOfExpertise = areasOfExpertise
-                            findNavController().navigate(R.id.navigateToSelectYourInterestFragment)
+                            findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
                             //  findNavController().navigate(R.id.navigateToSelectYourAccountPackageFragment)
                         }
                     }
@@ -219,7 +219,25 @@ class AddYourPersonalInfoFragment : BaseFragment<FragmentAddYourPersonalInfoBind
                         else -> {
                             RegistrationDataHolder.industry = industry
                             RegistrationDataHolder.interestedIn = interestedIn
-                            findNavController().navigate(R.id.navigateToSelectYourInterestFragment)
+                            findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
+                        }
+                    }
+                }
+                R.id.tvNextVCAccountRegistration ->{
+                    val  edtIndustryInterestedIn = binding.edtIndustryInterestedIn.text.toString().trim()
+                    val edtAreasExpertise = binding.edtAreasExpertise.text.toString().trim()
+                    when{
+                        edtIndustryInterestedIn.isEmpty() ->{
+                            showToast("Please enter industry interested in ")
+                        }
+                        edtAreasExpertise.isEmpty() ->{
+                            showToast("Please enter areas of expertise")
+                        }
+                        else ->{
+                            RegistrationDataHolder.interestedIn = edtIndustryInterestedIn
+                            RegistrationDataHolder.areasOfExpertise = edtAreasExpertise
+
+                            findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
                         }
                     }
                 }

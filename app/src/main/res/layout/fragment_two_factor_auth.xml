@@ -75,36 +75,79 @@
                     app:layout_constraintStart_toStartOf="@+id/tvDes"
                     app:layout_constraintTop_toBottomOf="@+id/tvDes" />
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edtUsername"
-                    style="@style/TextView_400_Regular"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_42sdp"
-                    android:layout_marginTop="@dimen/_25sdp"
-                    android:background="@drawable/radius_border_gray"
-                    android:gravity="start|center"
-                    android:hint="@string/email_or_user_name"
-                    android:onClick="@{v ->vm.onClick(v)}"
-                    android:paddingHorizontal="@dimen/_10sdp"
-                    android:singleLine="true"
-                    android:textColorHint="@color/text_gray"
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivQRCode"
+                    android:layout_width="@dimen/_120sdp"
+                    android:layout_height="@dimen/_120sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:src="@drawable/iv_qr"
+                    app:layout_constraintEnd_toEndOf="@+id/tvGetCode"
+                    app:layout_constraintStart_toStartOf="@+id/tvGetCode"
                     app:layout_constraintTop_toBottomOf="@+id/tvGetCode" />
 
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvCancel"
-                    style="@style/TextView_500_Medium"
+                    android:id="@+id/tvSecrete"
+                    style="@style/TextView_400_Regular"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_42sdp"
-                    android:layout_marginTop="@dimen/_50sdp"
-                    android:background="@drawable/radius_border_green"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:singleLine="true"
+                    android:text="242ewfegg34t532"
+                    android:textSize="@dimen/_13ssp"
+                    app:layout_constraintEnd_toEndOf="@+id/ivQRCode"
+                    app:layout_constraintStart_toStartOf="@+id/ivQRCode"
+                    app:layout_constraintTop_toBottomOf="@+id/ivQRCode" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtSecrete"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="@dimen/_150sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/radius_border_gray"
                     android:gravity="center"
+                    android:hint="@string/enter_code_manually"
                     android:onClick="@{v ->vm.onClick(v)}"
-                    android:text="@string/cancel"
-                    android:textColor="@color/colorPrimary"
-                    app:layout_constraintEnd_toStartOf="@+id/tvLoginButton"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    android:textSize="@dimen/_13ssp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edtUsername" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvSecrete" />
+
+<!--                <androidx.appcompat.widget.AppCompatEditText-->
+<!--                    android:id="@+id/edtUsername"-->
+<!--                    style="@style/TextView_400_Regular"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="@dimen/_42sdp"-->
+<!--                    android:layout_marginTop="@dimen/_25sdp"-->
+<!--                    android:background="@drawable/radius_border_gray"-->
+<!--                    android:gravity="start|center"-->
+<!--                    android:hint="@string/email_or_user_name"-->
+<!--                    android:onClick="@{v ->vm.onClick(v)}"-->
+<!--                    android:paddingHorizontal="@dimen/_10sdp"-->
+<!--                    android:singleLine="true"-->
+<!--                    android:textColorHint="@color/text_gray"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/tvGetCode" />-->
+
+
+<!--                <androidx.appcompat.widget.AppCompatTextView-->
+<!--                    android:id="@+id/tvCancel"-->
+<!--                    style="@style/TextView_500_Medium"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="@dimen/_42sdp"-->
+<!--                    android:layout_marginTop="@dimen/_50sdp"-->
+<!--                    android:background="@drawable/radius_border_green"-->
+<!--                    android:gravity="center"-->
+<!--                    android:onClick="@{v ->vm.onClick(v)}"-->
+<!--                    android:text="@string/cancel"-->
+<!--                    android:textColor="@color/colorPrimary"-->
+<!--                    app:layout_constraintEnd_toStartOf="@+id/tvLoginButton"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/edtUsername" />-->
 
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -119,8 +162,9 @@
                     android:text="@string/log_in_new"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/tvCancel"
-                    app:layout_constraintTop_toTopOf="@+id/tvCancel" />
+                    android:layout_marginTop="@dimen/_10sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/edtSecrete" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

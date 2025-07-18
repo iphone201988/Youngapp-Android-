@@ -1,9 +1,12 @@
 package com.tech.young.ui.ecosystem
 
 import android.content.Intent
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -21,6 +24,9 @@ import com.tech.young.databinding.FragmentEcosystemBinding
 import com.tech.young.databinding.ItemViewUsersBinding
 import com.tech.young.ui.common.CommonActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
@@ -31,7 +37,8 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<String, AdsItemViewBinding>
     private lateinit var categoryAdapter: SimpleRecyclerViewAdapter<CategoryModel, CategoryItemViewBinding>
     private lateinit var usersAdapter: SimpleRecyclerViewAdapter<GetLatestUserApiResponse.Data.User, ItemViewUsersBinding>
-
+    private var searchJob: Job? = null
+    private var apiTitle : String ? = null
     // list data
     private lateinit var categoryData: ArrayList<CategoryModel>
     private var selectedCategoryTitle: String? = null
@@ -47,7 +54,48 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
     override fun onCreateView(view: View) {
         initView()
         initOnClick()
+        searchView()
         initObserver()
+    }
+
+    private fun searchView() {
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                // Cancel any previous job to avoid multiple triggers
+                searchJob?.cancel()
+
+                // Launch coroutine after delay
+                searchJob = lifecycleScope.launch {
+                    delay(2000) // 3 seconds delay
+
+                    val query = s.toString().trim()
+                    if (query.isNotEmpty()) {
+                        callSearchApi(query)
+                    }
+
+                }
+            }
+        })
+    }
+
+    private fun callSearchApi(query: String) {
+        if (apiTitle != null){
+            val data = HashMap<String,Any>()
+            data["search"] = query
+            data["category"] = apiTitle.toString()
+            viewModel.getLatestUser(data,Constants.GET_USERS)
+        }
+        else{
+            val data = HashMap<String,Any>()
+            data["search"] = query
+            data["category"] = "general_member"
+            viewModel.getLatestUser(data,Constants.GET_USERS)
+        }
+
     }
 
     /** Setup initial view state **/
@@ -72,7 +120,7 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
     private fun getLatestUser() {
         val data = HashMap<String,Any>()
         data["category"] = "general_member"
-        viewModel.getLatestUser(data,Constants.ECO_SYSTEM)
+        viewModel.getLatestUser(data,Constants.GET_USERS)
     }
 
     /** Click observers **/
@@ -132,9 +180,9 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
                         selectedCategoryTitle = m.title
                         categoryAdapter.notifyDataSetChanged()
 
-                        val apiTitle = mapTitleToApiValue(selectedCategoryTitle!!)
+                         apiTitle = mapTitleToApiValue(selectedCategoryTitle!!)
                         val data = hashMapOf<String, Any>(
-                            "category" to apiTitle,
+                            "category" to apiTitle.toString(),
                         )
                         viewModel.getLatestUser(data,Constants.ECO_SYSTEM)
                     // Optional: Fetch/update data on selection
@@ -172,8 +220,8 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
             "Advisors",
             "Startups",
             "Small Businesses",
-            "Insurance",
-            "VCs"
+            "Investor",
+            "Firm"
         )
 
         return ArrayList(items.mapIndexed { index, item ->
@@ -193,8 +241,8 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
             "Advisors" -> "financial_advisor"
             "Startups" -> "startup"
             "Small Businesses" -> "small_business"
-            "Insurance" -> "insurance"
-            "VCs" -> "investor"
+            "Investor" -> "investor"
+            "Firm" -> "financial_firm"
             "Members" -> "general_member"
             else -> title.lowercase().replace(" ", "_")
         }

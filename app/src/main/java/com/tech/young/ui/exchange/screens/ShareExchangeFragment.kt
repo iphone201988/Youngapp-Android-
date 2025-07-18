@@ -1,11 +1,14 @@
 package com.tech.young.ui.exchange.screens
 
 import android.content.Intent
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -27,6 +30,8 @@ import com.tech.young.databinding.ItemLayoutSortDataBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.exchange.ExchangeVM
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() {
@@ -50,7 +55,12 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() {
     override fun onCreateView(view: View) {
         initView()
         initOnClick()
+        searchView()
         initObserver()
+    }
+
+    private fun searchView() {
+
     }
 
     /** View setup **/
@@ -144,6 +154,10 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() {
             "userType" to apiTitle,
             "type" to "share",
             "page" to 1
+
+
+
+
         )
         viewModel.getShare(data, Constants.GET_ALL_POST)
     }
