@@ -62,6 +62,7 @@ class SetupPasswordFragment : BaseFragment<FragmentSetupPasswordBinding>() {
                 Status.SUCCESS -> {
                     hideLoading()
                     val result: Signup? = BindingUtils.parseJson(it.data.toString())
+                    sharedPrefManager.saveUserId(result?.data?._id.toString())
                     showSuccessToast(result?.message.toString())
                     val bundle = Bundle().apply {
                         putString("from", "SignUpProcess")

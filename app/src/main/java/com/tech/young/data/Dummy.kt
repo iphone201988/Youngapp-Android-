@@ -1,7 +1,7 @@
 package com.tech.young.data
 
 import android.os.Parcelable
-import androidx.test.espresso.Root
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 import java.util.Date
 
@@ -65,23 +65,17 @@ data class RSSItem(
 ):Parcelable
 
 
-//@Root(name = "channel", strict = false)
-//data class NewsFeedList(
-//    @ElementList(name = "item", inline = true)
-//    val articleList: List<NewsFeed>
-//)
-//
-//@Root(name = "item", strict = false)
-//data class NewsFeed(
-//    @Element(name="title")
-//    val title: String,
-//    @Element(name="link")
-//    val link:String
-//)
-
-
 data class SortingItem(
     val isSelected: Boolean = false,
     val title: String
 )
 
+
+data class DiditItems(
+    var title : String
+)
+
+data class AuthResponse(
+    @SerializedName("access_token") val accessToken: String,
+    @SerializedName("expires_in") val expiresIn: Long
+)

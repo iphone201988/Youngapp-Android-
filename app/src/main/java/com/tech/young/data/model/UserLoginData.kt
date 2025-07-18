@@ -1162,4 +1162,16 @@ data class CreatePostApiResponse(
             var updatedAt: String?
         )
     }
+
+}
+
+data class DigitApiResponse(
+    var `data`: Data?,
+    var message: String?,
+    var success: Boolean?
+) {
+    data class Data(
+        var _id: String?,
+        var isDocumentVerified: String?
+    )
 }
