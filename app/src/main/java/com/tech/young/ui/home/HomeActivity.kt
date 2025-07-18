@@ -76,8 +76,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                                 BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null) {
                                 if (myDataModel.data != null) {
-                                    name = myDataModel.data?.user?.firstName.toString()
+                                    if (myDataModel.data?.user?.lastName.toString()!=null){
+                                        name = myDataModel.data?.user?.firstName.toString() +" "+ myDataModel.data?.user?.lastName.toString()
+                                    }
+                                    else{
+                                        name = myDataModel.data?.user?.firstName.toString()
+                                    }
                                     Log.i("dsadas", "initObserver: $name")
+                                    initAdapter()
                                 }
                             }
                         }
@@ -114,7 +120,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
 //            .findFragmentById(R.id.navHostFragment) as NavHostFragment).navController
         displayFragment(HomeFragment())
         updateHomeUI()
-        initAdapter()
         supportFragmentManager.addOnBackStackChangedListener {
             val currentFragment = supportFragmentManager.findFragmentById(R.id.frameLayout)
             if (currentFragment != null && currentFragment.isAdded) {

@@ -6,7 +6,10 @@
     <data>
         <variable
             name="vm"
-            type="com.tech.young.ui.my_profile_screens.forNormal.EditDetailsVM" />
+            type="com.tech.young.ui.my_profile_screens.YourProfileVM" />
+        <variable
+            name="bean"
+            type="com.tech.young.data.model.GetProfileApiResponse.GetProfileApiResponseData" />
 
     </data>
 
@@ -69,16 +72,17 @@
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-            <androidx.appcompat.widget.AppCompatEditText
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/edtChildren"
                 style="@style/TextView_400_Regular"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_42sdp"
                 android:layout_marginTop="@dimen/_3sdp"
-                android:enabled="false"
+                android:onClick="@{v ->vm.onClick(v)}"
                 android:background="@drawable/radius_border_gray"
                 android:gravity="start|center"
                 android:hint="Planning"
+                android:text="@{bean.user.children}"
                 android:paddingHorizontal="@dimen/_10sdp"
                 android:singleLine="true"
                 android:textColorHint="@color/text_gray"
@@ -101,13 +105,13 @@
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edtChildren" />
-            <androidx.appcompat.widget.AppCompatEditText
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/etEducation"
                 style="@style/TextView_400_Regular"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_42sdp"
                 android:layout_marginTop="@dimen/_3sdp"
-                android:enabled="false"
+                android:onClick="@{v->vm.onClick(v)}"
                 android:background="@drawable/radius_border_gray"
                 android:gravity="start|center"
                 android:hint="High School"
@@ -133,14 +137,15 @@
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/etEducation" />
-            <androidx.appcompat.widget.AppCompatEditText
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/etResidence"
                 style="@style/TextView_400_Regular"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_42sdp"
                 android:layout_marginTop="@dimen/_3sdp"
-                android:enabled="false"
                 android:background="@drawable/radius_border_gray"
+                android:onClick="@{v->vm.onClick(v)}"
+                android:text="@{bean.user.residenceStatus}"
                 android:gravity="start|center"
                 android:hint="Rent"
                 android:paddingHorizontal="@dimen/_10sdp"

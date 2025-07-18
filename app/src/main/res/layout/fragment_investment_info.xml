@@ -6,7 +6,10 @@
     <data>
         <variable
             name="vm"
-            type="com.tech.young.ui.my_profile_screens.forNormal.EditDetailsVM" />
+            type="com.tech.young.ui.my_profile_screens.YourProfileVM" />
+        <variable
+            name="bean"
+            type="com.tech.young.data.model.GetProfileApiResponse.GetProfileApiResponseData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -80,6 +83,8 @@
                     android:layout_marginTop="@dimen/_3sdp"
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
+                    android:inputType="numberDecimal"
+                    android:text="@{bean.user.stockInvestments}"
                     android:hint="@string/ic_dollar_currency"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
@@ -104,6 +109,8 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="0-5"
+                    android:text="@{bean.user.specificStockSymbols}"
+                    android:inputType="numberDecimal"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"
@@ -127,6 +134,8 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="@string/ic_dollar_currency"
+                    android:text="@{bean.user.cryptoInvestments}"
+                    android:inputType="numberDecimal"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"
@@ -149,6 +158,8 @@
                     android:layout_marginTop="@dimen/_3sdp"
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
+                    android:inputType="numberDecimal"
+                    android:text="@{bean.user.specificCryptoSymbols}"
                     android:hint="@string/ic_dollar_currency"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
@@ -173,6 +184,8 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="@string/ic_dollar_currency"
+                    android:text="@{bean.user.otherSecurityInvestments}"
+                    android:inputType="numberDecimal"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"
@@ -196,6 +209,8 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="@string/ic_dollar_currency"
+                    android:text="@{bean.user.realEstate}"
+                    android:inputType="numberDecimal"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"
@@ -219,6 +234,8 @@
                     android:layout_marginTop="@dimen/_3sdp"
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
+                    android:text="@{bean.user.retirementAccount}"
+                    android:inputType="numberDecimal"
                     android:hint="@string/ic_dollar_currency"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
@@ -240,8 +257,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
+                    android:text="@{bean.user.savings}"
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
+                    android:inputType="numberDecimal"
                     android:hint="@string/ic_dollar_currency"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
@@ -266,6 +285,8 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="@string/ic_dollar_currency"
+                    android:text="@{bean.user.startups}"
+                    android:inputType="numberDecimal"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"

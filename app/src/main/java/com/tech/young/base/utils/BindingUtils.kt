@@ -13,6 +13,7 @@ import android.graphics.PorterDuff
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.view.WindowInsetsController
@@ -623,6 +624,19 @@ object BindingUtils {
             // Optional fallback icon to avoid crash
             imageView.setImageResource(R.drawable.dummy_profile)
         }
+    }
+
+    /** create image file j**/
+    fun createImageFile(context: Context): File? {
+        val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss", Locale.US
+        ).format(Date())
+        val imageFileName = "IMG_" + timeStamp + "_"
+        val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val image = File.createTempFile(
+            imageFileName, ".png", storageDir
+        )
+        return image
     }
 
 }

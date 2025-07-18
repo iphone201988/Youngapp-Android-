@@ -24,79 +24,76 @@ data class UserLoginData(
     val subscription: Any?,
     val token: String?,
     val updatedAt: String?,
-    val userName: String?
+    val userName: String?,
 )
 
 @Parcelize
 data class LoginApiData(
-    val data: Data?, val message: String?, val success: Boolean?
+    val data: Data?, val message: String?, val success: Boolean?,
 ) : Parcelable
 
 @Parcelize
 data class Data(
-    val _id: String?, val is2FAEnabled: Boolean?, val qrCodeUrl: String?, val secret: String?
+    val _id: String?, val is2FAEnabled: Boolean?, val qrCodeUrl: String?, val secret: String?,
 ) : Parcelable
 
 
 data class Signup(
-    val data: SignupData?, val message: String?, val success: Boolean?
+    val data: SignupData?, val message: String?, val success: Boolean?,
 )
 
 data class SignupData(
-    val _id: String?, val role: String?
+    val _id: String?, val role: String?,
 )
 
 
 /*******************Complete Registration ********************/
 data class RegistrationCompleted(
-    val data: RegistrationCompletedData?, val message: String?, val success: Boolean?
+    val data: RegistrationCompletedData?, val message: String?, val success: Boolean?,
 )
 
 data class RegistrationCompletedData(
-    val _id: String?, val qrCodeUrl: String?, val secret: String?
+    val _id: String?, val qrCodeUrl: String?, val secret: String?,
 )
-
 
 
 @Parcelize
 data class Login(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
-): Parcelable {
+    var success: Boolean?,
+) : Parcelable {
     @Parcelize
     data class Data(
         var _id: String?,
         var is2FAEnabled: Boolean?,
         var qrCodeUrl: String?,
-        var secret: String?
+        var secret: String?,
     ) : Parcelable
 }
 
 
-
-
 @Parcelize
 data class StreamData(
-    val title : String?,
-    val topic : String?,
-    val scheduleDate  : String?,
-    val image : Uri?,
-    val description: String?
+    val title: String?,
+    val topic: String?,
+    val scheduleDate: String?,
+    val image: Uri?,
+    val description: String?,
 
-):Parcelable
+    ) : Parcelable
 
 
 /******************* verification 2 factor api response ********************/
 data class Verification2faApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
         var name: String?,
         var role: String?,
-        var token: String?
+        var token: String?,
     )
 }
 
@@ -104,74 +101,106 @@ data class Verification2faApiResponse(
 data class TrendingTopicApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var topics: List<Topic?>?
+        var topics: List<Topic?>?,
     ) {
         data class Topic(
             var count: Int?,
-            var topic: String?
+            var topic: String?,
         )
     }
 }
 
 /******************* get profile api response ********************/
+@Parcelize
 data class GetProfileApiResponse(
-    var `data`: Data?,
+    var `data`: GetProfileApiResponseData?,
     var message: String?,
-    var success: Boolean?
-) {
-    data class Data(
-        var user: User?
-    ) {
-        data class  User(
-            var _id: String?,
+    var success: Boolean?,
+) : Parcelable {
+    @Parcelize
+    data class GetProfileApiResponseData(
+        var user: User?,
+    ) : Parcelable {
+        @Parcelize
+        data class User(
+            val _id: String?,
+            val additionalPhotos: List<String?>?,
+            val children: String?,
+            val countryCode: String?,
+            val createdAt: String?,
+            val customers: Int?,
+            val email: String?,
+            val firstName: String?,
+            val followers: Int?,
+            val following: Int?,
+            val formUpload: List<String?>?,
+            val is2FAEnabled: Boolean?,
+            val isConnectedWithProfile: Boolean?,
+            val isDeactivatedByUser: Boolean?,
+            val isFollowed: Boolean?,
+            val isRegistrationCompleted: Boolean?,
+            val isReported: Boolean?,
+            val isVerified: Boolean?,
+            val lastLogin: String?,
+            val lastName: String?,
+            val location: Location?,
+            val phone: String?,
+            val ratings: List<Rating?>?,
+            val residenceStatus: String?,
+            val role: String?,
+            val sharesCount: Int?,
+            val topicsOfInterest: List<String?>?,
+            val username: String?,
             var about: String?,
-            var additionalPhotos: List<String?>?,
             var age: String?,
             var areaOfExpertise: String?,
             var businessRevenue: String?,
             var city: String?,
             var company: String?,
-            var countryCode: String?,
             var crdNumber: String?,
-            var createdAt: String?,
-            var customers: Int?,
-            var email: String?,
             var fairnessForward: Boolean?,
-            var firstName: String?,
-            var followedBy: List<Any?>?,
-            var followers: Int?,
-            var following: Int?,
-            var formUpload: List<String?>?,
+            var followedBy: List<String?>?,
             var gender: String?,
             var investors: Boolean?,
-            var is2FAEnabled: Boolean?,
-            var isConnectedWithProfile: Boolean?,
-            var isFollowed: Boolean?,
-            var isRegistrationCompleted: Boolean?,
-            var isReported: Boolean?,
-            var isVerified: Boolean?,
-            var lastLogin: String?,
-            var lastName: String?,
             var packageName: String?,
-            var phone: String?,
             var productsOffered: String?,
             var profileImage: String?,
             var race: String?,
-            var ratings: List<Rating?>?,
-            var role: String?,
             var state: String?,
-            var topicsOfInterest: List<Any?>?,
-            var username: String?,
             var website: String?,
-            var yearFounded: String?
-        ) {
+            var yearFounded: String?,
+            val financialExperience: String?,
+            val goals: String?,
+            val investmentAccounts: Boolean?,
+            val investmentRealEstate: Boolean?,
+            val retirement: Boolean?,
+            val riskTolerance: String?,
+            val salaryRange: String?,
+            val yearsEmployed: String?,
+            val cryptoInvestments: String?,
+            val otherSecurityInvestments: String?,
+            val realEstate: String?,
+            val retirementAccount: String?,
+            val savings: String?,
+            val specificCryptoSymbols: String?,
+            val specificStockSymbols: String?,
+            val startups: String?,
+            val stockInvestments: String?,
+        ) : Parcelable {
+            @Parcelize
+            data class Location(
+                val coordinates: List<Double?>?,
+                val type: String?,
+            ) : Parcelable
+
+            @Parcelize
             data class Rating(
                 var _id: String?,
-                var ratings: Int?
-            )
+                var ratings: Int?,
+            ) : Parcelable
         }
     }
 }
@@ -180,11 +209,11 @@ data class GetProfileApiResponse(
 data class GetEventsApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
         var events: List<Event?>?,
-        var pagination: Pagination?
+        var pagination: Pagination?,
     ) {
         data class Event(
             var _id: String?,
@@ -195,13 +224,13 @@ data class GetEventsApiResponse(
             var title: String?,
             var topic: String?,
             var type: String?,
-            var userId: String?
+            var userId: String?,
         )
 
         data class Pagination(
             var limit: Int?,
             var page: Int?,
-            var total: Int?
+            var total: Int?,
         )
     }
 }
@@ -214,10 +243,10 @@ data class GetSavedPostApiResponse(
     var `data`: Data?,
     var message: String?,
     var pagination: Pagination?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var posts: List<Post?>?
+        var posts: List<Post?>?,
     ) {
         data class Post(
             var _id: String?,
@@ -233,13 +262,13 @@ data class GetSavedPostApiResponse(
             var title: String?,
             var topic: String?,
             var type: String?,
-            var userId: UserId?
+            var userId: UserId?,
         ) {
             data class UserId(
                 var _id: String?,
                 var firstName: String?,
                 var lastName: String?,
-                var profileImage: String?
+                var profileImage: String?,
             )
         }
     }
@@ -247,7 +276,7 @@ data class GetSavedPostApiResponse(
     data class Pagination(
         var limit: Int?,
         var page: Int?,
-        var total: Int?
+        var total: Int?,
     )
 
 }
@@ -257,28 +286,28 @@ data class GetSavedPostApiResponse(
 data class GetChatApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var chats: List<Chat?>?
+        var chats: List<Chat?>?,
     ) {
         data class Chat(
             var _id: String?,
             var chatUsers: List<ChatUser?>?,
             var createdAt: String?,
             var hasUnreadMessages: Boolean?,
-            var lastMessage: LastMessage?
+            var lastMessage: LastMessage?,
         ) {
             data class ChatUser(
                 var _id: String?,
                 var profileImage: String?,
                 var role: String?,
-                var username: String?
+                var username: String?,
             )
 
             data class LastMessage(
                 var _id: String?,
-                var message: String?
+                var message: String?,
             )
         }
     }
@@ -290,10 +319,10 @@ data class GetUserApiResponse(
     var `data`: Data?,
     var message: String?,
     var pagination: Pagination?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var users: List<User?>?
+        var users: List<User?>?,
     ) {
         data class User(
             var _id: String?,
@@ -302,14 +331,14 @@ data class GetUserApiResponse(
             var profileImage: String?,
             var role: String?,
             var username: String?,
-            var isSelected: Boolean = false
+            var isSelected: Boolean = false,
         )
     }
 
     data class Pagination(
         var limit: Int?,
         var page: Int?,
-        var totalPages: Int?
+        var totalPages: Int?,
     )
 }
 
@@ -318,10 +347,10 @@ data class GetUserApiResponse(
 data class GetChatMessageApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var messages: List<Messages?>?
+        var messages: List<Messages?>?,
     ) {
         data class Messages(
             var _id: String?,
@@ -329,13 +358,13 @@ data class GetChatMessageApiResponse(
             var createdAt: String?,
             var isRead: Boolean?,
             var message: String?,
-            var senderId: SenderId?
+            var senderId: SenderId?,
         ) {
             data class SenderId(
                 var _id: String?,
                 var profileImage: String?,
                 var role: String?,
-                var username: String?
+                var username: String?,
             )
         }
     }
@@ -346,10 +375,10 @@ data class GetVaultApiResponse(
     var `data`: Data?,
     var message: String?,
     var pagination: Pagination?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var vaults: List<Vault?>?
+        var vaults: List<Vault?>?,
     ) {
         data class Vault(
             var _id: String?,
@@ -363,19 +392,19 @@ data class GetVaultApiResponse(
             var isSaved: Boolean?,
             var members: List<Member?>?,
             var title: String?,
-            var topic: String?
+            var topic: String?,
         ) {
             data class Admin(
                 var _id: String?,
                 var firstName: String?,
                 var lastName: String?,
                 var profileImage: String?,
-                var username: String?
+                var username: String?,
             )
 
             data class Member(
                 var _id: String?,
-                var profileImage: String?
+                var profileImage: String?,
             )
         }
     }
@@ -383,7 +412,7 @@ data class GetVaultApiResponse(
     data class Pagination(
         var limit: Int?,
         var page: Int?,
-        var total: Int?
+        var total: Int?,
     )
 }
 
@@ -431,10 +460,10 @@ data class GetVaultApiResponse(
 data class VaultDetailApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var vault: Vault?
+        var vault: Vault?,
     ) {
         data class Vault(
             var _id: String?,
@@ -447,14 +476,14 @@ data class VaultDetailApiResponse(
             var isMember: Boolean?,
             var members: List<Member?>?,
             var title: String?,
-            var topic: String?
+            var topic: String?,
         ) {
             data class Admin(
                 var _id: String?,
                 var firstName: String?,
                 var lastName: String?,
                 var profileImage: String?,
-                var username: String?
+                var username: String?,
             )
 
             data class Member(
@@ -462,19 +491,20 @@ data class VaultDetailApiResponse(
                 var firstName: String?,
                 var lastName: String?,
                 var profileImage: String?,
-                var username: String?
+                var username: String?,
             )
         }
     }
 }
+
 /******************* get vault detail api  response ********************/
 data class JoinVaultRoomApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var vaultId: String?
+        var vaultId: String?,
     )
 }
 
@@ -483,10 +513,10 @@ data class ExchangeShareApiResponse(
     var `data`: Data?,
     var message: String?,
     var pagination: Pagination?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var posts: List<Post?>?
+        var posts: List<Post?>?,
     ) {
         data class Post(
             var _id: String?,
@@ -506,13 +536,13 @@ data class ExchangeShareApiResponse(
             var title: String?,
             var topic: String?,
             var type: String?,
-            var userId: UserId?
+            var userId: UserId?,
         ) {
             data class UserId(
                 var _id: String?,
                 var firstName: String?,
                 var lastName: String?,
-                var profileImage: String?
+                var profileImage: String?,
             )
         }
     }
@@ -520,7 +550,7 @@ data class ExchangeShareApiResponse(
     data class Pagination(
         var limit: Int?,
         var page: Int?,
-        var total: Int?
+        var total: Int?,
     )
 }
 
@@ -529,10 +559,10 @@ data class VaultExchangeApiResponse(
     var `data`: Data?,
     var message: String?,
     var pagination: Pagination?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var vaults: List<Vault?>?
+        var vaults: List<Vault?>?,
     ) {
         data class Vault(
             var _id: String?,
@@ -545,19 +575,19 @@ data class VaultExchangeApiResponse(
             var members: List<Member?>?,
             var title: String?,
             var topic: String?,
-            var isSaved: Boolean?
+            var isSaved: Boolean?,
         ) {
             data class Admin(
                 var _id: String?,
                 var firstName: String?,
                 var lastName: String?,
                 var profileImage: String?,
-                var username: String?
+                var username: String?,
             )
 
             data class Member(
                 var _id: String?,
-                var profileImage: String?
+                var profileImage: String?,
             )
         }
     }
@@ -565,7 +595,7 @@ data class VaultExchangeApiResponse(
     data class Pagination(
         var limit: Int?,
         var page: Int?,
-        var total: Int?
+        var total: Int?,
     )
 
 }
@@ -574,10 +604,10 @@ data class VaultExchangeApiResponse(
 data class SavedPostApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var postId: String?
+        var postId: String?,
     )
 }
 
@@ -585,10 +615,10 @@ data class SavedPostApiResponse(
 data class SendOtpApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var _id: String?
+        var _id: String?,
     )
 }
 
@@ -596,11 +626,11 @@ data class SendOtpApiResponse(
 data class VerifyOtpApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
         var _id: String?,
-        var role: String?
+        var role: String?,
     )
 }
 
@@ -608,22 +638,22 @@ data class VerifyOtpApiResponse(
 data class UpdateUserProfileResponse(
     val data: UpdateUserProfileData?,
     val message: String?,
-    val success: Boolean?
+    val success: Boolean?,
 )
 
 data class UpdateUserProfileData(
-    val name: String?
+    val name: String?,
 )
 
 /*************** get other user profile *********************/
 data class GetOtherUserProfileModel(
     val data: GetOtherUserProfileModelData?,
     val message: String?,
-    val success: Boolean?
+    val success: Boolean?,
 )
 
 data class GetOtherUserProfileModelData(
-    val user: GetOtherUserProfileData?
+    val user: GetOtherUserProfileData?,
 )
 
 data class GetOtherUserProfileData(
@@ -672,7 +702,7 @@ data class GetOtherUserProfileData(
     val subscriptionId: String?,
     val topicsOfInterest: List<Any?>?,
     val username: String?,
-    val sharesCount : Int
+    val sharesCount: Int,
 )
 //{
 //    data class IsConnectedWithProfile(
@@ -687,9 +717,8 @@ data class GetOtherUserProfileData(
 
 data class Rating(
     val _id: String?,
-    val ratings: Double?
+    val ratings: Double?,
 )
-
 
 
 //data class GetOtherUserProfileModel(
@@ -760,11 +789,11 @@ data class Rating(
 data class GetCommentApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
         var comments: List<Comment?>?,
-        var pagination: Pagination?
+        var pagination: Pagination?,
     ) {
         data class Comment(
             var _id: String?,
@@ -774,21 +803,21 @@ data class GetCommentApiResponse(
             var likesCount: Int?,
             var type: String?,
             var userId: UserId?,
-            var vaultId: String?
+            var vaultId: String?,
         ) {
             data class UserId(
                 var _id: String?,
                 var firstName: String?,
                 var lastName: String?,
                 var profileImage: String?,
-                var role: String?
+                var role: String?,
             )
         }
 
         data class Pagination(
             var limit: Int?,
             var page: Int?,
-            var total: Int?
+            var total: Int?,
         )
     }
 }
@@ -797,10 +826,10 @@ data class GetCommentApiResponse(
 data class GetLatestUserApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var users: List<User?>?
+        var users: List<User?>?,
     ) {
         data class User(
             var _id: String?,
@@ -808,9 +837,9 @@ data class GetLatestUserApiResponse(
             var lastName: String?,
             var profileImage: String?,
             var role: String?,
-            var username: String?
+            var username: String?,
 
-        )
+            )
     }
 }
 
@@ -820,10 +849,10 @@ data class GetLatestUserApiResponse(
 data class GetPostDetailsApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var post: Post?
+        var post: Post?,
     ) {
         data class Post(
             var _id: String?,
@@ -838,13 +867,13 @@ data class GetPostDetailsApiResponse(
             var title: String?,
             var topic: String?,
             var type: String?,
-            var userId: UserId?
+            var userId: UserId?,
         ) {
             data class UserId(
                 var _id: String?,
                 var firstName: String?,
                 var lastName: String?,
-                var profileImage: String?
+                var profileImage: String?,
             )
         }
     }
@@ -854,20 +883,19 @@ data class GetPostDetailsApiResponse(
 /*************** received socket  api response *********************/
 
 
-
 data class ReceivedMessageApiResponse(
     var _id: String?,
     var chatId: String?,
     var createdAt: String?,
     var isRead: Boolean?,
     var message: String?,
-    var senderId: SenderId?
+    var senderId: SenderId?,
 ) {
     data class SenderId(
         var _id: String?,
         var profileImage: String?,
         var role: String?,
-        var username: String?
+        var username: String?,
     )
 }
 
@@ -876,10 +904,10 @@ data class ReceivedMessageApiResponse(
 data class AddCommentApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var comment: Comment?
+        var comment: Comment?,
     ) {
         data class Comment(
             var _id: String?,
@@ -888,12 +916,12 @@ data class AddCommentApiResponse(
             var isLiked: Boolean?,
             var postId: String?,
             var type: String?,
-            var userId: UserId?
+            var userId: UserId?,
         ) {
             data class UserId(
                 var _id: String?,
                 var firstName: String?,
-                var lastName: String?
+                var lastName: String?,
             )
         }
     }
@@ -904,11 +932,11 @@ data class AddCommentApiResponse(
 data class GetCommentApiResponsePost(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
         var comments: List<Comment?>?,
-        var pagination: Pagination?
+        var pagination: Pagination?,
     ) {
         data class Comment(
             var _id: String?,
@@ -918,21 +946,21 @@ data class GetCommentApiResponsePost(
             var likesCount: Int?,
             var postId: String?,
             var type: String?,
-            var userId: UserId?
+            var userId: UserId?,
         ) {
             data class UserId(
                 var _id: String?,
                 var firstName: String?,
                 var lastName: String?,
                 var profileImage: String?,
-                var role: String?
+                var role: String?,
             )
         }
 
         data class Pagination(
             var limit: Int?,
             var page: Int?,
-            var total: Int?
+            var total: Int?,
         )
     }
 }
@@ -943,10 +971,10 @@ data class GetCommentApiResponsePost(
 data class AddCommentApiResponseVault(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var comment: Comment?
+        var comment: Comment?,
     ) {
         data class Comment(
             var _id: String?,
@@ -955,12 +983,12 @@ data class AddCommentApiResponseVault(
             var isLiked: Boolean?,
             var type: String?,
             var userId: UserId?,
-            var vaultId: String?
+            var vaultId: String?,
         ) {
             data class UserId(
                 var _id: String?,
                 var firstName: String?,
-                var lastName: String?
+                var lastName: String?,
             )
         }
     }
@@ -972,10 +1000,10 @@ data class AddCommentApiResponseVault(
 data class CommentLikeDislikeApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var commentId: String?
+        var commentId: String?,
     )
 }
 
@@ -985,10 +1013,10 @@ data class CommentLikeDislikeApiResponse(
 data class StreamApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var post: Post?
+        var post: Post?,
     ) {
         data class Post(
             var __v: Int?,
@@ -1003,7 +1031,7 @@ data class StreamApiResponse(
             var title: String?,
             var topic: String?,
             var type: String?,
-            var updatedAt: String?
+            var updatedAt: String?,
         )
     }
 }
@@ -1055,10 +1083,10 @@ data class GetStreamApiResponse(
     var `data`: Data?,
     var message: String?,
     var pagination: Pagination?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var posts: List<Post?>?
+        var posts: List<Post?>?,
     ) {
         data class Post(
             var _id: String?,
@@ -1076,18 +1104,18 @@ data class GetStreamApiResponse(
             var title: String?,
             var topic: String?,
             var type: String?,
-            var userId: UserId?
+            var userId: UserId?,
         ) {
             data class UserId(
                 var _id: String?,
                 var firstName: String?,
                 var lastName: String?,
                 var location: Location?,
-                var profileImage: String?
+                var profileImage: String?,
             ) {
                 data class Location(
                     var coordinates: List<Double?>?,
-                    var type: String?
+                    var type: String?,
                 )
             }
         }
@@ -1096,7 +1124,7 @@ data class GetStreamApiResponse(
     data class Pagination(
         var limit: Int?,
         var page: Int?,
-        var total: Int?
+        var total: Int?,
     )
 }
 
@@ -1104,14 +1132,13 @@ data class GetStreamApiResponse(
 /***************  stream detail api response *********************/
 
 
-
 data class StreamDetailApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var post: Post?
+        var post: Post?,
     ) {
         data class Post(
             var _id: String?,
@@ -1131,7 +1158,7 @@ data class StreamDetailApiResponse(
                 var _id: String?,
                 var firstName: String?,
                 var lastName: String?,
-                var profileImage: String?
+                var profileImage: String?,
             )
         }
     }
@@ -1142,10 +1169,10 @@ data class StreamDetailApiResponse(
 data class CreatePostApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
-        var post: Post?
+        var post: Post?,
     ) {
         data class Post(
             var __v: Int?,
@@ -1159,7 +1186,7 @@ data class CreatePostApiResponse(
             var title: String?,
             var topic: String?,
             var type: String?,
-            var updatedAt: String?
+            var updatedAt: String?,
         )
     }
 
@@ -1168,10 +1195,10 @@ data class CreatePostApiResponse(
 data class DigitApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?
+    var success: Boolean?,
 ) {
     data class Data(
         var _id: String?,
-        var isDocumentVerified: String?
+        var isDocumentVerified: String?,
     )
 }

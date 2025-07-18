@@ -14,6 +14,7 @@ import com.tech.young.base.BaseViewModel
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.data.DropDownData
 import com.tech.young.data.UserData
+import com.tech.young.data.model.GetProfileApiResponse
 import com.tech.young.data.model.StreamData
 import com.tech.young.databinding.ActivityCommonBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -61,31 +62,39 @@ class CommonActivity : BaseActivity<ActivityCommonBinding>()  {
                                     val threadId = intent.getStringExtra("threadId")
                                     val userData = intent.getParcelableExtra<UserData>("userData")
 
-                                    val bundle = Bundle().apply {
-                                        putString("threadId", threadId)
-                                        putParcelable("userData", userData)
-                                    }
+                                    bundle.putString("threadId", threadId)
+                                    bundle.putParcelable("userData", userData)
 
                                     setStartDestination(R.id.fragmentViewMessage)
-                                    navController.setGraph(this, bundle)
                                 }
                                 "new_message" -> {
                                     setStartDestination(R.id.fragmentNewMessage)
                                 }
                                 "edit_profile" -> {
+                                    val profileData=intent.getParcelableExtra<GetProfileApiResponse.GetProfileApiResponseData>("profileData")
+                                    bundle.putParcelable("profileData", profileData)
                                     setStartDestination(R.id.fragmentEditProfile)
                                 }
                                 "account_verify" -> {
                                     setStartDestination(R.id.fragmentVerifyProfile)
                                 }
-                                "normal_family"->{
+                                "normal_family"-> {
+                                    val profileData =
+                                        intent.getParcelableExtra<GetProfileApiResponse.GetProfileApiResponseData>(
+                                            "profileData"
+                                        )
+                                    bundle.putParcelable("profileData", profileData)
                                     setStartDestination(R.id.fragmentFamilyDetails)
                                 }
                                 "normal_finance_detail"->{
+                                    val profileData=intent.getParcelableExtra<GetProfileApiResponse.GetProfileApiResponseData>("profileData")
+                                    bundle.putParcelable("profileData", profileData)
                                     setStartDestination(R.id.fragmentFinanceInfo)
                                 }
                                 "normal_investment"->{
-                                    setStartDestination(R.id.fragmentFamilyDetails)
+                                    val profileData=intent.getParcelableExtra<GetProfileApiResponse.GetProfileApiResponseData>("profileData")
+                                    bundle.putParcelable("profileData", profileData)
+                                    setStartDestination(R.id.fragmentInvestmentInfo)
                                 }
                                 "account_detail" -> {
                                     setStartDestination(R.id.fragmentAdditionalInfo)

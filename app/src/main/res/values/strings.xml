@@ -272,4 +272,5 @@
     <string name="powered_by_didit">Powered by didit</string>
     <string name="licence_verification">Licence Verification</string>
     <string name="we_ll_redirect_you_to_our_trusted_partner_didit_for_secure_licence_verification_the_process_is_quick_safe_and_your_data_is_protected">We\'ll redirect you to our trusted partner didit for secure licence verification. The Process is quick, safe, and your data is protected</string>
+    <string name="risk_tolerance">Risk Tolerance</string>
 </resources>

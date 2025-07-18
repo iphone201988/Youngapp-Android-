@@ -134,7 +134,21 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() {
             }
         }
 
+        sortAdapter= SimpleRecyclerViewAdapter(R.layout.item_layout_sort_data,BR.bean){ v, m, pos ->
 
+        }
+        binding.rvSort.adapter=sortAdapter
+        sortAdapter.list=getSortList()
+
+
+    }
+
+    private fun getSortList():ArrayList<SortingItem>{
+        val list=ArrayList<SortingItem>()
+        list.add(SortingItem("Followed"))
+        list.add(SortingItem("Saved"))
+        list.add(SortingItem("Booms"))
+        return list
     }
 
     /** API call **/

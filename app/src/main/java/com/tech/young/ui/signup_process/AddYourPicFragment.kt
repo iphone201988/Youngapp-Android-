@@ -1,28 +1,44 @@
 package com.tech.young.ui.signup_process
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.provider.MediaStore
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
+import com.tech.young.base.permission.PermissionHandler
+import com.tech.young.base.permission.Permissions
+import com.tech.young.base.utils.BaseCustomBottomSheet
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.BindingUtils.setNavigationBarStyle
 import com.tech.young.data.api.Constants
+import com.tech.young.databinding.BottomSheetCameraGalleryBinding
 import com.tech.young.databinding.FragmentAddYourPicBinding
 import com.tech.young.ui.auth.AuthCommonVM
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 
 @AndroidEntryPoint
 class AddYourPicFragment : BaseFragment<FragmentAddYourPicBinding>() {
     private val viewModel: AuthCommonVM by viewModels()
+    private lateinit var cameraGalleryBottomSheet: BaseCustomBottomSheet<BottomSheetCameraGalleryBinding>
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
+
+    //// camera
+    private var photoFile: File? = null
+    private var photoURI: Uri? = null
     override fun onCreateView(view: View) {
         initView()
         initOnClick()
@@ -52,6 +68,7 @@ class AddYourPicFragment : BaseFragment<FragmentAddYourPicBinding>() {
         } else {
             binding.consAddAdditionalPhoto.visibility = View.VISIBLE
         }
+        initBottomSheet()
     }
 
     private fun initOnClick() {
@@ -62,7 +79,7 @@ class AddYourPicFragment : BaseFragment<FragmentAddYourPicBinding>() {
                 }
 
                 R.id.ivAddNew, R.id.tvTakePicture -> {
-                    checkPermission()
+                    cameraGalleryBottomSheet.show()
                 }
 
                 R.id.tvNext -> {
@@ -91,19 +108,9 @@ class AddYourPicFragment : BaseFragment<FragmentAddYourPicBinding>() {
                             BindingUtils.convertImageToMultipart(imageUri, requireActivity())
                         RegistrationDataHolder.profileImage = imageFile
                         binding.ivUserImage.setImageURI(imageUri)
-
-
                     }
                 }
             }
-    }
-
-    private fun checkPermission() {
-        if (!BindingUtils.hasPermissions(requireContext(), BindingUtils.permissions)) {
-            permissionResultLauncher.launch(BindingUtils.permissions)
-        } else {
-            selectImage()
-        }
     }
 
     private var allGranted = false
@@ -128,5 +135,78 @@ class AddYourPicFragment : BaseFragment<FragmentAddYourPicBinding>() {
         }
         pickImageLauncher.launch(Intent.createChooser(intent, "Select Picture"))
     }
+
+    /** show camera & gallery bottom sheet **/
+    private fun initBottomSheet() {
+        cameraGalleryBottomSheet =
+            BaseCustomBottomSheet(requireContext(), R.layout.bottom_sheet_camera_gallery) {
+                when (it.id) {
+                    R.id.openCamara, R.id.openCamaraImage -> {
+                        openCamera()
+                        cameraGalleryBottomSheet.dismiss()
+                    }
+
+                    R.id.icon_emoji_new, R.id.tvChooseFromGallery -> {
+                        if (!BindingUtils.hasPermissions(
+                                requireContext(),
+                                BindingUtils.permissions
+                            )
+                        ) {
+                            permissionResultLauncher.launch(BindingUtils.permissions)
+                        } else {
+                            selectImage()
+                        }
+                        cameraGalleryBottomSheet.dismiss()
+                    }
+                }
+
+            }
+        cameraGalleryBottomSheet.behavior.isDraggable = true
+        cameraGalleryBottomSheet.setCancelable(true)
+    }
+
+    // camera intent
+    private fun openCamera() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Permissions.check(requireContext(), Manifest.permission.CAMERA, 0, object : PermissionHandler() {
+                override fun onGranted() {
+                    openCameraIntent()
+                }
+            })
+        } else {
+            openCameraIntent()
+        }
+    }
+
+
+    private fun openCameraIntent() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        photoFile = BindingUtils.createImageFile(requireContext())
+        val authority = "${requireContext().packageName}.provider"
+        val photoURI: Uri = FileProvider.getUriForFile(
+            requireContext(), authority, photoFile!!
+        )
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+        cameraLauncher.launch(cameraIntent)
+
+    }
+
+    private var cameraLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode === Activity.RESULT_OK) {
+                try {
+                    photoURI = photoFile!!.absoluteFile.toUri()
+                    if (photoURI != null) {
+                        binding.ivUserImage.setImageURI(photoURI)
+
+                    }
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
+                }
+            }
+        }
 
 }

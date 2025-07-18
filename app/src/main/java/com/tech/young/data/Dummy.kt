@@ -66,8 +66,8 @@ data class RSSItem(
 
 
 data class SortingItem(
+    val title: String,
     val isSelected: Boolean = false,
-    val title: String
 )
 
 

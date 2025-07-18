@@ -175,6 +175,24 @@ object DummyLists {
         return list
     }
 
+    fun homeOwnershipStatusList():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Rent"))
+        list.add(DropDownData("Own"))
+        list.add(DropDownData("Other"))
+        return list
+    }
+
+    fun childrenList():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("0"))
+        list.add(DropDownData("planning"))
+        list.add(DropDownData("1"))
+        list.add(DropDownData("2...10"))
+        list.add(DropDownData(">10"))
+        return list
+    }
+
 
     fun getIndustries():ArrayList<DropDownData>{
         val list=ArrayList<DropDownData>()
@@ -186,6 +204,43 @@ object DummyLists {
         list.add(DropDownData("Fintech"))
         list.add(DropDownData("Education"))
         list.add(DropDownData("Other"))
+        return list
+    }
+
+    fun getYearsEmployed():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("0-5"))
+        list.add(DropDownData("6-10"))
+        list.add(DropDownData("10-20"))
+        list.add(DropDownData(">20"))
+        return list
+    }
+
+    fun getSalaryRange():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Unemployed"))
+        list.add(DropDownData("$0-10K"))
+        list.add(DropDownData("$11-50K"))
+        list.add(DropDownData("$51-100K"))
+        list.add(DropDownData("$101-200K"))
+        list.add(DropDownData("$201-250K"))
+        list.add(DropDownData("over $251K"))
+        return list
+    }
+
+    fun getFinancialExpList():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Limited"))
+        list.add(DropDownData("Moderate"))
+        list.add(DropDownData("Extensive"))
+        return list
+    }
+
+    fun getRiskToleranceList():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Low - Risks scare me"))
+        list.add(DropDownData("Moderate - I’m on the fence"))
+        list.add(DropDownData("High - Bring it on"))
         return list
     }
 }

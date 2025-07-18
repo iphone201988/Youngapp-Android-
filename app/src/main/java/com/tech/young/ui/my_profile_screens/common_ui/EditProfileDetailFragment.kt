@@ -31,6 +31,7 @@ import com.tech.young.data.model.DummyLists.getIndustries
 import com.tech.young.data.model.DummyLists.getMartialStatus
 import com.tech.young.data.model.DummyLists.getRaceList
 import com.tech.young.data.model.GetProfileApiResponse
+import com.tech.young.data.model.GetProfileApiResponse.GetProfileApiResponseData
 import com.tech.young.data.model.UpdateUserProfileResponse
 import com.tech.young.databinding.BotttomSheetTopicsBinding
 import com.tech.young.databinding.FragmentEditProfileDetailBinding
@@ -48,6 +49,9 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
     BaseCustomBottomSheet.Listener {
     private val viewModel: YourProfileVM by viewModels()
     private var imageUri: Uri? = null
+    // data
+    private var profileData: GetProfileApiResponseData?=null
+
     private var profileImageMultipart: MultipartBody.Part? = null
     // race
     private lateinit var raceBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
@@ -82,6 +86,10 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
     /** handle view **/
     private fun initView() {
         val role = sharedPrefManager.getLoginData()?.role
+        profileData = arguments?.getParcelable("profileData")
+        if (profileData!=null){
+            binding.bean=profileData
+        }
         Log.i("dsadasdas", "initView: $role")
         if (role != null) {
             when (role) {
@@ -136,7 +144,6 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                 }
             }
         }
-        viewModel.getProfile(Constants.GET_USER_PROFILE)
         initBottomSheet()
         initAdapter()
     }
@@ -204,17 +211,6 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                 Status.SUCCESS -> {
                     hideLoading()
                     when (it.message) {
-                        "getProfile" -> {
-                            val myDataModel: GetProfileApiResponse? =
-                                BindingUtils.parseJson(it.data.toString())
-                            if (myDataModel != null) {
-                                if (myDataModel.data != null) {
-                                    binding.bean = myDataModel.data
-                                }
-                            }
-
-                        }
-
                         "updateProfile" -> {
                             try {
                                 val myDataModel: UpdateUserProfileResponse? =

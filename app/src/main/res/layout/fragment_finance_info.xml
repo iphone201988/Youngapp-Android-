@@ -6,7 +6,10 @@
     <data>
         <variable
             name="vm"
-            type="com.tech.young.ui.my_profile_screens.forNormal.EditDetailsVM" />
+            type="com.tech.young.ui.my_profile_screens.YourProfileVM" />
+        <variable
+            name="bean"
+            type="com.tech.young.data.model.GetProfileApiResponse.GetProfileApiResponseData" />
 
     </data>
 
@@ -97,16 +100,17 @@
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/etOccupation" />
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/etYears"
                     style="@style/TextView_400_Regular"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
-                    android:enabled="false"
+                    android:onClick="@{v->vm.onClick(v)}"
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="0-5"
+                    android:text="@{bean.user.yearsEmployed}"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"
@@ -130,13 +134,14 @@
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/etYears" />
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/etSalary"
                     style="@style/TextView_400_Regular"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
-                    android:enabled="false"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:text="@{bean.user.salaryRange}"
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="Unemployed"
@@ -162,14 +167,15 @@
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/etSalary" />
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/etFinance"
                     style="@style/TextView_400_Regular"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
-                    android:enabled="false"
+                    android:onClick="@{v->vm.onClick(v)}"
                     android:background="@drawable/radius_border_gray"
+                    android:text="@{bean.user.financialExperience}"
                     android:gravity="start|center"
                     android:hint="Limited"
                     android:paddingHorizontal="@dimen/_10sdp"
@@ -189,19 +195,20 @@
                     style="@style/TextView_500_Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/years_employed"
+                    android:text="@string/risk_tolerance"
                     android:layout_marginTop="@dimen/_12sdp"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/etFinance" />
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/etLowRisk"
                     style="@style/TextView_400_Regular"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
-                    android:enabled="false"
+                    android:onClick="@{v->vm.onClick(v)}"
                     android:background="@drawable/radius_border_gray"
+                    android:text="@{bean.user.riskTolerance}"
                     android:gravity="start|center"
                     android:hint="Low - Risks scare me"
                     android:paddingHorizontal="@dimen/_10sdp"
@@ -295,25 +302,37 @@
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/llInvestRealEstate" />
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/etTopic"
                     style="@style/TextView_400_Regular"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
-                    android:enabled="false"
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
-                    android:hint="Low - Risks scare me"
+                    android:onClick="@{v->vm.onClick(v)}"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"
                     app:layout_constraintTop_toBottomOf="@+id/tvTopic" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvSelectedCategory"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_layout_rv_category"
+                    app:layout_constraintTop_toTopOf="@id/etTopic"
+                    app:layout_constraintBottom_toBottomOf="@id/etTopic"
+                    app:layout_constraintStart_toStartOf="@id/etTopic"
+                    app:layout_constraintEnd_toStartOf="@id/ivDrop"/>
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivDrop"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:src="@drawable/iv_dropdown"
+                    android:onClick="@{v->vm.onClick(v)}"
                     app:layout_constraintBottom_toBottomOf="@+id/etTopic"
                     app:layout_constraintEnd_toEndOf="@+id/etTopic"
                     app:layout_constraintTop_toTopOf="@+id/etTopic" />
@@ -336,6 +355,7 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="Goals"
+                    android:text="@{bean.user.goals}"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"

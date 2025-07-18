@@ -9,7 +9,13 @@ import com.tech.young.R
 import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
+import com.tech.young.base.utils.BindingUtils
+import com.tech.young.base.utils.Status
+import com.tech.young.base.utils.showToast
+import com.tech.young.data.api.Constants
 import com.tech.young.data.model.EditProfileListModel
+import com.tech.young.data.model.GetProfileApiResponse
+import com.tech.young.data.model.GetProfileApiResponse.GetProfileApiResponseData
 import com.tech.young.databinding.EditProfileItemViewBinding
 import com.tech.young.databinding.FragmentEditProfileBinding
 import com.tech.young.ui.common.CommonActivity
@@ -22,6 +28,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
 
     // adapter
     private lateinit var editProfileAdapter: SimpleRecyclerViewAdapter<EditProfileListModel, EditProfileItemViewBinding>
+    private var profileData: GetProfileApiResponseData?=null
     // menu list
     private var editMenuList=ArrayList<EditProfileListModel>()
     override fun onCreateView(view: View) {
@@ -94,6 +101,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
                 }
             }
         }
+        viewModel.getProfile(Constants.GET_USER_PROFILE)
         // handle adapter
         initAdapter()
     }
@@ -115,7 +123,38 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
 
     /** handle observer **/
     private fun initObserver() {
+        viewModel.observeCommon.observe(requireActivity()){
+            when(it?.status){
+                Status.LOADING -> showLoading()
+                Status.SUCCESS ->{
+                    hideLoading()
+                    when(it.message){
+                        "getProfile" -> {
+                            val myDataModel: GetProfileApiResponse? =
+                                BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null) {
+                                if (myDataModel.data != null) {
+                                    profileData = myDataModel.data
+                                }
+                            }
 
+                        }
+                    }
+                }
+                Status.ERROR -> {
+                    hideLoading()
+                    try {
+                        showToast(it.message.toString())
+                    }
+                    catch (e:Exception){
+                        e.printStackTrace()
+                    }
+                }
+                else -> {
+
+                }
+            }
+        }
     }
 
     /** handle adapter **/
@@ -130,30 +169,35 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
                                     // edit profile
                                     getString(R.string.profile_details) -> {
                                         val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("profileData",profileData)
                                         intent.putExtra("from","edit_profile")
                                         startActivity(intent)
                                     }
                                     // other profile details
                                     getString(R.string.family_education) -> {
                                         val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("profileData",profileData)
                                         intent.putExtra("from","normal_family")
                                         startActivity(intent)
                                     }
 
                                     getString(R.string.financial_information) -> {
                                         val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("profileData",profileData)
                                         intent.putExtra("from","normal_finance_detail")
                                         startActivity(intent)
                                     }
 
                                     "Investment Summary (Optional)" -> {
                                         val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("profileData",profileData)
                                         intent.putExtra("from","normal_investment")
                                         startActivity(intent)
                                     }
 
                                     getString(R.string.additional_information) -> {
                                         val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("profileData",profileData)
                                         intent.putExtra("from","account_detail")
                                         startActivity(intent)
                                     }
