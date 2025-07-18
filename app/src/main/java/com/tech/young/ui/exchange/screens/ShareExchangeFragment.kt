@@ -102,6 +102,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() {
                     val data = HashMap<String,String>()
                     data["type"] = "share"
                     viewModel.likeDislike(data, Constants.LIKE_DISLIKE_POST + m._id)
+
                 }
                 R.id.iv_reshare -> viewModel.reshare(Constants.RESHARE_POST + m._id)
                 R.id.reportBtn -> {
