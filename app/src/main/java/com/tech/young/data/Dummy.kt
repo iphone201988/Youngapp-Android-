@@ -1,6 +1,7 @@
 package com.tech.young.data
 
 import android.os.Parcelable
+import androidx.test.espresso.Root
 import kotlinx.parcelize.Parcelize
 import java.util.Date
 
@@ -43,13 +44,40 @@ data class UserData(
 
 
 
+data class RSSFeed(
+    val title: String?,
+    val url: String?
+)
+
+data class RSSSection(
+    val title: String?,
+    val url: String?,
+    val feeds: List<RSSFeed>?
+)
+
 @Parcelize
-data class RssItem(
-    val title: String,
-    val link: String,
-    val imageUrl: String?,
-    val source: String
-) : Parcelable
+data class RSSItem(
+    val title: String?,
+    val link: String?,
+    val pubDate: String?,
+    val description: String?,
+    var imageURL: String? = null
+):Parcelable
+
+
+//@Root(name = "channel", strict = false)
+//data class NewsFeedList(
+//    @ElementList(name = "item", inline = true)
+//    val articleList: List<NewsFeed>
+//)
+//
+//@Root(name = "item", strict = false)
+//data class NewsFeed(
+//    @Element(name="title")
+//    val title: String,
+//    @Element(name="link")
+//    val link:String
+//)
 
 
 data class SortingItem(

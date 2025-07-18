@@ -537,6 +537,7 @@ object BindingUtils {
                 R.id.consMain ->{
                     val intent=Intent(context, CommonActivity::class.java)
                     intent.putExtra("from","news_details")
+                    intent.putExtra("url",m.link)
                     context.startActivity(intent)
                 }
             }

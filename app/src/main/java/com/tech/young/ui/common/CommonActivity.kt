@@ -157,6 +157,8 @@ class CommonActivity : BaseActivity<ActivityCommonBinding>()  {
                                     setStartDestination(R.id.fragmentExchangeShareDetails)
                                 }
                                 "news_details" ->{
+                                    val url=intent.getStringExtra("url").toString()
+                                    bundle.putString("url",url)
                                     setStartDestination(R.id.fragmentNewsDetails)
                                 }
                                 "live_stream" ->{
@@ -180,6 +182,11 @@ class CommonActivity : BaseActivity<ActivityCommonBinding>()  {
                                     val streamId=intent.getStringExtra("streamUrl").toString()
                                     bundle.putString("streamUrl",streamId)
                                     setStartDestination(R.id.fragmentRecordedStream)
+                                }
+                                "single_news"->{
+                                    val linkUrl=intent.getStringExtra("linkUrl").toString()
+                                    bundle.putString("linkUrl",linkUrl)
+                                    setStartDestination(R.id.fragmentNewsWeb)
                                 }
                             }
                             navController.setGraph(this, bundle)

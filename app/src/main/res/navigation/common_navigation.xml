@@ -128,11 +128,15 @@
         android:name="com.tech.young.ui.exchange.stream_detail_fragment.StreamDetailFragment"
         tools:layout="@layout/fragment_stream_detail"/>
 
-
     <fragment
         android:id="@+id/fragmentRecordedStream"
         android:name="com.tech.young.ui.stream_screen.RecordedStreamFragment"
         tools:layout="@layout/fragment_recorded_stream"/>
+
+    <fragment
+        android:id="@+id/fragmentNewsWeb"
+        android:name="com.tech.young.ui.news.NewsWebFragment"
+        tools:layout="@layout/fragment_news_web"/>
 
 
 </navigation>

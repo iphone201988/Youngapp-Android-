@@ -3,6 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <variable
+            name="callback"
+            type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
+        <variable
+            name="bean"
+            type="com.tech.young.data.RSSItem" />
+        <variable
+            name="pos"
+            type="Integer" />
 
     </data>
 
@@ -11,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/_10sdp"
+        android:onClick="@{v->callback.onItemClick(v,bean,pos)}"
         android:background="@drawable/profile_share_bg"
         android:layout_marginBottom="@dimen/_10sdp">
 
@@ -19,6 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_150sdp"
         android:src="@drawable/ic_dummy_2"
+        setImageFromUrl="@{bean.imageURL}"
         android:scaleType="centerCrop"
         app:shapeAppearance="@style/Shape10"
         app:layout_constraintTop_toTopOf="parent"
@@ -44,7 +55,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/_14ssp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:text="Grant Cardone’s Recent Move Could Mean Good News for Bitcoin: Is It Time To Invest?"
+                android:text="@{bean.title}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>

@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.firebase.messaging.ktx)
+    implementation(libs.androidx.espresso.core)
 //    implementation(libs.firebase.auth.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -104,5 +105,8 @@ dependencies {
     implementation ("com.google.android.exoplayer:exoplayer-core:2.18.1")
     implementation ("com.google.android.exoplayer:exoplayer-ui:2.18.1")
     implementation ("com.google.android.exoplayer:exoplayer-smoothstreaming:2.18.1")
+
+    implementation("org.jsoup:jsoup:1.16.1")
+
 
 }
