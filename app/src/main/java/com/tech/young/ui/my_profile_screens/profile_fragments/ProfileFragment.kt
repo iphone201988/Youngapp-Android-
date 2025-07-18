@@ -230,4 +230,9 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
 
         dialog.show()
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getProfile(Constants.GET_USER_PROFILE)
+    }
 }

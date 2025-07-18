@@ -47,7 +47,7 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>() {
                 navController.graph =
                     navController.navInflater.inflate(R.navigation.auth_navigation).apply {
                         if (type == "register") setStartDestination(R.id.fragmentSignupMain)
-                        else setStartDestination(R.id.fragmentAddYourPersonalInfo)
+                        else setStartDestination(R.id.fragmentLogin)
                     }
             }
         }

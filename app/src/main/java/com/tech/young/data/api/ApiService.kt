@@ -1,6 +1,7 @@
 package com.tech.young.data.api
 
 import com.google.gson.JsonObject
+import com.tech.young.data.IndexQuote
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -16,6 +17,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.PartMap
+import retrofit2.http.Query
 import retrofit2.http.QueryMap
 import retrofit2.http.Url
 
@@ -153,5 +155,14 @@ interface ApiService {
         @PartMap data: Map<String, RequestBody>?,
         @Part parts: MultipartBody.Part?
     ): Response<JsonObject>
+
+
+
+
+    @GET("quote")
+    suspend fun getQuote(
+        @Query("symbol") symbol: String,
+        @Query("token") token: String
+    ): IndexQuote
 
 }

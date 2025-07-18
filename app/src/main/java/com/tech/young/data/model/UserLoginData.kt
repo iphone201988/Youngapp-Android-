@@ -57,6 +57,7 @@ data class RegistrationCompletedData(
 )
 
 
+
 @Parcelize
 data class Login(
     var `data`: Data?,
@@ -1192,6 +1193,8 @@ data class CreatePostApiResponse(
 
 }
 
+
+/***************  create post  detail api response *********************/
 data class DigitApiResponse(
     var `data`: Data?,
     var message: String?,
@@ -1200,5 +1203,38 @@ data class DigitApiResponse(
     data class Data(
         var _id: String?,
         var isDocumentVerified: String?,
+    )
+}
+
+/***************  get ads api response *********************/
+
+data class GetAdsAPiResponse(
+    var `data`: Data?,
+    var message: String?,
+    var pagination: Pagination?,
+    var success: Boolean?
+) {
+    data class Data(
+        var ads: List<Ad?>?
+    ) {
+        data class Ad(
+            var __v: Int?,
+            var _id: String?,
+            var company: String?,
+            var createdAt: String?,
+            var email: String?,
+            var `file`: String?,
+            var name: String?,
+            var status: String?,
+            var updatedAt: String?,
+            var userId: String?,
+            var website: String?
+        )
+    }
+
+    data class Pagination(
+        var limit: Int?,
+        var page: Int?,
+        var total: Int?
     )
 }
