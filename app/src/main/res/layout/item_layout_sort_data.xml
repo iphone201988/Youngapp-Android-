@@ -3,18 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="bean"
+            type="com.tech.young.data.SortingItem" />
+        <variable
+            name="callback"
+            type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
+        <variable
+            name="pos"
+            type="Integer" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consMain"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp">
+        android:paddingVertical="@dimen/_8sdp"
+        android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/ivTick"
             android:layout_width="@dimen/_15sdp"
             android:layout_height="@dimen/_15sdp"
             android:src="@drawable/iv_tick"
+            android:visibility="gone"
             android:layout_marginStart="@dimen/_10sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +39,7 @@
             android:layout_width="wrap_content"
             android:textColor="@color/black"
             android:textSize="@dimen/_14ssp"
-            android:text="Followed"
+            android:text="@{bean.title}"
             app:layout_constraintStart_toEndOf="@id/ivTick"
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_height="wrap_content"

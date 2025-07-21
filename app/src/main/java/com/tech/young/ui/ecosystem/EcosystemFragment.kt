@@ -17,6 +17,7 @@ import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
 import com.tech.young.data.model.CategoryModel
+import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.GetLatestUserApiResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.CategoryItemViewBinding
@@ -34,7 +35,7 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
     private val viewModel: EcosystemVM by viewModels()
 
     // adapters
-    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<String, AdsItemViewBinding>
+    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private lateinit var categoryAdapter: SimpleRecyclerViewAdapter<CategoryModel, CategoryItemViewBinding>
     private lateinit var usersAdapter: SimpleRecyclerViewAdapter<GetLatestUserApiResponse.Data.User, ItemViewUsersBinding>
     private var searchJob: Job? = null
@@ -103,6 +104,7 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
 
 
         getLatestUser()
+        viewModel.getAds(Constants.GET_ADS)
 
         initAdapters()
 
@@ -153,6 +155,15 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
                                      if (myDataModel.data?.users != null){
                                          usersAdapter.list = myDataModel.data?.users
                                      }
+                                 }
+                             }
+                         }
+                         "getAds" ->{
+                             hideLoading()
+                             val myDataModel : GetAdsAPiResponse ? = BindingUtils.parseJson(it.data.toString())
+                             if (myDataModel != null){
+                                 if (myDataModel.data != null){
+                                     adsAdapter.list = myDataModel.data?.ads
                                  }
                              }
                          }
@@ -209,7 +220,6 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
                 // Handle ad item clicks if needed
             }
         }
-        adsAdapter.list = getList
         binding.rvAds.adapter = adsAdapter
     }
 
@@ -246,5 +256,20 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
             "Members" -> "general_member"
             else -> title.lowercase().replace(" ", "_")
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (apiTitle != null){
+            val data = HashMap<String,Any>()
+            data["category"] = apiTitle.toString()
+            viewModel.getLatestUser(data,Constants.GET_USERS)
+        }
+        else{
+            val data = HashMap<String,Any>()
+            data["category"] = "general_member"
+            viewModel.getLatestUser(data,Constants.GET_USERS)
+        }
+
     }
 }

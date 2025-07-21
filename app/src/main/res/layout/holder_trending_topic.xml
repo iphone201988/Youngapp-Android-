@@ -43,6 +43,7 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/ivUserImage"
+                setUserImageFromBaseUrl="@{bean.image}"
                 android:layout_width="@dimen/_70sdp"
                 android:layout_height="match_parent"
                 android:padding="@dimen/_8sdp"

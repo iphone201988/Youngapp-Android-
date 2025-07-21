@@ -1,7 +1,10 @@
 package com.tech.young.ui.exchange.exchange_share_detail
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +22,9 @@ import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
 import com.tech.young.data.model.AddCommentApiResponse
+import com.tech.young.data.model.AddRatingApiResponse
 import com.tech.young.data.model.CommentLikeDislikeApiResponse
+import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.GetCommentApiResponsePost
 import com.tech.young.data.model.GetPostDetailsApiResponse
 import com.tech.young.databinding.AdsItemViewBinding
@@ -31,7 +36,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBinding>() {
     private val viewModel: ExchangeVM by viewModels()
-    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<String, AdsItemViewBinding>
+    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private lateinit var commentAdapter: SimpleRecyclerViewAdapter<GetCommentApiResponsePost.Data.Comment,ItemLayoutPostCommentBinding>
 
     private var getList = listOf(
@@ -41,10 +46,32 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
     private var userId : String ? = null
     override fun onCreateView(view: View) {
         getData()
-        getComments()
         initOnClick()
         initAdapter()
         initObserver()
+
+        binding.ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+            if (fromUser) {
+                binding.ratings.text = "($rating)"
+                Handler(Looper.getMainLooper()).postDelayed({
+                    setRating(rating)
+                }, 1000)
+                Log.i("RatingBar", "User selected rating: $rating")
+                // Handle the rating value
+            }
+        }
+    }
+
+    private fun setRating(rating: Float) {
+        if (userId != null){
+            val data = HashMap<String,Any>()
+            data["ratings"]  = rating
+            data["type"] = "share"
+            data["id"] =  userId.toString()
+
+            viewModel.rating(data,Constants.RATING)
+        }
+
     }
 
     private fun getComments() {
@@ -85,7 +112,6 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
 
             }
         }
-        adsAdapter.list = getList
         binding.rvAds.adapter = adsAdapter
 
 
@@ -108,9 +134,11 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
                     showLoading()
                 }
                 Status.SUCCESS ->{
-                    hideLoading()
+
                     when(it.message){
                         "getShareDetail"  ->{
+                            getComments()
+                            viewModel.getAds(Constants.GET_ADS)
                             val myDataModel : GetPostDetailsApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
@@ -129,6 +157,7 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
                             }
                         }
                         "getComments" ->{
+                            hideLoading()
                             val myDataModel : GetCommentApiResponsePost ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data  != null){
@@ -144,6 +173,24 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
                                     getComments()
+                                }
+                            }
+                        }
+                        "getAds" ->{
+                            hideLoading()
+                            val myDataModel : GetAdsAPiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    adsAdapter.list = myDataModel.data?.ads
+                                }
+                            }
+                        }
+                        "rating" ->{
+                            hideLoading()
+                            val myDataModel : AddRatingApiResponse ? =  BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+
                                 }
                             }
                         }

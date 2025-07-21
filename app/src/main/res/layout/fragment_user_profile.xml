@@ -85,12 +85,13 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:shapeAppearance="@style/Shape50" />
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvRating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/TextView_500_Medium"
-                    android:text='@{bean.isRated()+ " Ratings"}'
+                    android:text='@{bean.isRated() != null ? bean.isRated().toString().concat(" Ratings") : "0.0 Ratings"}'
                     android:layout_marginHorizontal="@dimen/_18sdp"
                     android:textSize="@dimen/_12ssp"
                     app:layout_constraintTop_toTopOf="@id/ivImage"
@@ -589,11 +590,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/_30sdp"
                         android:layout_marginTop="@dimen/_8sdp"
-                        android:isIndicator="true"
                         android:numStars="5"
                         android:scaleX="1"
                         android:scaleY="1"
-                        android:rating="3.5"
+                        setRating="@{bean.isRated()}"
                         app:starSpacing="@dimen/_5sdp"
                         app:starColor="@color/yellow_star"
                         app:starDrawable="@drawable/ic_star"

@@ -23,6 +23,7 @@ import com.tech.young.base.utils.showToast
 import com.tech.young.data.DropDownData
 import com.tech.young.data.api.Constants
 import com.tech.young.data.api.SimpleApiResponse
+import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.BotttomSheetTopicsBinding
 import com.tech.young.databinding.FragmentReportUserBinding
@@ -41,7 +42,7 @@ class ReportUserFragment : BaseFragment<FragmentReportUserBinding>() , BaseCusto
     private var imageUri : Uri ?= null
     private var reportType : String ? = null
     // adapter
-    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<String, AdsItemViewBinding>
+    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
 
     private lateinit var reasonBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
     private lateinit var reasonAdapter : SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
@@ -54,6 +55,7 @@ class ReportUserFragment : BaseFragment<FragmentReportUserBinding>() , BaseCusto
 
     override fun onCreateView(view: View) {
         getReportList()
+        viewModel.getAds(Constants.GET_ADS)
         initBottomSheet()
         // view
         initView()
@@ -174,6 +176,15 @@ class ReportUserFragment : BaseFragment<FragmentReportUserBinding>() , BaseCusto
                                 requireActivity().onBackPressedDispatcher.onBackPressed()
                             }
                         }
+                        "getAds" ->{
+                            hideLoading()
+                            val myDataModel : GetAdsAPiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    adsAdapter.list = myDataModel.data?.ads
+                                }
+                            }
+                        }
                     }
                 }
                 Status.ERROR ->{
@@ -195,7 +206,6 @@ class ReportUserFragment : BaseFragment<FragmentReportUserBinding>() , BaseCusto
 
             }
         }
-        adsAdapter.list = getList
         binding.rvAds.adapter = adsAdapter
 
         reasonAdapter  = SimpleRecyclerViewAdapter(R.layout.item_layout_drop_down,BR.bean){v,m,pos ->
