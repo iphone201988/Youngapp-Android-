@@ -111,6 +111,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
         }
         // handle adapter
         initAdapter()
+
         // handle popup
         initPopup()
     }
