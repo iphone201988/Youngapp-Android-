@@ -6,24 +6,29 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.tech.young.BR
 import com.tech.young.R
+import com.tech.young.SocketManager
 import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
+import com.tech.young.base.utils.BaseCustomDialog
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
+import com.tech.young.data.api.SimpleApiResponse
 import com.tech.young.data.model.EditProfileListModel
 import com.tech.young.data.model.GetProfileApiResponse
 import com.tech.young.data.model.GetProfileApiResponse.GetProfileApiResponseData
 import com.tech.young.databinding.EditProfileItemViewBinding
 import com.tech.young.databinding.FragmentEditProfileBinding
+import com.tech.young.databinding.ItemLayoutLogoutPopupBinding
+import com.tech.young.ui.MySplashActivity
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.my_profile_screens.YourProfileVM
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
+class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCustomDialog.Listener {
     private val viewModel: YourProfileVM by viewModels()
 
     // adapter
@@ -31,6 +36,8 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
     private var profileData: GetProfileApiResponseData?=null
     // menu list
     private var editMenuList=ArrayList<EditProfileListModel>()
+
+    private lateinit var logoutPopup : BaseCustomDialog<ItemLayoutLogoutPopupBinding>
     override fun onCreateView(view: View) {
         // view
         initView()
@@ -52,6 +59,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
     private fun initView() {
         // handle list
         val role = sharedPrefManager.getLoginData()?.role
+        viewModel.getProfile(Constants.GET_USER_PROFILE)
         Log.i("dsadasdas", "initView: $role")
         if (role != null) {
             when (role) {
@@ -101,9 +109,10 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
                 }
             }
         }
-        viewModel.getProfile(Constants.GET_USER_PROFILE)
         // handle adapter
         initAdapter()
+        // handle popup
+        initPopup()
     }
 
     /**handle click **/
@@ -139,6 +148,17 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
                             }
 
                         }
+                        "logout" ->{
+                            val myDataModel : SimpleApiResponse? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                sharedPrefManager.clear()
+                                logoutPopup.dismiss()
+                                SocketManager.closeConnection()
+                                showToast(myDataModel.message.toString())
+                                val intent = Intent(requireContext() , MySplashActivity::class.java)
+                                startActivity(intent)
+                            }
+                        }
                     }
                 }
                 Status.ERROR -> {
@@ -155,6 +175,11 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
                 }
             }
         }
+    }
+
+    /** handle dialog **/
+    private fun initPopup() {
+        logoutPopup = BaseCustomDialog(requireContext() , R.layout.item_layout_logout_popup,this )
     }
 
     /** handle adapter **/
@@ -198,7 +223,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
                                     getString(R.string.additional_information) -> {
                                         val intent=Intent(requireContext(), CommonActivity::class.java)
                                         intent.putExtra("profileData",profileData)
-                                        intent.putExtra("from","account_detail")
+                                        intent.putExtra("from","personal_preference")
                                         startActivity(intent)
                                     }
 
@@ -207,6 +232,9 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
                                             Intent(requireContext(), CommonActivity::class.java)
                                         intent.putExtra("from", "account_verify")
                                         startActivity(intent)
+                                    }
+                                    "Logout"->{
+                                        logoutPopup.show()
                                     }
                                 }
                             }
@@ -215,8 +243,26 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
                                     getString(R.string.profile_details) -> {
                                         val intent =
                                             Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("profileData",profileData)
                                         intent.putExtra("from", "edit_profile")
                                         startActivity(intent)
+                                    }
+                                    getString(R.string.professional_information)->{
+                                        val intent =
+                                            Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("profileData",profileData)
+                                        intent.putExtra("from", "professional_info")
+                                        startActivity(intent)
+
+                                    }
+
+                                    getString(R.string.personal_preferences)->{
+                                        val intent =
+                                            Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("profileData",profileData)
+                                        intent.putExtra("from", "personal_preference")
+                                        startActivity(intent)
+
                                     }
 
                                     getString(R.string.account_verification) -> {
@@ -227,8 +273,12 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
                                     }
                                     getString(R.string.form_upload)->{
                                         val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("profileData",profileData)
                                         intent.putExtra("from","form_upload")
                                         startActivity(intent)
+                                    }
+                                    "Logout"->{
+                                        logoutPopup.show()
                                     }
                                 }
 
@@ -237,22 +287,25 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
                                 when(m.subTitle){
                                     getString(R.string.profile_details) -> {
                                         val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("profileData",profileData)
                                         intent.putExtra("from","edit_profile")
                                         startActivity(intent)
                                     }
                                     getString(R.string.business_financial_information)->{
                                         val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("profileData",profileData)
                                         intent.putExtra("from","business_info")
                                         startActivity(intent)
 
                                     }
                                     getString(R.string.additional_information)->{
                                         val intent=Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("from","account_detail")
+                                        intent.putExtra("from","personal_preference")
                                         startActivity(intent)
                                     }
                                     getString(R.string.form_upload)->{
                                         val intent=Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("profileData",profileData)
                                         intent.putExtra("from","form_upload")
                                         startActivity(intent)
                                     }
@@ -261,6 +314,9 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
                                             Intent(requireContext(), CommonActivity::class.java)
                                         intent.putExtra("from", "account_verify")
                                         startActivity(intent)
+                                    }
+                                    "Logout"->{
+                                        logoutPopup.show()
                                     }
                                 }
                             }
@@ -417,5 +473,16 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>() {
             EditProfileListModel("Account Management", "Logout", R.drawable.ic_logout,2)
         )
         return list
+    }
+
+    override fun onViewClick(view: View?) {
+        when(view?.id){
+            R.id.tvLogout ->{
+                viewModel.logout(Constants.LOG_OUT)
+            }
+            R.id.tvNo ->{
+                logoutPopup.dismiss()
+            }
+        }
     }
 }

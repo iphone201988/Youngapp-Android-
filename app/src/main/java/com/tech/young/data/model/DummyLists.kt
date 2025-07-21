@@ -243,4 +243,95 @@ object DummyLists {
         list.add(DropDownData("High - Bring it on"))
         return list
     }
+
+    fun getLicenseList():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Securities"))
+        list.add(DropDownData("CFA"))
+        list.add(DropDownData("Other"))
+        return list
+    }
+
+    fun getServicesOfferedList():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Wealth Education"))
+        list.add(DropDownData("Household budgeting"))
+        list.add(DropDownData("Financial planning"))
+        list.add(DropDownData("Wealth Management"))
+        list.add(DropDownData(  "Investing"))
+        list.add(DropDownData(  "Child Education Planning"))
+        list.add(DropDownData(  "Retirement Planning"))
+        list.add(DropDownData(  "Estate Planning"))
+        list.add(DropDownData(  "Debt Management"))
+        list.add(DropDownData(  "Student loan Management"))
+        list.add(DropDownData(  "Tax Planning"))
+        return list
+    }
+
+    fun getYearsInFinancialIndustryList():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("0-3"))
+        list.add(DropDownData("4-10"))
+        list.add(DropDownData("10+"))
+        return list
+    }
+
+    fun getProductOrAreaOfExpertise():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Insurance"))
+        list.add(DropDownData("Annuities"))
+        list.add(DropDownData("Other"))
+        return list
+    }
+
+    fun getSeekingData():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Investors"))
+        list.add(DropDownData("Loans"))
+        list.add(DropDownData("Donations"))
+        list.add(DropDownData("Customers"))
+        list.add(DropDownData("Hiring"))
+        return list
+    }
+
+
+    fun getStageOfBusiness():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Pre-Seed"))
+        list.add(DropDownData("Seed"))
+        list.add(DropDownData("Series A"))
+        list.add(DropDownData("Series B"))
+        return list
+    }
+
+    fun getFundRaisedList():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("$10K-$100K"))
+        list.add(DropDownData("$100K-$1M"))
+        list.add(DropDownData("$1M-$3M"))
+        list.add(DropDownData("$3M-$15M"))
+        list.add(DropDownData( ">$15M"))
+        return list
+    }
+
+    fun getFundRaisingList():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("$50K-$250K"))
+        list.add(DropDownData("$500K-$2M"))
+        list.add(DropDownData("$2M-$5M"))
+        list.add(DropDownData("$5M-$20M"))
+        list.add(DropDownData(">$20M"))
+        return list
+    }
+
+    fun getBusinessRevenueList():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("$0-$50K"))
+        list.add(DropDownData("$50K-$500K"))
+        list.add(DropDownData("$500K-$5M"))
+        list.add(DropDownData("$5M-$25M"))
+        list.add(DropDownData(">$25M"))
+        return list
+    }
+
 }

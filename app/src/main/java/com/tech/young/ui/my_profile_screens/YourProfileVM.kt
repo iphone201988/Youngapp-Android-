@@ -92,13 +92,37 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
         }
     }
 
-    fun updateProfile(url: String, data: HashMap<String, RequestBody>, part: MultipartBody.Part?){
+    fun updateProfile(url: String, data: HashMap<String, RequestBody>, part: MultipartBody.Part?,partList:MutableList<MultipartBody.Part>?){
         CoroutineScope(Dispatchers.IO).launch {
             observeCommon.postValue(Resource.loading(null))
             try {
-                val response = apiHelper.apiForPutMultipart(url,data,part)
+                val response = apiHelper.apiForPutMultipart(url,data,part,partList)
                 if (response.isSuccessful && response.body() != null){
                     observeCommon.postValue(Resource.success("updateProfile", response.body()))
+                }
+                else{
+                    observeCommon.postValue(
+                        Resource.error(
+                            handleErrorResponse(
+                                response.errorBody(),
+                                response.code()
+                            ), null
+                        )
+                    )
+                }
+            }catch (e : Exception){
+                observeCommon.postValue(Resource.error(e.message.toString(), null))
+            }
+        }
+    }
+
+    fun logout(url: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            observeCommon.postValue(Resource.loading(null))
+            try {
+                val response = apiHelper.apiGetOnlyAuthToken(url)
+                if (response.isSuccessful && response.body() != null){
+                    observeCommon.postValue(Resource.success("logout", response.body()))
                 }
                 else{
                     observeCommon.postValue(

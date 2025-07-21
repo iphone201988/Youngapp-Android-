@@ -190,6 +190,13 @@ data class GetProfileApiResponse(
             val specificStockSymbols: String?,
             val startups: String?,
             val stockInvestments: String?,
+            val certificates:String?,
+            val occupation:String?,
+            val servicesProvided:String?,
+            val yearsInFinancialIndustry:String?,
+            val fundsRaising:String?,
+            val fundsRaised:String?,
+            val stageOfBusiness:String?,
         ) : Parcelable {
             @Parcelize
             data class Location(

@@ -27,10 +27,6 @@
         android:name="com.tech.young.ui.my_profile_screens.common_ui.AgreementAndVerificationFragment"
         tools:layout="@layout/fragment_agreement_and_verification"/>
     <fragment
-        android:id="@+id/fragmentAdditionalInfo"
-        android:name="com.tech.young.ui.my_profile_screens.common_ui.AdditionalInfoFragment"
-        tools:layout="@layout/fragment_additional_info"/>
-    <fragment
         android:id="@+id/fragmentFamilyDetails"
         android:name="com.tech.young.ui.my_profile_screens.forNormal.FamilyDetailsFragment"
         tools:layout="@layout/fragment_family_details"/>
@@ -137,6 +133,15 @@
         android:id="@+id/fragmentNewsWeb"
         android:name="com.tech.young.ui.news.NewsWebFragment"
         tools:layout="@layout/fragment_news_web"/>
+
+   <fragment
+        android:id="@+id/fragmentProfessionalInfo"
+        android:name="com.tech.young.ui.my_profile_screens.forFinance.ProfessionalInformationFragment"
+        tools:layout="@layout/fragment_professional_information"/>
+    <fragment
+        android:id="@+id/fragmentPersonalPreference"
+        android:name="com.tech.young.ui.my_profile_screens.forFinance.PersonalPreferencesFragment"
+        tools:layout="@layout/fragment_personal_preferences"/>
 
 
 </navigation>

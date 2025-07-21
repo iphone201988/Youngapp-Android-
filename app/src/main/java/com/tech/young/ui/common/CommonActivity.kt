@@ -75,6 +75,16 @@ class CommonActivity : BaseActivity<ActivityCommonBinding>()  {
                                     bundle.putParcelable("profileData", profileData)
                                     setStartDestination(R.id.fragmentEditProfile)
                                 }
+                                "professional_info" -> {
+                                    val profileData=intent.getParcelableExtra<GetProfileApiResponse.GetProfileApiResponseData>("profileData")
+                                    bundle.putParcelable("profileData", profileData)
+                                    setStartDestination(R.id.fragmentProfessionalInfo)
+                                }
+                                "personal_preference" -> {
+                                    val profileData=intent.getParcelableExtra<GetProfileApiResponse.GetProfileApiResponseData>("profileData")
+                                    bundle.putParcelable("profileData", profileData)
+                                    setStartDestination(R.id.fragmentPersonalPreference)
+                                }
                                 "account_verify" -> {
                                     setStartDestination(R.id.fragmentVerifyProfile)
                                 }
@@ -95,9 +105,6 @@ class CommonActivity : BaseActivity<ActivityCommonBinding>()  {
                                     val profileData=intent.getParcelableExtra<GetProfileApiResponse.GetProfileApiResponseData>("profileData")
                                     bundle.putParcelable("profileData", profileData)
                                     setStartDestination(R.id.fragmentInvestmentInfo)
-                                }
-                                "account_detail" -> {
-                                    setStartDestination(R.id.fragmentAdditionalInfo)
                                 }
                                 "payment_details" -> {
                                     val userId = intent.getStringExtra("userId")
@@ -150,9 +157,13 @@ class CommonActivity : BaseActivity<ActivityCommonBinding>()  {
                                     setStartDestination(R.id.fragmentCommonVault)
                                 }
                                 "business_info"->{
+                                    val profileData=intent.getParcelableExtra<GetProfileApiResponse.GetProfileApiResponseData>("profileData")
+                                    bundle.putParcelable("profileData", profileData)
                                     setStartDestination(R.id.fragmentBusinessInfo)
                                 }
                                 "form_upload"->{
+                                    val profileData=intent.getParcelableExtra<GetProfileApiResponse.GetProfileApiResponseData>("profileData")
+                                    bundle.putParcelable("profileData", profileData)
                                     setStartDestination(R.id.fragmentFormUpload)
                                 }
                                 "people"->{

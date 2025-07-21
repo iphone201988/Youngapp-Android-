@@ -122,7 +122,7 @@ class InvestmentInfoFragment : BaseFragment<FragmentInvestmentInfoBinding>() {
         data["retirementAccount"] = binding.etRetirement.text.toString().toRequestBody()
         data["savings"] = binding.etSavings.text.toString().toRequestBody()
         data["startups"] = binding.etStartUp.text.toString().toRequestBody()
-        viewModel.updateProfile(Constants.UPDATE_USER, data, null)
+        viewModel.updateProfile(Constants.UPDATE_USER, data, null,null)
     }
 
 }

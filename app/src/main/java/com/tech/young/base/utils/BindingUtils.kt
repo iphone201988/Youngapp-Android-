@@ -40,6 +40,7 @@ import com.tech.young.databinding.ItemLayoutRvMembersBinding
 import com.github.dhaval2404.imagepicker.util.FileUtil.getTempFile
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.gson.Gson
+import com.tech.young.data.ImageModel
 import com.tech.young.data.NewsItem
 import com.tech.young.data.NewsSection
 import com.tech.young.databinding.ItemLayoutSubNewsBinding
@@ -232,6 +233,20 @@ object BindingUtils {
         return MultipartBody.Part.createFormData(
             "profileImage", newFile.name, newFile.asRequestBody("image/*".toMediaTypeOrNull())
         )
+    }
+
+    @BindingAdapter("setAddImages")
+    @JvmStatic
+    fun setAddImages(imageView: ShapeableImageView, image:ImageModel) {
+        if (image!=null){
+            if (image.image_Uri!=null){
+                Glide.with(imageView.context).load(image.image_Uri).placeholder(R.drawable.user).override(1024).into(imageView)
+            }
+            if (image.image_Url!=null){
+                Glide.with(imageView.context).load(Constants.BASE_URL_IMAGE+image.image_Url).placeholder(R.drawable.user).override(1024).into(imageView)
+
+            }
+        }
     }
 
 

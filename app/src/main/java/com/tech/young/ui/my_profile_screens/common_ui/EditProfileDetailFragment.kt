@@ -467,6 +467,6 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
 
             }
         }
-        viewModel.updateProfile(Constants.UPDATE_USER, data,profileImageMultipart)
+        viewModel.updateProfile(Constants.UPDATE_USER, data,profileImageMultipart,null)
     }
 }

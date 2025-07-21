@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="bean"
+            type="com.tech.young.data.model.GetProfileApiResponse.GetProfileApiResponseData" />
         <variable
             name="vm"
-            type="com.tech.young.ui.my_profile_screens.forFinance.FinanceAccountVm" />
+            type="com.tech.young.ui.my_profile_screens.YourProfileVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,6 +41,7 @@
                 style="@style/TextView_600_SemiBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Professional Information"
                 android:layout_marginStart="@dimen/_10sdp"
                 app:layout_constraintBottom_toBottomOf="@id/ivBack"
                 app:layout_constraintStart_toEndOf="@id/ivBack"
@@ -99,9 +102,10 @@
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:background="@drawable/radius_border_gray"
-                    android:enabled="false"
                     android:gravity="start|center"
+                    android:text="@{bean.user.crdNumber}"
                     android:hint="CRD Number"
+                    android:inputType="number"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"
@@ -118,14 +122,15 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/etCrdNumber" />
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/etLicence"
                     style="@style/TextView_400_Regular"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:text="@{bean.user.certificates}"
                     android:background="@drawable/radius_border_gray"
-                    android:enabled="false"
                     android:gravity="start|center"
                     android:hint="Securities"
                     android:paddingHorizontal="@dimen/_10sdp"
@@ -161,8 +166,8 @@
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:background="@drawable/radius_border_gray"
-                    android:enabled="false"
                     android:gravity="start|center"
+                    android:text="@{bean.user.occupation}"
                     android:hint="Occupation"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
@@ -180,16 +185,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/etOccupation" />
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/etYears"
                     style="@style/TextView_400_Regular"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:background="@drawable/radius_border_gray"
-                    android:enabled="false"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:text="@{bean.user.yearsInFinancialIndustry}"
                     android:gravity="start|center"
-                    android:hint=""
+                    android:hint="0-3"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"
@@ -215,16 +221,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/etYears" />
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/etServiceProvided"
                     style="@style/TextView_400_Regular"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
+                    android:text="@{bean.user.servicesProvided}"
                     android:background="@drawable/radius_border_gray"
-                    android:enabled="false"
+                    android:onClick="@{v->vm.onClick(v)}"
                     android:gravity="start|center"
-                    android:hint=""
+                    android:hint="Wealth Education"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"
@@ -244,7 +251,6 @@
                     style="@style/TextView_500_Medium"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
-                    android:layout_marginBottom="@dimen/_30sdp"
                     android:background="@drawable/corner_radius_10"
                     android:gravity="center"
                     android:onClick="@{v ->vm.onClick(v)}"

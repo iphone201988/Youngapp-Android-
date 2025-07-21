@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="callback"
+            type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
+        <variable
+            name="pos"
+            type="Integer" />
+        <variable
+            name="bean"
+            type="com.tech.young.data.ImageModel" />
+        <import type="android.view.View"/>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="@{v->callback.onItemClick(v,bean,pos)}"
+        android:layout_marginEnd="@dimen/_10sdp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivImage"
+            android:src="@drawable/additional_photo"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_120sdp"
+            android:onClick="@{v->callback.onItemClick(v,bean,pos)}"
+            android:visibility='@{bean.type=="1"?View.VISIBLE:View.GONE}'
+            android:scaleType="fitXY"
+            app:shapeAppearance="@style/Shape10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivImage1"
+            android:src="@drawable/additional_photo"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_120sdp"
+            setAddImages="@{bean}"
+            android:visibility='@{bean.type=="2"?View.VISIBLE:View.GONE}'
+            android:scaleType="fitXY"
+            app:shapeAppearance="@style/Shape10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

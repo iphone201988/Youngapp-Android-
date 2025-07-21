@@ -197,6 +197,6 @@ class FamilyDetailsFragment : BaseFragment<FragmentFamilyDetailsBinding>(),
         data["children"] = binding.edtChildren.text.toString().toRequestBody()
         data["educationLevel"] = binding.etEducation.text.toString().toRequestBody()
         data["residenceStatus"] = binding.etResidence.text.toString().toRequestBody()
-        viewModel.updateProfile(Constants.UPDATE_USER, data,null)
+        viewModel.updateProfile(Constants.UPDATE_USER, data,null,null)
     }
 }

@@ -1,5 +1,6 @@
 package com.tech.young.data
 
+import android.net.Uri
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
@@ -98,4 +99,10 @@ data class IndexQuote(
     val o: Double?,  // open
     val pc: Double?, // previous close
     val t: Long?     // timestamp
+)
+
+data class ImageModel(
+    var image_Url: String?,
+    var image_Uri: Uri? = null,
+    var type:String?
 )

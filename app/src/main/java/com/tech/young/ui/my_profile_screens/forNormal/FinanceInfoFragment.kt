@@ -350,7 +350,7 @@ class FinanceInfoFragment : BaseFragment<FragmentFinanceInfoBinding>(),
         data["investmentRealEstate"] = isEstateSelected.toString().toRequestBody()
         data["topicsOfInterest"] = selectedActualValues.toRequestBody()
         data["goals"] = binding.etGoals.text.toString().toRequestBody()
-        viewModel.updateProfile(Constants.UPDATE_USER, data, null)
+        viewModel.updateProfile(Constants.UPDATE_USER, data, null,null)
     }
 
 }
