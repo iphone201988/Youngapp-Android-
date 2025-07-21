@@ -4,6 +4,9 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +25,8 @@ import com.tech.young.base.utils.showToast
 import com.tech.young.data.UserData
 import com.tech.young.data.api.Constants
 import com.tech.young.data.api.SimpleApiResponse
+import com.tech.young.data.model.AddRatingApiResponse
+import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.GetOtherUserProfileData
 import com.tech.young.data.model.GetOtherUserProfileModel
 import com.tech.young.data.model.GetOtherUserProfileModelData
@@ -40,7 +45,7 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
     // adapter
     private lateinit var yourImageAdapter: SimpleRecyclerViewAdapter<String, YourPhotosItemViewBinding>
     private lateinit var shareAdapter: SimpleRecyclerViewAdapter<String, ShareProfileItemViewBinding>
-    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<String, AdsItemViewBinding>
+    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private var userId:String?=null
     private var chatId : String ? = null
     private var userData : GetOtherUserProfileData? = null
@@ -52,6 +57,28 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
         initOnClick()
         // observer
         initObserver()
+
+        binding.ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+            if (fromUser) {
+//                binding.tvAverageRating.text = "($rating)"
+                Handler(Looper.getMainLooper()).postDelayed({
+                    setRating(rating)
+                }, 1000)
+                Log.i("RatingBar", "User selected rating: $rating")
+                // Handle the rating value
+            }
+        }
+    }
+
+    private fun setRating(rating: Float) {
+        if (userId != null){
+            val data = HashMap<String,Any>()
+            data["ratings"]  = rating
+            data["type"] = "user"
+            data["id"] =  userId.toString()
+
+            viewModel.rating(data,Constants.RATING)
+        }
     }
 
     override fun getLayoutResource(): Int {
@@ -66,6 +93,7 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
     private fun initView() {
         userId= arguments?.getString("userId").toString()
         apiCall()
+        viewModel.getAds(Constants.GET_ADS)
         // adapter
         initAdapter()
     }
@@ -182,6 +210,24 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
 
                             }
                         }
+                        "getAds" ->{
+                            hideLoading()
+                            val myDataModel : GetAdsAPiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    adsAdapter.list = myDataModel.data?.ads
+                                }
+                            }
+                        }
+                        "rating" ->{
+                            hideLoading()
+                            val myDataModel : AddRatingApiResponse? =  BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+
+                                }
+                            }
+                        }
 
                     }
                 }
@@ -230,7 +276,6 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
 
             }
         }
-        adsAdapter.list = getList
         binding.rvAds.adapter = adsAdapter
     }
 
@@ -297,5 +342,6 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
             data["userId"]=userId.toString()
             viewModel.getUserProfile(Constants.GET_USER_PROFILE,data)
         }
+
     }
 }

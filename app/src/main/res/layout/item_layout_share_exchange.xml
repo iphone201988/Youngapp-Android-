@@ -39,6 +39,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/reportBtn"
             android:layout_width="@dimen/_24sdp"
@@ -57,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:visibility="gone"
+            android:visibility="@{bean.isReportVisible ? View.VISIBLE : View.GONE}"
             android:padding="@dimen/_5sdp"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:layout_marginStart="@dimen/_5sdp"
@@ -94,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextView_500_Medium"
-            android:text="@{bean.ratings.toString()}"
+            android:text="@{bean.ratings != null ? bean.ratings.toString() : `0.0`}"
             android:layout_marginEnd="@dimen/_8sdp"
             android:textSize="@dimen/_12ssp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -253,6 +254,7 @@
             android:background="@color/border_gray"
             android:layout_marginTop="@dimen/_10sdp"
             app:layout_constraintTop_toBottomOf="@id/tvComments" />
+
         <per.wsj.library.AndRatingBar
             android:id="@+id/ratingBar"
             android:layout_width="wrap_content"
@@ -261,8 +263,8 @@
             android:layout_marginBottom="@dimen/_8sdp"
             android:numStars="5"
             android:scaleX="1"
+            setRating="@{bean.ratings}"
             android:scaleY="1"
-            android:rating="0"
             app:starSpacing="@dimen/_5sdp"
             app:starColor="@color/yellow_star"
             app:starDrawable="@drawable/ic_star"
@@ -286,7 +288,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextView_500_Medium"
-            android:text="0.0"
+            android:text="@{bean.ratings != null ? bean.ratings.toString() : `0.0`}"
             android:layout_marginEnd="@dimen/_8sdp"
             android:textSize="@dimen/_12ssp"
             app:layout_constraintEnd_toEndOf="parent"

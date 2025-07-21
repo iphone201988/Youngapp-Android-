@@ -21,6 +21,7 @@ import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
+import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.GetProfileApiResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.DialogRatingBinding
@@ -37,7 +38,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
     // adapter
     private lateinit var yourImageAdapter:SimpleRecyclerViewAdapter<String,YourPhotosItemViewBinding>
     private lateinit var shareAdapter:SimpleRecyclerViewAdapter<String,ShareProfileItemViewBinding>
-    private lateinit var adsAdapter:SimpleRecyclerViewAdapter<String,AdsItemViewBinding>
+    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private var userId : String ? = null
     override fun onCreateView(view: View) {
         // view
@@ -46,6 +47,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
         initOnClick()
         // observer
         initObserver()
+
 
     }
 
@@ -59,7 +61,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
 
     /** handle view **/
     private fun initView() {
-        viewModel.getProfile(Constants.GET_USER_PROFILE)
 
         binding.includeShare.tabShare.setOnClickListener {
             val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_share")
@@ -112,9 +113,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                     showLoading()
                 }
                 Status.SUCCESS ->{
-                    hideLoading()
+
                     when(it.message){
                         "getProfile" ->{
+                            viewModel.getAds(Constants.GET_ADS)
                             val myDataModel : GetProfileApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
@@ -126,6 +128,16 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                             }
 
                         }
+                            "getAds" ->{
+                                hideLoading()
+                                val myDataModel : GetAdsAPiResponse ? = BindingUtils.parseJson(it.data.toString())
+                                if (myDataModel != null){
+                                    if (myDataModel.data != null){
+                                        adsAdapter.list = myDataModel.data?.ads
+                                    }
+                                }
+                            }
+
                     }
                 }
                 Status.ERROR ->{
@@ -175,7 +187,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
 
             }
         }
-        adsAdapter.list=getList
         binding.rvAds.adapter=adsAdapter
     }
 

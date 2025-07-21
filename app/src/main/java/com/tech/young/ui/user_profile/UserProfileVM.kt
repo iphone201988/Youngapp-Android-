@@ -85,4 +85,52 @@ class UserProfileVM @Inject constructor(val apiHelper: ApiHelper) :BaseViewModel
              }
          }
      }
+
+    fun getAds(url: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            userProfileObserver.postValue(Resource.loading(null))
+            try {
+                val response = apiHelper.apiGetOnlyAuthToken(url)
+                if (response.isSuccessful && response.body() != null) {
+                    userProfileObserver.postValue(Resource.success("getAds", response.body()))
+                } else {
+                    userProfileObserver.postValue(
+                        Resource.error(
+                            handleErrorResponse(
+                                response.errorBody(),
+                                response.code()
+                            ), null
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                userProfileObserver.postValue(Resource.error(e.message.toString(), null))
+            }
+        }
+
+
+    }
+    fun rating(data: HashMap<String, Any>, url: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            userProfileObserver.postValue(Resource.loading(null))
+            try {
+                val response = apiHelper.apiPostForRawBody(url, data)
+                if (response.isSuccessful && response.body() != null) {
+                    userProfileObserver.postValue(Resource.success("rating", response.body()))
+                } else {
+                    userProfileObserver.postValue(
+                        Resource.error(
+                            handleErrorResponse(
+                                response.errorBody(),
+                                response.code()
+                            ), null
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                userProfileObserver.postValue(Resource.error(e.message.toString(), null))
+            }
+        }
+    }
+
 }

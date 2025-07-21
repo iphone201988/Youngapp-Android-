@@ -3,6 +3,7 @@ package com.tech.young.ui.exchange.screens
 import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
@@ -78,7 +79,20 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() {
 
         vaultAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_vault_exchange,BR.bean){v,m,pos ->
             val consReport = v.rootView.findViewById<ConstraintLayout>(R.id.consReport)
+            val title = v.rootView.findViewById<TextView>(R.id.tvReport)
 
+
+
+// Initial visibility
+            consReport.visibility = if (m.isReportVisible) View.VISIBLE else View.GONE
+
+            if (sharedPrefManager.getUserId() == m.admin?._id){
+                title.text = "Delete vault"
+            }
+            else{
+                title.text = "Report"
+
+            }
             when(v.id){
                 R.id.ivSaves ->{
                     viewModel.vaultSaveUnSave( Constants.SAVE_UNSAVE_VAULT+m._id)
@@ -110,15 +124,23 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() {
                 }
 
                 R.id.reportBtn -> {
-                    consReport.visibility = if (consReport.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+                    m.isReportVisible = !m.isReportVisible
+                    vaultAdapter.notifyDataSetChanged()
                 }
                 R.id.consReport ->{
-                    val intent = Intent(requireContext(), CommonActivity::class.java)
-                    intent.putExtra("from", "report_user")
-                    intent.putExtra("userId", m._id)
-                    intent.putExtra("reportType","vault")
-                    startActivity(intent)
-                    consReport.visibility = View.GONE
+                    if (title.text == "Report"){
+                        val intent = Intent(requireContext(), CommonActivity::class.java)
+                        intent.putExtra("from", "report_user")
+                        intent.putExtra("userId", m._id)
+                        intent.putExtra("reportType","vault")
+                        startActivity(intent)
+                }
+                    else {
+                        viewModel.deletePost( Constants.DELETE_POST+m._id)
+                    }
+
+                    m.isReportVisible = false
+                    vaultAdapter.notifyItemChanged(pos)
                 }
             }
 

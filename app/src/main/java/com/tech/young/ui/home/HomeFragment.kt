@@ -21,6 +21,7 @@ import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
 import com.tech.young.data.api.StockQuoteService
+import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.TrendingTopicApiResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentHomeBinding
@@ -41,12 +42,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun onCreateView(view: View) {
         // view
         initView()
+        viewModel.getTrendingTopics(Constants.GET_TRENDING_TOPICS)
 
-        getAds()
         // click
         initOnClick()
 
-        viewModel.getTrendingTopics(Constants.GET_TRENDING_TOPICS)
+
         // observer
         initObserver()
     }
@@ -136,6 +137,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     hideLoading()
                     when(it.message){
                         "getTrendingTopic" ->{
+                            getAds()
                             val myDataModel : TrendingTopicApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
@@ -143,6 +145,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                                         adapterTrending.list = myDataModel.data?.topics
                                     }
 
+                                }
+                            }
+                        }
+                        "getAds" ->{
+                            val myDataModel : GetAdsAPiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    adsAdapter.list = myDataModel.data?.ads
                                 }
                             }
                         }
@@ -302,14 +312,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     /** handle ads adapter **/
     // adapter
-    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<String, AdsItemViewBinding>
+    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private fun initAdapter() {
         adsAdapter = SimpleRecyclerViewAdapter(R.layout.ads_item_view, BR.bean) { v, m, pos ->
             when (v.id) {
 
             }
         }
-        adsAdapter.list = getList
         binding.rvAds.adapter = adsAdapter
     }
 

@@ -16,15 +16,14 @@ class VaultRoomVM @Inject constructor(val apiHelper: ApiHelper) :  BaseViewModel
 
     val observeCommon = SingleRequestEvent<JsonObject>()
 
-    fun getVaultData( url : String){
+    fun getVaultData(url: String) {
         CoroutineScope(Dispatchers.IO).launch {
             observeCommon.postValue(Resource.loading(null))
             try {
                 val response = apiHelper.apiGetOnlyAuthToken(url)
-                if (response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     observeCommon.postValue(Resource.success("getVaultData", response.body()))
-                }
-                else{
+                } else {
                     observeCommon.postValue(
                         Resource.error(
                             handleErrorResponse(
@@ -34,20 +33,20 @@ class VaultRoomVM @Inject constructor(val apiHelper: ApiHelper) :  BaseViewModel
                         )
                     )
                 }
-            }catch (e : Exception){
+            } catch (e: Exception) {
                 observeCommon.postValue(Resource.error(e.message.toString(), null))
             }
         }
     }
-    fun joinLeaveRoom(url : String){
+
+    fun joinLeaveRoom(url: String) {
         CoroutineScope(Dispatchers.IO).launch {
             observeCommon.postValue(Resource.loading(null))
             try {
                 val response = apiHelper.apiPutWithoutRawBody(url)
-                if (response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     observeCommon.postValue(Resource.success("joinLeaveRoom", response.body()))
-                }
-                else{
+                } else {
                     observeCommon.postValue(
                         Resource.error(
                             handleErrorResponse(
@@ -57,21 +56,20 @@ class VaultRoomVM @Inject constructor(val apiHelper: ApiHelper) :  BaseViewModel
                         )
                     )
                 }
-            }catch (e : Exception){
+            } catch (e: Exception) {
                 observeCommon.postValue(Resource.error(e.message.toString(), null))
             }
         }
     }
 
-    fun getComment(data: HashMap<String,Any>,  url : String){
+    fun getComment(data: HashMap<String, Any>, url: String) {
         CoroutineScope(Dispatchers.IO).launch {
             observeCommon.postValue(Resource.loading(null))
             try {
-                val response = apiHelper.apiGetWithQueryAuth(url,data)
-                if (response.isSuccessful && response.body() != null){
+                val response = apiHelper.apiGetWithQueryAuth(url, data)
+                if (response.isSuccessful && response.body() != null) {
                     observeCommon.postValue(Resource.success("getComment", response.body()))
-                }
-                else{
+                } else {
                     observeCommon.postValue(
                         Resource.error(
                             handleErrorResponse(
@@ -81,22 +79,21 @@ class VaultRoomVM @Inject constructor(val apiHelper: ApiHelper) :  BaseViewModel
                         )
                     )
                 }
-            }catch (e : Exception){
+            } catch (e: Exception) {
                 observeCommon.postValue(Resource.error(e.message.toString(), null))
             }
         }
     }
 
 
-    fun addComment(data : HashMap<String,Any>, url: String){
+    fun addComment(data: HashMap<String, Any>, url: String) {
         CoroutineScope(Dispatchers.IO).launch {
             observeCommon.postValue(Resource.loading(null))
             try {
-                val response = apiHelper.apiPostForRawBody(url,data)
-                if (response.isSuccessful && response.body() != null){
+                val response = apiHelper.apiPostForRawBody(url, data)
+                if (response.isSuccessful && response.body() != null) {
                     observeCommon.postValue(Resource.success("addComment", response.body()))
-                }
-                else{
+                } else {
                     observeCommon.postValue(
                         Resource.error(
                             handleErrorResponse(
@@ -106,23 +103,21 @@ class VaultRoomVM @Inject constructor(val apiHelper: ApiHelper) :  BaseViewModel
                         )
                     )
                 }
-            }catch (e : Exception){
+            } catch (e: Exception) {
                 observeCommon.postValue(Resource.error(e.message.toString(), null))
             }
         }
     }
 
 
-
-    fun likeDislikeComment(url : String){
+    fun likeDislikeComment(url: String) {
         CoroutineScope(Dispatchers.IO).launch {
             observeCommon.postValue(Resource.loading(null))
             try {
                 val response = apiHelper.apiPutWithoutRawBody(url)
-                if (response.isSuccessful && response.body() != null){
+                if (response.isSuccessful && response.body() != null) {
                     observeCommon.postValue(Resource.success("likeDislikeComment", response.body()))
-                }
-                else{
+                } else {
                     observeCommon.postValue(
                         Resource.error(
                             handleErrorResponse(
@@ -132,7 +127,55 @@ class VaultRoomVM @Inject constructor(val apiHelper: ApiHelper) :  BaseViewModel
                         )
                     )
                 }
-            }catch (e : Exception){
+            } catch (e: Exception) {
+                observeCommon.postValue(Resource.error(e.message.toString(), null))
+            }
+        }
+    }
+
+    fun getAds(url: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            observeCommon.postValue(Resource.loading(null))
+            try {
+                val response = apiHelper.apiGetOnlyAuthToken(url)
+                if (response.isSuccessful && response.body() != null) {
+                    observeCommon.postValue(Resource.success("getAds", response.body()))
+                } else {
+                    observeCommon.postValue(
+                        Resource.error(
+                            handleErrorResponse(
+                                response.errorBody(),
+                                response.code()
+                            ), null
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                observeCommon.postValue(Resource.error(e.message.toString(), null))
+            }
+        }
+
+
+    }
+
+    fun rating(data: HashMap<String, Any>, url: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            observeCommon.postValue(Resource.loading(null))
+            try {
+                val response = apiHelper.apiPostForRawBody(url, data)
+                if (response.isSuccessful && response.body() != null) {
+                    observeCommon.postValue(Resource.success("rating", response.body()))
+                } else {
+                    observeCommon.postValue(
+                        Resource.error(
+                            handleErrorResponse(
+                                response.errorBody(),
+                                response.code()
+                            ), null
+                        )
+                    )
+                }
+            } catch (e: Exception) {
                 observeCommon.postValue(Resource.error(e.message.toString(), null))
             }
         }

@@ -11,7 +11,7 @@
             type="Integer" />
         <variable
             name="bean"
-            type="String" />
+            type="com.tech.young.data.model.GetAdsAPiResponse.Data.Ad" />
 
     </data>
 
@@ -22,6 +22,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="@dimen/_250sdp"
             android:layout_height="@dimen/_150sdp"
+            setUserImageFromBaseUrl="@{bean.file}"
             app:shapeAppearance="@style/Shape10"
             android:src="@drawable/ic_ad_dummy"
             android:scaleType="centerCrop"

@@ -99,17 +99,38 @@ data class Verification2faApiResponse(
 }
 
 /******************* trending topic api response ********************/
+//data class TrendingTopicApiResponse(
+//    var `data`: Data?,
+//    var message: String?,
+//    var success: Boolean?,
+//) {
+//    data class Data(
+//        var topics: List<Topic?>?,
+//    ) {
+//        data class Topic(
+//            var count: Int?,
+//            var topic: String?,
+//        )
+//    }
+//}
+
 data class TrendingTopicApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?,
+    var success: Boolean?
 ) {
     data class Data(
-        var topics: List<Topic?>?,
+        var topics: List<Topic?>?
     ) {
         data class Topic(
+            var _id: String?,
             var count: Int?,
+            var createdAt: String?,
+            var description: String?,
+            var image: String?,
+            var title: String?,
             var topic: String?,
+            var userId: String?
         )
     }
 }
@@ -190,6 +211,7 @@ data class GetProfileApiResponse(
             val specificStockSymbols: String?,
             val startups: String?,
             val stockInvestments: String?,
+
         ) : Parcelable {
             @Parcelize
             data class Location(
@@ -202,6 +224,61 @@ data class GetProfileApiResponse(
                 var _id: String?,
                 var ratings: Int?,
             ) : Parcelable
+        }
+    }
+}
+
+data class dsaas(
+    var `data`: Data?,
+    var message: String?,
+    var success: Boolean?
+) {
+    data class Data(
+        var user: User?
+    ) {
+        data class User(
+            var _id: String?,
+            var additionalPhotos: List<Any?>?,
+            var age: String?,
+            var areaOfExpertise: String?,
+            var city: String?,
+            var company: String?,
+            var countryCode: String?,
+            var createdAt: String?,
+            var customers: Int?,
+            var email: String?,
+            var firstName: String?,
+            var followers: Int?,
+            var following: Int?,
+            var formUpload: List<Any?>?,
+            var gender: String?,
+            var is2FAEnabled: Boolean?,
+            var isConnectedWithProfile: Boolean?,
+            var isDeactivatedByUser: Boolean?,
+            var isDocumentVerified: String?,
+            var isFollowed: Boolean?,
+            var isRegistrationCompleted: Boolean?,
+            var isReported: Boolean?,
+            var isVerified: Boolean?,
+            var lastLogin: String?,
+            var lastName: String?,
+            var location: Location?,
+            var packageName: String?,
+            var phone: String?,
+            var profileImage: String?,
+            var race: String?,
+            var ratings: List<Any?>?,
+            var role: String?,
+            var sharesCount: Int?,
+            var state: String?,
+            var topicsOfInterest: List<Any?>?,
+            var username: String?,
+            var yearFounded: String?
+        ) {
+            data class Location(
+                var coordinates: List<Double?>?,
+                var type: String?
+            )
         }
     }
 }
@@ -520,6 +597,7 @@ data class ExchangeShareApiResponse(
         var posts: List<Post?>?,
     ) {
         data class Post(
+            var isReportVisible: Boolean = false,
             var _id: String?,
             var commentsCount: Int?,
             var createdAt: String?,
@@ -566,6 +644,7 @@ data class VaultExchangeApiResponse(
         var vaults: List<Vault?>?,
     ) {
         data class Vault(
+            var isReportVisible: Boolean = false,
             var _id: String?,
             var admin: Admin?,
             var commentsCount: Int?,
@@ -576,6 +655,7 @@ data class VaultExchangeApiResponse(
             var members: List<Member?>?,
             var title: String?,
             var topic: String?,
+            var ratings: Double?,
             var isSaved: Boolean?,
         ) {
             data class Admin(
@@ -839,6 +919,7 @@ data class GetLatestUserApiResponse(
             var profileImage: String?,
             var role: String?,
             var username: String?,
+            var ratings: Double?
 
             )
     }
@@ -1105,6 +1186,7 @@ data class GetStreamApiResponse(
             var title: String?,
             var topic: String?,
             var type: String?,
+            var ratings: Double?,
             var userId: UserId?,
         ) {
             data class UserId(
@@ -1236,5 +1318,16 @@ data class GetAdsAPiResponse(
         var limit: Int?,
         var page: Int?,
         var total: Int?
+    )
+}
+
+/***************  add rating  api response *********************/
+data class AddRatingApiResponse(
+    var `data`: Data?,
+    var message: String?,
+    var success: Boolean?
+) {
+    data class Data(
+        var ratings: Int?
     )
 }

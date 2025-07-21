@@ -2,7 +2,10 @@ package com.tech.young.ui.exchange.stream_detail_fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +23,9 @@ import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
 import com.tech.young.data.model.AddCommentApiResponse
+import com.tech.young.data.model.AddRatingApiResponse
 import com.tech.young.data.model.CommentLikeDislikeApiResponse
+import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.GetCommentApiResponsePost
 import com.tech.young.data.model.StreamDetailApiResponse
 import com.tech.young.databinding.AdsItemViewBinding
@@ -43,7 +48,7 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
     private var ownerUserId : String? = null
     private lateinit var commentAdapter: SimpleRecyclerViewAdapter<GetCommentApiResponsePost.Data.Comment, ItemLayoutPostCommentBinding>
 
-    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<String, AdsItemViewBinding>
+    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
 
 
     private var getList = listOf(
@@ -55,6 +60,28 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
         initAdapter()
         initObserver()
 
+
+        binding.ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+            if (fromUser) {
+                binding.ratings.text = "($rating)"
+                Handler(Looper.getMainLooper()).postDelayed({
+                    setRating(rating)
+                }, 1000)
+                Log.i("RatingBar", "User selected rating: $rating")
+                // Handle the rating value
+            }
+        }
+    }
+
+    private fun setRating(rating: Float) {
+        if (streamId != null){
+            val data = HashMap<String,Any>()
+            data["ratings"]  = rating
+            data["type"] = "stream"
+            data["id"] =  streamId.toString()
+
+            viewModel.rating(data,Constants.RATING)
+        }
     }
 
     private fun initAdapter() {
@@ -76,7 +103,6 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
 
             }
         }
-        adsAdapter.list = getList
         binding.rvAds.adapter = adsAdapter
 
     }
@@ -151,9 +177,9 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                     showLoading()
                 }
                 Status.SUCCESS ->{
-                    hideLoading()
                     when(it.message){
                         "getShareDetail" -> {
+                            viewModel.getAds(Constants.GET_ADS)
                             val myDataModel: StreamDetailApiResponse? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null) {
                                 myDataModel.data?.let { streamDetail ->
@@ -194,6 +220,7 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                             }
                         }
                         "addComment" ->{
+                            hideLoading()
                             val myDataModel  : AddCommentApiResponse? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
@@ -203,6 +230,7 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                             }
                         }
                         "getComments" ->{
+                            hideLoading()
                             val myDataModel : GetCommentApiResponsePost? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data  != null){
@@ -214,10 +242,29 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                             }
                         }
                         "likeDislikeComment" ->{
+                            hideLoading()
                             val myDataModel : CommentLikeDislikeApiResponse? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
                                     getComments()
+                                }
+                            }
+                        }
+                        "getAds" ->{
+                            hideLoading()
+                            val myDataModel : GetAdsAPiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    adsAdapter.list = myDataModel.data?.ads
+                                }
+                            }
+                        }
+                        "rating" ->{
+                            hideLoading()
+                            val myDataModel : AddRatingApiResponse? =  BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+
                                 }
                             }
                         }

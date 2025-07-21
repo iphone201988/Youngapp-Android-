@@ -75,6 +75,13 @@ object BindingUtils {
         }
     }
 
+    @BindingAdapter("setRating")
+    @JvmStatic
+    fun setRating(view: per.wsj.library.AndRatingBar, ratingValue: Double?) {
+        view.rating = (ratingValue ?: 0.0).toFloat()
+    }
+
+
 
     @BindingAdapter("setAccountName")
     @JvmStatic
@@ -234,6 +241,24 @@ object BindingUtils {
         )
     }
 
+    fun createImageMultipartFromUri(
+        context: Context,
+        uri: Uri,
+        uploadType: String
+    ): MultipartBody.Part? {
+        val file = getTempFile(context, uri) ?: return null
+
+        val timestamp = System.currentTimeMillis()
+        val fileName = "${file.nameWithoutExtension}_$timestamp.${file.extension}"
+        val renamedFile = File(file.parent, fileName)
+        file.renameTo(renamedFile)
+
+        return MultipartBody.Part.createFormData(
+            uploadType,
+            renamedFile.name,
+            renamedFile.asRequestBody("image/*".toMediaTypeOrNull())
+        )
+    }
 
     @BindingAdapter("setFormattedDate")
     @JvmStatic
@@ -638,6 +663,9 @@ object BindingUtils {
         )
         return image
     }
+
+
+
 
 }
 

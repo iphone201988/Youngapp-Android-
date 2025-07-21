@@ -65,6 +65,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() {
 
     /** View setup **/
     private fun initView() {
+
         initAdapters()
 
         // Set category list
@@ -81,9 +82,14 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() {
     /** Adapter setup **/
     private fun initAdapters() {
 
-        shareAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_share_exchange, BR.bean) { v, m, _ ->
+        shareAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_share_exchange, BR.bean) { v, m, pos ->
             val consReport = v.rootView.findViewById<ConstraintLayout>(R.id.consReport)
             val title = v.rootView.findViewById<TextView>(R.id.tvReport)
+
+            // Initial visibility
+            consReport.visibility = if (m.isReportVisible) View.VISIBLE else View.GONE
+
+
             if (sharedPrefManager.getUserId() == m.userId?._id){
                 title.text = "Delete post"
             }
@@ -106,8 +112,9 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() {
                 }
                 R.id.iv_reshare -> viewModel.reshare(Constants.RESHARE_POST + m._id)
                 R.id.reportBtn -> {
-                    consReport.visibility = if (consReport.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-            }
+                    m.isReportVisible = !m.isReportVisible
+                    shareAdapter.notifyDataSetChanged()
+                }
                 R.id.consReport ->{
                     if (title.text == "Report"){
                         val intent = Intent(requireContext(), CommonActivity::class.java)
@@ -115,13 +122,15 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() {
                         intent.putExtra("userId", m._id)
                         intent.putExtra("reportType","share")
                         startActivity(intent)
-                        consReport.visibility = View.GONE
+//                        consReport.visibility = View.GONE
                     }
                     else{
                         viewModel.deletePost( Constants.DELETE_POST+m._id)
-                        consReport.visibility = View.GONE
+//                        consReport.visibility = View.GONE
 
                     }
+                    m.isReportVisible = false
+                    shareAdapter.notifyItemChanged(pos)
 
                 }
                 R.id.consMain ->{
@@ -146,6 +155,11 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() {
         }
 
         sortAdapter= SimpleRecyclerViewAdapter(R.layout.item_layout_sort_data,BR.bean){ v, m, pos ->
+            when(v.id){
+                R.id.consMain ->{
+
+                }
+            }
 
         }
         binding.rvSort.adapter=sortAdapter
@@ -250,6 +264,9 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() {
                 R.id.addShare ->{
                     val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_share")
                     startActivity(intent)
+                }
+                R.id.tvSort , R.id.ivSort ->{
+                    binding.rvSort.visibility = View.VISIBLE
                 }
             }
         })

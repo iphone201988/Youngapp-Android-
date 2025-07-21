@@ -1,5 +1,7 @@
 package com.tech.young.ui.vault_screen.vault_room
 
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -16,7 +18,9 @@ import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
 import com.tech.young.data.model.AddCommentApiResponseVault
+import com.tech.young.data.model.AddRatingApiResponse
 import com.tech.young.data.model.CommentLikeDislikeApiResponse
+import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.GetCommentApiResponse
 import com.tech.young.data.model.JoinVaultRoomApiResponse
 import com.tech.young.data.model.VaultDetailApiResponse
@@ -31,7 +35,7 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
 
     private lateinit var membersAdapter: SimpleRecyclerViewAdapter<VaultDetailApiResponse.Data.Vault.Member, ItemLayoutMemberViewBinding>
     private lateinit var commentAdapter: SimpleRecyclerViewAdapter<GetCommentApiResponse.Data.Comment, ItemLayoutCommentViewBinding>
-    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<String, AdsItemViewBinding>
+    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private var vaultId : String ? = null
 
     private var getList = listOf(
@@ -43,7 +47,7 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
     override fun onCreateView(view: View) {
 
         getVaultData()
-
+        viewModel.getAds(Constants.GET_ADS)
         getCommentData()
         // click
         initOnClick()
@@ -51,6 +55,28 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
         initAdapter()
 
         setObserver()
+
+        binding.ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+            if (fromUser) {
+                binding.tvAverageRating.text = "($rating)"
+                Handler(Looper.getMainLooper()).postDelayed({
+                    setRating(rating)
+                }, 1000)
+                Log.i("RatingBar", "User selected rating: $rating")
+                // Handle the rating value
+            }
+        }
+    }
+
+    private fun setRating(rating: Float) {
+        if (vaultId != null){
+            val data = HashMap<String,Any>()
+            data["ratings"]  = rating
+            data["type"] = "vault"
+            data["id"] =  vaultId.toString()
+
+            viewModel.rating(data,Constants.RATING)
+        }
     }
 
     private fun getCommentData() {
@@ -150,6 +176,24 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
                                 }
                             }
                         }
+                        "getAds" ->{
+                            hideLoading()
+                            val myDataModel : GetAdsAPiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    adsAdapter.list = myDataModel.data?.ads
+                                }
+                            }
+                        }
+                        "rating" ->{
+                            hideLoading()
+                            val myDataModel : AddRatingApiResponse? =  BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+
+                                }
+                            }
+                        }
                     }
 
 
@@ -216,7 +260,6 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
 
             }
         }
-        adsAdapter.list = getList
         binding.rvAds.adapter = adsAdapter
 
         commentAdapter =
