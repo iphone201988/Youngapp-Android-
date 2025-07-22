@@ -13,6 +13,7 @@ import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
 import com.tech.young.data.DropDownData
 import com.tech.young.data.api.Constants
+import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.GetUserApiResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentPeopleBinding
@@ -24,12 +25,13 @@ import dagger.hilt.android.AndroidEntryPoint
 class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
 
     private val viewModel : PeopleFragmentVm by viewModels()
-    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<String, AdsItemViewBinding>
+    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     var selectedUserIds = ""
     private var selectedCategory: ArrayList<DropDownData>? = null
     private lateinit var userAdapter : SimpleRecyclerViewAdapter<GetUserApiResponse.Data.User, ItemLayoutPeoplesBinding>
     override fun onCreateView(view: View) {
         initOnClick()
+        viewModel.getAds(Constants.GET_ADS)
         getUsers()
         initAdapter()
         setObserver()
@@ -65,7 +67,6 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
 
             }
         }
-        adsAdapter.list = getList
         binding.rvAds.adapter = adsAdapter
     }
 
@@ -81,14 +82,28 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
                 }
                 Status.SUCCESS ->{
                     hideLoading()
-                    val myDataModel : GetUserApiResponse ? = BindingUtils.parseJson(it.data.toString())
-                    if (myDataModel != null){
-                        if (myDataModel.data != null){
-                            if (myDataModel.data?.users != null){
-                                userAdapter.list = myDataModel.data?.users
+                    when(it.message){
+                        "getUsers" ->{
+                            val myDataModel : GetUserApiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    if (myDataModel.data?.users != null){
+                                        userAdapter.list = myDataModel.data?.users
+                                    }
+                                }
                             }
                         }
+                        "getAds" ->{
+                                val myDataModel : GetAdsAPiResponse ? = BindingUtils.parseJson(it.data.toString())
+                                if (myDataModel != null){
+                                    if (myDataModel.data != null){
+                                        adsAdapter.list = myDataModel.data?.ads
+                                    }
+                                }
+
+                        }
                     }
+
                 }
                 Status.ERROR ->{
                     hideLoading()

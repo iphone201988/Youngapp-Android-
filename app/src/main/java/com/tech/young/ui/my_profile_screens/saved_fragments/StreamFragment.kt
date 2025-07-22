@@ -27,11 +27,12 @@ class StreamFragment : BaseFragment<FragmentStreamBinding>() {
     // adapter
     private lateinit var categoryAdapter: SimpleRecyclerViewAdapter<CategoryModel, CategoryItemViewBinding>
     private lateinit var streamAdapter: SimpleRecyclerViewAdapter<GetSavedPostApiResponse.Data.Post, StreamItemViewBinding>
+    private var apiTitle : String ? = null
+
     override fun onCreateView(view: View) {
        // view
         initView()
 
-        getSavedData()
         // click
         initOnClick()
         // observer
@@ -48,11 +49,21 @@ class StreamFragment : BaseFragment<FragmentStreamBinding>() {
 
 
     private fun getSavedData() {
-        val data = HashMap<String,Any>()
-        data["userType"] = "general_member"
-        data["type"] = "stream"
-        data["page"] = 1
-        viewModel.savedShare(data, Constants.GET_SAVED_POST)
+        if (apiTitle != null){
+            val data = HashMap<String,Any>()
+            data["userType"] =  apiTitle.toString()
+            data["type"] = "stream"
+            data["page"] = 1
+            viewModel.savedShare(data, Constants.GET_SAVED_POST)
+        }
+        else{
+            val data = HashMap<String,Any>()
+            data["userType"] = "general_member"
+            data["type"] = "stream"
+            data["page"] = 1
+            viewModel.savedShare(data, Constants.GET_SAVED_POST)
+        }
+
     }
 
     /** handle view **/
@@ -117,9 +128,9 @@ class StreamFragment : BaseFragment<FragmentStreamBinding>() {
         categoryAdapter=SimpleRecyclerViewAdapter(R.layout.category_item_view, BR.bean){ v, m, pos->
             when(v.id){
                 R.id.clMain->{
-                    val apiTitle = mapTitleToApiValue(m.title)
+                    apiTitle = mapTitleToApiValue(m.title)
                     val data = HashMap<String,Any>()
-                    data["userType"] = apiTitle
+                    data["userType"] = apiTitle!!
                     data["type"] = "stream"
                     data["page"] = 1
                     viewModel.savedShare(data,Constants.GET_SAVED_POST)

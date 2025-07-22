@@ -32,6 +32,7 @@ import com.tech.young.ui.common.CommonActivity
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.util.FileUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.tech.young.data.model.GetAdsAPiResponse
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -46,7 +47,7 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
     private var imageUri : Uri ?= null
 
     // adapter
-    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<String, AdsItemViewBinding>
+    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private lateinit var topicBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
     private lateinit var categoryBottomSheet : BaseCustomBottomSheet<BottomSheetCategoryBinding>
 
@@ -85,6 +86,7 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
     /** handle view **/
     private fun initView() {
         initBottomsheet()
+        viewModel.getAds(Constants.GET_ADS)
         getTopicsList()
         selectedCateGoryList()
         getCategoryList()
@@ -214,11 +216,24 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
                 }
                 Status.SUCCESS ->{
                     hideLoading()
-                    val myDataModel : GetUserApiResponse? = BindingUtils.parseJson(it.data.toString())
-                    if (myDataModel != null){
-                        showToast(myDataModel.message.toString())
-                        requireActivity().onBackPressedDispatcher.onBackPressed()
+                    when(it.message){
+                        "createVault"  ->{
+                            val myDataModel : GetUserApiResponse? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                showToast(myDataModel.message.toString())
+                                requireActivity().onBackPressedDispatcher.onBackPressed()
+                            }
+                        }
+                        "getAds" ->{
+                            val myDataModel : GetAdsAPiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    adsAdapter.list = myDataModel.data?.ads
+                                }
+                            }
+                        }
                     }
+
                 }
                 Status.ERROR ->{
                     hideLoading()
@@ -238,7 +253,6 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
 
             }
         }
-        adsAdapter.list = getList
         binding.rvAds.adapter = adsAdapter
 
 

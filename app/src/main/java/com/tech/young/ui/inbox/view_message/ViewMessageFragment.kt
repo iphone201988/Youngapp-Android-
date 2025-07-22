@@ -17,6 +17,7 @@ import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.UserData
 import com.tech.young.data.api.Constants
+import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.GetChatMessageApiResponse
 import com.tech.young.data.model.GetChatMessageApiResponse.Data.Messages
 import com.tech.young.data.model.ReceivedMessageApiResponse
@@ -38,7 +39,7 @@ class ViewMessageFragment : BaseFragment<FragmentViewMessageBinding>() {
     private var userId : String ? = null
     private var userData : UserData ? = null
     // adapter
-    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<String, AdsItemViewBinding>
+    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private lateinit var chatAdapter: ChatAdapter
     private var chatList: ArrayList<ChatModel> = ArrayList()
     ////Socket
@@ -197,6 +198,14 @@ class ViewMessageFragment : BaseFragment<FragmentViewMessageBinding>() {
 
                             }
                         }
+                        "getAds" ->{
+                            val myDataModel : GetAdsAPiResponse? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    adsAdapter.list = myDataModel.data?.ads
+                                }
+                            }
+                        }
 
                     }
                 }
@@ -258,7 +267,6 @@ class ViewMessageFragment : BaseFragment<FragmentViewMessageBinding>() {
 
             }
         }
-        adsAdapter.list = getList
         binding.rvAds.adapter = adsAdapter
 
         userId = sharedPrefManager.getUserId()

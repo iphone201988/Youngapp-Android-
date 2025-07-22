@@ -56,6 +56,7 @@ object Constants {
     const val UN_AUTH = "user/getUnauthUser"
     const val GET_ADS = "ads"
     const val RATING = "rating"
+    const val DELETE_VAULT = "vault/"
     /*************** Temp value store****************/
        var chooseAccountType = ""
 

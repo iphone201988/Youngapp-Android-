@@ -34,6 +34,7 @@ import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
 import com.tech.young.data.api.SimpleApiResponse
+import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.BottomSheetCameraGalleryBinding
 import com.tech.young.databinding.FragmentAdvertiseBinding
@@ -61,12 +62,12 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
     private var imageUri : Uri? = null
 
     // adapter
-    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<String, AdsItemViewBinding>
+    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
 
     override fun onCreateView(view: View) {
         initBottomSheet()
         galleryLauncher()
-
+        viewModel.getAds(Constants.GET_ADS)
         initAdapter()
         // click
         initOnClick()
@@ -90,6 +91,14 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
                                 startActivity(intent)
                                 requireActivity().finishAffinity()
                                 showDialog()
+                            }
+                        }
+                        "getAds" ->{
+                            val myDataModel : GetAdsAPiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    adsAdapter.list = myDataModel.data?.ads
+                                }
                             }
                         }
                     }
@@ -230,7 +239,6 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
 
             }
         }
-        adsAdapter.list = getList
         binding.rvAds.adapter = adsAdapter
     }
 

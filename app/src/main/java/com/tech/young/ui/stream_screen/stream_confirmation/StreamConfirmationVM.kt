@@ -41,4 +41,28 @@ class StreamConfirmationVM @Inject constructor(private val apiHelper: ApiHelper)
             }
         }
     }
+
+    fun getAds(url : String){
+        CoroutineScope(Dispatchers.IO).launch {
+            observeCommon.postValue(Resource.loading(null))
+            try {
+                val response = apiHelper.apiGetOnlyAuthToken(url)
+                if (response.isSuccessful && response.body() != null){
+                    observeCommon.postValue(Resource.success("getAds", response.body()))
+                }
+                else{
+                    observeCommon.postValue(
+                        Resource.error(
+                            handleErrorResponse(
+                                response.errorBody(),
+                                response.code()
+                            ), null
+                        )
+                    )
+                }
+            }catch (e : Exception){
+                observeCommon.postValue(Resource.error(e.message.toString(), null))
+            }
+        }
+    }
 }

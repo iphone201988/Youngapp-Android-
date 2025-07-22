@@ -12,6 +12,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.tech.young.BR
@@ -20,8 +21,12 @@ import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BaseCustomBottomSheet
+import com.tech.young.base.utils.BindingUtils
+import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.DropDownData
+import com.tech.young.data.api.Constants
+import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.StreamData
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.BotttomSheetTopicsBinding
@@ -47,7 +52,7 @@ class CommonStreamFragment : BaseFragment<FragmentCommonStreamBinding>() ,BaseCu
     private  var scheduleDateToSend: String? = null
 
     // adapter
-    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<String, AdsItemViewBinding>
+    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
 
     private var getList = listOf(
         "", "", "", "", ""
@@ -55,6 +60,8 @@ class CommonStreamFragment : BaseFragment<FragmentCommonStreamBinding>() ,BaseCu
     override fun onCreateView(view: View) {
         // view
         initView()
+
+
         // click
         initOnClick()
     }
@@ -71,10 +78,42 @@ class CommonStreamFragment : BaseFragment<FragmentCommonStreamBinding>() ,BaseCu
     /****/
     private fun initView() {
         initBottomsheet()
+        viewModel.getAds(Constants.GET_ADS)
         getTopicsList()
         setDefaultDateTime()
         // adapter
         initAdapter()
+        initObserver()
+    }
+
+    private fun initObserver() {
+        viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
+            when(it?.status){
+                Status.LOADING ->{
+                    showLoading()
+                }
+                Status.SUCCESS ->{
+                    hideLoading()
+                    when(it.message){
+                        "getAds" ->{
+                            val myDataModel : GetAdsAPiResponse? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    adsAdapter.list = myDataModel.data?.ads
+                                }
+                            }
+                        }
+                    }
+                }
+                Status.ERROR ->{
+                    hideLoading()
+                    showToast(it.message.toString())
+                }
+                else ->{
+
+                }
+            }
+        })
     }
 
     /** handle click **/
@@ -149,7 +188,6 @@ class CommonStreamFragment : BaseFragment<FragmentCommonStreamBinding>() ,BaseCu
 
             }
         }
-        adsAdapter.list = getList
         binding.rvAds.adapter = adsAdapter
 
 

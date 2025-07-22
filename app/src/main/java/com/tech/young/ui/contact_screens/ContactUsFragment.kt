@@ -29,6 +29,7 @@ import com.tech.young.databinding.FragmentContactUsBinding
 import com.tech.young.databinding.PolicyItemViewBinding
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.util.FileUtil
+import com.tech.young.data.model.GetAdsAPiResponse
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -45,13 +46,14 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
 
 
     // adapter
-    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<String, AdsItemViewBinding>
+    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
 
     private lateinit var policiesAdapter: SimpleRecyclerViewAdapter<String, PolicyItemViewBinding>
 
     override fun onCreateView(view: View) {
         // click
         initOnClick()
+        viewModel.getAds(Constants.GET_ADS)
         // adapter
         initAdapter()
 
@@ -71,6 +73,14 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
                             val myDataModel : SimpleApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 showToast(myDataModel.message.toString())
+                            }
+                        }
+                        "getAds" ->{
+                            val myDataModel : GetAdsAPiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    adsAdapter.list = myDataModel.data?.ads
+                                }
                             }
                         }
                     }
@@ -143,7 +153,6 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
 
             }
         }
-        adsAdapter.list = getList
         binding.rvAds.adapter = adsAdapter
 
     }

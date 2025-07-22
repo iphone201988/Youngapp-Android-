@@ -20,6 +20,7 @@ import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
 import com.tech.young.data.api.Constants
+import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.StreamApiResponse
 import com.tech.young.data.model.StreamData
 import com.tech.young.databinding.AdsItemViewBinding
@@ -43,7 +44,7 @@ class StreamConfirmationFragment : BaseFragment<FragmentStreamConfirmationBindin
 
 
     // adapter
-    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<String, AdsItemViewBinding>
+    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
 
     private var getList = listOf(
         "", "", "", "", ""
@@ -52,6 +53,8 @@ class StreamConfirmationFragment : BaseFragment<FragmentStreamConfirmationBindin
     override fun onCreateView(view: View) {
         // view
         initView()
+
+        viewModel.getAds(Constants.GET_ADS)
         // click
         initOnClick()
 
@@ -85,6 +88,14 @@ class StreamConfirmationFragment : BaseFragment<FragmentStreamConfirmationBindin
                                         }
 
                                     }
+                                }
+                            }
+                        }
+                        "getAds" ->{
+                            val myDataModel : GetAdsAPiResponse? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    adsAdapter.list = myDataModel.data?.ads
                                 }
                             }
                         }
@@ -265,7 +276,6 @@ class StreamConfirmationFragment : BaseFragment<FragmentStreamConfirmationBindin
 
             }
         }
-        adsAdapter.list = getList
         binding.rvAds.adapter = adsAdapter
     }
 

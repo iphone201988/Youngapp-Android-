@@ -1,6 +1,7 @@
 package com.tech.young.ui.exchange.screens
 
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -12,6 +13,8 @@ import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
+import com.tech.young.data.FilterItem
+import com.tech.young.data.SortingItem
 import com.tech.young.data.api.Constants
 import com.tech.young.data.model.CategoryModel
 import com.tech.young.data.model.GetStreamApiResponse
@@ -19,18 +22,23 @@ import com.tech.young.data.model.SavedPostApiResponse
 import com.tech.young.data.model.VaultExchangeApiResponse
 import com.tech.young.databinding.CategoryItemViewBinding
 import com.tech.young.databinding.FragmentStreamExchangeBinding
+import com.tech.young.databinding.ItemLayoutSortDataBinding
 import com.tech.young.databinding.ItemLayoutStreamExchangeBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.exchange.ExchangeVM
+import com.tech.young.ui.exchange.Filterable
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.internal.ignoreIoExceptions
 
 @AndroidEntryPoint
-class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() {
+class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , Filterable {
     private val viewModel: ExchangeVM by viewModels()
     private lateinit var categoryAdapter: SimpleRecyclerViewAdapter<CategoryModel, CategoryItemViewBinding>
     private lateinit var streamAdapter : SimpleRecyclerViewAdapter<GetStreamApiResponse.Data.Post,ItemLayoutStreamExchangeBinding>
     private  lateinit  var categoryData : ArrayList<CategoryModel>
+    private lateinit var sortAdapter : SimpleRecyclerViewAdapter<SortingItem, ItemLayoutSortDataBinding>
+    private var sortList = ArrayList<SortingItem>()
+
     private var selectedCategoryTitle: String? = null
 
 
@@ -56,7 +64,7 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() {
 
     /** handle view **/
     private fun initView() {
-
+        getSortList()
         initAdapter()
 
 
@@ -68,9 +76,15 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() {
         binding.rvCategories.adapter = categoryAdapter
 
         // Initial fetch
-        selectedCategoryTitle?.let { getStreamExchange(it) }
+        selectedCategoryTitle?.let { getStreamExchange(it,"",null) }
+        Log.i("fsdfsdfsd", "initView: $categoryData , $selectedCategoryTitle  ,$selectedCategoryForExchange")
     }
 
+    private fun getSortList() {
+        sortList.add(SortingItem("Followed", "byFollowers"))
+        sortList.add(SortingItem("Saved", "bySave"))
+        sortList.add(SortingItem("Booms", "byBoom"))
+    }
     private fun initAdapter() {
         categoryAdapter=SimpleRecyclerViewAdapter(R.layout.category_item_view, BR.bean){ v, m, pos->
             when(v.id){
@@ -81,7 +95,7 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() {
                         selectedCategoryTitle = m.title
                         categoryAdapter.notifyDataSetChanged()
 
-                        getStreamExchange(m.title)
+                        getStreamExchange(m.title,"",null)
                     }
 
                 }
@@ -123,10 +137,47 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() {
         }
         binding.rvStream.adapter = streamAdapter
         streamAdapter.notifyDataSetChanged()
+
+
+        sortAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_sort_data, BR.bean) { v, m, pos ->
+            when (v.id) {
+                R.id.consMain -> {
+                    val clickedItem = sortList[pos]
+
+                    val wasSelected = clickedItem.isSelected
+                    sortList.forEach { it.isSelected = false }
+
+                    // Toggle the clicked item
+                    clickedItem.isSelected = !wasSelected
+                    sortAdapter.notifyDataSetChanged()
+
+                    val selectedKey = if (clickedItem.isSelected) clickedItem.key else ""
+
+                    Log.i("SelectedKey", if (selectedKey.isEmpty()) "Deselected, no sort active" else selectedKey)
+
+                    // Always call API with proper key (or blank)
+                    getStreamExchange(selectedCategoryTitle.toString(), selectedKey,null)
+
+                    binding.rvSort.visibility = View.GONE
+                }
+
+
+            }
+        }
+
+        binding.rvSort.adapter = sortAdapter
+        sortAdapter.list = sortList
     }
 
     /** handle click **/
     private fun initOnClick() {
+        viewModel.onClick.observe(viewLifecycleOwner, Observer {
+            when(it?.id){
+                R.id.ivSort, R.id.tvSort ->{
+                binding.rvSort.visibility = View.VISIBLE
+                }
+            }
+        })
 
     }
 
@@ -153,7 +204,7 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() {
                         if(myDataModel != null){
                             if (myDataModel.data != null){
                                 showToast(myDataModel.message.toString())
-                                selectedCategoryTitle?.let { getStreamExchange(it) }
+                                selectedCategoryTitle?.let { getStreamExchange(it,"",null) }
 
                             }
                         }
@@ -163,7 +214,7 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() {
                             if(myDataModel != null){
                                 if (myDataModel.data != null){
                                     showToast(myDataModel.message.toString())
-                                    selectedCategoryTitle?.let { getStreamExchange(it) }
+                                    selectedCategoryTitle?.let { getStreamExchange(it,"",null) }
                                 }
                             }
                         }
@@ -206,14 +257,42 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() {
     }
 
 
-    private fun getStreamExchange(title: String) {
+    private fun getStreamExchange(title: String,selectedKey: String, selectedFilter: FilterItem?) {
         val apiTitle = mapTitleToApiValue(title)
         val data = hashMapOf<String, Any>(
             "userType" to apiTitle,
             "type" to "stream",
             "page" to 1
         )
+
+        if (selectedKey.isNotEmpty()) {
+            data[selectedKey] = true
+        }
+
+        // New support for key-value pair (e.g., rating = 1)
+        selectedFilter?.let {
+            if (it.key.isNotEmpty() && it.value != null) {
+                data[it.key] = it.value
+            }
+        }
+
         viewModel.getStream(data, Constants.GET_ALL_POST)
     }
 
+    override fun onFilterApplied(selectedFilter: FilterItem) {
+        val selectedKey = if (selectedFilter.isSelected) selectedFilter.key else ""
+        Log.i("dfdsfsdfsd", "onFilterApplied: $selectedKey , $selectedFilter")
+        getStreamExchange(selectedCategoryTitle.toString(), selectedKey, selectedFilter) // ← Pass selectedFilter
+
+    }
+
+    override fun onSearchQueryChanged(query: String) {
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.i("dsadsad", "onResume: $selectedCategoryTitle")
+        getStreamExchange(selectedCategoryTitle.toString(),"",null)
+    }
 }

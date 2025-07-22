@@ -79,7 +79,7 @@
             style="@style/TextView_400_Regular"
             android:layout_width="0dp"
             android:layout_height="@dimen/_42sdp"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginTop="24dp"
             android:background="@drawable/radius_border_gray"
             android:gravity="start|center"
             android:hint="@string/search_here"
@@ -87,19 +87,36 @@
             android:paddingEnd="@dimen/_50sdp"
             android:singleLine="true"
             android:textColorHint="@color/text_gray"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintEnd_toStartOf="@id/filterList"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/filterList"
             android:layout_width="@dimen/_42sdp"
             android:layout_height="@dimen/_42sdp"
             android:src="@drawable/iv_filter_icon"
             android:scaleType="fitXY"
-            app:layout_constraintEnd_toEndOf="@id/etSearch"
+            android:onClick="@{v -> vm.onClick(v)}"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/etSearch"
             app:layout_constraintBottom_toBottomOf="@id/etSearch"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFilter"
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"
+            android:background="@drawable/bg_cons"
+            android:visibility="gone"
+            android:elevation="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            tools:listitem="@layout/item_layout_fiter"
+            app:layout_constraintTop_toBottomOf="@id/filterList"
+            app:layout_constraintEnd_toEndOf="@id/filterList"/>
 
 
         <com.google.android.material.tabs.TabLayout

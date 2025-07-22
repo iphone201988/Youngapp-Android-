@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="bean"
             type="com.tech.young.data.SortingItem" />
@@ -26,11 +27,10 @@
             android:layout_width="@dimen/_15sdp"
             android:layout_height="@dimen/_15sdp"
             android:src="@drawable/iv_tick"
-            android:visibility="gone"
+            android:visibility="@{bean.isSelected()==true?View.VISIBLE:View.INVISIBLE}"
             android:layout_marginStart="@dimen/_10sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:tint="@color/black" />
         
         <TextView
@@ -46,5 +46,12 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/text_gray"
+            android:alpha="0.4"
+            app:layout_constraintBottom_toBottomOf="@+id/ivTick"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

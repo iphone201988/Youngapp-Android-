@@ -25,6 +25,7 @@ import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
 import com.tech.young.data.DropDownData
 import com.tech.young.data.model.CreatePostApiResponse
+import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.databinding.BotttomSheetTopicsBinding
 import com.tech.young.databinding.ItemLayoutDropDownBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,17 +40,20 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
     private val viewModel: ShareVM by viewModels()
 
     // adapter
-    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<String, AdsItemViewBinding>
+    private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private lateinit var topicBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
     private lateinit var topicAdapter : SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
     private var topicList = ArrayList<DropDownData>()
 
+    private var selectedOption: String = "stock"  // default
 
     private var imageUri : Uri ?= null
 
     override fun onCreateView(view: View) {
         // view
         initView()
+
+        viewModel.getAds(Constants.GET_ADS)
         // click
         initOnClick()
         // observer
@@ -98,8 +102,9 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
                         data["title"] = binding.etTitle.text.toString().trim().toRequestBody()
                         data["description"] = binding.etDescription.text.toString().trim().toRequestBody()
                         data["topic"] = binding.etTopic.text.toString().trim().toRequestBody()
-                        data["symbol"] = binding.etSymbol.text.toString().trim().toRequestBody()
+                        data["symbol"] = selectedOption.toRequestBody()
                         data["type"] = "share".toRequestBody()
+                        data["symbolValue"] = binding.etSymbol.text.toString().trim().toRequestBody()
                         viewModel.sharePost(data, Constants.CREATE_SHARE,multipartImage)
                     }
                 }
@@ -156,6 +161,14 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
                                 }
                             }
                         }
+                        "getAds" ->{
+                            val myDataModel : GetAdsAPiResponse? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    adsAdapter.list = myDataModel.data?.ads
+                                }
+                            }
+                        }
                     }
                 }
                 Status.ERROR ->{
@@ -176,7 +189,6 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
 
             }
         }
-        adsAdapter.list = getList
         binding.rvAds.adapter = adsAdapter
 
         topicAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_drop_down,BR.bean){v,m,pos ->
@@ -199,17 +211,25 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
     private fun setupToggle() {
         binding.yesOption.label.text = "Stock"
         binding.noOption.label.text = "Crypto"
+
+        // Default selection
+        selectedOption = "stock"
+        binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_selected)
+        binding.noOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
+
         binding.yesOption.box.setOnClickListener {
+            selectedOption = "stock"
             binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_selected)
             binding.noOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
         }
+
         binding.noOption.box.setOnClickListener {
+            selectedOption = "crypto"
             binding.noOption.box.setBackgroundResource(R.drawable.ic_check_selected)
             binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
         }
-        binding.noOption.box.setBackgroundResource(R.drawable.ic_check_selected)
-        binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
     }
+
 
     private fun isEmptyField() : Boolean {
         if (TextUtils.isEmpty(binding.etTitle.text.toString().trim())){

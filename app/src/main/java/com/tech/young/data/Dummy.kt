@@ -68,7 +68,17 @@ data class RSSItem(
 
 data class SortingItem(
     val title: String,
-    val isSelected: Boolean = false,
+    val key : String,
+    var isSelected: Boolean = false,
+)
+
+
+data class FilterItem(
+    val title: String,
+    val isHeader: Boolean = false,
+    var isSelected: Boolean = false,
+    val key: String = "",        // e.g., "distance", "rating"
+    val value: Any? = null       // e.g., 1, 2, true, etc.
 )
 
 
@@ -106,3 +116,4 @@ data class ImageModel(
     var image_Uri: Uri? = null,
     var type:String?
 )
+
