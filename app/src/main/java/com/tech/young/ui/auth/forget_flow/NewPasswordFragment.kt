@@ -1,5 +1,6 @@
 package com.tech.young.ui.auth.forget_flow
 
+import android.text.InputType
 import android.text.TextUtils
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -80,6 +81,12 @@ class NewPasswordFragment : BaseFragment<FragmentNewPasswordBinding>() {
                     requireActivity().onBackPressedDispatcher.onBackPressed()
                 }
 
+                R.id.ivPassword ->{
+                    signUpShowHidePassword()
+                }
+                R.id.ivConfirmPassword ->{
+                    signUpShowHideConfirmPassword()
+                }
                 R.id.tvLoginButton -> {
                     val userId = arguments?.getString("userId")
                     if (isEmptyField()){
@@ -127,4 +134,28 @@ class NewPasswordFragment : BaseFragment<FragmentNewPasswordBinding>() {
         }
     }
 
+
+    private fun signUpShowHidePassword() {
+        if (binding.edtNewPassword.inputType == InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD) {
+            binding.ivPassword.setImageResource(R.drawable.iv_show_eye)
+            binding.edtNewPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+        } else {
+            binding.ivPassword.setImageResource(R.drawable.pass_invisible)
+            binding.edtNewPassword.inputType =
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+        binding.edtNewPassword.setSelection(binding.edtNewPassword.length())
+    }
+
+    private fun signUpShowHideConfirmPassword() {
+        if (binding.edtConfirmPassword.inputType == InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD) {
+            binding.ivConfirmPassword.setImageResource(R.drawable.iv_show_eye)
+            binding.edtConfirmPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+        } else {
+            binding.ivConfirmPassword.setImageResource(R.drawable.pass_invisible)
+            binding.edtConfirmPassword.inputType =
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+        binding.edtConfirmPassword.setSelection(binding.edtConfirmPassword.length())
+    }
 }

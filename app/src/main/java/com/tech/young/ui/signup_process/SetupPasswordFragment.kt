@@ -228,7 +228,7 @@ class SetupPasswordFragment : BaseFragment<FragmentSetupPasswordBinding>() {
 
         return when {
             oldPassword.isBlank() -> {
-                showErrorToast("Enter old password")
+                showErrorToast("Enter password")
                 false
             }
 

@@ -294,7 +294,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                         }
 
                         "Investor/ VC" -> {
-                            selectedCategoryForExchange = "Insurance"
+                            selectedCategoryForExchange = "Investor"
                             //selectedCategoryForExchange="VCs"
                             displayFragment(ExchangeFragment())
                             updateOtherUI(getString(R.string.exchange))
@@ -329,7 +329,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                         }
 
                         "Investor/ VC" -> {
-                            selectedCategoryForEcosystem = "Insurance"
+                            selectedCategoryForEcosystem = "Investor"
                             //selectedCategoryForEcosystem ="VCs"
                             displayFragment(EcosystemFragment())
                             updateOtherUI(getString(R.string.ecosystem))

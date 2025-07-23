@@ -1,6 +1,7 @@
 package com.tech.young.ui.signup_process.enter_details
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -10,6 +11,7 @@ import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.BindingUtils.setNavigationBarStyle
+import com.tech.young.base.utils.showToast
 import com.tech.young.databinding.FragmentEnterYourDetailsBinding
 import com.tech.young.ui.signup_process.SignUpVm
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,25 +66,52 @@ class EnterYourDeatilsFragment : BaseFragment<FragmentEnterYourDetailsBinding>()
                 }
 
                 R.id.tvNext -> {
-                    val bundle = Bundle().apply {
-                        putString("role", type)
-                        putString("firstName", binding.edtFirstName.text.toString().trim())
-                        putString("lastName", binding.edtLastName.text.toString().trim())
-                        if (type != "General Member") {
-                            putString("company", binding.edtCompany.text.toString().trim())
-                        }
-                        putString("username", binding.edtUsername.text.toString().trim())
-                        putString("email", binding.edtEmail.text.toString().trim())
-                        putString("countryCode", countryCode)
-                        putString("phone", binding.edtPhone.text.toString().trim())
+                    if (isEmptyField()){
+                        val bundle = Bundle().apply {
+                            putString("role", type)
+                            putString("firstName", binding.edtFirstName.text.toString().trim())
+                            putString("lastName", binding.edtLastName.text.toString().trim())
+                            if (type != "General Member") {
+                                putString("company", binding.edtCompany.text.toString().trim())
+                            }
+                            putString("username", binding.edtUsername.text.toString().trim())
+                            putString("email", binding.edtEmail.text.toString().trim())
+                            putString("countryCode", countryCode)
+                            putString("phone", binding.edtPhone.text.toString().trim())
 
+                        }
+                        findNavController().navigate(R.id.navigateToSetupPasswordFragment, bundle)
                     }
-                    findNavController().navigate(R.id.navigateToSetupPasswordFragment, bundle)
+
                 }
             }
         })
 
     }
 
-
+    private fun isEmptyField() : Boolean {
+       if (TextUtils.isEmpty(binding.edtFirstName.text.toString().trim())){
+           showToast("Please enter first name")
+           return false
+       }
+        if (TextUtils.isEmpty(binding.edtLastName.text.toString().trim())){
+            showToast("Please enter last name")
+            return false
+        }
+        if (TextUtils.isEmpty(binding.edtEmail.text.toString().trim())){
+            showToast("Please enter email")
+            return false
+        }
+        if (TextUtils.isEmpty(binding.edtPhone.text.toString().trim())){
+            showToast("Please enter phone number")
+            return false
+        }
+        if (type != "General Member"){
+            if (TextUtils.isEmpty(binding.edtCompany.text.toString().trim())){
+                showToast("Please enter company name")
+                return false
+            }
+        }
+        return true
+    }
 }
