@@ -57,6 +57,7 @@ object Constants {
     const val GET_ADS = "ads"
     const val RATING = "rating"
     const val DELETE_VAULT = "vault/"
+    const val DOWNLOAD_HISTORY = "post/downloadHistory"
     /*************** Temp value store****************/
        var chooseAccountType = ""
 

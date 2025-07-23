@@ -14,9 +14,11 @@ import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.view.WindowInsetsController
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
@@ -680,6 +682,50 @@ object BindingUtils {
     }
 
 
+
+    @BindingAdapter("setRoleBasedLabel")
+    @JvmStatic
+    fun setRoleBasedLabel(textView: TextView, role: String?) {
+        val label = when (role?.lowercase()) {
+            "small_business" -> "Small Business"
+            "investor" -> "VC"
+            "financial_firm" -> "Insurance"
+            "financial_advisor" -> "Financial Advisor"
+            "startup" -> "Startup"
+            else -> ""  // default fallback
+        }
+        textView.text = label
+    }
+
+
+    @BindingAdapter("setServiceLabel")
+    @JvmStatic
+    fun setServiceLabel(textView: TextView, role: String?) {
+        val label = when (role?.lowercase()) {
+            "small_business" -> "Services/Products"
+            "investor" -> "Interested"
+            "financial_firm" -> "Services/Products"
+            "startup" -> "Services/Products"
+            "financial_advisor" -> "Services/Products"
+            "general_member" -> "Interested"
+            else -> ""  // default fallback
+        }
+        textView.text = label
+    }
+
+    @BindingAdapter("setFoundLabel")
+    @JvmStatic
+    fun setFoundLabel(textView: TextView, role: String?) {
+        val label = when (role?.lowercase()) {
+            "small_business" -> "Founded"
+            "investor" -> "Founded"
+            "financial_firm" -> "Founded"
+            "startup" -> "Launch Date"
+            "financial_advisor" -> "Founded"
+            else -> ""  // default fallback
+        }
+        textView.text = label
+    }
 
 
 }

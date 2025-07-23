@@ -44,7 +44,10 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
     private var sortList = ArrayList<SortingItem>()
     private var selectedCategoryTitle: String? = null
     private  lateinit  var categoryData : ArrayList<CategoryModel>
-
+    private var selectedKey : String ?= null
+    private var userSelectedKey : String ? = null
+    private var selectedFilterData : FilterItem ? = null
+    private var searchData : String ? = null
     companion object {
         var selectedCategoryForExchange: String? = null
     }
@@ -91,7 +94,7 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
                         selectedCategoryTitle = m.title
                         categoryAdapter.notifyDataSetChanged()
 
-                        getVault(m.title,"",null)
+                        getVault(m.title)
                     }
                 }
             }
@@ -183,12 +186,12 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
                     clickedItem.isSelected = !wasSelected
                     sortAdapter.notifyDataSetChanged()
 
-                    val selectedKey = if (clickedItem.isSelected) clickedItem.key else ""
+                    selectedKey = if (clickedItem.isSelected) clickedItem.key else ""
 
-                    Log.i("SelectedKey", if (selectedKey.isEmpty()) "Deselected, no sort active" else selectedKey)
+                   // Log.i("SelectedKey", if (selectedKey.isEmpty()) "Deselected, no sort active" else selectedKey)
 
                     // Always call API with proper key (or blank)
-                   getVault(selectedCategoryTitle.toString(), selectedKey,null)
+                   getVault(selectedCategoryTitle.toString())
 
                     binding.rvSort.visibility = View.GONE
                 }
@@ -201,22 +204,31 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
         sortAdapter.list = sortList
     }
 
-    private fun getVault(title: String,selectedKey: String, selectedFilter: FilterItem?) {
+    private fun getVault(title: String) {
         val apiTitle = mapTitleToApiValue(title)
         val data = hashMapOf<String, Any>(
             "userType" to apiTitle,
             "page" to 1
         )
 
-        if (selectedKey.isNotEmpty()) {
-            data[selectedKey] = true
+        if (selectedKey?.isNotEmpty() == true) {
+            data[selectedKey!!] = true
+        }
+
+        if (userSelectedKey?.isNotEmpty() == true) {
+            data[userSelectedKey!!] = true
         }
 
         // New support for key-value pair (e.g., rating = 1)
-        selectedFilter?.let {
-            if (it.key.isNotEmpty() && it.value != null) {
-                data[it.key] = it.value
+        if (selectedFilterData != null){
+            selectedFilterData?.let {
+                if (it.key.isNotEmpty() && it.value != null) {
+                    data[it.key] = it.value
+                }
             }
+        }
+        if (searchData?.isNotEmpty() == true){
+            data["search"] = searchData!!
         }
 
         viewModel.getVault(data, Constants.GET_VAULT)
@@ -236,7 +248,7 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
         binding.rvCategories.adapter = categoryAdapter
 
         // Initial fetch
-        selectedCategoryTitle?.let { getVault(it,"",null) }
+        selectedCategoryTitle?.let { getVault(it) }
     }
     private fun getSortList() {
         sortList.add(SortingItem("Followed", "byFollowers"))
@@ -282,7 +294,7 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
                             if(myDataModel != null){
                                 if (myDataModel.data != null){
                                     showToast(myDataModel.message.toString())
-                                    selectedCategoryTitle?.let { getVault(it,"",null) }
+                                    selectedCategoryTitle?.let { getVault(it) }
 
 
                                 }
@@ -293,7 +305,7 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
                             if(myDataModel != null){
                                 if (myDataModel.data != null){
                                     showToast(myDataModel.message.toString())
-                                    selectedCategoryTitle?.let { getVault(it,"",null) }
+                                    selectedCategoryTitle?.let { getVault(it) }
                                 }
                             }
                         }
@@ -301,7 +313,7 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
                             val myDataModel : SimpleApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 showToast(myDataModel.message.toString())
-                                selectedCategoryTitle?.let { getVault(it,"",null) }
+                                selectedCategoryTitle?.let { getVault(it) }
                             }
                         }
                     }
@@ -342,17 +354,19 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
 
     override fun onResume() {
         super.onResume()
-        getVault(selectedCategoryTitle.toString(),"",null)
+        getVault(selectedCategoryTitle.toString())
     }
 
-    override fun onFilterApplied(selectedFilter: FilterItem) {
-        val selectedKey = if (selectedFilter.isSelected) selectedFilter.key else ""
+    override fun onFilterApplied(selectedFilter: FilterItem?) {
+        selectedFilterData = selectedFilter
+        userSelectedKey = if (selectedFilter?.isSelected == true) selectedFilter.key else ""
         Log.i("dfdsfsdfsd", "onFilterApplied: $selectedKey , $selectedFilter")
-        getVault(selectedCategoryTitle.toString(), selectedKey, selectedFilter) // ← Pass selectedFilter
+        getVault(selectedCategoryTitle.toString()) // ← Pass selectedFilter
     }
 
     override fun onSearchQueryChanged(query: String) {
-
+        searchData = query
+        getVault(selectedCategoryTitle.toString())
     }
 
 

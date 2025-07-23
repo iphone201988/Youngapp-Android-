@@ -1337,3 +1337,32 @@ data class AddRatingApiResponse(
         var ratings: Int?
     )
 }
+
+/***************  download history   api response *********************/
+data class DownloadHistoryApiResponse(
+    var `data`: Data?,
+    var message: String?,
+    var success: Boolean?
+) {
+    data class Data(
+        var posts: List<Post?>?
+    ) {
+        data class Post(
+            var __v: Int?,
+            var _id: String?,
+            var createdAt: String?,
+            var description: String?,
+            var image: String?,
+            var isDeleted: Boolean?,
+            var isPublished: Boolean?,
+            var reSharedBy: String?,
+            var reSharedPostId: String?,
+            var scheduleDate: String?,
+            var symbol: String?,
+            var title: String?,
+            var topic: String?,
+            var type: String?,
+            var updatedAt: String?
+        )
+    }
+}

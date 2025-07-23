@@ -131,7 +131,7 @@ class TwoFactorAuthFragment : BaseFragment<FragmentTwoFactorAuthBinding>() {
 
                 Status.ERROR -> {
                     hideLoading()
-                    showErrorToast(it.message.toString())
+                    showToast(it.message.toString())
                 }
 
                 else -> {}

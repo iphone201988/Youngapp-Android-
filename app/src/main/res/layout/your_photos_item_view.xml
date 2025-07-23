@@ -25,6 +25,7 @@
             android:layout_width="@dimen/_90sdp"
             android:layout_height="@dimen/_120sdp"
             app:shapeAppearance="@style/Shape10"
+            android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

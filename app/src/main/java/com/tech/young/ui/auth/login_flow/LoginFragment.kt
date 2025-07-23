@@ -1,6 +1,7 @@
 package com.tech.young.ui.auth.login_flow
 
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
@@ -74,6 +75,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
                 R.id.ivBack -> {
                     requireActivity().onBackPressedDispatcher.onBackPressed()
                 }
+                R.id.ivPassword ->{
+                   signUpShowHidePassword()
+                }
 
                 R.id.tvLoginButton -> {
                     try {
@@ -109,6 +113,17 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
 
     }
 
+    private fun signUpShowHidePassword() {
+        if (binding.edtPassword.inputType == InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD) {
+            binding.ivPassword.setImageResource(R.drawable.iv_show_eye)
+            binding.edtPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+        } else {
+            binding.ivPassword.setImageResource(R.drawable.pass_invisible)
+            binding.edtPassword.inputType =
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+        binding.edtPassword.setSelection(binding.edtPassword.length())
+    }
 
     private fun isLoginInputValid(): Boolean {
         return when {

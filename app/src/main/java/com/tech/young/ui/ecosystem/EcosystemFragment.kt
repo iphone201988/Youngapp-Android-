@@ -3,6 +3,7 @@ package com.tech.young.ui.ecosystem
 import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -15,6 +16,7 @@ import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
+import com.tech.young.data.FilterItem
 import com.tech.young.data.api.Constants
 import com.tech.young.data.model.CategoryModel
 import com.tech.young.data.model.GetAdsAPiResponse
@@ -22,6 +24,7 @@ import com.tech.young.data.model.GetLatestUserApiResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.CategoryItemViewBinding
 import com.tech.young.databinding.FragmentEcosystemBinding
+import com.tech.young.databinding.ItemLayoutFiterBinding
 import com.tech.young.databinding.ItemViewUsersBinding
 import com.tech.young.ui.common.CommonActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,11 +43,15 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
     private lateinit var usersAdapter: SimpleRecyclerViewAdapter<GetLatestUserApiResponse.Data.User, ItemViewUsersBinding>
     private var searchJob: Job? = null
     private var apiTitle : String ? = null
+    private lateinit var filterAdapter  : SimpleRecyclerViewAdapter<FilterItem, ItemLayoutFiterBinding>
+    private var filterList = ArrayList<FilterItem>()
     // list data
     private lateinit var categoryData: ArrayList<CategoryModel>
     private var selectedCategoryTitle: String? = null
     private val getList = listOf("", "", "", "", "")
-
+    private var userSelectedKey : String ? = null
+    private var selectedFilterData : FilterItem ? = null
+    private var searchData : String ? = null
     companion object {
         var selectedCategoryForEcosystem: String? = null
     }
@@ -58,6 +65,23 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
         searchView()
         initObserver()
     }
+
+
+    private fun getFilterList() {
+        filterList.clear()
+
+        filterList.add(FilterItem("Date Posted", isSelected = true)) // No API key
+        filterList.add(FilterItem("Number of Customers", key = "byCustomers", value = true))
+        filterList.add(FilterItem("Number of Followers", key = "byFollowers", value = true))
+        filterList.add(FilterItem("Rating", isHeader = true)) // just a header, not selectable
+
+        filterList.add(FilterItem("1 Star", key = "rating", value = 1))
+        filterList.add(FilterItem("2 Star", key = "rating", value = 2))
+        filterList.add(FilterItem("3 Star", key = "rating", value = 3))
+        filterList.add(FilterItem("4 Star", key = "rating", value = 4))
+        filterList.add(FilterItem("5 Star", key = "rating", value = 5))
+    }
+
 
     private fun searchView() {
         binding.etSearch.addTextChangedListener(object : TextWatcher {
@@ -73,37 +97,33 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
                 searchJob = lifecycleScope.launch {
                     delay(2000) // 3 seconds delay
 
-                    val query = s.toString().trim()
-                    if (query.isNotEmpty()) {
-                        callSearchApi(query)
-                    }
+                    searchData = s.toString().trim()
+                    getLatestUser(selectedCategoryTitle.toString())
 
                 }
             }
         })
     }
 
-    private fun callSearchApi(query: String) {
-        if (apiTitle != null){
-            val data = HashMap<String,Any>()
-            data["search"] = query
-            data["category"] = apiTitle.toString()
-            viewModel.getLatestUser(data,Constants.GET_USERS)
-        }
-        else{
-            val data = HashMap<String,Any>()
-            data["search"] = query
-            data["category"] = "general_member"
-            viewModel.getLatestUser(data,Constants.GET_USERS)
-        }
-
-    }
+//    private fun callSearchApi(query: String) {
+//        if (apiTitle != null){
+//            val data = HashMap<String,Any>()
+//            data["search"] = query
+//            data["category"] = apiTitle.toString()
+//            viewModel.getLatestUser(data,Constants.GET_USERS)
+//        }
+//        else{
+//            val data = HashMap<String,Any>()
+//            data["search"] = query
+//            data["category"] = "general_member"
+//            viewModel.getLatestUser(data,Constants.GET_USERS)
+//        }
+//
+//    }
 
     /** Setup initial view state **/
     private fun initView() {
-
-
-        getLatestUser()
+        getFilterList()
         viewModel.getAds(Constants.GET_ADS)
 
         initAdapters()
@@ -115,14 +135,44 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
         categoryAdapter.list = categoryData
         binding.rvCategories.adapter = categoryAdapter
 
+   //     selectedCategoryTitle?.let { getLatestUser(it) }
+
+
         // If needed, you can call a method here like:
         // fetchUsersOrAds(selectedCategoryTitle)
     }
 
-    private fun getLatestUser() {
-        val data = HashMap<String,Any>()
-        data["category"] = "general_member"
+//    private fun getLatestUser() {
+//        val data = HashMap<String,Any>()
+//        data["category"] = "general_member"
+//        viewModel.getLatestUser(data,Constants.GET_USERS)
+//    }
+
+    private fun getLatestUser(title: String) {
+        val apiTitle = mapTitleToApiValue(title)  // ← safe mapping for userType
+        Log.i("Dasdasd", "getShareExchange:$apiTitle ")
+
+        val data = hashMapOf<String, Any>(
+            "category" to apiTitle
+        )
+        if (userSelectedKey?.isNotEmpty() == true) {
+            data[userSelectedKey!!] = true
+        }
+
+        if (selectedFilterData != null){
+            selectedFilterData?.let {
+                if (it.key.isNotEmpty() && it.value != null) {
+                    data[it.key] = it.value
+                }
+            }
+        }
+
+        if (searchData != null){
+            data["search"] = searchData!!
+        }
+
         viewModel.getLatestUser(data,Constants.GET_USERS)
+
     }
 
     /** Click observers **/
@@ -131,6 +181,9 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
             when (it?.id) {
                 R.id.ivBack -> {
                     // handle back
+                }
+                R.id.filterList ->{
+                    binding.rvFilter.visibility = View.VISIBLE
                 }
             }
         }
@@ -185,19 +238,28 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
         categoryAdapter = SimpleRecyclerViewAdapter(R.layout.category_item_view, BR.bean) { v, m, pos ->
             when (v.id) {
                 R.id.clMain -> {
+//                    if (!m.isSelected) {
+//                        categoryData.forEach { it.isSelected = false }
+//                        categoryData[pos].isSelected = true
+//                        selectedCategoryTitle = m.title
+//                        categoryAdapter.notifyDataSetChanged()
+//
+//                         apiTitle = mapTitleToApiValue(selectedCategoryTitle!!)
+//                        val data = hashMapOf<String, Any>(
+//                            "category" to apiTitle.toString(),
+//                        )
+//                        viewModel.getLatestUser(data,Constants.ECO_SYSTEM)
+//                    // Optional: Fetch/update data on selection
+//                        // fetchUsersOrAds(selectedCategoryTitle!!)
+//                    }
+
                     if (!m.isSelected) {
                         categoryData.forEach { it.isSelected = false }
                         categoryData[pos].isSelected = true
                         selectedCategoryTitle = m.title
                         categoryAdapter.notifyDataSetChanged()
 
-                         apiTitle = mapTitleToApiValue(selectedCategoryTitle!!)
-                        val data = hashMapOf<String, Any>(
-                            "category" to apiTitle.toString(),
-                        )
-                        viewModel.getLatestUser(data,Constants.ECO_SYSTEM)
-                    // Optional: Fetch/update data on selection
-                        // fetchUsersOrAds(selectedCategoryTitle!!)
+                        getLatestUser(m.title)
                     }
                 }
             }
@@ -221,7 +283,61 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
             }
         }
         binding.rvAds.adapter = adsAdapter
+
+
+        filterAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_fiter, BR.bean) { v, m, pos ->
+            when (v.id) {
+                R.id.consMain -> {
+                    try {
+                        val clickedItem = filterList.getOrNull(pos) // safe access
+                        if (clickedItem != null) {
+                            val wasSelected = clickedItem.isSelected
+
+                            // Deselect all
+                            filterList.forEach { it.isSelected = false }
+
+                            // Toggle selection
+                            if (!wasSelected) {
+                                clickedItem.isSelected = true
+                            }
+
+                            filterAdapter.notifyDataSetChanged()
+
+                            // Call onFilterApplied directly (same fragment)
+                            if (wasSelected) {
+                                onFilterApplied(null) // deselect case
+                            } else {
+                                onFilterApplied(clickedItem) // selected case
+                            }
+
+                            binding.rvFilter.visibility = View.GONE
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
+
+        binding.rvFilter.adapter = filterAdapter
+        filterAdapter.list = filterList
+        filterAdapter.notifyDataSetChanged()
+
     }
+
+
+    fun onFilterApplied(selectedFilter: FilterItem?) {
+        selectedFilterData = selectedFilter
+
+        userSelectedKey = if (selectedFilter?.isSelected == true) {
+            selectedFilter.key
+        } else {
+            ""
+        }
+
+        getLatestUser(selectedCategoryTitle.toString())
+    }
+
 
     /** Create initial category list **/
     private fun categoryList(selectedCategory: String? = null): ArrayList<CategoryModel> {
@@ -260,16 +376,7 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
 
     override fun onResume() {
         super.onResume()
-        if (apiTitle != null){
-            val data = HashMap<String,Any>()
-            data["category"] = apiTitle.toString()
-            viewModel.getLatestUser(data,Constants.GET_USERS)
-        }
-        else{
-            val data = HashMap<String,Any>()
-            data["category"] = "general_member"
-            viewModel.getLatestUser(data,Constants.GET_USERS)
-        }
+        getLatestUser(selectedCategoryTitle.toString())
 
     }
 }

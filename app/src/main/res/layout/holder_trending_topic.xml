@@ -48,6 +48,7 @@
                 android:layout_height="match_parent"
                 android:padding="@dimen/_8sdp"
                 android:src="@drawable/dummy_person"
+                android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

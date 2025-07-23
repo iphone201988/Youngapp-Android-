@@ -45,6 +45,10 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
     private lateinit var categoryAdapter: SimpleRecyclerViewAdapter<CategoryModel, CategoryItemViewBinding>
     private lateinit var sortAdapter : SimpleRecyclerViewAdapter<SortingItem, ItemLayoutSortDataBinding>
     private var sortList = ArrayList<SortingItem>()
+    private var selectedKey : String ?= null
+    private var userSelectedKey : String ? = null
+    private var selectedFilterData : FilterItem ? = null
+    private var searchData : String ? = null
 
     private lateinit var categoryData: ArrayList<CategoryModel>
     private var selectedCategoryTitle: String? = null
@@ -84,7 +88,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
         binding.rvCategories.adapter = categoryAdapter
 
         // Initial fetch
-        selectedCategoryTitle?.let { getShareExchange(it,"",null,"") }
+        selectedCategoryTitle?.let { getShareExchange(it) }
     }
 
     /** Adapter setup **/
@@ -158,7 +162,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                 selectedCategoryTitle = m.title
                 categoryAdapter.notifyDataSetChanged()
 
-                getShareExchange(m.title,"",null,"")
+                getShareExchange(m.title)
             }
         }
 
@@ -174,12 +178,12 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                     clickedItem.isSelected = !wasSelected
                     sortAdapter.notifyDataSetChanged()
 
-                    val selectedKey = if (clickedItem.isSelected) clickedItem.key else ""
+                     selectedKey = if (clickedItem.isSelected) clickedItem.key else ""
 
-                    Log.i("SelectedKey", if (selectedKey.isEmpty()) "Deselected, no sort active" else selectedKey)
+             //       Log.i("SelectedKey", if (selectedKey.isEmpty()) "Deselected, no sort active" else selectedKey)
 
                     // Always call API with proper key (or blank)
-                    getShareExchange(selectedCategoryTitle.toString(), selectedKey,null,"")
+                    getShareExchange(selectedCategoryTitle.toString())
 
                     binding.rvSort.visibility = View.GONE
                 }
@@ -202,7 +206,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
     }
 
     /** API call **/
-    private fun getShareExchange(title: String, selectedKey: String, selectedFilter: FilterItem?,  search: String) {
+    private fun getShareExchange(title: String) {
         val apiTitle = mapTitleToApiValue(title)  // ← safe mapping for userType
         Log.i("Dasdasd", "getShareExchange:$apiTitle ")
 
@@ -212,19 +216,26 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
             "page" to 1
         )
 
-        if (selectedKey.isNotEmpty()) {
-            data[selectedKey] = true
+        if (selectedKey?.isNotEmpty() == true) {
+            data[selectedKey!!] = true
         }
 
-        if (search.isNotEmpty()){
-            data["search"] = search
+        if (userSelectedKey?.isNotEmpty() == true) {
+            data[userSelectedKey!!] = true
+        }
+
+        if (searchData?.isNotEmpty() == true){
+            data["search"] = searchData!!
         }
         // New support for key-value pair (e.g., rating = 1)
-        selectedFilter?.let {
-            if (it.key.isNotEmpty() && it.value != null) {
-                data[it.key] = it.value
+        if (selectedFilterData != null){
+            selectedFilterData?.let {
+                if (it.key.isNotEmpty() && it.value != null) {
+                    data[it.key] = it.value
+                }
             }
         }
+
 
         viewModel.getShare(data, Constants.GET_ALL_POST)
     }
@@ -256,7 +267,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                             if(myDataModel != null){
                                 if (myDataModel.data != null){
                                     showToast(myDataModel.message.toString())
-                                    selectedCategoryTitle?.let { getShareExchange(it,"",null,"") }
+                                    selectedCategoryTitle?.let { getShareExchange(it) }
                                 }
                             }
                         }
@@ -265,7 +276,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                             if(myDataModel != null){
                                 if (myDataModel.data != null){
                                     showToast(myDataModel.message.toString())
-                                    selectedCategoryTitle?.let { getShareExchange(it,"",null,"") }
+                                    selectedCategoryTitle?.let { getShareExchange(it) }
                                 }
                             }
                         }
@@ -279,7 +290,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                             val myDataModel : SimpleApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 showToast(myDataModel.message.toString())
-                                selectedCategoryTitle?.let { getShareExchange(it,"",null,"") }
+                                selectedCategoryTitle?.let { getShareExchange(it) }
 
                             }
                         }
@@ -344,17 +355,19 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
 
     override fun onResume() {
         super.onResume()
-        getShareExchange(selectedCategoryTitle.toString(),"",null,"")
+        getShareExchange(selectedCategoryTitle.toString())
     }
 
-    override fun onFilterApplied(selectedFilter: FilterItem) {
-        val selectedKey = if (selectedFilter.isSelected) selectedFilter.key else ""
+    override fun onFilterApplied(selectedFilter: FilterItem?) {
+        selectedFilterData = selectedFilter
+        userSelectedKey = if (selectedFilter?.isSelected == true) selectedFilter.key else ""
         Log.i("dfdsfsdfsd", "onFilterApplied: $selectedKey , $selectedFilter")
-        getShareExchange(selectedCategoryTitle.toString(), selectedKey, selectedFilter,"") // ← Pass selectedFilter
+        getShareExchange(selectedCategoryTitle.toString()) // ← Pass selectedFilter
     }
 
     override fun onSearchQueryChanged(query: String) {
-        getShareExchange(selectedCategoryTitle.toString(), "", null,query)
+        searchData = query
+        getShareExchange(selectedCategoryTitle.toString())
     }
 
 }

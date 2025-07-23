@@ -40,7 +40,10 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
     private var sortList = ArrayList<SortingItem>()
 
     private var selectedCategoryTitle: String? = null
-
+    private var selectedKey : String ?= null
+    private var userSelectedKey : String ? = null
+    private var selectedFilterData : FilterItem ? = null
+    private var searchData : String ? = null
 
     companion object {
         var selectedCategoryForExchange: String? = null
@@ -76,7 +79,7 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
         binding.rvCategories.adapter = categoryAdapter
 
         // Initial fetch
-        selectedCategoryTitle?.let { getStreamExchange(it,"",null) }
+        selectedCategoryTitle?.let { getStreamExchange(it) }
         Log.i("fsdfsdfsd", "initView: $categoryData , $selectedCategoryTitle  ,$selectedCategoryForExchange")
     }
 
@@ -95,7 +98,7 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                         selectedCategoryTitle = m.title
                         categoryAdapter.notifyDataSetChanged()
 
-                        getStreamExchange(m.title,"",null)
+                        getStreamExchange(m.title)
                     }
 
                 }
@@ -151,12 +154,12 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                     clickedItem.isSelected = !wasSelected
                     sortAdapter.notifyDataSetChanged()
 
-                    val selectedKey = if (clickedItem.isSelected) clickedItem.key else ""
+                    selectedKey = if (clickedItem.isSelected) clickedItem.key else ""
 
-                    Log.i("SelectedKey", if (selectedKey.isEmpty()) "Deselected, no sort active" else selectedKey)
+                   // Log.i("SelectedKey", if (selectedKey.isEmpty()) "Deselected, no sort active" else selectedKey)
 
                     // Always call API with proper key (or blank)
-                    getStreamExchange(selectedCategoryTitle.toString(), selectedKey,null)
+                    getStreamExchange(selectedCategoryTitle.toString())
 
                     binding.rvSort.visibility = View.GONE
                 }
@@ -204,7 +207,7 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                         if(myDataModel != null){
                             if (myDataModel.data != null){
                                 showToast(myDataModel.message.toString())
-                                selectedCategoryTitle?.let { getStreamExchange(it,"",null) }
+                                selectedCategoryTitle?.let { getStreamExchange(it) }
 
                             }
                         }
@@ -214,7 +217,7 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                             if(myDataModel != null){
                                 if (myDataModel.data != null){
                                     showToast(myDataModel.message.toString())
-                                    selectedCategoryTitle?.let { getStreamExchange(it,"",null) }
+                                    selectedCategoryTitle?.let { getStreamExchange(it) }
                                 }
                             }
                         }
@@ -257,7 +260,7 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
     }
 
 
-    private fun getStreamExchange(title: String,selectedKey: String, selectedFilter: FilterItem?) {
+    private fun getStreamExchange(title: String) {
         val apiTitle = mapTitleToApiValue(title)
         val data = hashMapOf<String, Any>(
             "userType" to apiTitle,
@@ -265,34 +268,45 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
             "page" to 1
         )
 
-        if (selectedKey.isNotEmpty()) {
-            data[selectedKey] = true
+        if (selectedKey?.isNotEmpty() == true) {
+            data[selectedKey!!] = true
+        }
+        if (userSelectedKey?.isNotEmpty() == true) {
+            data[userSelectedKey!!] = true
         }
 
+
         // New support for key-value pair (e.g., rating = 1)
-        selectedFilter?.let {
-            if (it.key.isNotEmpty() && it.value != null) {
-                data[it.key] = it.value
+        if (selectedFilterData != null){
+            selectedFilterData?.let {
+                if (it.key.isNotEmpty() && it.value != null) {
+                    data[it.key] = it.value
+                }
             }
+        }
+        if (searchData?.isNotEmpty() == true){
+            data["search"] = searchData!!
         }
 
         viewModel.getStream(data, Constants.GET_ALL_POST)
     }
 
-    override fun onFilterApplied(selectedFilter: FilterItem) {
-        val selectedKey = if (selectedFilter.isSelected) selectedFilter.key else ""
+    override fun onFilterApplied(selectedFilter: FilterItem?) {
+        selectedFilterData = selectedFilter
+         userSelectedKey = if (selectedFilter?.isSelected == true) selectedFilter.key else ""
         Log.i("dfdsfsdfsd", "onFilterApplied: $selectedKey , $selectedFilter")
-        getStreamExchange(selectedCategoryTitle.toString(), selectedKey, selectedFilter) // ← Pass selectedFilter
+        getStreamExchange(selectedCategoryTitle.toString()) // ← Pass selectedFilter
 
     }
 
     override fun onSearchQueryChanged(query: String) {
-
+        searchData = query
+        getStreamExchange(selectedCategoryTitle.toString())
     }
 
     override fun onResume() {
         super.onResume()
         Log.i("dsadsad", "onResume: $selectedCategoryTitle")
-        getStreamExchange(selectedCategoryTitle.toString(),"",null)
+        getStreamExchange(selectedCategoryTitle.toString())
     }
 }

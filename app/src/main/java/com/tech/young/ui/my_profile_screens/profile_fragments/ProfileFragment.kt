@@ -120,6 +120,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                             val myDataModel : GetProfileApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
+
                                     userId = myDataModel.data?.user?._id
                                     binding.bean = myDataModel.data
                                     yourImageAdapter.list = myDataModel.data?.user?.additionalPhotos
@@ -137,6 +138,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                                     }
                                 }
                             }
+
 
                     }
                 }

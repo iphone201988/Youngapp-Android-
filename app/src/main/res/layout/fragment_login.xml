@@ -88,6 +88,7 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="@string/enter_password"
+                    android:inputType="textPassword"
                     android:onClick="@{v ->vm.onClick(v)}"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
@@ -96,10 +97,12 @@
                     tools:layout_editor_absoluteX="0dp" />
 
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivPassword"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:src="@drawable/pass_invisible"
+                    android:onClick="@{v -> vm.onClick(v)}"
                     app:layout_constraintBottom_toBottomOf="@+id/edtPassword"
                     app:layout_constraintEnd_toEndOf="@+id/edtPassword"
                     app:layout_constraintTop_toTopOf="@+id/edtPassword" />

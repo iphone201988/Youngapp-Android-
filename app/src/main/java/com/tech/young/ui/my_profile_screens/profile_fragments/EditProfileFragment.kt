@@ -21,6 +21,7 @@ import com.tech.young.data.model.GetProfileApiResponse
 import com.tech.young.data.model.GetProfileApiResponse.GetProfileApiResponseData
 import com.tech.young.databinding.EditProfileItemViewBinding
 import com.tech.young.databinding.FragmentEditProfileBinding
+import com.tech.young.databinding.ItemLayoutDeleteAccountPopupBinding
 import com.tech.young.databinding.ItemLayoutLogoutPopupBinding
 import com.tech.young.ui.MySplashActivity
 import com.tech.young.ui.common.CommonActivity
@@ -38,6 +39,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
     private var editMenuList=ArrayList<EditProfileListModel>()
 
     private lateinit var logoutPopup : BaseCustomDialog<ItemLayoutLogoutPopupBinding>
+    private lateinit var deleteAccountPopup : BaseCustomDialog<ItemLayoutDeleteAccountPopupBinding>
     override fun onCreateView(view: View) {
         // view
         initView()
@@ -59,7 +61,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
     private fun initView() {
         // handle list
         val role = sharedPrefManager.getLoginData()?.role
-        viewModel.getProfile(Constants.GET_USER_PROFILE)
+    //    viewModel.getProfile(Constants.GET_USER_PROFILE)
         Log.i("dsadasdas", "initView: $role")
         if (role != null) {
             when (role) {
@@ -181,6 +183,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
     /** handle dialog **/
     private fun initPopup() {
         logoutPopup = BaseCustomDialog(requireContext() , R.layout.item_layout_logout_popup,this )
+        deleteAccountPopup = BaseCustomDialog(requireContext(), R.layout.item_layout_delete_account_popup,this)
     }
 
     /** handle adapter **/
@@ -237,6 +240,9 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                                     "Logout"->{
                                         logoutPopup.show()
                                     }
+                                    "Delete Account" ->{
+                                        deleteAccountPopup.show()
+                                    }
                                 }
                             }
                             1->{
@@ -281,6 +287,9 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                                     "Logout"->{
                                         logoutPopup.show()
                                     }
+                                    "Delete Account" ->{
+                                        deleteAccountPopup.show()
+                                    }
                                 }
 
                             }
@@ -318,6 +327,9 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                                     }
                                     "Logout"->{
                                         logoutPopup.show()
+                                    }
+                                    "Delete Account" ->{
+                                        deleteAccountPopup.show()
                                     }
                                 }
                             }
@@ -484,6 +496,18 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
             R.id.tvNo ->{
                 logoutPopup.dismiss()
             }
+            R.id.tvDelete ->{
+
+            }
+            R.id.tvNoDelete ->{
+                deleteAccountPopup.dismiss()
+            }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getProfile(Constants.GET_USER_PROFILE)
+
     }
 }

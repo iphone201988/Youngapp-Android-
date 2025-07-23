@@ -319,6 +319,7 @@
                     android:layout_height="wrap_content"
                     style="@style/TextView_500_Medium"
                     android:text="@string/payment_history"
+                    android:visibility="gone"
                     android:layout_marginTop="@dimen/_8sdp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/etExp"/>
@@ -329,6 +330,7 @@
                     android:src="@drawable/iv_dropdown"
                     android:onClick="@{v->vm.onClick(v)}"
                     android:rotation="270"
+                    android:visibility="gone"
                     android:tint="@color/text_black"
                     app:layout_constraintTop_toTopOf="@id/tvPaymentHistory"
                     app:layout_constraintBottom_toBottomOf="@id/tvPaymentHistory"
@@ -340,6 +342,7 @@
                     style="@style/TextView_500_Medium"
                     android:layout_marginTop="@dimen/_12sdp"
                     android:text="Download History"
+                    android:onClick="@{v -> vm.onClick(v)}"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvPaymentHistory"/>
@@ -350,6 +353,7 @@
                     style="@style/TextView_500_Medium"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="@string/deactivate_account"
+                    android:onClick="@{ v -> vm.onClick(v)}"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvDownload"/>
@@ -359,7 +363,7 @@
                     android:layout_height="wrap_content"
                     style="@style/TextView_500_Medium"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:text="@string/close_account"
+                    android:text="@string/delete_account"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvDeactivate"/>

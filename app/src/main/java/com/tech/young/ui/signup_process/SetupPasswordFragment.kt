@@ -1,6 +1,7 @@
 package com.tech.young.ui.signup_process
 
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -149,6 +150,12 @@ class SetupPasswordFragment : BaseFragment<FragmentSetupPasswordBinding>() {
                     requireActivity().onBackPressedDispatcher.onBackPressed()
                 }
 
+                R.id.ivPassword ->{
+                    signUpShowHidePassword()
+                }
+                R.id.ivConfirmPassword ->{
+                    signUpShowHideConfirmPassword()
+                }
                 R.id.tvNext -> {
                     try {
                         val oldPassword = binding.edtOldPassword.text?.toString()?.trim()
@@ -189,7 +196,30 @@ class SetupPasswordFragment : BaseFragment<FragmentSetupPasswordBinding>() {
 
     }
 
+    private fun signUpShowHidePassword() {
+        if (binding.edtOldPassword.inputType == InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD) {
+            binding.ivPassword.setImageResource(R.drawable.iv_show_eye)
+            binding.edtOldPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+        } else {
+            binding.ivPassword.setImageResource(R.drawable.pass_invisible)
+            binding.edtOldPassword.inputType =
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+        binding.edtOldPassword.setSelection(binding.edtOldPassword.length())
+    }
 
+
+    private fun signUpShowHideConfirmPassword() {
+        if (binding.edtConfirmPassword.inputType == InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD) {
+            binding.ivConfirmPassword.setImageResource(R.drawable.iv_show_eye)
+            binding.edtConfirmPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+        } else {
+            binding.ivConfirmPassword.setImageResource(R.drawable.pass_invisible)
+            binding.edtConfirmPassword.inputType =
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+        binding.edtConfirmPassword.setSelection(binding.edtConfirmPassword.length())
+    }
     private fun isPasswordInputValid(): Boolean {
         val oldPassword = binding.edtOldPassword.text.toString().trim()
         val confirmPassword = binding.edtConfirmPassword.text.toString().trim()

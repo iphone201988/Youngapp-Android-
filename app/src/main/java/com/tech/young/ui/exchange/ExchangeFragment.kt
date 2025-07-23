@@ -31,6 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 @AndroidEntryPoint
 class ExchangeFragment : BaseFragment<FragmentExchangeBinding>() {
@@ -92,24 +93,45 @@ class ExchangeFragment : BaseFragment<FragmentExchangeBinding>() {
         filterAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_fiter, BR.bean) { v, m, pos ->
             when (v.id) {
                 R.id.consMain -> {
-                    val clickedItem = filterList[pos]
-                    val wasSelected = clickedItem.isSelected
-                    filterList.forEach { it.isSelected = false }
-                    clickedItem.isSelected = !wasSelected
-                    filterAdapter.notifyDataSetChanged()
+                    try {
+                        val clickedItem = filterList.getOrNull(pos)  // safe access
+                        if (clickedItem != null) {
+                            val wasSelected = clickedItem.isSelected
 
-                    val currentItem = binding.viewPager.currentItem
-                    val fragment = viewPagerAdapter.getFragment(currentItem)
-                    Log.i("dsfsdfs", "initAdapter: $clickedItem, $currentItem , $fragment")
+                            // Deselect all
+                            filterList.forEach { it.isSelected = false }
 
-                    if (fragment is Filterable) {
-                        fragment.onFilterApplied(clickedItem)
+                            // Toggle selection
+                            if (!wasSelected) {
+                                clickedItem.isSelected = true
+                            }
+
+                            filterAdapter.notifyDataSetChanged()
+
+                            val currentItem = binding.viewPager.currentItem
+                            val fragment = viewPagerAdapter.getFragment(currentItem)
+
+                            Log.i("FilterCheck", "Clicked: $clickedItem, Page: $currentItem , Fragment: $fragment")
+
+                            if (fragment is Filterable) {
+                                if (wasSelected) {
+                                    fragment.onFilterApplied(null) // deselect case
+                                } else {
+                                    fragment.onFilterApplied(clickedItem) // new selection
+                                }
+                            }
+
+                            binding.rvFilter.visibility = View.GONE
                     }
 
-                    binding.rvFilter.visibility = View.GONE
+                    }catch (e : Exception){
+                        e.printStackTrace()
+                    }
                 }
             }
         }
+
+
 
         binding.rvFilter.adapter = filterAdapter
         filterAdapter.list = filterList
