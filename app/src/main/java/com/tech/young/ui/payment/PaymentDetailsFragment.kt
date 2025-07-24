@@ -19,6 +19,7 @@ import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
+import com.tech.young.data.api.SimpleApiResponse
 import com.tech.young.data.model.DownloadHistoryApiResponse
 import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.GetProfileApiResponse
@@ -26,6 +27,7 @@ import com.tech.young.data.model.UpdateUserProfileResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentPaymentDetailsBinding
 import com.tech.young.databinding.ItemLayoutDeactivateAccountBinding
+import com.tech.young.databinding.ItemLayoutDeleteAccountPopupBinding
 import com.tech.young.databinding.ItemLayoutLogoutPopupBinding
 import com.tech.young.ui.MySplashActivity
 import com.tech.young.ui.common.CommonActivity
@@ -43,6 +45,7 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
     private var userId : String ? = null
 
     private lateinit var deactivateAccount : BaseCustomDialog<ItemLayoutDeactivateAccountBinding>
+    private lateinit var deleteAccount : BaseCustomDialog<ItemLayoutDeleteAccountPopupBinding>
 
     // adapter
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
@@ -58,6 +61,7 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
 
     private fun initBottomSheet() {
         deactivateAccount = BaseCustomDialog(requireContext(),R.layout.item_layout_deactivate_account,this)
+        deleteAccount = BaseCustomDialog(requireContext(),R.layout.item_layout_delete_account_popup, this)
     }
 
     override fun getLayoutResource(): Int {
@@ -101,6 +105,9 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
                 }
                 R.id.tvDeactivate ->{
                     deactivateAccount.show()
+                }
+                R.id.tvDeleteAccount ->{
+                    deleteAccount.show()
                 }
             }
         }
@@ -164,6 +171,16 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
                             }
                             catch (e:Exception){
                                 e.printStackTrace()
+                            }
+
+                        }
+                        "deleteAccount" ->{
+                            val myDataModel : SimpleApiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                sharedPrefManager.clear()
+                                val intent = Intent(requireContext(), MySplashActivity::class.java)
+                                startActivity(intent)
+                                requireActivity().finishAffinity()
                             }
 
                         }
@@ -274,6 +291,13 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
             }
             R.id.tvNoDeactivate ->{
                 deactivateAccount.dismiss()
+            }
+            R.id.tvDelete ->{
+                viewModel.deleteAccount(Constants.DELETE_ACCOUNT)
+                deleteAccount.dismiss()
+            }
+            R.id.tvNoDelete ->{
+                deleteAccount.dismiss()
             }
         }
 

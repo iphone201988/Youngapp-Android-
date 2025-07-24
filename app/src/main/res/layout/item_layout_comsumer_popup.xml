@@ -50,7 +50,7 @@
                     android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:layout_marginHorizontal="@dimen/_15sdp"
-                    android:text="Live stream will be ended. Are you sure"
+                    android:text="The Stream has been concluded by the host,"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_15ssp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -67,15 +67,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvHeading" />
 
-                <View
-                    android:id="@+id/viewVertical"
-                    android:layout_width="1dp"
-                    android:layout_height="@dimen/_40sdp"
-                    android:background="@color/gray"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/viewHorizontal" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -88,34 +79,20 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvHeading">
 
                     <TextView
-                        android:id="@+id/tvYes"
+                        android:id="@+id/tvEnded"
                         style="@style/TextView_700_Bold"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:onClick="@{(v)->callback.onViewClick(v)}"
                         android:padding="@dimen/_8sdp"
-                        android:text="Yes"
+                        android:text="Ended"
                         android:textColor="@color/green"
-                        app:layout_constraintTop_toTopOf="@+id/tvNo"
-                        app:layout_constraintBottom_toBottomOf="@+id/tvNo"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/tvNo"
-                        android:textSize="@dimen/_16ssp" />
-                    <TextView
-                        android:id="@+id/tvNo"
-                        style="@style/TextView_700_Bold"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:onClick="@{(v)->callback.onViewClick(v)}"
-                        android:padding="@dimen/_8sdp"
-                        android:text="No"
-                        android:textColor="@color/colorPrimary"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/tvYes"
-                        android:textSize="@dimen/_16ssp"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:textSize="@dimen/_16ssp" />
+
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

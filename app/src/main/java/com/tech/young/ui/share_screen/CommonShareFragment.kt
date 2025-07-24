@@ -1,6 +1,7 @@
 package com.tech.young.ui.share_screen
 
 import android.app.Activity
+import android.content.Intent
 import android.net.Uri
 import android.text.TextUtils
 import android.view.View
@@ -26,8 +27,11 @@ import com.tech.young.base.utils.Status
 import com.tech.young.data.DropDownData
 import com.tech.young.data.model.CreatePostApiResponse
 import com.tech.young.data.model.GetAdsAPiResponse
+import com.tech.young.data.model.ShareData
+import com.tech.young.data.model.StreamData
 import com.tech.young.databinding.BotttomSheetTopicsBinding
 import com.tech.young.databinding.ItemLayoutDropDownBinding
+import com.tech.young.ui.common.CommonActivity
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -97,15 +101,25 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
                 R.id.tvShare -> {
                     // handle click
                     if (isEmptyField()){
-                        val multipartImage = imageUri?.let { convertImageToMultipart(it) }
-                        val data = HashMap<String, RequestBody>()
-                        data["title"] = binding.etTitle.text.toString().trim().toRequestBody()
-                        data["description"] = binding.etDescription.text.toString().trim().toRequestBody()
-                        data["topic"] = binding.etTopic.text.toString().trim().toRequestBody()
-                        data["symbol"] = selectedOption.toRequestBody()
-                        data["type"] = "share".toRequestBody()
-                        data["symbolValue"] = binding.etSymbol.text.toString().trim().toRequestBody()
-                        viewModel.sharePost(data, Constants.CREATE_SHARE,multipartImage)
+
+
+                        val shareData = ShareData(
+                          title = binding.etTitle.text.toString().trim(),
+                            topic =  binding.etTopic.text.toString().trim(),
+                            description = binding.etDescription.text.toString().trim(),
+                            symbol = selectedOption,
+                            symbolValue =  binding.etSymbol.text.toString().trim(),
+                            image = imageUri
+
+                        )
+
+                        val intent = Intent(requireContext(), CommonActivity::class.java).apply {
+                            putExtra("from", "share_confirmation")
+                            putExtra("share_data", shareData)
+                        }
+                        startActivity(intent)
+
+
                     }
                 }
                 R.id.ivUploadImage ->{

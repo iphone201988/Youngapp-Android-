@@ -8,6 +8,8 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -27,6 +29,7 @@ import com.tech.young.databinding.FragmentEcosystemBinding
 import com.tech.young.databinding.ItemLayoutFiterBinding
 import com.tech.young.databinding.ItemViewUsersBinding
 import com.tech.young.ui.common.CommonActivity
+import com.tech.young.utils.VerticalPagination
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -52,6 +55,12 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
     private var userSelectedKey : String ? = null
     private var selectedFilterData : FilterItem ? = null
     private var searchData : String ? = null
+
+
+    private var pagination: VerticalPagination? = null
+    var page  = 1
+
+
     companion object {
         var selectedCategoryForEcosystem: String? = null
     }
@@ -276,6 +285,18 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
             }
         }
         binding.rvUsers.adapter = usersAdapter
+        val lm = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        pagination = VerticalPagination(lm, 2)
+        pagination?.setListener(object : VerticalPagination.VerticalScrollListener {
+            override fun onLoadMore() {
+                page++
+
+
+            }
+        })
+        pagination?.let {
+            binding.rvUsers.addOnScrollListener(it)
+        }
 
         adsAdapter = SimpleRecyclerViewAdapter(R.layout.ads_item_view, BR.bean) { v, m, pos ->
             when (v.id) {

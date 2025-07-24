@@ -51,13 +51,14 @@ object Constants {
     const val ADD_COMMENT = "comment"
     const val GET_COMMENT  = "comment"
     const val LIKE_DISLIKE_COMMENT = "comment/"
-    const val CREATE_SHARE = "post/"
+    const val CREATE_SHARE = "post"
     const val DELETE_POST = "post/"
     const val UN_AUTH = "user/getUnauthUser"
     const val GET_ADS = "ads"
     const val RATING = "rating"
     const val DELETE_VAULT = "vault/"
     const val DOWNLOAD_HISTORY = "post/downloadHistory"
+    const val DELETE_ACCOUNT = "deleteAccount"
     /*************** Temp value store****************/
        var chooseAccountType = ""
 

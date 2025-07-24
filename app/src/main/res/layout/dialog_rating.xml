@@ -32,7 +32,7 @@
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextView_500_Medium"
+                    style="@style/TextView_400_Regular"
                     android:text="@string/rating_overview"
                     android:textStyle="bold"
                     android:textSize="@dimen/_14ssp"

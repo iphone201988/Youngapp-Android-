@@ -384,5 +384,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
         }
     }
 
+    override fun onBackPressed() {
 
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressedDispatcher.onBackPressed()
+        }
+        finishAffinity()
+    }
 }

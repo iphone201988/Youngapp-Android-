@@ -103,7 +103,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
 
 
             if (sharedPrefManager.getUserId() == m.userId?._id){
-                title.text = "Delete post"
+                title.text = "Delete share"
             }
             else{
                 title.text = "Report"
@@ -369,5 +369,8 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
         searchData = query
         getShareExchange(selectedCategoryTitle.toString())
     }
+
+
+
 
 }

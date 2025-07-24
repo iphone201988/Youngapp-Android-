@@ -77,7 +77,6 @@
             style="@style/TextView_400_Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Share Title"
             android:textColor="@color/text_gray"
             app:layout_constraintStart_toStartOf="parent"
             android:textSize="@dimen/_12ssp"
@@ -85,15 +84,25 @@
             android:layout_marginTop="@dimen/_30sdp"/>
 
         <TextView
-            android:id="@+id/tvInvestManagement"
+            android:id="@+id/tvTopic"
+            style="@style/TextView_400_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_gray"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            android:layout_marginTop="@dimen/_30sdp"/>
+
+        <TextView
+            android:id="@+id/tvDescription"
             style="@style/TextView_400_Regular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/_12ssp"
             android:layout_marginTop="@dimen/_10sdp"
             android:textColor="@color/text_gray"
-            android:text="@string/investment_management"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle"/>
+            app:layout_constraintTop_toBottomOf="@id/tvTopic"/>
 
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -104,7 +113,7 @@
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
             android:layout_marginTop="@dimen/_10sdp"
-            app:layout_constraintTop_toBottomOf="@id/tvInvestManagement"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -126,7 +135,6 @@
             style="@style/TextView_400_Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Stock"
             android:textColor="@color/text_gray"
             app:layout_constraintStart_toStartOf="parent"
             android:textSize="@dimen/_10ssp"

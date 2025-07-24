@@ -91,7 +91,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                     showRatingDialog()
 
                 }
-                R.id.icAccount, R.id.tvAccountDetails->{
+                R.id.icAccount, R.id.consAccountDetails->{
                     if (userId != null){
                         val intent = Intent(requireContext(), CommonActivity::class.java)
                         intent.putExtra("from", "payment_details")

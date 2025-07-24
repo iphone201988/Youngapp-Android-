@@ -20,12 +20,14 @@ import com.tech.young.R
 import com.tech.young.SocketManager
 import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
+import com.tech.young.base.utils.BaseCustomDialog
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.model.ConsumerJoinModel
 import com.tech.young.data.model.ConsumerModel
 import com.tech.young.data.model.CreateTransportModel
 import com.tech.young.databinding.FragmentConsumerStreamBinding
+import com.tech.young.databinding.ItemLayoutStreamEndBinding
 import dagger.hilt.android.AndroidEntryPoint
 import io.socket.client.Ack
 import io.socket.client.Socket
@@ -47,7 +49,7 @@ import kotlin.coroutines.resume
 
 
 @AndroidEntryPoint
-class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() {
+class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() , BaseCustomDialog.Listener {
 
     private val viewModel : StreamVM by viewModels()
     private lateinit var mediaSoupDevice: Device
@@ -61,6 +63,9 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() {
     private var videoProducerId: String? = null
     private var audioProducerId: String? = null
 
+    private lateinit var endStreamPopup : BaseCustomDialog<ItemLayoutStreamEndBinding>
+
+
     var listData = ArrayList<String>()
     private var roomId : String ? = null
     private lateinit var mSocket: Socket
@@ -70,6 +75,7 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() {
 
     override fun onCreateView(view: View) {
         initView()
+        initPopup()
         Handler(Looper.getMainLooper()).post{
             socketHandler()
             Handler(Looper.getMainLooper()).postDelayed({
@@ -90,6 +96,11 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() {
         }
     }
 
+    private fun initPopup() {
+        endStreamPopup = BaseCustomDialog(requireContext(),R.layout.item_layout_comsumer_popup, this )
+
+    }
+
     private fun initView() {
         roomId = arguments?.getString("streamId")
         Log.i("dsdsa", "initView: $roomId")
@@ -99,7 +110,9 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() {
             Log.w("SocketManager", "Received admin-disconnected")
 
             Handler(Looper.getMainLooper()).post {
-               showToast("Admin has ended the stream")
+
+                endStreamPopup.show()
+
 
                 // Optional: Exit screen or show dialog
                 (context as? Activity)?.finish()
@@ -557,6 +570,20 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() {
                     })
                 }
             )
+        }
+    }
+
+    override fun onViewClick(view: View?) {
+        when(view?.id){
+            R.id.tvEnded ->{
+                endStreamPopup.dismiss()
+                // Disconnect socket
+                SocketManager.mSocket?.disconnect()
+
+                // Go back
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+
+            }
         }
     }
 

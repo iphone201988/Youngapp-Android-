@@ -44,7 +44,9 @@ class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>() {
 
     private fun getNewsList() {
          newsSections = arrayListOf(
-            NewsSection("Nasdaq", arrayListOf(
+            NewsSection("Nasdaq",
+                "https://www.nasdaq.com/nasdaq-RSS-Feeds",
+                arrayListOf(
                 NewsItem("Cryptocurrencies","https://www.nasdaq.com/feed/rssoutbound?category=Cryptocurrencies"),
                 NewsItem("Markets","https://www.nasdaq.com/feed/rssoutbound?category=Markets"),
                 NewsItem("Nasdaq Inc News","https://www.nasdaq.com/feed/rssoutbound?category=Nasdaq"),
@@ -54,7 +56,9 @@ class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>() {
                 NewsItem("Saving Money","https://www.nasdaq.com/feed/rssoutbound?category=Saving%20Money")
             )
             ),
-            NewsSection("Investing.com", arrayListOf(
+            NewsSection("Investing.com",
+                ""
+                ,arrayListOf(
                 NewsItem("All News","https://www.investing.com/rss/investing_news.rss"),
                 NewsItem("Stock Market News","https://www.investing.com/rss/news_25.rss"),
                 NewsItem("Cryptocurrency news","https://www.investing.com/rss/news_301.rss"),
@@ -62,14 +66,18 @@ class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>() {
 
             )
             ),
-             NewsSection("MarketWatch", arrayListOf(
+             NewsSection("MarketWatch",
+                 "https://www.marketwatch.com/site/rss",
+                 arrayListOf(
                  NewsItem("Top Stories","https://feeds.content.dowjones.io/public/rss/mw_topstories"),
                  NewsItem("Real-time headlines","https://feeds.content.dowjones.io/public/rss/mw_realtimeheadlines"),
                  NewsItem("Breaking News","https://feeds.content.dowjones.io/public/rss/mw_bulletins"),
                  NewsItem("Market Pulse","https://feeds.content.dowjones.io/public/rss/mw_marketpulse")
              )
              ),
-             NewsSection("CNBC", arrayListOf(
+             NewsSection("CNBC",
+                 "https://www.cnbc.com/rss-feeds/",
+                 arrayListOf(
                  NewsItem("Business","https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10001147"),
                  NewsItem("Earnings","https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=15839135"),
                  NewsItem("Economy","https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=20910258"),
@@ -81,14 +89,18 @@ class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>() {
                  NewsItem("Personal Finance","https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=21324812"),
              )
              ),
-             NewsSection("WSJ", arrayListOf(
+             NewsSection("WSJ",
+                 "",
+                 arrayListOf(
                  NewsItem("U.S Business","https://feeds.content.dowjones.io/public/rss/WSJcomUSBusiness"),
                  NewsItem("Market News","https://feeds.content.dowjones.io/public/rss/RSSMarketsMain"),
                  NewsItem("Economy","https://feeds.content.dowjones.io/public/rss/socialeconomyfeed"),
                  NewsItem("Personal Finance","https://feeds.content.dowjones.io/public/rss/RSSPersonalFinance")
              )
              ),
-             NewsSection("CNN", arrayListOf(
+             NewsSection("CNN",
+                 "",
+                 arrayListOf(
                  NewsItem("Business News","http://rss.cnn.com/rss/money_latest.rss"),
                  NewsItem("Top Stories","http://rss.cnn.com/rss/money_topstories.rss"),
                  NewsItem("Economy","http://rss.cnn.com/rss/money_news_economy.rss")

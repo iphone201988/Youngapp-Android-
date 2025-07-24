@@ -3,6 +3,7 @@ package com.tech.young.ui.my_profile_screens.profile_fragments
 import android.content.Intent
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.viewModels
 import com.tech.young.BR
 import com.tech.young.R
@@ -32,6 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCustomDialog.Listener {
     private val viewModel: YourProfileVM by viewModels()
 
+    private var lastLogin : String ? = null
     // adapter
     private lateinit var editProfileAdapter: SimpleRecyclerViewAdapter<EditProfileListModel, EditProfileItemViewBinding>
     private var profileData: GetProfileApiResponseData?=null
@@ -147,6 +149,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                             if (myDataModel != null) {
                                 if (myDataModel.data != null) {
                                     profileData = myDataModel.data
+                                    lastLogin = myDataModel.data?.user?.lastLogin
                                 }
                             }
 
@@ -190,6 +193,8 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
     private fun initAdapter() {
         editProfileAdapter =
             SimpleRecyclerViewAdapter(R.layout.edit_profile_item_view, BR.bean) { v, m, pos ->
+                val date = v.rootView.findViewById<TextView>(R.id.date)
+                date.text = lastLogin
                 when (v.id) {
                     R.id.clMain -> {
                         when(m.listType){
@@ -348,32 +353,32 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
         val list = ArrayList<EditProfileListModel>()
         list.add(
             EditProfileListModel(
-                "Account", getString(R.string.profile_details), R.drawable.ic_arrow_forward,0, true
+                "Account", getString(R.string.profile_details), R.drawable.iv_forword,0, true
             )
         )
         list.add(
             EditProfileListModel("Account",
-                getString(R.string.family_education), R.drawable.ic_arrow_forward,0))
+                getString(R.string.family_education), R.drawable.iv_forword,0))
         list.add(
             EditProfileListModel("Account",
-                getString(R.string.financial_information), R.drawable.ic_arrow_forward,0)
+                getString(R.string.financial_information), R.drawable.iv_forword,0)
         )
         list.add(
             EditProfileListModel(
-                "Account", "Investment Summary (Optional)", R.drawable.ic_arrow_forward,0
+                "Account", "Investment Summary (Optional)", R.drawable.iv_forword,0
             )
         )
 
         list.add(
             EditProfileListModel(
-                "Account", getString(R.string.additional_information), R.drawable.ic_arrow_forward,0
+                "Account", getString(R.string.additional_information), R.drawable.iv_forword,0
             )
         )
 //        list.add(
 //            EditProfileListModel(
 //                "Account Management",
 //                getString(R.string.member_agreement),
-//                R.drawable.ic_arrow_forward,
+//                R.drawable.iv_forword,
 //                true
 //            )
 //        )
@@ -381,7 +386,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
             EditProfileListModel(
                 "Account Management",
                 getString(R.string.account_verification),
-                R.drawable.ic_arrow_forward,
+                R.drawable.iv_forword,
                 0,
                 true
             )
@@ -403,27 +408,27 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
         val list = ArrayList<EditProfileListModel>()
         list.add(
             EditProfileListModel(
-                "Account", getString(R.string.profile_details), R.drawable.ic_arrow_forward,1, true
+                "Account", getString(R.string.profile_details), R.drawable.iv_forword,1, true
             )
         )
         list.add(
             EditProfileListModel("Account",
-                getString(R.string.professional_information), R.drawable.ic_arrow_forward,1)
+                getString(R.string.professional_information), R.drawable.iv_forword,1)
         )
         list.add(
             EditProfileListModel("Account",
-                getString(R.string.personal_preferences), R.drawable.ic_arrow_forward,1)
+                getString(R.string.personal_preferences), R.drawable.iv_forword,1)
         )
         list.add(
             EditProfileListModel(
-                "Account", getString(R.string.form_upload), R.drawable.ic_arrow_forward,1
+                "Account", getString(R.string.form_upload), R.drawable.iv_forword,1
             )
         )
 //        list.add(
 //            EditProfileListModel(
 //                "Account Management",
 //                getString(R.string.member_agreement),
-//                R.drawable.ic_arrow_forward,
+//                R.drawable.iv_forword,
 //                true
 //            )
 //        )
@@ -431,7 +436,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
             EditProfileListModel(
                 "Account Management",
                 getString(R.string.account_verification),
-                R.drawable.ic_arrow_forward,1,
+                R.drawable.iv_forword,1,
                 true
             )
         )
@@ -452,27 +457,27 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
         val list = ArrayList<EditProfileListModel>()
         list.add(
             EditProfileListModel(
-                "Account", getString(R.string.profile_details), R.drawable.ic_arrow_forward, 2,true
+                "Account", getString(R.string.profile_details), R.drawable.iv_forword, 2,true
             )
         )
         list.add(
             EditProfileListModel("Account",
-                getString(R.string.business_financial_information), R.drawable.ic_arrow_forward,2)
+                getString(R.string.business_financial_information), R.drawable.iv_forword,2)
         )
         list.add(
             EditProfileListModel("Account",
-                getString(R.string.additional_information), R.drawable.ic_arrow_forward,2)
+                getString(R.string.additional_information), R.drawable.iv_forword,2)
         )
         list.add(
             EditProfileListModel(
-                "Account", getString(R.string.form_upload), R.drawable.ic_arrow_forward,2
+                "Account", getString(R.string.form_upload), R.drawable.iv_forword,2
             )
         )
         list.add(
             EditProfileListModel(
                 "Account Management",
                 getString(R.string.account_verification),
-                R.drawable.ic_arrow_forward,2,
+                R.drawable.iv_forword,2,
                 true
             )
         )

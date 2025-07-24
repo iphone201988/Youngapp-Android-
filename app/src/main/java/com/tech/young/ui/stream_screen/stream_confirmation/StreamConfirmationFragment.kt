@@ -19,6 +19,7 @@ import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
+import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
 import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.StreamApiResponse
@@ -102,7 +103,8 @@ class StreamConfirmationFragment : BaseFragment<FragmentStreamConfirmationBindin
                     }
                 }
                 Status.ERROR ->{
-
+                    hideLoading()
+                    showToast(it.message.toString())
                 }
                 else ->{
 

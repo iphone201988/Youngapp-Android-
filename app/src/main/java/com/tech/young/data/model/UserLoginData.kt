@@ -85,6 +85,20 @@ data class StreamData(
     ) : Parcelable
 
 
+@Parcelize
+data class ShareData(
+    val title: String?,
+    val topic: String?,
+    val description: String?,
+    val symbol : String?,
+    val symbolValue : String?,
+    val image : Uri?
+
+    ) : Parcelable
+
+
+
+
 /******************* verification 2 factor api response ********************/
 data class Verification2faApiResponse(
     var `data`: Data?,
@@ -1177,6 +1191,7 @@ data class GetStreamApiResponse(
         var posts: List<Post?>?,
     ) {
         data class Post(
+            var isReportVisible: Boolean = false,
             var _id: String?,
             var commentsCount: Int?,
             var createdAt: String?,

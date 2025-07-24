@@ -3,6 +3,8 @@ package com.tech.young.ui.exchange.screens
 import android.content.Intent
 import android.util.Log
 import android.view.View
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.tech.young.BR
@@ -16,6 +18,7 @@ import com.tech.young.base.utils.showToast
 import com.tech.young.data.FilterItem
 import com.tech.young.data.SortingItem
 import com.tech.young.data.api.Constants
+import com.tech.young.data.api.SimpleApiResponse
 import com.tech.young.data.model.CategoryModel
 import com.tech.young.data.model.GetStreamApiResponse
 import com.tech.young.data.model.SavedPostApiResponse
@@ -110,6 +113,22 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
 
 
         streamAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_stream_exchange, BR.bean){v,m,pos ->
+            val consReport = v.rootView.findViewById<ConstraintLayout>(R.id.consReport)
+            val title = v.rootView.findViewById<TextView>(R.id.tvReport)
+
+
+            // Initial visibility
+            consReport.visibility = if (m.isReportVisible) View.VISIBLE else View.GONE
+
+
+            if (sharedPrefManager.getUserId() == m.userId?._id){
+                title.text = "Delete stream"
+            }
+            else{
+                title.text = "Report"
+
+            }
+
             when(v.id){
                 R.id.consMain ->{
 
@@ -134,7 +153,29 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                     data["type"] = "stream"
                     viewModel.likeDislike(data, Constants.LIKE_DISLIKE_POST + m._id)
                 }
+                R.id.reportBtn -> {
+                    m.isReportVisible = !m.isReportVisible
+                    streamAdapter.notifyDataSetChanged()
+                }
 
+                R.id.consReport ->{
+                    if (title.text == "Report"){
+                        val intent = Intent(requireContext(), CommonActivity::class.java)
+                        intent.putExtra("from", "report_user")
+                        intent.putExtra("userId", m._id)
+                        intent.putExtra("reportType","stream")
+                        startActivity(intent)
+//                        consReport.visibility = View.GONE
+                    }
+                    else{
+                        viewModel.deletePost( Constants.DELETE_POST+m._id)
+//                        consReport.visibility = View.GONE
+
+                    }
+                    m.isReportVisible = false
+                    streamAdapter.notifyItemChanged(pos)
+
+                }
             }
 
         }
@@ -179,6 +220,11 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                 R.id.ivSort, R.id.tvSort ->{
                 binding.rvSort.visibility = View.VISIBLE
                 }
+
+                R.id.addStream ->{
+                    val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_stream")
+                    startActivity(intent)
+                }
             }
         })
 
@@ -219,6 +265,14 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                                     showToast(myDataModel.message.toString())
                                     selectedCategoryTitle?.let { getStreamExchange(it) }
                                 }
+                            }
+                        }
+                        "deletePost" ->{
+                            val myDataModel : SimpleApiResponse? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                showToast(myDataModel.message.toString())
+                                selectedCategoryTitle?.let { getStreamExchange(it) }
+
                             }
                         }
 

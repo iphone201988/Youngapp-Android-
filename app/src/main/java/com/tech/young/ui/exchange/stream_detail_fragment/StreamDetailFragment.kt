@@ -34,6 +34,7 @@ import com.tech.young.databinding.ItemLayoutPostCommentBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.exchange.ExchangeVM
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Calendar
 import java.util.Date
 
 
@@ -193,6 +194,7 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                                     if (!scheduleDate.isNullOrEmpty()) {
                                         val dateTime = BindingUtils.convertUtcToLocalTime(scheduleDate) ?: ""
                                         val utcDate = BindingUtils.utcStringToDate(scheduleDate)
+
 
                                         if (ownerUserId != null) {
                                             if (ownerUserId.equals(currentUserId) ) {

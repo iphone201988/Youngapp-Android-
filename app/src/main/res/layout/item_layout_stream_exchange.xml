@@ -3,12 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="android.view.View" />
+
         <variable
             name="bean"
             type="com.tech.young.data.model.GetStreamApiResponse.Data.Post" />
+
         <variable
             name="callback"
-            type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback"/>
+            type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
+
         <variable
             name="pos"
             type="Integer" />
@@ -19,153 +24,191 @@
         android:id="@+id/consMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:background="@drawable/profile_share_bg"
-        android:layout_marginBottom="@dimen/_10sdp">
+        android:onClick="@{v -> callback.onItemClick(v,bean,pos)}">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivImage"
             setUserImageFromBaseUrl="@{bean.image}"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_150sdp"
-            android:src="@drawable/ic_dummy_2"
-            android:scaleType="centerCrop"
             android:padding="@dimen/_8sdp"
-            app:shapeAppearance="@style/Shape10"
-            app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_dummy_2"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/Shape10" />
 
         <ImageView
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
-            android:layout_marginEnd="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_15sdp"
-            app:scheduleDate="@{bean.scheduleDate}"
-            app:streamUrl="@{bean.streamUrl}"
+            android:layout_marginEnd="@dimen/_15sdp"
             app:layout_constraintEnd_toEndOf="@id/ivImage"
-            app:layout_constraintTop_toTopOf="@id/ivImage"/>
+            app:layout_constraintTop_toTopOf="@id/ivImage"
+            app:scheduleDate="@{bean.scheduleDate}"
+            app:streamUrl="@{bean.streamUrl}" />
+
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/reportBtn"
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
-            android:src="@drawable/ic_dots_bg"
-            android:layout_marginTop="@dimen/_7sdp"
             android:layout_marginStart="@dimen/_7sdp"
-            app:layout_constraintTop_toTopOf="@id/ivImage"
-            app:layout_constraintStart_toStartOf="@id/ivImage"/>
+            android:layout_marginTop="@dimen/_7sdp"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            android:src="@drawable/ic_dots_bg"
+            app:layout_constraintStart_toStartOf="@id/ivImage"
+            app:layout_constraintTop_toTopOf="@id/ivImage" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/consReport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:background="@color/white"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            android:padding="@dimen/_5sdp"
+            android:visibility="@{bean.isReportVisible ? View.VISIBLE : View.GONE}"
+            app:layout_constraintStart_toStartOf="@id/reportBtn"
+            app:layout_constraintTop_toBottomOf="@id/reportBtn">
+
+            <TextView
+                android:id="@+id/tvReport"
+                style="@style/TextView_400_Regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Report"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivStar"
             android:layout_width="@dimen/_15sdp"
             android:layout_height="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_3sdp"
             android:src="@drawable/ic_star"
-            app:layout_constraintEnd_toStartOf="@id/tvRating"
-            app:layout_constraintTop_toTopOf="@id/ivUserImage"
             app:layout_constraintBottom_toBottomOf="@id/ivUserImage"
-            android:layout_marginEnd="@dimen/_3sdp" />
+            app:layout_constraintEnd_toStartOf="@id/tvRating"
+            app:layout_constraintTop_toTopOf="@id/ivUserImage" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvRating"
+            style="@style/TextView_500_Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/TextView_500_Medium"
-            android:text="@{bean.ratings != null ? bean.ratings.toString() : `0.0`}"
             android:layout_marginEnd="@dimen/_8sdp"
+            android:text="@{bean.ratings != null ? bean.ratings.toString() : `0.0`}"
             android:textSize="@dimen/_12ssp"
+            app:layout_constraintBottom_toBottomOf="@id/ivStar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/ivStar"
-            app:layout_constraintBottom_toBottomOf="@id/ivStar"/>
+            app:layout_constraintTop_toTopOf="@id/ivStar" />
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivUserImage"
             android:layout_width="@dimen/_32sdp"
             android:layout_height="@dimen/_32sdp"
-            android:src="@drawable/dummy_person"
-            app:shapeAppearance="@style/Shape50"
             android:layout_marginStart="@dimen/_8sdp"
+            android:src="@drawable/dummy_person"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivImage"/>
+            app:layout_constraintTop_toBottomOf="@id/ivImage"
+            app:shapeAppearance="@style/Shape50" />
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvUserName"
+            style="@style/TextView_500_Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/TextView_500_Medium"
-            android:textColor="@color/colorPrimary"
             android:layout_marginEnd="@dimen/_8sdp"
-            android:textSize="@dimen/_14ssp"
-            android:text='@{bean.userId.firstName+ " "+ bean.userId.lastName}'
             android:paddingHorizontal="@dimen/_8sdp"
-            app:layout_constraintStart_toEndOf="@id/ivUserImage"
+            android:text='@{bean.userId.firstName+ " "+ bean.userId.lastName}'
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/_14ssp"
             app:layout_constraintEnd_toStartOf="@+id/ivStar"
-            app:layout_constraintTop_toTopOf="@id/ivUserImage"/>
+            app:layout_constraintStart_toEndOf="@id/ivUserImage"
+            app:layout_constraintTop_toTopOf="@id/ivUserImage" />
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDate"
+            style="@style/TextView_400_Regular"
             convertUtcToLocalTimeText="@{bean.createdAt}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_8sdp"
             android:text="12 January at 09:28PM"
-            style="@style/TextView_400_Regular"
             android:textColor="@color/text_gray"
             android:textSize="@dimen/_10ssp"
-            android:paddingHorizontal="@dimen/_8sdp"
             app:layout_constraintStart_toEndOf="@id/ivUserImage"
-            app:layout_constraintTop_toBottomOf="@id/tvUserName"/>
+            app:layout_constraintTop_toBottomOf="@id/tvUserName" />
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvTitle"
+            style="@style/TextView_500_Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/TextView_500_Medium"
-            android:textSize="@dimen/_12ssp"
-            android:text="@{bean.description}"
             android:layout_marginTop="@dimen/_8sdp"
             android:paddingHorizontal="@dimen/_8sdp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:text="@{bean.title}"
+            android:textSize="@dimen/_12ssp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivUserImage"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivUserImage" />
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivHeart"
+            setLikeIcon="@{bean.isLiked()}"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
-            android:src="@drawable/ic_heart"
-            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
-            setLikeIcon ="@{bean.isLiked()}"
             android:layout_marginVertical="@dimen/_8sdp"
             android:layout_marginStart="@dimen/_8sdp"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            android:src="@drawable/ic_heart"
             app:layout_constraintStart_toStartOf="@id/tvTitle"
             app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvSaves"
+            style="@style/TextView_400_Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/TextView_400_Regular"
+            android:layout_marginStart="@dimen/_3sdp"
+            android:text='@{bean.likesCount.toString()+ " Booms"}'
             android:textColor="@color/gray"
             android:textSize="@dimen/_12ssp"
-            android:text='@{bean.likesCount.toString()+ " Booms"}'
-            app:layout_constraintStart_toEndOf="@id/ivHeart"
-            app:layout_constraintTop_toTopOf="@id/ivHeart"
             app:layout_constraintBottom_toBottomOf="@id/ivHeart"
-            android:layout_marginStart="@dimen/_3sdp"/>
+            app:layout_constraintStart_toEndOf="@id/ivHeart"
+            app:layout_constraintTop_toTopOf="@id/ivHeart" />
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivComment"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
+            android:layout_marginStart="@dimen/_10sdp"
             android:src="@drawable/ic_message"
-            app:layout_constraintStart_toEndOf="@id/tvSaves"
-            app:layout_constraintTop_toTopOf="@id/ivHeart"
             app:layout_constraintBottom_toBottomOf="@id/ivHeart"
-            android:layout_marginStart="@dimen/_10sdp"/>
+            app:layout_constraintStart_toEndOf="@id/tvSaves"
+            app:layout_constraintTop_toTopOf="@id/ivHeart" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvComments"
+            style="@style/TextView_400_Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/TextView_400_Regular"
+            android:layout_marginStart="@dimen/_3sdp"
+            android:text='@{bean.commentsCount.toString()+ " comments"}'
             android:textColor="@color/gray"
             android:textSize="@dimen/_12ssp"
-            android:text='@{bean.commentsCount.toString()+ " comments"}'
-            app:layout_constraintStart_toEndOf="@id/ivComment"
             app:layout_constraintBottom_toBottomOf="@id/ivComment"
-            app:layout_constraintTop_toTopOf="@id/ivComment"
-            android:layout_marginStart="@dimen/_3sdp"/>
+            app:layout_constraintStart_toEndOf="@id/ivComment"
+            app:layout_constraintTop_toTopOf="@id/ivComment" />
 
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -173,36 +216,38 @@
             setSaveIcon="@{bean.isSaved()}"
             android:layout_width="@dimen/_16sdp"
             android:layout_height="@dimen/_16sdp"
-            android:src="@drawable/iv_saves_icon"
-            app:tint="@color/colorPrimary"
+            android:layout_marginStart="@dimen/_10sdp"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            android:src="@drawable/iv_saves_icon"
+            app:layout_constraintBottom_toBottomOf="@id/ivHeart"
             app:layout_constraintStart_toEndOf="@id/tvComments"
             app:layout_constraintTop_toTopOf="@id/ivHeart"
-            app:layout_constraintBottom_toBottomOf="@id/ivHeart"
-            android:layout_marginStart="@dimen/_10sdp"/>
+            app:tint="@color/colorPrimary" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvSaveData"
+            style="@style/TextView_400_Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/TextView_400_Regular"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:text="Saves"
             android:textColor="@color/gray"
-            android:text= "Saves"
             android:textSize="@dimen/_10ssp"
-            app:layout_constraintStart_toEndOf="@id/ivSaves"
             app:layout_constraintBottom_toBottomOf="@id/ivSaves"
-            app:layout_constraintTop_toTopOf="@id/ivSaves"
-            android:layout_marginStart="@dimen/_2sdp"/>
+            app:layout_constraintStart_toEndOf="@id/ivSaves"
+            app:layout_constraintTop_toTopOf="@id/ivSaves" />
 
         <View
             android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
-            android:background="@color/border_gray"
             android:layout_marginTop="@dimen/_10sdp"
+            android:background="@color/border_gray"
             app:layout_constraintTop_toBottomOf="@id/tvComments" />
+
         <per.wsj.library.AndRatingBar
             android:id="@+id/ratingBar"
+            setRating="@{bean.ratings}"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_25sdp"
             android:layout_marginTop="@dimen/_8sdp"
@@ -210,35 +255,35 @@
             android:numStars="5"
             android:scaleX="1"
             android:scaleY="1"
-            setRating="@{bean.ratings}"
-            app:starSpacing="@dimen/_5sdp"
-            app:starColor="@color/yellow_star"
-            app:starDrawable="@drawable/ic_star"
             app:bgColor="@color/yellow_star"
             app:bgDrawable="@drawable/ic_star_unfilled"
-            app:layout_constraintTop_toBottomOf="@id/view"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/ivHeart"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/view"
+            app:starColor="@color/yellow_star"
+            app:starDrawable="@drawable/ic_star"
+            app:starSpacing="@dimen/_5sdp" />
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivStar2"
             android:layout_width="@dimen/_15sdp"
             android:layout_height="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_3sdp"
             android:src="@drawable/ic_star"
-            app:layout_constraintEnd_toStartOf="@id/tvRating2"
-            app:layout_constraintTop_toTopOf="@id/ratingBar"
             app:layout_constraintBottom_toBottomOf="@id/ratingBar"
-            android:layout_marginEnd="@dimen/_3sdp" />
+            app:layout_constraintEnd_toStartOf="@id/tvRating2"
+            app:layout_constraintTop_toTopOf="@id/ratingBar" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvRating2"
+            style="@style/TextView_500_Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/TextView_500_Medium"
-            android:text="@{bean.ratings != null ? bean.ratings.toString() : `0.0`}"
             android:layout_marginEnd="@dimen/_8sdp"
+            android:text="@{bean.ratings != null ? bean.ratings.toString() : `0.0`}"
             android:textSize="@dimen/_12ssp"
+            app:layout_constraintBottom_toBottomOf="@id/ivStar2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/ivStar2"
-            app:layout_constraintBottom_toBottomOf="@id/ivStar2"/>
+            app:layout_constraintTop_toTopOf="@id/ivStar2" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

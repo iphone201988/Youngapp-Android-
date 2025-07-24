@@ -101,5 +101,18 @@
             android:layout_marginTop="@dimen/_10sdp"
             tools:listitem="@layout/item_layout_stream_exchange" />
 
+
+
+        <ImageView
+            android:id="@+id/addStream"
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="@dimen/_70sdp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_add_icn"
+            android:onClick="@{ v  ->vm.onClick(v)}"
+            android:layout_marginBottom="@dimen/_20sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

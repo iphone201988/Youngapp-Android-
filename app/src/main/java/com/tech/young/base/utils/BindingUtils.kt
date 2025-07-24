@@ -613,16 +613,28 @@ object BindingUtils {
     }
 
 
-    fun utcStringToDate(utcString: String?): Date {
+//    fun utcStringToDate(utcString: String?): Date {
+//        return try {
+//            val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
+//            formatter.timeZone = TimeZone.getTimeZone("UTC")
+//            formatter.parse(utcString ?: "") ?: Date()
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            Date()
+//        }
+//    }
+
+    fun utcStringToDate(utcString: String?): Date? {
         return try {
-            val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
+            val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.getDefault())
             formatter.timeZone = TimeZone.getTimeZone("UTC")
-            formatter.parse(utcString ?: "") ?: Date()
+            formatter.parse(utcString ?: "")
         } catch (e: Exception) {
             e.printStackTrace()
-            Date()
+            null
         }
     }
+
 
 
     @JvmStatic

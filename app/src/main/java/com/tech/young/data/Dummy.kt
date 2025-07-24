@@ -24,6 +24,7 @@ data class DropDownData(
 // Parent item - Section
 data class NewsSection(
     val heading: String,
+    val headingLink: String? = null,
     val items: List<NewsItem>
 )
 

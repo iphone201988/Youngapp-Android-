@@ -602,34 +602,49 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/rvShare" />
 
-                    <per.wsj.library.AndRatingBar
-                        android:id="@+id/ratingBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_30sdp"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:isIndicator="true"
-                        android:numStars="5"
-                        android:rating="3.5"
-                        android:scaleX="1"
-                        android:scaleY="1"
-                        app:bgColor="@color/yellow_star"
-                        app:bgDrawable="@drawable/ic_star_unfilled"
-                        app:layout_constraintStart_toStartOf="@id/tvRatings"
-                        app:layout_constraintTop_toBottomOf="@id/tvRatings"
-                        app:starColor="@color/yellow_star"
-                        app:starDrawable="@drawable/ic_star"
-                        app:starSpacing="@dimen/_5sdp" />
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/icRatingArrow"
-                        android:layout_width="@dimen/_18sdp"
-                        android:layout_height="@dimen/_18sdp"
-                        android:onClick="@{v->vm.onClick(v)}"
-                        android:src="@drawable/ic_arrow_forward"
-                        android:tint="@color/colorPrimary"
-                        app:layout_constraintBottom_toBottomOf="@id/ratingBar"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/ratingBar" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/consRating"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:background="@drawable/bg_standard"
+                        app:layout_constraintTop_toBottomOf="@id/tvRatings"
+                        app:layout_constraintStart_toStartOf="@id/tvRatings"
+                        app:layout_constraintEnd_toEndOf="@id/tvRatings">
+
+
+                        <per.wsj.library.AndRatingBar
+                            android:id="@+id/ratingBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_30sdp"
+                            android:isIndicator="true"
+                            android:numStars="5"
+                            android:scaleX="1"
+                            android:scaleY="1"
+                            app:bgColor="@color/yellow_star"
+                            app:bgDrawable="@drawable/ic_star_unfilled"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:starColor="@color/yellow_star"
+                            app:starDrawable="@drawable/ic_star"
+                            app:starSpacing="@dimen/_5sdp" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/icRatingArrow"
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:onClick="@{v->vm.onClick(v)}"
+                            android:src="@drawable/ic_arrow_forward"
+                            android:tint="@color/colorPrimary"
+                            app:layout_constraintBottom_toBottomOf="@id/ratingBar"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/ratingBar" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvAccount"
@@ -640,29 +655,47 @@
                         android:text="@string/account"
                         android:textColor="@color/colorPrimary"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ratingBar" />
+                        app:layout_constraintTop_toBottomOf="@id/consRating" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvAccountDetails"
-                        style="@style/TextView_500_Medium"
-                        android:layout_width="0dp"
-                        android:onClick="@{v -> vm.onClick(v)}"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/consAccountDetails"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_10sdp"
-                        android:text="@string/account_details"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvAccount" />
+                        android:padding="@dimen/_13sdp"
+                        android:onClick="@{v -> vm.onClick(v)}"
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/icAccount"
-                        android:layout_width="@dimen/_18sdp"
-                        android:layout_height="@dimen/_18sdp"
-                        android:onClick="@{v->vm.onClick(v)}"
-                        android:src="@drawable/ic_arrow_forward"
-                        android:tint="@color/colorPrimary"
-                        app:layout_constraintBottom_toBottomOf="@id/tvAccountDetails"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/tvAccountDetails" />
+                        android:background="@drawable/bg_standard"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        app:layout_constraintTop_toBottomOf="@id/tvAccount"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvAccountDetails"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="0dp"
+                            android:onClick="@{v -> vm.onClick(v)}"
+                            android:layout_height="wrap_content"
+                            android:text="@string/account_details"
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/icAccount"
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:onClick="@{v->vm.onClick(v)}"
+                            android:src="@drawable/ic_arrow_forward"
+                            android:tint="@color/colorPrimary"
+                            app:layout_constraintBottom_toBottomOf="@id/tvAccountDetails"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/tvAccountDetails" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvAds"
@@ -673,7 +706,7 @@
                         android:text="@string/ads"
                         android:textColor="@color/colorPrimary"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvAccountDetails" />
+                        app:layout_constraintTop_toBottomOf="@id/consAccountDetails" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvAds"

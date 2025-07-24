@@ -15,6 +15,7 @@ import com.tech.young.base.utils.BindingUtils
 import com.tech.young.data.DropDownData
 import com.tech.young.data.UserData
 import com.tech.young.data.model.GetProfileApiResponse
+import com.tech.young.data.model.ShareData
 import com.tech.young.data.model.StreamData
 import com.tech.young.databinding.ActivityCommonBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -133,6 +134,9 @@ class CommonActivity : BaseActivity<ActivityCommonBinding>()  {
                                     setStartDestination(R.id.fragmentCommonShare)
                                 }
                                 "share_confirmation"->{
+                                    val shareData = intent.getParcelableExtra<ShareData>("share_data")
+                                    Log.i("dfdsfsdfs", "initView: $shareData")
+                                    bundle.putParcelable("share_data", shareData)
                                     setStartDestination(R.id.fragmentShareConfirmation)
                                 }
                                 "common_stream"->{
