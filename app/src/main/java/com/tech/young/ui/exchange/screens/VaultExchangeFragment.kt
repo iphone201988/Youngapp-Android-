@@ -253,7 +253,6 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
     private fun getSortList() {
         sortList.add(SortingItem("Followed", "byFollowers"))
         sortList.add(SortingItem("Saved", "bySave"))
-        sortList.add(SortingItem("Booms", "byBoom"))
     }
     /** handle click **/
     private fun initOnClick(){

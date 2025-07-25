@@ -215,6 +215,16 @@ class StreamConfirmationFragment : BaseFragment<FragmentStreamConfirmationBindin
             requireActivity(), ContextCompat.getColor(requireContext(), R.color.colorSecondary2)
         )
 
+        val dateTime = BindingUtils.convertUtcToLocalTime(streamData?.scheduleDate) ?: ""
+
+        bindingDialog.streamTitle.text = streamData?.title
+        bindingDialog.userName.text = sharedPrefManager.getLoginData()?.name
+        bindingDialog.tvStreamTime.text = dateTime
+
+        bindingDialog.ivCross.setOnClickListener {
+            dialog.dismiss()
+        }
+
         bindingDialog.tvConfirm.setOnClickListener {
             BindingUtils.statusBarStyleBlack(requireActivity())
             BindingUtils.styleSystemBars(
@@ -226,6 +236,7 @@ class StreamConfirmationFragment : BaseFragment<FragmentStreamConfirmationBindin
                 val topic = data.topic
                 val scheduleDate = data.scheduleDate
                 val image = data.image
+
 
                 // Required fields check (scheduleDate is optional)
                 if (title.isNullOrBlank() || description.isNullOrBlank() || topic.isNullOrBlank()) {

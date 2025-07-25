@@ -27,6 +27,7 @@ interface ApiHelper {
     suspend fun apiForPostWithData(url : String, data : HashMap<String,Any>) : Response<JsonObject>
 
     suspend fun apiForPutMultipart(url: String,map: HashMap<String, RequestBody>?, part: MultipartBody.Part?,partList:MutableList<MultipartBody.Part>?): Response<JsonObject>
+    suspend fun apiForPutMultipart1(url: String,map: HashMap<String, RequestBody>?, part: MultipartBody.Part?,partList:MutableList<MultipartBody.Part?>?): Response<JsonObject>
 
     suspend fun apiPutWithQuery(url: String , data: HashMap<String, String>) : Response<JsonObject>
 

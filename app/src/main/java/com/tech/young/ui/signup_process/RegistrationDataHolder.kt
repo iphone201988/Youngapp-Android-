@@ -4,6 +4,7 @@ import okhttp3.MultipartBody
 
 object RegistrationDataHolder {
     var profileImage: MultipartBody.Part? = null
+    var imageMultiplatform: MutableList<MultipartBody.Part?> = MutableList(5) { null }
 
     var userId: String? = null
     var role: String? = null

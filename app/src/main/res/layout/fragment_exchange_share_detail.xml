@@ -99,7 +99,59 @@
             app:layout_constraintStart_toStartOf="@id/tvTitle"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profileImage"
+            setUserImageFromBaseUrl="@{bean.userId.profileImage}"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/dummy_person"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            app:layout_constraintTop_toBottomOf="@id/etTitle"
+            app:layout_constraintStart_toStartOf="@id/tvTitle"/>
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvUserName"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text='@{bean.userId.firstName+" "+ bean.userId.lastName}'
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:textSize="@dimen/_14ssp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toStartOf="@id/time"
+            app:layout_constraintTop_toTopOf="@id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/profileImage"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSubject"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_10ssp"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:singleLine="true"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toEndOf="@id/tvUserName"
+            app:layout_constraintTop_toBottomOf="@id/tvUserName"
+            app:layout_constraintStart_toStartOf="@id/tvUserName"/>
+
+
+        <TextView
+            android:id="@+id/time"
+            style="@style/TextView_500_Medium"
+            setFormattedCreatedAt="@{bean.createdAt}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_10ssp"
+            android:textColor="@color/dark_gray"
+            app:layout_constraintTop_toTopOf="@id/tvUserName"
+            app:layout_constraintBottom_toBottomOf="@id/tvUserName"
+            app:layout_constraintEnd_toEndOf="parent"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDescription"
             style="@style/TextView_600_SemiBold"
@@ -109,7 +161,7 @@
             android:layout_marginTop="@dimen/_20sdp"
             android:textColor="@color/colorPrimary"
             app:layout_constraintStart_toStartOf="@id/etTitle"
-            app:layout_constraintTop_toBottomOf="@id/etTitle" />
+            app:layout_constraintTop_toBottomOf="@id/tvSubject" />
 
 
         <androidx.appcompat.widget.AppCompatTextView

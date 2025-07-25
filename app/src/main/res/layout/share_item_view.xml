@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextView_400_Regular"
-            android:text='@{bean.likesCount.toString()+" saves"}'
+            android:text='@{bean.likesCount.toString()+" Booms"}'
             android:textColor="@color/gray"
             android:textSize="@dimen/_12ssp"
             app:layout_constraintStart_toEndOf="@id/ivHeart"

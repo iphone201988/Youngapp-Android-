@@ -58,21 +58,62 @@ data class RegistrationCompletedData(
 
 
 
+//@Parcelize
+//data class Login(
+//    var `data`: Data?,
+//    var message: String?,
+//    var success: Boolean?,
+//) : Parcelable {
+//    @Parcelize
+//    data class Data(
+//        var _id: String?,
+//        var is2FAEnabled: Boolean?,
+//        var qrCodeUrl: String?,
+//        var secret: String?,
+//    ) : Parcelable
+//}
+
+
 @Parcelize
 data class Login(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?,
-) : Parcelable {
+    var success: Boolean?
+) :Parcelable
+{
     @Parcelize
     data class Data(
         var _id: String?,
-        var is2FAEnabled: Boolean?,
+        var additionalPhotos: List<String?>?,
+        var company: String?,
         var qrCodeUrl: String?,
         var secret: String?,
-    ) : Parcelable
+        var countryCode: String?,
+        var createdAt: String?,
+        var customers: Int?,
+        var email: String?,
+        var firstName: String?,
+        var followers: Int?,
+        var following: Int?,
+        var formUpload: List<String?>?,
+        var is2FAEnabled: Boolean?,
+        var isDeactivatedByUser: Boolean?,
+        var isRegistrationCompleted: Boolean?,
+        var isVerified: Boolean?,
+        var lastName: String?,
+        var location: Location?,
+        var phone: String?,
+        var role: String?,
+        var topicsOfInterest: List<String?>?,
+        var username: String?
+    ): Parcelable {
+        @Parcelize
+        data class Location(
+            var coordinates: List<Double?>?,
+            var type: String?
+        ): Parcelable
+    }
 }
-
 
 @Parcelize
 data class StreamData(

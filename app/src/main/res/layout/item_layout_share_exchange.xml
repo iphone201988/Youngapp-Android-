@@ -164,6 +164,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvSymbol" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDescription"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:text="@{bean.description}"
+            android:singleLine="true"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivHeart"
             setLikeIcon ="@{bean.isLiked()}"
@@ -173,7 +187,7 @@
             android:layout_marginVertical="@dimen/_8sdp"
             android:layout_marginStart="@dimen/_8sdp"
             app:layout_constraintStart_toStartOf="@id/tvTitle"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+            app:layout_constraintTop_toBottomOf="@id/tvDescription" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvSaves"

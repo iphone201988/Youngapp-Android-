@@ -111,7 +111,13 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
                         "getVaultData" -> {
                             val myDataModel: VaultDetailApiResponse? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null && myDataModel.data != null) {
+                                var userId = sharedPrefManager.getUserId()
                                 binding.bean = myDataModel.data
+                                if (myDataModel.data?.vault?.admin?._id.equals(userId)){
+                                    binding.tvJoin.visibility = View.GONE
+                                }else{
+                                    binding.tvJoin.visibility = View.VISIBLE
+                                }
                                 val isMember = myDataModel.data?.vault?.isMember == true
 
                                 // Set members list

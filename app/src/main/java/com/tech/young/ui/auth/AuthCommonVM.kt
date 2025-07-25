@@ -118,12 +118,14 @@ class AuthCommonVM @Inject constructor(
     fun completeRegistration(
         request: HashMap<String, RequestBody>,
         url: String,
-        profileImage: MultipartBody.Part?
+        profileImage: MultipartBody.Part?,
+        partList:MutableList<MultipartBody.Part?>?
+
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             observeCommon.postValue(Resource.loading(null))
             try {
-                apiHelper.apiForMultipartPut(url, request, profileImage).let {
+                apiHelper.apiForPutMultipart1(url, request, profileImage,partList).let {
                     if (it.isSuccessful) {
                         observeCommon.postValue(Resource.success("CompleteRegistration", it.body()))
                     } else observeCommon.postValue(

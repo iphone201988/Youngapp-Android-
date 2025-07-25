@@ -156,6 +156,16 @@ interface ApiService {
         @Part parts: MultipartBody.Part?,
         @Part partsList: MutableList<MultipartBody.Part>?
     ): Response<JsonObject>
+    @Multipart
+    @JvmSuppressWildcards
+    @PUT
+    suspend fun apiForPutMultipart1(
+        @Url url: String,
+        @Header("Authorization") token: String,
+        @PartMap data: Map<String, RequestBody>?,
+        @Part parts: MultipartBody.Part?,
+        @Part partsList: MutableList<MultipartBody.Part?>?
+    ): Response<JsonObject>
 
 
 

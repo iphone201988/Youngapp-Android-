@@ -104,7 +104,7 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
 
                 // Launch coroutine after delay
                 searchJob = lifecycleScope.launch {
-                    delay(2000) // 3 seconds delay
+                    delay(500) // 3 seconds delay
 
                     searchData = s.toString().trim()
                     getLatestUser(selectedCategoryTitle.toString())
@@ -134,6 +134,22 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
     private fun initView() {
         getFilterList()
         viewModel.getAds(Constants.GET_ADS)
+
+        binding.includeShare.tabShare.setOnClickListener {
+            val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","common_share")
+            startActivity(intent)
+        }
+
+        binding.includeShare.tabStream.setOnClickListener {
+            val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","common_stream")
+            startActivity(intent)
+        }
+
+
+        binding.includeShare.tabVault.setOnClickListener {
+            val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","common_vault")
+            startActivity(intent)
+        }
 
         initAdapters()
 

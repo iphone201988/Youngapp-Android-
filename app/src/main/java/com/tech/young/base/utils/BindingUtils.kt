@@ -64,7 +64,7 @@ object BindingUtils {
     @JvmStatic
     fun setImageFromUrl(image: ShapeableImageView, url: String?) {
         if (url != null) {
-            Glide.with(image.context).load(url).placeholder(R.drawable.user).error(R.drawable.user)
+            Glide.with(image.context).load(url).placeholder(R.drawable.dummy_profile).error(R.drawable.dummy_profile)
                 .into(image)
         }
     }
@@ -73,8 +73,8 @@ object BindingUtils {
     @JvmStatic
     fun setUserImageFromBaseUrl(image: ShapeableImageView, url: String?) {
         if (url != null) {
-            Glide.with(image.context).load(Constants.BASE_URL_IMAGE+url).placeholder(R.drawable.user)
-                .error(R.drawable.user).into(image)
+            Glide.with(image.context).load(Constants.BASE_URL_IMAGE+url).placeholder(R.drawable.dummy_profile)
+                .error(R.drawable.dummy_profile).into(image)
         }
     }
 
@@ -739,7 +739,14 @@ object BindingUtils {
         textView.text = label
     }
 
-
+    @BindingAdapter("loadImage")
+    @JvmStatic
+    fun ImageView.loadImage(uri: Uri?) {
+        Glide.with(this.context)
+            .load(uri)
+            .placeholder(R.drawable.additional_photo)
+            .into(this)
+    }
 }
 
 

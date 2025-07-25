@@ -21,6 +21,7 @@ import com.tech.young.data.api.Constants
 import com.tech.young.data.model.Login
 import com.tech.young.databinding.FragmentLoginBinding
 import com.tech.young.ui.auth.AuthCommonVM
+import com.tech.young.ui.signup_process.RegistrationDataHolder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -84,14 +85,19 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
                         val username = binding.edtUsername.text?.toString()?.trim()
                         val password = binding.edtPassword.text?.toString()?.trim()
                         if (!isLoginInputValid()) return@Observer
+
                         val request = hashMapOf<String, Any>(
                             "email" to username!!,
                             "password" to password!!,
                             "deviceToken" to token,
-                            "deviceType" to "2",
-                            "latitude" to lat,
-                            "longitude" to long
+                            "deviceType" to "2"
                         )
+
+                        if (lat != 0.0 && long != 0.0) {
+                            request["latitude"] = lat
+                            request["longitude"] = long
+                        }
+
                         viewModel.login(request, Constants.LOGIN)
 
                     } catch (e: Exception) {
@@ -99,6 +105,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
                         showErrorToast("Something went wrong: ${e.message}")
                     }
                 }
+
 
 
                 R.id.tvForgetPass -> {
@@ -149,24 +156,57 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
                     showLoading()
                 }
 
+//                Status.SUCCESS -> {
+//                    hideLoading()
+//                    val result: Login? = BindingUtils.parseJson(it.data.toString())
+//                    showSuccessToast(result?.message.toString())
+//                   result!!.data?._id?.let { it1 -> sharedPrefManager.saveUserId(it1) }
+//
+//
+//
+//                    if (result?.data?.is2FAEnabled == true) {
+//                        val bundle: Bundle = bundleOf("data" to result?.data)
+//                        findNavController().navigate(R.id.navigateToTowFactorAuthFragment, bundle)
+////                        val intent = Intent(requireActivity(), HomeActivity::class.java)
+////                        startActivity(intent)
+//
+//                    } else {
+//                        findNavController().navigate(R.id.fragmentTwoFactorQr)
+////                        val bundle: Bundle = bundleOf("data" to result?.data)
+////                        findNavController().navigate(R.id.navigateToTowFactorAuthFragment, bundle)
+//                    }
+//
+//                }
+
                 Status.SUCCESS -> {
                     hideLoading()
                     val result: Login? = BindingUtils.parseJson(it.data.toString())
                     showSuccessToast(result?.message.toString())
-                   result!!.data?._id?.let { it1 -> sharedPrefManager.saveUserId(it1) }
-                    if (result?.data?.is2FAEnabled == true) {
-                        val bundle: Bundle = bundleOf("data" to result?.data)
-                        findNavController().navigate(R.id.navigateToTowFactorAuthFragment, bundle)
-//                        val intent = Intent(requireActivity(), HomeActivity::class.java)
-//                        startActivity(intent)
-
-                    } else {
-                        findNavController().navigate(R.id.fragmentTwoFactorQr)
-//                        val bundle: Bundle = bundleOf("data" to result?.data)
-//                        findNavController().navigate(R.id.navigateToTowFactorAuthFragment, bundle)
+                    result?.data?._id?.let { userId ->
+                        sharedPrefManager.saveUserId(userId)
                     }
 
+                    val user = result?.data
+                    if (user?.is2FAEnabled == true) {
+                        val bundle = bundleOf("data" to user)
+                        findNavController().navigate(R.id.navigateToTowFactorAuthFragment, bundle)
+                    } else {
+                        if (user?.isRegistrationCompleted == false) {
+                            val role = user.role ?: ""
+                            RegistrationDataHolder.role = role
+                            RegistrationDataHolder.userId = user._id
+
+                            val accountRegistrationFor =registrationFor(role)
+                            Constants.chooseAccountType =  accountRegistrationFor
+
+                            findNavController().navigate(R.id.navigateToAddLicenseFragment)
+
+                        } else {
+                            findNavController().navigate(R.id.navigateToTowFactorAuthFragment)
+                        }
+                    }
                 }
+
 
                 Status.ERROR -> {
                     hideLoading()
@@ -177,5 +217,18 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
             }
         })
     }
+
+    private fun registrationFor(role: String?): String {
+        return when (role?.lowercase()) {
+            "general_member" -> "General Member"
+            "financial_advisor" -> "Financial Advisor"
+            "financial_firm" -> "Financial Firm"
+            "small_business" -> "Small Business"
+            "startup" -> "Startup"
+            "investor" -> "Investor / VC"
+            else -> "General Member" // default fallback
+        }
+    }
+
 
 }

@@ -104,6 +104,14 @@ class ApiHelperImpl @Inject constructor(private val apiService: ApiService, priv
     ): Response<JsonObject> {
         return apiService.apiForPutMultipart(url,getTokenFromSPref(), map, part,partList)
     }
+    override suspend fun apiForPutMultipart1(
+        url: String,
+        map: HashMap<String, RequestBody>?,
+        part: MultipartBody.Part?,
+        partList:MutableList<MultipartBody.Part?>?
+    ): Response<JsonObject> {
+        return apiService.apiForPutMultipart1(url,getTokenFromSPref(), map, part,partList)
+    }
 
     override suspend fun apiPutWithQuery(
         url: String,

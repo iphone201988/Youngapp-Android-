@@ -25,11 +25,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingBottom="@dimen/_10sdp">
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvTicker"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_48sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
                     android:background="@color/green"
                     android:overScrollMode="never"
                     android:scrollbars="none"

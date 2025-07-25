@@ -81,7 +81,7 @@
                     style="@style/TextView_600_SemiBold"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/title"
+                    android:text="@{bean.vault.title}"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_20sdp"
                     app:layout_constraintEnd_toStartOf="@id/ivThreeDots"
@@ -95,6 +95,7 @@
                     android:layout_width="@dimen/_24sdp"
                     android:layout_height="@dimen/_24sdp"
                     android:src="@drawable/iv_three_dots"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tvTitle"
                     app:layout_constraintBottom_toBottomOf="@id/tvTitle"/>

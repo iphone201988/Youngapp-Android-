@@ -99,6 +99,7 @@
             android:layout_height="@dimen/_42sdp"
             android:src="@drawable/iv_filter_icon"
             android:scaleType="fitXY"
+            android:translationX="-8dp"
             android:onClick="@{v -> vm.onClick(v)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/etSearch"

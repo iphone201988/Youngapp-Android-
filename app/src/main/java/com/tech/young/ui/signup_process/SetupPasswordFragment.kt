@@ -16,6 +16,7 @@ import com.tech.young.base.utils.BindingUtils.setNavigationBarStyle
 import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showErrorToast
 import com.tech.young.base.utils.showSuccessToast
+import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
 import com.tech.young.data.model.Signup
 import com.tech.young.databinding.FragmentSetupPasswordBinding
@@ -74,7 +75,7 @@ class SetupPasswordFragment : BaseFragment<FragmentSetupPasswordBinding>() {
 
                 Status.ERROR -> {
                     hideLoading()
-                    showErrorToast(it.message.toString())
+                    showToast(it.message.toString())
                 }
 
                 else -> {}
@@ -161,6 +162,7 @@ class SetupPasswordFragment : BaseFragment<FragmentSetupPasswordBinding>() {
                         val oldPassword = binding.edtOldPassword.text?.toString()?.trim()
                         val confirmPassword = binding.edtConfirmPassword.text?.toString()?.trim()
                         if (!isPasswordInputValid()) return@Observer
+
                         val request = hashMapOf<String, Any>(
                             "firstName" to firstName.toString(),
                             "lastName" to lastName.toString(),
@@ -172,24 +174,22 @@ class SetupPasswordFragment : BaseFragment<FragmentSetupPasswordBinding>() {
                             "phone" to phone.toString(),
                             "password" to confirmPassword.toString(),
                             "deviceToken" to token,
-                            "deviceType" to "2",
-                            "latitude" to lat,
-                            "longitude" to long
+                            "deviceType" to "2"
                         )
+
+                        if (lat != 0.0 && long != 0.0) {
+                            request["latitude"] = lat
+                            request["longitude"] = long
+                        }
+
                         viewModel.signup(request, Constants.REGISTER)
 
                     } catch (e: Exception) {
                         e.printStackTrace()
                         showErrorToast("Something went wrong: ${e.message}")
                     }
-
-
-                    /* val bundle = Bundle().apply {
-                         putString("from", "SignUpProcess")
-                     }
-
-                     findNavController().navigate(R.id.navigateToOtpFragment, bundle)*/
                 }
+
 
             }
         })

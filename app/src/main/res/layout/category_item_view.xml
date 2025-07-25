@@ -19,7 +19,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="@{v->callback.onItemClick(v,bean,pos)}"
-        android:padding="@dimen/_6sdp"
+        android:paddingHorizontal="@dimen/_6sdp"
+        android:paddingVertical="@dimen/_4sdp"
         android:layout_marginEnd="@dimen/_5sdp"
         android:background="@{bean.selected?@drawable/selected_side_menu_bg:@drawable/radius_border_green}">
         <androidx.appcompat.widget.AppCompatTextView

@@ -118,3 +118,7 @@ data class ImageModel(
     var type:String?
 )
 
+
+data class AdditionalPhotos(
+    var image: Uri?
+)
