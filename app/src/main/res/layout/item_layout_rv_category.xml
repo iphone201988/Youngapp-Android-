@@ -23,7 +23,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_5sdp"
+            android:layout_margin="@dimen/_8sdp"
             android:background="@drawable/bg_standard"
             android:backgroundTint="@color/colorPrimary"
             app:layout_constraintTop_toTopOf="parent"
@@ -37,7 +37,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{bean.title}"
-                android:padding="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_6sdp"
+                android:paddingHorizontal="@dimen/_8sdp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintTop_toTopOf="parent"
@@ -47,11 +48,11 @@
 
             <ImageView
                 android:id="@+id/ivCross"
-                android:layout_width="@dimen/_12sdp"
-                android:layout_height="@dimen/_12sdp"
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
                 android:src="@drawable/iv_cross"
                 android:onClick="@{ v ->callback.onItemClick(v,bean,pos)}"
-                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
                 app:layout_constraintTop_toTopOf="@id/title"
                 app:layout_constraintBottom_toBottomOf="@id/title"
                 app:layout_constraintEnd_toEndOf="parent"/>

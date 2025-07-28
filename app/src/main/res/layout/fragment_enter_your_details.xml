@@ -42,159 +42,181 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvLoginTopText"
-                    style="@style/TextView_800_ExtraBold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_23sdp"
-                    android:text="@string/enter_your_details_below"
-                    android:textSize="@dimen/_20ssp"
-                    app:layout_constraintStart_toStartOf="@+id/ivBack"
-                    app:layout_constraintTop_toBottomOf="@+id/ivBack" />
-
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvDes"
-                    style="@style/TextView_400_Regular"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:text="@string/enter_some_basic_details_below"
-                    android:textColor="@color/text_gray"
-                    app:layout_constraintStart_toStartOf="@+id/tvLoginTopText"
-                    app:layout_constraintTop_toBottomOf="@+id/tvLoginTopText" />
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edtFirstName"
-                    style="@style/TextView_400_Regular"
+                <androidx.core.widget.NestedScrollView
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_42sdp"
-                    android:layout_marginTop="@dimen/_30sdp"
-                    android:background="@drawable/radius_border_gray"
-                    android:gravity="start|center"
-                    android:hint="@string/first_name"
-                    android:onClick="@{v ->vm.onClick(v)}"
-                    android:paddingHorizontal="@dimen/_10sdp"
-                    android:singleLine="true"
-                    android:textColorHint="@color/text_gray"
-                    app:layout_constraintEnd_toStartOf="@+id/edtLastName"
+                    android:layout_height="0dp"
+                    android:fillViewport="true"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ivBack"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvDes" />
+                    app:layout_constraintEnd_toEndOf="parent">
 
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edtLastName"
-                    style="@style/TextView_400_Regular"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_42sdp"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:background="@drawable/radius_border_gray"
-                    android:gravity="start|center"
-                    android:hint="@string/last_name"
-                    android:onClick="@{v ->vm.onClick(v)}"
-                    android:paddingHorizontal="@dimen/_10sdp"
-                    android:singleLine="true"
-                    android:textColorHint="@color/text_gray"
-                    app:layout_constraintBottom_toBottomOf="@+id/edtFirstName"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/edtFirstName"
-                    app:layout_constraintTop_toTopOf="@+id/edtFirstName" />
-
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edtCompany"
-                    style="@style/TextView_400_Regular"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_42sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/radius_border_gray"
-                    android:gravity="start|center"
-                    android:hint="@string/company"
-                    android:onClick="@{v ->vm.onClick(v)}"
-                    android:paddingHorizontal="@dimen/_10sdp"
-                    android:singleLine="true"
-                    android:textColorHint="@color/text_gray"
-                    android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@+id/edtFirstName" />
+                    android:layout_height="match_parent">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvLoginTopText"
+                        style="@style/TextView_800_ExtraBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_23sdp"
+                        android:text="@string/enter_your_details_below"
+                        android:textSize="@dimen/_20ssp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edtUsername"
-                    style="@style/TextView_400_Regular"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_42sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/radius_border_gray"
-                    android:gravity="start|center"
-                    android:hint="@string/username"
-                    android:onClick="@{v ->vm.onClick(v)}"
-                    android:paddingHorizontal="@dimen/_10sdp"
-                    android:singleLine="true"
-                    android:textColorHint="@color/text_gray"
-                    app:layout_constraintTop_toBottomOf="@+id/edtCompany" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvDes"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/enter_some_basic_details_below"
+                        android:textColor="@color/text_gray"
+                        app:layout_constraintStart_toStartOf="@+id/tvLoginTopText"
+                        app:layout_constraintTop_toBottomOf="@+id/tvLoginTopText" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtFirstName"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_42sdp"
+                        android:layout_marginTop="@dimen/_30sdp"
+                        android:background="@drawable/radius_border_gray"
+                        android:gravity="start|center"
+                        android:hint="@string/first_name"
+                        android:onClick="@{v ->vm.onClick(v)}"
+                        android:paddingHorizontal="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/text_gray"
+                        app:layout_constraintEnd_toStartOf="@+id/edtLastName"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvDes" />
 
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edtEmail"
-                    style="@style/TextView_400_Regular"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_42sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/radius_border_gray"
-                    android:gravity="start|center"
-                    android:hint="@string/email_address"
-                    android:onClick="@{v ->vm.onClick(v)}"
-                    android:paddingHorizontal="@dimen/_10sdp"
-                    android:singleLine="true"
-                    android:textColorHint="@color/text_gray"
-                    app:layout_constraintTop_toBottomOf="@+id/edtUsername" />
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edtPhone"
-                    style="@style/TextView_400_Regular"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_42sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/radius_border_gray"
-                    android:gravity="start|center"
-                    android:hint="@string/phone_number"
-                    android:inputType="number"
-                    android:onClick="@{v ->vm.onClick(v)}"
-                    android:paddingHorizontal="@dimen/_10sdp"
-                    android:singleLine="true"
-                    android:textColorHint="@color/text_gray"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/countryCodePicker"
-                    app:layout_constraintTop_toBottomOf="@+id/edtEmail" />
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtLastName"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_42sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:background="@drawable/radius_border_gray"
+                        android:gravity="start|center"
+                        android:hint="@string/last_name"
+                        android:onClick="@{v ->vm.onClick(v)}"
+                        android:paddingHorizontal="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/text_gray"
+                        app:layout_constraintBottom_toBottomOf="@+id/edtFirstName"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/edtFirstName"
+                        app:layout_constraintTop_toTopOf="@+id/edtFirstName" />
 
 
-                <com.hbb20.CountryCodePicker
-                    android:id="@+id/countryCodePicker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_42sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:background="@drawable/radius_border_gray"
-                    android:gravity="center"
-                    app:ccp_autoDetectCountry="true"
-                    app:ccp_showFlag="false"
-                    app:layout_constraintBottom_toBottomOf="@+id/edtPhone"
-                    app:layout_constraintEnd_toStartOf="@+id/edtPhone"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/edtPhone" />
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtCompany"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_42sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:background="@drawable/radius_border_gray"
+                        android:gravity="start|center"
+                        android:hint="@string/company"
+                        android:onClick="@{v ->vm.onClick(v)}"
+                        android:paddingHorizontal="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/text_gray"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/edtFirstName" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvNext"
-                    style="@style/TextView_500_Medium"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_42sdp"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:background="@drawable/corner_radius_10"
-                    android:gravity="center"
-                    android:onClick="@{v ->vm.onClick(v)}"
-                    android:text="@string/next"
-                    android:textColor="@color/white"
-                    app:layout_constraintTop_toBottomOf="@+id/edtPhone" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtUsername"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_42sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:background="@drawable/radius_border_gray"
+                        android:gravity="start|center"
+                        android:hint="@string/username"
+                        android:onClick="@{v ->vm.onClick(v)}"
+                        android:paddingHorizontal="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/text_gray"
+                        app:layout_constraintTop_toBottomOf="@+id/edtCompany" />
+
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtEmail"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_42sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:background="@drawable/radius_border_gray"
+                        android:gravity="start|center"
+                        android:hint="@string/email_address"
+                        android:onClick="@{v ->vm.onClick(v)}"
+                        android:paddingHorizontal="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/text_gray"
+                        app:layout_constraintTop_toBottomOf="@+id/edtUsername" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtPhone"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_42sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:background="@drawable/radius_border_gray"
+                        android:gravity="start|center"
+                        android:hint="@string/phone_number"
+                        android:inputType="number"
+                        android:onClick="@{v ->vm.onClick(v)}"
+                        android:paddingHorizontal="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/text_gray"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/countryCodePicker"
+                        app:layout_constraintTop_toBottomOf="@+id/edtEmail" />
+
+
+                    <com.hbb20.CountryCodePicker
+                        android:id="@+id/countryCodePicker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_42sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:background="@drawable/radius_border_gray"
+                        android:gravity="center"
+                        app:ccp_autoDetectCountry="true"
+                        app:ccp_showFlag="false"
+                        app:layout_constraintBottom_toBottomOf="@+id/edtPhone"
+                        app:layout_constraintEnd_toStartOf="@+id/edtPhone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/edtPhone" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvNext"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_42sdp"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:background="@drawable/corner_radius_10"
+                        android:gravity="center"
+                        android:onClick="@{v ->vm.onClick(v)}"
+                        android:text="@string/next"
+                        android:textColor="@color/white"
+                        app:layout_constraintTop_toBottomOf="@+id/edtPhone" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </androidx.core.widget.NestedScrollView>
+
+
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

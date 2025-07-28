@@ -21,32 +21,21 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/consMain"
-        android:layout_width="280dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clipChildren="false"
+        android:elevation="@dimen/_5sdp"
+        android:layout_margin="@dimen/_5sdp"
+        android:background="@drawable/bg_trending"
         android:clipToPadding="false"
         android:onClick="@{v -> callback.onItemClick(v, bean, pos)}"
-        android:paddingHorizontal="@dimen/_10sdp">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_70sdp"
-            android:layout_marginVertical="@dimen/_5sdp"
-            android:background="@drawable/bg_trending"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:elevation="6dp"
-            android:paddingEnd="@dimen/_15sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        android:padding="@dimen/_8sdp">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/ivUserImage"
                 setUserImageFromBaseUrl="@{bean.image}"
-                android:layout_width="@dimen/_70sdp"
-                android:layout_height="match_parent"
-                android:padding="@dimen/_8sdp"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
                 android:src="@drawable/dummy_person"
                 android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -54,15 +43,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize20Percent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/textContainer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_1sdp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ivUserImage"
-                app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvTitle"
@@ -70,10 +50,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{bean.topic}"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/_15ssp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textSize="@dimen/_12ssp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    app:layout_constraintStart_toEndOf="@id/ivUserImage"
+                    app:layout_constraintTop_toTopOf="@id/ivUserImage" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvDes"
@@ -82,14 +64,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:text="Trending no. 1"
+                    android:textSize="@dimen/_8sdp"
                     android:textColor="@color/text_gray"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tvTitle"
                     app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </layout>

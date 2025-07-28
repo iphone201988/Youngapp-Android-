@@ -273,6 +273,7 @@ data class GetProfileApiResponse(
             val fundsRaising:String?,
             val fundsRaised:String?,
             val stageOfBusiness:String?,
+            var isRated: Double?
         ) : Parcelable {
             @Parcelize
             data class Location(

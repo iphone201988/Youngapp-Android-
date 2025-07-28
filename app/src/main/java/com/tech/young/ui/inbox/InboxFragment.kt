@@ -45,6 +45,7 @@ class InboxFragment : BaseFragment<FragmentInboxBinding>() {
 
     private fun getChat() {
         viewModel.getChat(Constants.GET_CHAT)
+        viewModel.getAds(Constants.GET_ADS)
     }
 
     override fun getLayoutResource(): Int {

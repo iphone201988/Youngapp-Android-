@@ -87,9 +87,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 val updatedItems = topItems.map { item ->
                     val metadata = fetchUrlMetadata(item.link ?: "")
                     val imageUrlMeta = metadata["imageUrl"]
-                    val imageUrl = resolveImageUrl(url, imageUrlMeta)
-                    item.copy(imageURL = imageUrl)
+                    val finalImageUrl = imageUrlMeta?.let { resolveImageUrl(item.link ?: "", it) } ?: item.imageURL
+                    item.copy(imageURL = finalImageUrl)
                 }
+
 
 
                 rssItems.clear()
@@ -165,9 +166,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         var currentItem: RSSItem? = null
         var text = ""
         var imageUrl: String? = null
+        var defaultImageUrl: String? = null
+        var insideImageTag = false
 
         val parser = Xml.newPullParser()
-        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
+        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
         parser.setInput(inputStream, null)
         var eventType = parser.eventType
 
@@ -181,18 +184,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                             currentItem = RSSItem(null, null, null, null)
                             imageUrl = null
                         }
-                        tagName.equals("media:content", ignoreCase = true) -> {
-                            // Fix: use getAttributeValue without namespace
+                        tagName.equals("media:content", ignoreCase = true) ||
+                                (tagName == "content" && parser.prefix == "media") -> {
+                            // Detect namespaced media:content
                             imageUrl = parser.getAttributeValue(null, "url")
-                            // If still null, try getAttributeValue(0)
-                            if (imageUrl == null) {
+                            if (imageUrl.isNullOrEmpty()) {
                                 for (i in 0 until parser.attributeCount) {
-                                    if (parser.getAttributeName(i) == "url") {
+                                    if (parser.getAttributeName(i).contains("url")) {
                                         imageUrl = parser.getAttributeValue(i)
                                         break
                                     }
                                 }
                             }
+                        }
+                        tagName.equals("image", ignoreCase = true) -> {
+                            insideImageTag = true
                         }
                     }
                 }
@@ -202,20 +208,33 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 }
 
                 XmlPullParser.END_TAG -> {
-                    if (currentItem != null) {
-                        when (tagName) {
-                            "title" -> currentItem = currentItem.copy(title = text.trim())
-                            "link" -> currentItem = currentItem.copy(link = text.trim())
-                            "pubDate" -> currentItem = currentItem.copy(pubDate = text.trim())
-                            "description" -> currentItem = currentItem.copy(description = text.trim())
-                            "item" -> {
-                                currentItem = currentItem.copy(imageURL = imageUrl)
-                                items.add(currentItem)
+                    when {
+                        currentItem != null -> {
+                            when (tagName) {
+                                "title" -> currentItem = currentItem.copy(title = text.trim())
+                                "link" -> currentItem = currentItem.copy(link = text.trim())
+                                "pubDate" -> currentItem = currentItem.copy(pubDate = text.trim())
+                                "description" -> currentItem = currentItem.copy(description = text.trim())
+                                "item" -> {
+                                    currentItem = currentItem.copy(
+                                        imageURL = imageUrl ?: defaultImageUrl
+                                    )
+                                    items.add(currentItem)
+                                }
                             }
+                        }
+
+                        insideImageTag && tagName.equals("url", ignoreCase = true) -> {
+                            defaultImageUrl = text.trim()
+                        }
+
+                        tagName.equals("image", ignoreCase = true) -> {
+                            insideImageTag = false
                         }
                     }
                 }
             }
+
             eventType = parser.next()
         }
 
@@ -224,18 +243,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
 
 
+
+
     private fun resolveImageUrl(baseUrl: String, imageUrl: String?): String? {
         if (imageUrl.isNullOrEmpty()) return null
-        return if (imageUrl.startsWith("http")||imageUrl.startsWith("https")) {
-            imageUrl
-        } else {
-            try {
-                URL(URL(baseUrl), imageUrl).toString()
-            } catch (e: MalformedURLException) {
-                null
-            }
+        return try {
+            URL(URL(baseUrl), imageUrl).toString()
+        } catch (e: MalformedURLException) {
+            null
         }
     }
+
     private fun getAds() {
         viewModel.getAds(Constants.GET_ADS)
     }
@@ -262,6 +280,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
         binding.tabShare.tabVault.setOnClickListener {
          val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","common_vault")
+            startActivity(intent)
+        }
+
+        binding.tabLayoutBottom.tabExchange.setOnClickListener {
+            val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","exchange")
+            startActivity(intent)
+        }
+
+        binding.tabLayoutBottom.tabEcosystem.setOnClickListener {
+            val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","ecosystem")
             startActivity(intent)
         }
         setupTickerRecycler()
@@ -291,16 +319,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     startActivity(intent)
                 }
                 R.id.tvMembersView->{
-                    val intent = Intent(requireContext(), StreamActivity::class.java)
-                    startActivity(intent)
+
 
 //                    val intent=Intent(requireContext(),CommonActivity::class.java)
 //                    intent.putExtra("from","view_more")
 //                    startActivity(intent)
                 }
                 R.id.tvSmallView->{
-                    val intent = Intent(requireContext(), ConsumerStreamActiivty::class.java)
-                    startActivity(intent)
+
 //                    val intent=Intent(requireContext(),CommonActivity::class.java)
 //                    intent.putExtra("from","view_more")
 //                    startActivity(intent)
@@ -396,12 +422,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             // Fetch data from API
             val quotes = StockQuoteService.fetchQuotes(symbols)
 
+            Log.i("hgfhghg", "setupTickerRecycler: $quotes")
+
             // Convert to StockItem list
             val stockItems = quotes.map { (symbol, quote) ->
                 val isUp = (quote.d ?: 0.0) >= 0
                 val percentChange = String.format("%.2f%%", quote.dp ?: 0.0)
                 StockItem(symbol, percentChange, isUp)
             }
+            Log.i("hgfhghg", "setupTickerRecycler: $stockItems")
+
+
 
             // Tripled list for infinite effect
             val loopedList = stockItems + stockItems + stockItems

@@ -1,9 +1,12 @@
 package com.tech.young.ui.vault_screen.people_screen
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -20,6 +23,9 @@ import com.tech.young.databinding.FragmentPeopleBinding
 import com.tech.young.databinding.ItemLayoutPeoplesBinding
 import com.tech.young.ui.vault_screen.CommonVaultFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
@@ -27,14 +33,42 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
     private val viewModel : PeopleFragmentVm by viewModels()
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     var selectedUserIds = ""
+    private var searchJob: Job? = null
+    private var searchData : String ? = null
+
     private var selectedCategory: ArrayList<DropDownData>? = null
     private lateinit var userAdapter : SimpleRecyclerViewAdapter<GetUserApiResponse.Data.User, ItemLayoutPeoplesBinding>
     override fun onCreateView(view: View) {
         initOnClick()
         viewModel.getAds(Constants.GET_ADS)
         getUsers()
+        searchView()
         initAdapter()
         setObserver()
+    }
+
+
+
+    private fun searchView() {
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                // Cancel any previous job to avoid multiple triggers
+                searchJob?.cancel()
+
+                // Launch coroutine after delay
+                searchJob = lifecycleScope.launch {
+                    delay(500) // 3 seconds delay
+
+                    searchData = s.toString().trim()
+                    getUsers()
+
+                }
+            }
+        })
     }
 
     private fun initAdapter() {
@@ -129,6 +163,10 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
                 put("category", selectedActualValues)  // <- set as comma-separated string
                 put("page", 1)
                 put("limit", 20)
+
+                if (searchData != null){
+                    put("search",searchData.toString())
+                }
             }
             viewModel.getUsers(data, Constants.GET_USERS)
         }

@@ -133,18 +133,17 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
         // Set current month page
         binding.rangeCalenderOneTime.setDate(currentCalendar)
 
+        binding.rangeCalenderOneTime.clearSelectedDays()
 
         binding.rangeCalenderOneTime.setOnPreviousPageChangeListener(object :
             OnCalendarPageChangeListener {
             override fun onChange() {
-                currentCalendar = binding.rangeCalenderOneTime.currentPageDate
                 updateMonthYearTexts()
             }
         })
 
         binding.rangeCalenderOneTime.setOnForwardPageChangeListener(object : OnCalendarPageChangeListener {
             override fun onChange() {
-                currentCalendar = binding.rangeCalenderOneTime.currentPageDate
                 updateMonthYearTexts()
             }
 

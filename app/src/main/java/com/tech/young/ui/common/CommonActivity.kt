@@ -212,6 +212,13 @@ class CommonActivity : BaseActivity<ActivityCommonBinding>()  {
                                     bundle.putString("linkUrl",linkUrl)
                                     setStartDestination(R.id.fragmentNewsWeb)
                                 }
+                                "exchange" ->{
+                                    setStartDestination(R.id.fragmentExchange)
+                                }
+                                "ecosystem" ->{
+                                    setStartDestination(R.id.fragmentEcosystem)
+
+                                }
                             }
                             navController.setGraph(this, bundle)
                         }

@@ -150,6 +150,9 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                                 if (myDataModel.data != null) {
                                     profileData = myDataModel.data
                                     lastLogin = myDataModel.data?.user?.lastLogin
+                                    Constants.userLastLogin = lastLogin.toString()
+
+                                    initAdapter()
                                 }
                             }
 
@@ -194,6 +197,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
         editProfileAdapter =
             SimpleRecyclerViewAdapter(R.layout.edit_profile_item_view, BR.bean) { v, m, pos ->
                 val date = v.rootView.findViewById<TextView>(R.id.date)
+                Log.i("last", "initAdapter: $lastLogin")
                 date.text = lastLogin
                 when (v.id) {
                     R.id.clMain -> {

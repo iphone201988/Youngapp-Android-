@@ -617,6 +617,7 @@
 
                         <per.wsj.library.AndRatingBar
                             android:id="@+id/ratingBar"
+                            setRating="@{bean.user.isRated()}"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/_30sdp"
                             android:isIndicator="true"

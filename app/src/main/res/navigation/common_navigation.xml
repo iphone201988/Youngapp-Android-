@@ -143,5 +143,15 @@
         android:name="com.tech.young.ui.my_profile_screens.forFinance.PersonalPreferencesFragment"
         tools:layout="@layout/fragment_personal_preferences"/>
 
+    <fragment
+        android:id="@+id/fragmentExchange"
+        android:name="com.tech.young.ui.exchange.ExchangeFragment"
+        tools:layout="@layout/fragment_exchange"/>
+
+    <fragment
+        android:id="@+id/fragmentEcosystem"
+        android:name="com.tech.young.ui.ecosystem.EcosystemFragment"
+        tools:layout="@layout/fragment_ecosystem"/>
+
 
 </navigation>

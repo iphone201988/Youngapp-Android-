@@ -747,6 +747,5 @@ object BindingUtils {
             .placeholder(R.drawable.additional_photo)
             .into(this)
     }
+
 }
-
-

@@ -225,6 +225,7 @@ class SetupPasswordFragment : BaseFragment<FragmentSetupPasswordBinding>() {
         val confirmPassword = binding.edtConfirmPassword.text.toString().trim()
 
         val passwordPattern = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%^&*(),.?\":{}|<>])[A-Za-z\\d!@#\$%^&*(),.?\":{}|<>]{12,}\$")
+        binding.passwordValidation.visibility = View.GONE
 
         return when {
             oldPassword.isBlank() -> {
@@ -238,12 +239,13 @@ class SetupPasswordFragment : BaseFragment<FragmentSetupPasswordBinding>() {
             }
 
             !passwordPattern.matches(oldPassword) -> {
-                showErrorToast("Password requirement should be a minimum of 12 characters, 1 uppercase, 1 lowercase, and 1 special character.")
+                binding.passwordValidation.visibility = View.VISIBLE
+//                showErrorToast("Password requirement should be a minimum of 12 characters, 1 uppercase, 1 lowercase, and 1 special character.")
                 false
             }
 
             oldPassword != confirmPassword -> {
-                showErrorToast("Passwords do not match")
+                showErrorToast("Passwords not matched")
                 false
             }
 

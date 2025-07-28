@@ -320,6 +320,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_marginStart="@dimen/_2sdp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/item_layout_rv_category"
                     app:layout_constraintTop_toTopOf="@id/etTopic"

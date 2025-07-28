@@ -123,7 +123,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvYourPhotos"
                     tools:itemCount="5"
-                    tools:listitem="@layout/your_photos_item_view" />
+                    tools:listitem="@layout/add_photos_item_view" />
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/clFairness"
                     android:layout_width="0dp"
