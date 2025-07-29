@@ -150,8 +150,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                                 if (myDataModel.data != null) {
                                     profileData = myDataModel.data
                                     lastLogin = myDataModel.data?.user?.lastLogin
-                                    Constants.userLastLogin = lastLogin.toString()
-
+                                    BindingUtils.lastLogin = lastLogin.toString()
                                     initAdapter()
                                 }
                             }

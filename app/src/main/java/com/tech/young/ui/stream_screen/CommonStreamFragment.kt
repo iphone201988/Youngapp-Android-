@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import android.text.TextUtils
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -84,6 +85,16 @@ class CommonStreamFragment : BaseFragment<FragmentCommonStreamBinding>() ,BaseCu
         // adapter
         initAdapter()
         initObserver()
+
+        binding.etDescription.setOnTouchListener { v, event ->
+            val parent = v.parent ?: return@setOnTouchListener false  // Safely accessing the parent
+            parent.requestDisallowInterceptTouchEvent(true)
+            when (event.action and MotionEvent.ACTION_MASK) {
+                MotionEvent.ACTION_UP -> parent.requestDisallowInterceptTouchEvent(false)
+            }
+            false
+        }
+        
     }
 
     private fun initObserver() {

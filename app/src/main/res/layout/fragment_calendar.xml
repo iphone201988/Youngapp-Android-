@@ -161,6 +161,7 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_100sdp"
+                            android:visibility="gone"
                             android:background="@color/transparent"
                             android:onClick="@{v -> vm.onClick(v)}"
                             app:layout_constraintEnd_toEndOf="parent"

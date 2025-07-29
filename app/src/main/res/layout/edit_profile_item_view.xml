@@ -70,6 +70,7 @@
                 style="@style/TextView_400_Regular"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:textSize="@dimen/_12ssp"
+                triggerLastLogin="@{true}"
                 android:background="@drawable/bg_cons"
                 android:textColor="@color/black"
                 android:visibility="@{bean.image==0?View.VISIBLE:View.GONE}"

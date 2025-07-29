@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Young app</string>
+    <string name="app_name"><Young>Young</Young></string>
 
     <string name="session_expired">session_expired</string>
     <string name="alert">Alert</string>

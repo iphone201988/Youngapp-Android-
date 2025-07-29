@@ -32,6 +32,7 @@ import com.tech.young.databinding.ItemLayoutHomeNewsBinding
 import com.tech.young.databinding.ItemLayoutNewsDataBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.consumer_stream.ConsumerStreamActiivty
+import com.tech.young.ui.exchange.screens.ShareExchangeFragment
 import com.tech.young.ui.streaming_activity.StreamActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -319,14 +320,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     startActivity(intent)
                 }
                 R.id.tvMembersView->{
-
-
-//                    val intent=Intent(requireContext(),CommonActivity::class.java)
-//                    intent.putExtra("from","view_more")
-//                    startActivity(intent)
+                    val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","exchange")
+                    ShareExchangeFragment.selectedCategoryForExchange = "Members"
+                    startActivity(intent)
                 }
                 R.id.tvSmallView->{
-
+                    val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","exchange")
+                    ShareExchangeFragment.selectedCategoryForExchange = "Small Businesses"
+                    startActivity(intent)
 //                    val intent=Intent(requireContext(),CommonActivity::class.java)
 //                    intent.putExtra("from","view_more")
 //                    startActivity(intent)
@@ -505,9 +506,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 }
             }
 
-        newsAdapter.list = rssItems
+
         binding.rvNews.adapter = newsAdapter
         binding.rvNews.layoutManager = layoutManager
+        binding.rvNews.setHasFixedSize(true)
+        newsAdapter.list = rssItems
 
         binding.rvMembers.layoutManager = layoutManager2
         binding.rvMembers.setHasFixedSize(true)

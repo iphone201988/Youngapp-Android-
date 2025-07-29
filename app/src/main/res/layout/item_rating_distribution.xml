@@ -27,9 +27,10 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="20dp"
+            android:layout_height="10dp"
             android:max="100"
             android:progress="80"
+            android:progressDrawable="@drawable/custom_progress_bar"
             android:progressTint="@color/yellow_star" />
 
         <TextView

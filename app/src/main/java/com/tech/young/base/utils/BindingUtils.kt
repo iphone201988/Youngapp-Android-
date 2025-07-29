@@ -60,6 +60,9 @@ import java.util.TimeZone
 
 object BindingUtils {
 
+    var lastLogin : String ? = null
+
+
     @BindingAdapter("setImageFromUrl")
     @JvmStatic
     fun setImageFromUrl(image: ShapeableImageView, url: String?) {
@@ -746,6 +749,28 @@ object BindingUtils {
             .load(uri)
             .placeholder(R.drawable.additional_photo)
             .into(this)
+    }
+
+
+    @JvmStatic
+    @BindingAdapter("triggerLastLogin")
+    fun triggerLastLogin(textView: TextView, trigger: Boolean) {
+        if (lastLogin.isNullOrBlank()) {
+            textView.text = ""
+            return
+        }
+
+        try {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+            val date = inputFormat.parse(lastLogin)
+
+            val outputFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+            textView.text = date?.let { outputFormat.format(it) } ?: ""
+        } catch (e: Exception) {
+            textView.text = ""
+            e.printStackTrace()
+        }
     }
 
 }

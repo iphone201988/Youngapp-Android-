@@ -5,11 +5,15 @@ import android.net.Uri
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.applandeo.materialcalendarview.EventDay
 import com.applandeo.materialcalendarview.listeners.OnCalendarPageChangeListener
+import com.applandeo.materialcalendarview.listeners.OnDayClickListener
+import com.applandeo.materialcalendarview.utils.calendar
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -27,6 +31,7 @@ import com.tech.young.databinding.ItemLayoutRemindersBinding
 import com.tech.young.ui.my_profile_screens.YourProfileVM
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.util.FileUtil
+import com.tech.young.data.api.SimpleApiResponse
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -36,6 +41,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import java.util.TimeZone
 
 @AndroidEntryPoint
 class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
@@ -44,7 +50,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
     private lateinit var topicAdapter : SimpleRecyclerViewAdapter<DropDownData,ItemLayoutDropDownBinding>
     private var topicList = ArrayList<DropDownData>()
     private var imageUri : Uri ?= null
-    private var userSelectedDate: Calendar? = null
+    private var userSelectedDate: String? = null
 
     private var getList = listOf(
         "", "", "", "", ""
@@ -135,6 +141,32 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
 
         binding.rangeCalenderOneTime.clearSelectedDays()
 
+        binding.rangeCalenderOneTime.post {
+            val calendarLayout = binding.rangeCalenderOneTime.getChildAt(0) as? LinearLayout
+            val header = calendarLayout?.getChildAt(0)
+            header?.visibility = View.GONE
+            calendarLayout?.setPadding(0, 0, 0, 0)
+            updateMonthYearTexts()
+
+        }
+
+        binding.rangeCalenderOneTime.setOnDayClickListener(object : OnDayClickListener {
+            override fun onDayClick(eventDay: EventDay) {
+                val selectedDate = eventDay.calendar.time
+
+                // Format date to UTC ISO 8601 format: yyyy-MM-dd'T'HH:mm:ss'Z'
+                val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+                sdf.timeZone = TimeZone.getTimeZone("UTC")
+
+                userSelectedDate = sdf.format(selectedDate)
+
+                Log.i("SelectedDate", "onDayClick: $userSelectedDate")
+            }
+        })
+
+
+
+
         binding.rangeCalenderOneTime.setOnPreviousPageChangeListener(object :
             OnCalendarPageChangeListener {
             override fun onChange() {
@@ -146,14 +178,10 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
             override fun onChange() {
                 updateMonthYearTexts()
             }
-
-
-
         })
 
 
 
-        updateMonthYearTexts()
 
     }
 
@@ -186,6 +214,16 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                 R.id.tvSubmit ->{
                     binding.calendarCons.visibility = View.VISIBLE
                     binding.consAddEvent.visibility = View.GONE
+                    if (isEmptyField()){
+                        val multipartImage = imageUri?.let { convertImageToMultipart(it) }
+                        val data = HashMap<String, RequestBody>()
+                        data["title"] = binding.etTitle.text.toString().trim().toRequestBody()
+                        data["topic"] = binding.etTopic.text.toString().trim().toRequestBody()
+                        data["description"] = binding.etDescription.text.toString().trim().toRequestBody()
+                        data["type"] = "own_events".toRequestBody()
+                        data["scheduledDate"] = userSelectedDate.toString().toRequestBody()
+                        viewModel.addEvent(data,Constants.CREATE_EVENT,multipartImage)
+                    }
                 }
                 R.id.etTopic ->{
                     binding.rvTopics.visibility = View.VISIBLE
@@ -197,18 +235,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                         .createIntent { intent ->
                             startForImageResult.launch(intent)
                         }
-                }
-                R.id.tvSubmit ->{
-                    if (isEmptyField()){
-                        val multipartImage = imageUri?.let { convertImageToMultipart(it) }
-                        val data = HashMap<String, RequestBody>()
-                        data["title"] = binding.etTitle.text.toString().trim().toRequestBody()
-                        data["topic"] = binding.etTopic.text.toString().trim().toRequestBody()
-                        data["description"] = binding.etDescription.text.toString().trim().toRequestBody()
-                        data["type"] = binding.etDescription.text.toString().trim().toRequestBody()
-                        data["scheduledDate"]
-                        viewModel.addEvent(data,Constants.CREATE_EVENT,multipartImage)
-                    }
                 }
             }
         })
@@ -250,6 +276,13 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                                 }
                             }
                         }
+                        "addEvent" ->{
+                            val myDataModel : SimpleApiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                showToast(myDataModel.message.toString())
+                                getEventsData()
+                            }
+                        }
                     }
                 }
                 Status.ERROR ->{
@@ -277,12 +310,20 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
     }
 
     private fun updateMonthYearTexts() {
-        val monthFormat = SimpleDateFormat("MMMM", Locale.getDefault())
-        val yearFormat = SimpleDateFormat("yyyy", Locale.getDefault())
+        val calendarDate: Calendar? = binding.rangeCalenderOneTime.currentPageDate
 
-        binding.tvMonth.text = monthFormat.format(currentCalendar.time)
-        binding.tvYear.text = yearFormat.format(currentCalendar.time)
+        if (calendarDate != null) {
+            val monthFormat = SimpleDateFormat("MMMM", Locale.getDefault())
+            val yearFormat = SimpleDateFormat("yyyy", Locale.getDefault())
+
+            binding.tvMonth.text = monthFormat.format(calendarDate.time)
+            binding.tvYear.text = yearFormat.format(calendarDate.time)
+        } else {
+            binding.tvMonth.text = ""
+            binding.tvYear.text = ""
+        }
     }
+
 
     private fun isEmptyField() : Boolean {
 
@@ -312,6 +353,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
     }
     override fun onResume() {
         super.onResume()
-        getEventsData()
+       // getEventsData()
     }
 }

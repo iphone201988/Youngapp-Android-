@@ -19,7 +19,7 @@
         android:id="@+id/consMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/_10sdp"
+        android:padding="@dimen/_8sdp"
         android:onClick="@{v->callback.onItemClick(v,bean,pos)}"
         android:background="@drawable/profile_share_bg"
         android:layout_marginBottom="@dimen/_10sdp">
@@ -27,11 +27,11 @@
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivImage"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/_150sdp"
+        android:layout_height="@dimen/_140sdp"
         android:src="@drawable/ic_dummy_2"
         setImageFromUrl="@{bean.imageURL}"
         android:scaleType="centerCrop"
-        app:shapeAppearance="@style/Shape10"
+        app:shapeAppearance="@style/Shape5"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -39,7 +39,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
+             android:background="@drawable/bg_news_cons"
             android:layout_marginTop="-20dp"
             android:padding="@dimen/_5sdp"
             app:layout_constraintTop_toBottomOf="@id/ivImage"
