@@ -31,7 +31,8 @@
             android:max="100"
             android:progress="80"
             android:progressDrawable="@drawable/custom_progress_bar"
-            android:progressTint="@color/yellow_star" />
+            android:backgroundTint="@android:color/transparent" />
+
 
         <TextView
             android:id="@+id/star_count"

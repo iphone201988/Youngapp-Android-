@@ -252,6 +252,7 @@
             android:layout_height="@dimen/_25sdp"
             android:layout_marginTop="@dimen/_8sdp"
             android:layout_marginBottom="@dimen/_8sdp"
+            android:isIndicator="true"
             android:numStars="5"
             android:scaleX="1"
             android:scaleY="1"

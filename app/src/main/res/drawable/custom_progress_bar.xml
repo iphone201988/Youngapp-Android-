@@ -1,16 +1,20 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background track -->
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
-            <corners android:radius="12dp" />
+            <corners android:radius="20dp" />
             <solid android:color="#EEEEEE" />
         </shape>
     </item>
+
+    <!-- Progress fill -->
     <item android:id="@android:id/progress">
         <clip>
             <shape android:shape="rectangle">
-                <corners android:radius="12dp" />
+                <corners android:radius="20dp" />
                 <solid android:color="@color/yellow_star" />
             </shape>
         </clip>
     </item>
 </layer-list>
+

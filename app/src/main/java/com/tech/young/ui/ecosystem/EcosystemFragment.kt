@@ -208,7 +208,8 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
                     // handle back
                 }
                 R.id.filterList ->{
-                    binding.rvFilter.visibility = View.VISIBLE
+                    binding.rvFilter.visibility =
+                        if (binding.rvFilter.visibility == View.VISIBLE) View.GONE else View.VISIBLE
                 }
             }
         }

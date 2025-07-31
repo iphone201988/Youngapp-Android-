@@ -292,6 +292,7 @@
             android:layout_marginTop="@dimen/_8sdp"
             android:layout_marginBottom="@dimen/_8sdp"
             android:numStars="5"
+            android:isIndicator="true"
             android:scaleX="1"
             setRating="@{bean.ratings}"
             android:scaleY="1"

@@ -45,32 +45,6 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
 
-        <LinearLayout
-            android:id="@+id/shareLinear"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
-            app:layout_constraintEnd_toStartOf="@id/addIcon"
-            app:layout_constraintBottom_toBottomOf="parent">
-            <include
-                android:id="@+id/shareLayout"
-                layout="@layout/share_stream_layout"/>
-        </LinearLayout>
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/addIcon"
-            android:layout_width="@dimen/_35sdp"
-            android:layout_height="@dimen/_35sdp"
-            android:src="@drawable/ic_calendar"
-            android:background="@drawable/unselected_side_menu_bg"
-            android:padding="@dimen/_10sdp"
-            android:backgroundTint="@color/gray"
-            android:scaleType="fitXY"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/shareLinear"
-            app:layout_constraintBottom_toBottomOf="@id/shareLinear"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

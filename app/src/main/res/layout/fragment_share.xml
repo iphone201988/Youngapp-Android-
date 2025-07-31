@@ -48,18 +48,7 @@
             app:layout_constraintVertical_bias="1.0"
             tools:listitem="@layout/share_item_view" />
 
-        <LinearLayout
-            android:id="@+id/shareLinear"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginBottom="@dimen/_10sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-            <include
-                android:id="@+id/shareLayout"
-                layout="@layout/share_stream_layout"/>
-        </LinearLayout>
+<!--    -->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

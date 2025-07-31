@@ -9,6 +9,8 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -48,6 +50,12 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
     private var userSelectedKey : String ? = null
     private var selectedFilterData : FilterItem ? = null
     private var searchData : String ? = null
+
+
+    private var page  = 1
+    private var isLoading = false
+    private var isLastPage = false
+    private var totalPages : Int ? = null
     companion object {
         var selectedCategoryForExchange: String? = null
     }
@@ -70,6 +78,62 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
         // observer
 
         initObserver()
+
+
+        binding.rvVault.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                // 👇 Only continue if scrolling down
+                if (dy <= 0) return
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (!isLoading && page < totalPages!!) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
+                        firstVisibleItemPosition >= 0
+                    ) {
+                        isLoading = true // ✅ Lock before load
+                        selectedCategoryTitle?.let { loadNextPage(it) }
+                    }
+                }
+            }
+        })
+    }
+
+    private fun loadNextPage(title: String) {
+        page ++
+        isLoading = true
+
+        val apiTitle = mapTitleToApiValue(title)
+        val data = hashMapOf<String, Any>(
+            "userType" to apiTitle,
+            "page" to page
+        )
+
+        if (selectedKey?.isNotEmpty() == true) {
+            data[selectedKey!!] = true
+        }
+
+        if (userSelectedKey?.isNotEmpty() == true) {
+            data[userSelectedKey!!] = true
+        }
+
+        // New support for key-value pair (e.g., rating = 1)
+        if (selectedFilterData != null){
+            selectedFilterData?.let {
+                if (it.key.isNotEmpty() && it.value != null) {
+                    data[it.key] = it.value
+                }
+            }
+        }
+        if (searchData?.isNotEmpty() == true){
+            data["search"] = searchData!!
+        }
+
+        viewModel.getVault(data, Constants.GET_VAULT)
+
     }
 
     private fun initAdapter() {
@@ -205,6 +269,7 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
     }
 
     private fun getVault(title: String) {
+        page = 1
         val apiTitle = mapTitleToApiValue(title)
         val data = hashMapOf<String, Any>(
             "userType" to apiTitle,
@@ -263,8 +328,9 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
                     val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_vault")
                     startActivity(intent)
                 }
-                R.id.ivSort , R.id.tvSort ->{
-                    binding.rvSort.visibility = View.VISIBLE
+                R.id.tvSort, R.id.ivSort -> {
+                    binding.rvSort.visibility =
+                        if (binding.rvSort.visibility == View.VISIBLE) View.GONE else View.VISIBLE
                 }
             }
         })
@@ -284,7 +350,19 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
                             var myDataModel : VaultExchangeApiResponse? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data!= null){
-                                    vaultAdapter .list = myDataModel.data?.vaults
+                                    totalPages = myDataModel.pagination?.total ?: 1
+                                    if (page <= totalPages!!) {
+                                        isLoading = false
+                                    }
+                                    if (page == 1){
+                                        vaultAdapter.list = myDataModel.data?.vaults
+                                        vaultAdapter.notifyDataSetChanged()
+                                    } else{
+                                        vaultAdapter.addToList(myDataModel.data?.vaults)
+                                        vaultAdapter.notifyDataSetChanged()
+
+                                    }
+                                   // vaultAdapter .list = myDataModel.data?.vaults
                                 }
                             }
                         }

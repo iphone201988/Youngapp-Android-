@@ -7,6 +7,8 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -48,6 +50,9 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
     private var selectedFilterData : FilterItem ? = null
     private var searchData : String ? = null
 
+    private var page  = 1
+    private var isLoading = false
+    private var totalPages : Int ? = null
     companion object {
         var selectedCategoryForExchange: String? = null
     }
@@ -66,6 +71,62 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
         initOnClick()
         // observer
         initObserver()
+
+
+
+        binding.rvStream.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                // 👇 Only continue if scrolling down
+                if (dy <= 0) return
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (!isLoading && page < totalPages!!) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
+                        firstVisibleItemPosition >= 0
+                    ) {
+                        isLoading = true // ✅ Lock before load
+                        selectedCategoryTitle?.let { loadNextPage(it) }
+                    }
+                }
+            }
+        })
+    }
+
+    private fun loadNextPage(title: String) {
+        page++
+        isLoading = true
+        val apiTitle = mapTitleToApiValue(title)
+        val data = hashMapOf<String, Any>(
+            "userType" to apiTitle,
+            "type" to "stream",
+            "page" to page
+        )
+
+        if (selectedKey?.isNotEmpty() == true) {
+            data[selectedKey!!] = true
+        }
+        if (userSelectedKey?.isNotEmpty() == true) {
+            data[userSelectedKey!!] = true
+        }
+
+
+        // New support for key-value pair (e.g., rating = 1)
+        if (selectedFilterData != null){
+            selectedFilterData?.let {
+                if (it.key.isNotEmpty() && it.value != null) {
+                    data[it.key] = it.value
+                }
+            }
+        }
+        if (searchData?.isNotEmpty() == true){
+            data["search"] = searchData!!
+        }
+
+        viewModel.getStream(data, Constants.GET_ALL_POST)
     }
 
     /** handle view **/
@@ -217,8 +278,9 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
     private fun initOnClick() {
         viewModel.onClick.observe(viewLifecycleOwner, Observer {
             when(it?.id){
-                R.id.ivSort, R.id.tvSort ->{
-                binding.rvSort.visibility = View.VISIBLE
+                R.id.tvSort, R.id.ivSort -> {
+                    binding.rvSort.visibility =
+                        if (binding.rvSort.visibility == View.VISIBLE) View.GONE else View.VISIBLE
                 }
 
                 R.id.addStream ->{
@@ -244,7 +306,19 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                             val myDataModel :GetStreamApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
-                                    streamAdapter.list  = myDataModel.data?.posts
+                                    totalPages = myDataModel.pagination?.total ?: 1
+                                    if (page <= totalPages!!) {
+                                        isLoading = false
+                                    }
+                                    if (page == 1){
+                                        streamAdapter.list = myDataModel.data?.posts
+                                        streamAdapter.notifyDataSetChanged()
+                                    } else{
+                                        streamAdapter.addToList(myDataModel.data?.posts)
+                                        streamAdapter.notifyDataSetChanged()
+
+                                    }
+                                   // streamAdapter.list  = myDataModel.data?.posts
                                 }
                             }
                         }
@@ -315,6 +389,7 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
 
 
     private fun getStreamExchange(title: String) {
+        page = 1
         val apiTitle = mapTitleToApiValue(title)
         val data = hashMapOf<String, Any>(
             "userType" to apiTitle,

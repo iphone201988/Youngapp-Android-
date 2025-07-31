@@ -18,7 +18,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/consMain"
         android:layout_width="match_parent"
-        android:paddingVertical="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_5sdp"
         android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
         android:layout_height="wrap_content">
 
@@ -28,9 +28,10 @@
             android:layout_height="@dimen/_15sdp"
             android:src="@drawable/iv_tick"
             android:visibility="@{bean.isSelected()==true?View.VISIBLE:View.INVISIBLE}"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toBottomOf="@id/viewLine"
             app:tint="@color/black" />
         
         <TextView
@@ -43,15 +44,17 @@
             app:layout_constraintStart_toEndOf="@id/ivTick"
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toBottomOf="@id/viewLine"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
 
         <View
+            android:id="@+id/viewLine"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
             android:background="@color/text_gray"
             android:alpha="0.4"
-            app:layout_constraintBottom_toBottomOf="@+id/ivTick"/>
+            app:layout_constraintTop_toTopOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

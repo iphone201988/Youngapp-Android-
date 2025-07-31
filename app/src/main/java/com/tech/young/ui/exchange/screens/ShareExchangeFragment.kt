@@ -10,6 +10,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -53,6 +55,11 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
     private lateinit var categoryData: ArrayList<CategoryModel>
     private var selectedCategoryTitle: String? = null
 
+
+    private var page  = 1
+    private var isLoading = false
+    private var isLastPage = false
+    private var totalPages : Int ? = null
     companion object {
         var selectedCategoryForExchange: String? = null
     }
@@ -67,7 +74,68 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
         initObserver()
 
 
+        binding.rvShare.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                // 👇 Only continue if scrolling down
+                if (dy <= 0) return
 
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (!isLoading && page < totalPages!!) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
+                        firstVisibleItemPosition >= 0
+                    ) {
+                        isLoading = true // ✅ Lock before load
+                        selectedCategoryTitle?.let { loadNextPage(it) }
+                    }
+                }
+            }
+        })
+
+
+
+
+
+
+    }
+
+    private fun loadNextPage(title: String) {
+        isLoading = true
+        page++
+        val apiTitle = mapTitleToApiValue(title)  // ← safe mapping for userType
+        Log.i("Dasdasd", "getShareExchange:$apiTitle ")
+
+        val data = hashMapOf<String, Any>(
+            "userType" to apiTitle,
+            "type" to "share",
+            "page" to page
+        )
+
+        if (selectedKey?.isNotEmpty() == true) {
+            data[selectedKey!!] = true
+        }
+
+        if (userSelectedKey?.isNotEmpty() == true) {
+            data[userSelectedKey!!] = true
+        }
+
+        if (searchData?.isNotEmpty() == true){
+            data["search"] = searchData!!
+        }
+        // New support for key-value pair (e.g., rating = 1)
+        if (selectedFilterData != null){
+            selectedFilterData?.let {
+                if (it.key.isNotEmpty() && it.value != null) {
+                    data[it.key] = it.value
+                }
+            }
+        }
+
+
+        viewModel.getShare(data, Constants.GET_ALL_POST)
     }
 
     private fun searchView() {
@@ -207,6 +275,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
 
     /** API call **/
     private fun getShareExchange(title: String) {
+        page = 1
         val apiTitle = mapTitleToApiValue(title)  // ← safe mapping for userType
         Log.i("Dasdasd", "getShareExchange:$apiTitle ")
 
@@ -244,11 +313,12 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
 
     /** handle observer **/
     private fun initObserver(){
-        viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
+        viewModel.observeCommon.observe(viewLifecycleOwner, Observer let@{
             when(it?.status){
                 Status.LOADING ->{
                     showLoading()
                 }
+
                 Status.SUCCESS ->{
                     hideLoading()
                     when(it.message){
@@ -256,12 +326,24 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                             var myDataModel : ExchangeShareApiResponse? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data!= null){
-                                    shareAdapter.list = myDataModel.data?.posts
-                                    shareAdapter.notifyDataSetChanged()
+                                    totalPages = myDataModel.pagination?.total ?: 1
+                                    if (page <= totalPages!!) {
+                                        isLoading = false
+                                    }
+                                    if (page == 1){
+                                        shareAdapter.list = myDataModel.data?.posts
+                                        shareAdapter.notifyDataSetChanged()
+                                    } else{
+                                        shareAdapter.addToList(myDataModel.data?.posts)
+                                        shareAdapter.notifyDataSetChanged()
+
+                                    }
+
 
                                 }
                             }
                         }
+
                         "saveUnSave" ->{
                             val myDataModel : SavedPostApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if(myDataModel != null){
@@ -271,6 +353,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                                 }
                             }
                         }
+
                         "likeDislike" ->{
                             val myDataModel : SavedPostApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if(myDataModel != null){
@@ -280,12 +363,14 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                                 }
                             }
                         }
+
                         "reshare" ->{
                             val myDataModel : SimpleApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 showToast(myDataModel.message.toString())
                             }
                         }
+
                         "deletePost" ->{
                             val myDataModel : SimpleApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
@@ -296,10 +381,12 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                         }
                     }
                 }
+
                 Status.ERROR ->{
                     hideLoading()
                     showToast(it.message.toString())
                 }
+
                 else ->{
 
                 }
@@ -317,8 +404,9 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                     val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_share")
                     startActivity(intent)
                 }
-                R.id.tvSort , R.id.ivSort ->{
-                    binding.rvSort.visibility = View.VISIBLE
+                R.id.tvSort, R.id.ivSort -> {
+                    binding.rvSort.visibility =
+                        if (binding.rvSort.visibility == View.VISIBLE) View.GONE else View.VISIBLE
                 }
             }
         })

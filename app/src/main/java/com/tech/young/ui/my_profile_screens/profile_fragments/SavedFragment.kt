@@ -1,5 +1,6 @@
 package com.tech.young.ui.my_profile_screens.profile_fragments
 
+import android.content.Intent
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,6 +16,7 @@ import com.tech.young.ui.my_profile_screens.saved_fragments.VaultFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.Tab
 import com.google.android.material.tabs.TabLayoutMediator
+import com.tech.young.ui.common.CommonActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,6 +43,18 @@ class SavedFragment : BaseFragment<FragmentSavedBinding>() {
     /** handle view **/
     private fun initView(){
         initViewPagerAdapter()
+        binding.shareLayout.tabShare.setOnClickListener {
+            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_share")
+            startActivity(intent)
+        }
+        binding.shareLayout.tabStream.setOnClickListener {
+            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_stream")
+            startActivity(intent)
+        }
+        binding.shareLayout.tabVault.setOnClickListener {
+            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_vault")
+            startActivity(intent)
+        }
     }
 
     /** handle click **/

@@ -10,6 +10,8 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.applandeo.materialcalendarview.EventDay
 import com.applandeo.materialcalendarview.listeners.OnCalendarPageChangeListener
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener
@@ -32,6 +34,7 @@ import com.tech.young.ui.my_profile_screens.YourProfileVM
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.util.FileUtil
 import com.tech.young.data.api.SimpleApiResponse
+import com.tech.young.utils.VerticalPagination
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -51,7 +54,8 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
     private var topicList = ArrayList<DropDownData>()
     private var imageUri : Uri ?= null
     private var userSelectedDate: String? = null
-
+    private var pagination: VerticalPagination? = null
+    var page  = 1
     private var getList = listOf(
         "", "", "", "", ""
     )
@@ -61,7 +65,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
         // view
         initView()
 
-        getEventsData()
+        //getEventsData()
         // click
 
         getTopicsList()
@@ -107,7 +111,37 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
 
         }
         binding.rvReminder.adapter = reminderAdapter
-        reminderAdapter.notifyDataSetChanged()
+        val lm = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        pagination = VerticalPagination(lm, 2)
+        pagination?.setListener(object : VerticalPagination.VerticalScrollListener {
+            override fun onLoadMore() {
+                page++
+                Log.i("dsadasd", "onLoadMore: $page")
+                val data =  HashMap<String,Any>()
+                data["page"] = page
+                viewModel.getEvents(data, Constants.GET_EVENTS)
+
+            }
+        })
+        pagination?.let {
+            binding.rvReminder.addOnScrollListener(it)
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         topicAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_drop_down,BR.bean){v,m,pos ->
             when(v.id){
@@ -266,16 +300,28 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                 Status.SUCCESS ->{
                     hideLoading()
                     when(it.message){
-                        "getEvents" ->{
-                            val myDataModel : GetEventsApiResponse ? = BindingUtils.parseJson(it.data.toString())
-                            if (myDataModel != null){
-                                if (myDataModel.data != null){
-                                    if (myDataModel.data?.events != null){
-                                        reminderAdapter.list = myDataModel.data?.events
+                        "getEvents" -> {
+                            val myDataModel: GetEventsApiResponse? = BindingUtils.parseJson(it.data.toString())
+
+                            myDataModel?.data?.let { eventData ->
+                                eventData.pagination?.total?.let { total ->
+                                    if (page <= total) {
+                                        pagination?.isLoading = false
                                     }
+                                }
+
+                                val events = eventData.events
+                                if (page == 1) {
+                                    reminderAdapter.list = events
+                                } else {
+                                    reminderAdapter.addToList(events)
                                 }
                             }
                         }
+
+                        //  if (myDataModel.data?.events != null){
+//                                        reminderAdapter.list = myDataModel.data?.events
+//                                    }
                         "addEvent" ->{
                             val myDataModel : SimpleApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
@@ -353,6 +399,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
     }
     override fun onResume() {
         super.onResume()
-       // getEventsData()
+        getEventsData()
     }
 }

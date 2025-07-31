@@ -45,6 +45,8 @@ import com.google.gson.Gson
 import com.tech.young.data.ImageModel
 import com.tech.young.data.NewsItem
 import com.tech.young.data.NewsSection
+import com.tech.young.data.model.GetOtherUserProfileData
+import com.tech.young.data.model.GetProfileApiResponse
 import com.tech.young.databinding.ItemLayoutSubNewsBinding
 import com.tech.young.ui.common.CommonActivity
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -570,6 +572,31 @@ object BindingUtils {
 
 
 
+    @BindingAdapter("formatDateTimeForInbox")
+    @JvmStatic
+    fun formatDateTimeForInbox(textView: TextView, dateString: String?) {
+        if (dateString.isNullOrBlank()) {
+            textView.text = ""
+            return
+        }
+
+        try {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+            val outputFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
+            outputFormat.timeZone = TimeZone.getDefault()
+
+            val date = inputFormat.parse(dateString)
+            textView.text = if (date != null) outputFormat.format(date) else ""
+        } catch (e: Exception) {
+            e.printStackTrace()
+            textView.text = ""
+        }
+    }
+
+
+
     @BindingAdapter("childNewsAdapter")
     @JvmStatic
     fun childNewsAdapter(view : RecyclerView , subNews : List<NewsItem>?){
@@ -726,6 +753,54 @@ object BindingUtils {
             else -> ""  // default fallback
         }
         textView.text = label
+    }
+
+
+    @BindingAdapter("goalLabel")
+    @JvmStatic
+    fun goalLabel(textView: TextView, role: String?) {
+        val label = when (role?.lowercase()) {
+            "small_business" -> "Website"
+            "investor" -> "Website"
+            "financial_firm" -> "Website"
+            "startup" -> "Website"
+            "financial_advisor" -> "Website"
+            "general_member" -> "Goals"
+            else -> ""  // default fallback
+        }
+        textView.text = label
+    }
+
+
+
+    @BindingAdapter("setDataOnRole")
+    @JvmStatic
+    fun setDataOnRole(textView: TextView, data: GetProfileApiResponse.GetProfileApiResponseData.User?) {
+        data?.let {
+            val content = when (it.role?.lowercase()) {
+                "general_member" -> it.goals
+                else -> it.website
+            }
+
+            textView.text = content?.takeIf { it.isNotBlank() } ?: ""
+        } ?: run {
+            textView.text = ""
+        }
+    }
+
+    @BindingAdapter("setDataOnRoleOthers")
+    @JvmStatic
+    fun setDataOnRoleOthers(textView: TextView, data: GetOtherUserProfileData?) {
+        data?.let {
+            val content = when (it.role?.lowercase()) {
+                "general_member" -> it.goals
+                else -> it.website
+            }
+
+            textView.text = content?.takeIf { it.isNotBlank() } ?: ""
+        } ?: run {
+            textView.text = ""
+        }
     }
 
     @BindingAdapter("setFoundLabel")

@@ -5,6 +5,8 @@ import com.tech.young.data.IndexQuote
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.withTimeoutOrNull
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -33,19 +35,26 @@ object StockQuoteService {
 
     suspend fun fetchQuotes(symbols: List<String>): Map<String, IndexQuote> {
         val result = mutableMapOf<String, IndexQuote>()
-        coroutineScope {
+        supervisorScope {
             symbols.map { symbol ->
                 async {
                     try {
-                        val quote = apiService.getQuote(symbol, API_KEY)
-                        result[symbol] = quote
-                        Log.i("Dasdasds", "fetchQuotes: $quote")
+                        val quote = withTimeoutOrNull(8000) {
+                            apiService.getQuote(symbol, API_KEY)
+                        }
+                        if (quote != null) {
+                            result[symbol] = quote
+                            Log.i("QuoteFetcher", "$symbol: $quote")
+                        } else {
+                            Log.w("QuoteFetcher", "$symbol: fetch timed out")
+                        }
                     } catch (e: Exception) {
-                        Log.e("StockQuoteService", "Error fetching $symbol: ${e.message}")
+                        Log.e("QuoteFetcher", "Error fetching $symbol: ${e.message}", e)
                     }
                 }
             }.awaitAll()
         }
         return result
     }
+
 }

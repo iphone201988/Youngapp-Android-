@@ -17,10 +17,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/consMain"
+        android:paddingBottom="@dimen/_5sdp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
-        android:padding="12dp">
+        android:clickable="@{!bean.isHeader}"
+        android:focusable="@{!bean.isHeader}"
+        android:onClick="@{v -> callback.onItemClick(v,bean,pos)}">
 
         <!-- Header Text -->
         <TextView
@@ -42,9 +44,11 @@
             android:layout_height="16dp"
             android:src="@drawable/iv_tick"
             app:tint="@color/black"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:visibility="@{bean.isSelected ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewLine"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
@@ -56,20 +60,20 @@
             android:textColor="@android:color/black"
             android:visibility="@{bean.isHeader ? View.GONE : View.VISIBLE}"
             app:layout_constraintStart_toEndOf="@id/ivCheck"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toBottomOf="@id/viewLine"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="8dp"/>
 
         <!-- Optional Divider -->
         <View
+            android:id="@+id/viewLine"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="#ddd"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp"
-            android:visibility="@{bean.isHeader ? View.GONE : View.VISIBLE}" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

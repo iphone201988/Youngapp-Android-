@@ -70,21 +70,7 @@ class StreamFragment : BaseFragment<FragmentStreamBinding>() {
     private fun initView(){
         // adpater
         initAdapter()
-        binding.shareLayout.tabShare.setOnClickListener {
-            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_share")
-            startActivity(intent)
-        }
 
-        binding.shareLayout.tabStream.setOnClickListener {
-            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_stream")
-            startActivity(intent)
-        }
-
-
-        binding.shareLayout.tabVault.setOnClickListener {
-            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_vault")
-            startActivity(intent)
-        }
     }
 
     /** handle click **/

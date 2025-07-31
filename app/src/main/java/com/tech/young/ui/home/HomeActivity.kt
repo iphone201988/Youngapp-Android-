@@ -160,6 +160,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                         updateOtherUI(getString(R.string.ecosystem))
                     }
 
+                    is ViewMoreFragment ->{
+                        updateOtherUI("News")
+                    }
+
 
                 }
 

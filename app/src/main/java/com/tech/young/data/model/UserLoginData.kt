@@ -273,7 +273,7 @@ data class GetProfileApiResponse(
             val fundsRaising:String?,
             val fundsRaised:String?,
             val stageOfBusiness:String?,
-            var isRated: Double?
+            var isRated: Double?,
         ) : Parcelable {
             @Parcelize
             data class Location(
@@ -802,8 +802,14 @@ data class GetOtherUserProfileModelData(
 data class GetOtherUserProfileData(
     val _id: String?,
     val additionalPhotos: List<String?>?,
+    var goals: String?,
+    var website: String?,
     val age: String?,
     val chatId: String?,
+    var city: String?,
+    var productsOffered: String?,
+    var state: String?,
+    var about: String?,
     val company: String?,
     val countryCode: String?,
     val createdAt: String?,
@@ -1423,3 +1429,10 @@ data class DownloadHistoryApiResponse(
         )
     }
 }
+
+
+
+
+
+
+

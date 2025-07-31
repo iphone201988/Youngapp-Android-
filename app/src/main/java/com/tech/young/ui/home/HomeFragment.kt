@@ -32,6 +32,8 @@ import com.tech.young.databinding.ItemLayoutHomeNewsBinding
 import com.tech.young.databinding.ItemLayoutNewsDataBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.consumer_stream.ConsumerStreamActiivty
+import com.tech.young.ui.ecosystem.EcosystemFragment
+import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.exchange.screens.ShareExchangeFragment
 import com.tech.young.ui.streaming_activity.StreamActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -285,13 +287,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
 
         binding.tabLayoutBottom.tabExchange.setOnClickListener {
-            val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","exchange")
-            startActivity(intent)
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, ExchangeFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
         binding.tabLayoutBottom.tabEcosystem.setOnClickListener {
-            val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","ecosystem")
-            startActivity(intent)
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, EcosystemFragment())
+                .addToBackStack(null)
+                .commit()
         }
         setupTickerRecycler()
 
@@ -315,19 +321,29 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 R.id.tvNewsView->{
 //                    val intent = Intent(requireContext(), StreamActivity::class.java)
 //                    startActivity(intent)
-                    val intent=Intent(requireContext(),CommonActivity::class.java)
-                    intent.putExtra("from","view_more")
-                    startActivity(intent)
+//                    val intent=Intent(requireContext(),CommonActivity::class.java)
+//                    intent.putExtra("from","view_more")
+//                    startActivity(intent)
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, ViewMoreFragment())
+                        .addToBackStack(null)
+                        .commit()
                 }
-                R.id.tvMembersView->{
-                    val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","exchange")
+                R.id.tvMembersView -> {
                     ShareExchangeFragment.selectedCategoryForExchange = "Members"
-                    startActivity(intent)
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, ExchangeFragment())
+                        .addToBackStack(null)
+                        .commit()
                 }
+
                 R.id.tvSmallView->{
-                    val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","exchange")
                     ShareExchangeFragment.selectedCategoryForExchange = "Small Businesses"
-                    startActivity(intent)
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, ExchangeFragment())
+                        .addToBackStack(null)
+                        .commit()
 //                    val intent=Intent(requireContext(),CommonActivity::class.java)
 //                    intent.putExtra("from","view_more")
 //                    startActivity(intent)

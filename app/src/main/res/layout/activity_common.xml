@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:paddingTop="@dimen/_30sdp"
+        android:fitsSystemWindows="true"
         tools:context=".ui.common.CommonActivity">
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/mainNavigationHost"

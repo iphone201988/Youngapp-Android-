@@ -13,6 +13,7 @@
         android:layout_gravity="start"
         android:orientation="vertical"
         android:layout_marginVertical="@dimen/_5sdp">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
