@@ -6,7 +6,6 @@ object Constants {
 //  //  const val BASE_URL_IMAGE = "https://3.148.147.103:8000"
     const val BASE_URL_IMAGE = "https://youngappbucket.s3.us-east-2.amazonaws.com"
 
-   // const val BASE_URL = "http://192.168.0.199:8888/api/v1/"
 
     const val GOOGLE_API_KEY = "AIzaSyD5Jt2e9ocVmXovnsOsdmtdhPRkP8m9IhQ"
 

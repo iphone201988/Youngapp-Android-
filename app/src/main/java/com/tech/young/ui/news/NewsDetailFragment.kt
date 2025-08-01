@@ -11,6 +11,7 @@ import com.tech.young.R
 import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
+import com.tech.young.data.NewsItem
 import com.tech.young.data.RSSItem
 import com.tech.young.databinding.FragmentNewsDetailBinding
 import com.tech.young.databinding.ItemLayoutNewsDataBinding
@@ -215,4 +216,6 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
             }
         }
     }
+
+
 }

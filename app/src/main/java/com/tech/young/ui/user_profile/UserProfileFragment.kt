@@ -96,6 +96,22 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
         viewModel.getAds(Constants.GET_ADS)
         // adapter
         initAdapter()
+
+        binding.includeShare.tabShare.setOnClickListener {
+            val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","common_share")
+            startActivity(intent)
+        }
+
+        binding.includeShare.tabStream.setOnClickListener {
+            val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","common_stream")
+            startActivity(intent)
+        }
+
+
+        binding.includeShare.tabVault.setOnClickListener {
+            val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","common_vault")
+            startActivity(intent)
+        }
     }
 
     /** handle click **/

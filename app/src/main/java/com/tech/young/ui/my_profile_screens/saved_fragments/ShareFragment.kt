@@ -144,8 +144,8 @@ class ShareFragment : BaseFragment<FragmentShareBinding>() {
             "Advisors" -> "financial_advisor"
             "Startups" -> "startup"
             "Small Businesses" -> "small_business"
-            "Insurance" -> "insurance"
-            "VCs" -> "investor"
+            "Investor" -> "investor"
+            "Firm" -> "financial_firm"
             "Members" -> "general_member"
             else -> title.lowercase().replace(" ", "_")
         }
@@ -156,8 +156,8 @@ class ShareFragment : BaseFragment<FragmentShareBinding>() {
         list.add(CategoryModel("Advisors"))
         list.add(CategoryModel("Startups"))
         list.add(CategoryModel("Small Businesses"))
-        list.add(CategoryModel("Insurance"))
-        list.add(CategoryModel("VCs"))
+        list.add(CategoryModel("Investor"))
+        list.add(CategoryModel("Firm"))
         return list
     }
     private var getList = listOf(

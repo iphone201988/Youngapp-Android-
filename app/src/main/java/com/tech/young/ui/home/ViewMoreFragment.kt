@@ -1,5 +1,7 @@
 package com.tech.young.ui.home
 
+import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -10,19 +12,24 @@ import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
+import com.tech.young.base.utils.event.SingleRequestEvent
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.NewsItem
 import com.tech.young.data.NewsSection
+import com.tech.young.data.SubViewClickBean
 import com.tech.young.data.api.Constants
 import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentViewMoreBinding
 import com.tech.young.databinding.ItemLayoutNewsBinding
 import com.tech.young.databinding.ViewMoreItemViewBinding
+import com.tech.young.ui.exchange.ExchangeFragment
+import com.tech.young.ui.news.NewsDetailFragment
+import com.tech.young.ui.news.NewsItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>() {
+class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>(){
     private val viewModel: HomeActivityVM by viewModels()
 
     // adapter
@@ -30,6 +37,11 @@ class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>() {
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
 
     private var newsSections = ArrayList<NewsSection>()
+
+    companion object{
+
+        val subViewClick: SingleRequestEvent<SubViewClickBean> = SingleRequestEvent()
+    }
     override fun onCreateView(view: View) {
         getNewsList()
         // view
@@ -137,6 +149,23 @@ class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>() {
 
     /** handle observer **/
     private fun initObserver() {
+
+        subViewClick.observe(requireActivity(), Observer { it ->
+            val bundle = Bundle()
+            bundle.putString("url", it?.data?.bean?.link) // 👈 pass URL from observer
+
+            val fragment = NewsDetailFragment()
+            fragment.arguments = bundle
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, fragment)
+                .addToBackStack(null)
+                .commit()
+        })
+
+
+
+
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when(it?.status){
                 Status.LOADING ->{
@@ -191,5 +220,7 @@ class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>() {
     private var getList = listOf(
         "", "", "", "", ""
     )
+
+
 
 }

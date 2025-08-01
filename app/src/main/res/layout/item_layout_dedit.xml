@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <variable
+            name="bean"
+            type="com.tech.young.data.DiditItems" />
 
     </data>
 
@@ -28,7 +31,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/_12ssp"
             android:layout_marginHorizontal="@dimen/_5sdp"
-            android:text="Instant verification under 2 min"
+            android:text="@{bean.title}"
             app:layout_constraintStart_toEndOf="@id/icon"
             app:layout_constraintTop_toTopOf="@id/icon"
             app:layout_constraintEnd_toEndOf="parent"/>

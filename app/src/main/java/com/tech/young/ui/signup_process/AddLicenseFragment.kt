@@ -44,6 +44,7 @@ class AddLicenseFragment : BaseFragment<FragmentAddLicenseBinding>() {
     }
 
     private fun getDiditList() {
+        deditList.clear()
         deditList.add(DiditItems("Instant verification in under 2 minutes"))
         deditList.add(DiditItems("End-to-end encrypted data protection"))
         deditList.add(DiditItems("Mobile-optimized verification flow"))

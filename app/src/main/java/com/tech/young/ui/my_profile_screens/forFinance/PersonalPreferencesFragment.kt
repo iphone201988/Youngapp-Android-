@@ -316,6 +316,24 @@ class PersonalPreferencesFragment : BaseFragment<FragmentPersonalPreferencesBind
                 R.id.clImage,R.id.ivImage->{
                     cameraGalleryBottomSheet.show()
                 }
+                R.id.ivDelete -> {
+                    if (!m.image_Url.isNullOrEmpty()) {
+                        val imageUrl = m.image_Url!!
+
+                        val part = MultipartBody.Part.createFormData(
+                            "additionalPhotosToBeRemoved[]", // 👈 array key
+                            null,
+                            imageUrl.toRequestBody("text/plain".toMediaTypeOrNull())
+                        )
+
+                        viewModel.updateProfile(
+                            Constants.UPDATE_USER,
+                            hashMapOf(),              // no other data
+                            null,                     // no single file
+                            mutableListOf(part)       // ✅ send as a list
+                        )
+                    }
+                }
             }
         }
         yourImageAdapter.list = getImageList()

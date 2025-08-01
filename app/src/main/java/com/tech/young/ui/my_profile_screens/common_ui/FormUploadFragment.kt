@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,7 +39,11 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import java.io.FileOutputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 @AndroidEntryPoint
 class FormUploadFragment : BaseFragment<FragmentFormUploadBinding>(),
@@ -89,6 +94,7 @@ class FormUploadFragment : BaseFragment<FragmentFormUploadBinding>(),
                 profileData?.user?.formUpload?.forEach {
                     imageUriList.add(ImageModel(it, null, "2"))
                 }
+                Log.i("fdsfsdfsdf", "initView: $imageUriList")
                 yourImageAdapter.list = imageUriList
             }
         }
@@ -198,6 +204,25 @@ class FormUploadFragment : BaseFragment<FragmentFormUploadBinding>(),
                 R.id.clImage, R.id.ivImage -> {
                     cameraGalleryBottomSheet.show()
                 }
+                R.id.ivDelete -> {
+                    if (!m.image_Url.isNullOrEmpty()) {
+                        val imageUrl = m.image_Url!!
+
+                        val part = MultipartBody.Part.createFormData(
+                            "formUploadToBeRemoved[]", // 👈 array key
+                            null,
+                            imageUrl.toRequestBody("text/plain".toMediaTypeOrNull())
+                        )
+
+                        viewModel.updateProfile(
+                            Constants.UPDATE_USER,
+                            hashMapOf(),              // no other data
+                            null,                     // no single file
+                            mutableListOf(part)       // ✅ send as a list
+                        )
+                    }
+                }
+
             }
         }
         yourImageAdapter.list = getImageList()
@@ -211,50 +236,89 @@ class FormUploadFragment : BaseFragment<FragmentFormUploadBinding>(),
     }
 
 
+//    private fun selectImage() {
+//        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+//            type = "image/*"
+//            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+//            action = Intent.ACTION_GET_CONTENT
+//        }
+//        pickImageLauncher.launch(Intent.createChooser(intent, "Select Picture"))
+//    }
+
     private fun selectImage() {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
-            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            action = Intent.ACTION_GET_CONTENT
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false) // Limit to single image
         }
         pickImageLauncher.launch(Intent.createChooser(intent, "Select Picture"))
     }
+
+//    private fun galleryLauncher() {
+//        pickImageLauncher =
+//            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+//                if (result.resultCode == Activity.RESULT_OK) {
+//                    result.data?.let { data ->
+//                        try {
+//                            val clipData = data.clipData
+////                            if (clipData != null) {
+////                                // Multiple images selected
+////                                for (i in 0 until clipData.itemCount) {
+////                                    clipData.getItemAt(i)?.uri?.let { uri ->
+////                                        if (imageUriList.none { it.type == "1" }) {
+////                                            imageUriList.add(ImageModel(null, null, "1"))
+////                                        }
+////                                        imageUriList.add(ImageModel(null, uri, "2"))
+////                                        convertMultipartPartGal(uri).let { part ->
+////                                            imageMultiplatform.add(part)
+////                                        }
+////
+////                                        handleSelectedImages(imageUriList)
+////                                    }
+////                                }
+////                            }
+////
+// //                          else {
+//                                // Single image selected
+//                                data.data?.let { uri ->
+//                                    if (imageUriList.none { it.type == "1" }) {
+//                                        imageUriList.add(ImageModel(null, null, "1"))
+//                                    }
+//                                    imageUriList.add(ImageModel(null, uri, "2"))
+//                                    convertMultipartPartGal(uri).let { part ->
+//                                        imageMultiplatform.add(part)
+//                                    }
+//                                    handleSelectedImages(imageUriList)
+//                                }
+//  //                          }
+//                        } catch (e: Exception) {
+//                            e.printStackTrace()
+//                        }
+//                    }
+//                }
+//            }
+//    }
+
 
     private fun galleryLauncher() {
         pickImageLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
-                    result.data?.let { data ->
+                    result.data?.data?.let { uri ->
                         try {
-                            val clipData = data.clipData
-                            if (clipData != null) {
-                                // Multiple images selected
-                                for (i in 0 until clipData.itemCount) {
-                                    clipData.getItemAt(i)?.uri?.let { uri ->
-                                        if (imageUriList.none { it.type == "1" }) {
-                                            imageUriList.add(ImageModel(null, null, "1"))
-                                        }
-                                        imageUriList.add(ImageModel(null, uri, "2"))
-                                        convertMultipartPartGal(uri).let { part ->
-                                            imageMultiplatform.add(part)
-                                        }
+                            // Optional: clear previous image entries
+                            imageUriList.removeAll { it.type == "2" }
+                            imageMultiplatform.clear()
 
-                                        handleSelectedImages(imageUriList)
-                                    }
-                                }
-                            } else {
-                                // Single image selected
-                                data.data?.let { uri ->
-                                    if (imageUriList.none { it.type == "1" }) {
-                                        imageUriList.add(ImageModel(null, null, "1"))
-                                    }
-                                    imageUriList.add(ImageModel(null, uri, "2"))
-                                    convertMultipartPartGal(uri).let { part ->
-                                        imageMultiplatform.add(part)
-                                    }
-                                    handleSelectedImages(imageUriList)
-                                }
+                            if (imageUriList.none { it.type == "1" }) {
+                                imageUriList.add(ImageModel(null, null, "1"))
                             }
+
+                            imageUriList.add(ImageModel(null, uri, "2"))
+
+                            val part = convertMultipartPartGal(uri)
+                            imageMultiplatform.add(part)
+
+                            handleSelectedImages(imageUriList)
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
@@ -262,6 +326,7 @@ class FormUploadFragment : BaseFragment<FragmentFormUploadBinding>(),
                 }
             }
     }
+
 
     private var allGranted = false
     private val permissionResultLauncher =
@@ -357,6 +422,10 @@ class FormUploadFragment : BaseFragment<FragmentFormUploadBinding>(),
             "formUpload", newFile.name, newFile.asRequestBody("image/*".toMediaTypeOrNull())
         )
     }
+
+
+
+
 
     override fun onViewClick(view: View?) {
 

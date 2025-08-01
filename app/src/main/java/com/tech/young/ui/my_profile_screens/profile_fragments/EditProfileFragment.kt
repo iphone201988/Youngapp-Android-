@@ -26,6 +26,8 @@ import com.tech.young.databinding.ItemLayoutDeleteAccountPopupBinding
 import com.tech.young.databinding.ItemLayoutLogoutPopupBinding
 import com.tech.young.ui.MySplashActivity
 import com.tech.young.ui.common.CommonActivity
+import com.tech.young.ui.ecosystem.EcosystemFragment
+import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.my_profile_screens.YourProfileVM
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -49,6 +51,21 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
         initOnClick()
         // observer
         initObserver()
+
+
+        binding.tabLayoutBottom.tabExchange.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, ExchangeFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.tabLayoutBottom.tabEcosystem.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, EcosystemFragment())
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     override fun getLayoutResource(): Int {
@@ -124,12 +141,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
     private fun initOnClick() {
         viewModel.onClick.observe(requireActivity()){
             when(it?.id){
-                R.id.tabEcosystem->{
-                    // handle click
-                }
-                R.id.tabExchange->{
-                    // handle click
-                }
+
             }
         }
 

@@ -45,10 +45,13 @@ import com.google.gson.Gson
 import com.tech.young.data.ImageModel
 import com.tech.young.data.NewsItem
 import com.tech.young.data.NewsSection
+import com.tech.young.data.SubViewClickBean
 import com.tech.young.data.model.GetOtherUserProfileData
 import com.tech.young.data.model.GetProfileApiResponse
 import com.tech.young.databinding.ItemLayoutSubNewsBinding
 import com.tech.young.ui.common.CommonActivity
+import com.tech.young.ui.home.ViewMoreFragment
+import com.tech.young.ui.news.NewsItemClickListener
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -608,10 +611,15 @@ object BindingUtils {
         val eventAdapter = SimpleRecyclerViewAdapter<NewsItem, ItemLayoutSubNewsBinding>(R.layout.item_layout_sub_news,BR.bean){ v, m, pos ->
             when(v.id){
                 R.id.consMain ->{
-                    val intent=Intent(context, CommonActivity::class.java)
-                    intent.putExtra("from","news_details")
-                    intent.putExtra("url",m.link)
-                    context.startActivity(intent)
+//                    val intent=Intent(context, CommonActivity::class.java)
+//                    intent.putExtra("from","news_details")
+//                    intent.putExtra("url",m.link)
+//                    context.startActivity(intent)
+                    val clickData = SubViewClickBean(v!!, m, pos)
+                    ViewMoreFragment.subViewClick.value = Resource.success("dssaasas",clickData)
+
+
+
                 }
             }
         }
@@ -620,6 +628,8 @@ object BindingUtils {
         eventAdapter.notifyDataSetChanged()
 
     }
+
+
 
 
     fun convertUtcToLocalTime(utcDate: String?): String {

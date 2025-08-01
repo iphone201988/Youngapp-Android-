@@ -57,8 +57,10 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
     private var searchData : String ? = null
 
 
-    private var pagination: VerticalPagination? = null
-    var page  = 1
+    private var page  = 1
+    private var isLoading = false
+    private var isLastPage = false
+    private var totalPages : Int ? = null
 
 
     companion object {
@@ -73,6 +75,58 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
         initOnClick()
         searchView()
         initObserver()
+
+        binding.rvUsers.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                // 👇 Only continue if scrolling down
+                if (dy <= 0) return
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (!isLoading && page < totalPages!!) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
+                        firstVisibleItemPosition >= 0
+                    ) {
+                        isLoading = true // ✅ Lock before load
+                        selectedCategoryTitle?.let { loadNextPage(it) }
+                    }
+                }
+            }
+        })
+
+    }
+
+    private fun loadNextPage(title: String) {
+        isLoading = true
+        page++
+
+
+        val apiTitle = mapTitleToApiValue(title)  // ← safe mapping for userType
+        Log.i("Dasdasd", "getShareExchange:$apiTitle ")
+
+        val data = hashMapOf<String, Any>(
+            "category" to apiTitle
+        )
+        if (userSelectedKey?.isNotEmpty() == true) {
+            data[userSelectedKey!!] = true
+        }
+
+        if (selectedFilterData != null){
+            selectedFilterData?.let {
+                if (it.key.isNotEmpty() && it.value != null) {
+                    data[it.key] = it.value
+                }
+            }
+        }
+
+        if (searchData != null){
+            data["search"] = searchData!!
+        }
+
+        viewModel.getLatestUser(data,Constants.GET_USERS)
     }
 
 
@@ -302,18 +356,6 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
             }
         }
         binding.rvUsers.adapter = usersAdapter
-        val lm = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        pagination = VerticalPagination(lm, 2)
-        pagination?.setListener(object : VerticalPagination.VerticalScrollListener {
-            override fun onLoadMore() {
-                page++
-
-
-            }
-        })
-        pagination?.let {
-            binding.rvUsers.addOnScrollListener(it)
-        }
 
         adsAdapter = SimpleRecyclerViewAdapter(R.layout.ads_item_view, BR.bean) { v, m, pos ->
             when (v.id) {

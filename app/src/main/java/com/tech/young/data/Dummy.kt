@@ -2,6 +2,7 @@ package com.tech.young.data
 
 import android.net.Uri
 import android.os.Parcelable
+import android.view.View
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 import java.util.Date
@@ -20,6 +21,12 @@ data class DropDownData(
 
 ) : Parcelable
 
+
+data class SubViewClickBean(
+    var v : View,
+    var bean : NewsItem,
+    var position : Int
+)
 
 // Parent item - Section
 data class NewsSection(
