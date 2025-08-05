@@ -34,6 +34,8 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.util.FileUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.tech.young.data.model.GetAdsAPiResponse
+import com.tech.young.ui.ecosystem.EcosystemFragment
+import com.tech.young.ui.exchange.ExchangeFragment
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -108,6 +110,21 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
                 MotionEvent.ACTION_UP -> parent.requestDisallowInterceptTouchEvent(false)
             }
             false
+        }
+
+
+        binding.tabLayoutBottom.tabExchange.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, ExchangeFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.tabLayoutBottom.tabEcosystem.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, EcosystemFragment())
+                .addToBackStack(null)
+                .commit()
         }
     }
 

@@ -35,6 +35,7 @@ import com.tech.young.ui.consumer_stream.ConsumerStreamActiivty
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.exchange.screens.ShareExchangeFragment
+import com.tech.young.ui.share_screen.CommonShareFragment
 import com.tech.young.ui.streaming_activity.StreamActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -189,7 +190,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                         }
                         tagName.equals("media:content", ignoreCase = true) ||
                                 (tagName == "content" && parser.prefix == "media") -> {
-                            // Detect namespaced media:content
+                            // Detect name spaced media:content
                             imageUrl = parser.getAttributeValue(null, "url")
                             if (imageUrl.isNullOrEmpty()) {
                                 for (i in 0 until parser.attributeCount) {
@@ -271,19 +272,34 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     private fun initView(){
         binding.tabShare.tabShare.setOnClickListener {
-         val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","common_share")
-            startActivity(intent)
+//         val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","common_share")
+//            startActivity(intent)
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, CommonShareFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
         binding.tabShare.tabStream.setOnClickListener {
-         val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","common_stream")
-            startActivity(intent)
+//         val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","common_stream")
+//            startActivity(intent)
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, CommonShareFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
 
         binding.tabShare.tabVault.setOnClickListener {
-         val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","common_vault")
-            startActivity(intent)
+//         val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","common_vault")
+//            startActivity(intent)
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, CommonShareFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
         binding.tabLayoutBottom.tabExchange.setOnClickListener {

@@ -1,7 +1,9 @@
 package com.tech.young.ui.my_profile_screens.profile_fragments
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.net.Uri
+import android.provider.OpenableColumns
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -246,8 +248,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                     binding.consAddEvent.visibility = View.VISIBLE
                 }
                 R.id.tvSubmit ->{
-                    binding.calendarCons.visibility = View.VISIBLE
-                    binding.consAddEvent.visibility = View.GONE
                     if (isEmptyField()){
                         val multipartImage = imageUri?.let { convertImageToMultipart(it) }
                         val data = HashMap<String, RequestBody>()
@@ -282,14 +282,45 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                 val fileUri = data?.data
                 imageUri = fileUri
 
-                //  Log.i("dasd", ": $imageUri")
-            } else if (resultCode == ImagePicker.RESULT_ERROR) {
+                fileUri?.let { uri ->
+                    val fileName = getFileNameFromUri(requireContext(), uri)
+                    binding.etUploadFile.setText(fileName)
+                }
 
+            } else if (resultCode == ImagePicker.RESULT_ERROR) {
+                // Handle error if needed
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
+
+
+    private fun getFileNameFromUri(context: Context, uri: Uri): String {
+        var result: String? = null
+        if (uri.scheme == "content") {
+            val cursor = context.contentResolver.query(uri, null, null, null, null)
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME))
+                }
+            } finally {
+                cursor?.close()
+            }
+        }
+
+        if (result == null) {
+            result = uri.path
+            val cut = result?.lastIndexOf('/')
+            if (cut != null && cut != -1) {
+                result = result?.substring(cut + 1)
+            }
+        }
+
+        return result ?: "unknown_file"
+    }
+
+
     /** handle observer **/
     private fun initObserver() {
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
@@ -327,6 +358,8 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                             if (myDataModel != null){
                                 showToast(myDataModel.message.toString())
                                 getEventsData()
+                                binding.calendarCons.visibility = View.VISIBLE
+                                binding.consAddEvent.visibility = View.GONE
                             }
                         }
                     }

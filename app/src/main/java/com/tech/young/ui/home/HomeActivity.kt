@@ -16,6 +16,8 @@ import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BaseCustomDialog
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
+import com.tech.young.base.utils.event.SingleRequestEvent
+import com.tech.young.data.SubViewClickBean
 import com.tech.young.data.api.Constants
 import com.tech.young.data.api.SimpleApiResponse
 import com.tech.young.data.model.GetProfileApiResponse
@@ -34,6 +36,10 @@ import com.tech.young.ui.inbox.InboxFragment
 import com.tech.young.ui.my_profile_screens.YourProfileFragment
 import com.tech.young.ui.policies_about.AboutFragment
 import com.tech.young.ui.policies_about.PoliciesFragment
+import com.tech.young.ui.share_screen.CommonShareFragment
+import com.tech.young.ui.stream_screen.CommonStreamFragment
+import com.tech.young.ui.user_profile.UserProfileFragment
+import com.tech.young.ui.vault_screen.CommonVaultFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,6 +49,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
     private lateinit var logoutPopup : BaseCustomDialog<ItemLayoutLogoutPopupBinding>
 
     private var name: String = "Your name"
+
+    companion object{
+        var userName  : String ? = null
+    }
+
+
     override fun getLayoutResource(): Int {
         return R.layout.activity_home
     }
@@ -164,7 +176,20 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                         updateOtherUI("News")
                     }
 
+                    is CommonShareFragment ->{
+                        updateOtherUI("Share")
+                    }
 
+                    is  CommonStreamFragment ->{
+                        updateOtherUI("Stream")
+                    }
+
+                    is CommonVaultFragment ->{
+                        updateOtherUI("Vault")
+                    }
+                    is UserProfileFragment ->{
+                        updateOtherUI(userName.toString())
+                    }
                 }
 
             }
@@ -388,5 +413,25 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
         }
     }
 
-
+//    override fun onResume() {
+//        navClick.observe(this){
+//            Log.i("fdfdsfs", "onResume:${navClick} ")
+//            when(it?.status){
+//                Status.LOADING ->{
+//
+//                }
+//                Status.SUCCESS ->{
+//                    Log.i("fdfdsfs", "success:${navClick} ")
+//                    binding.drawerLayout.openDrawer(GravityCompat.START)
+//
+//            }Status.ERROR ->{
+//
+//            }
+//                else ->{
+//
+//                }
+//            }
+//        }
+//        super.onResume()
+//    }
 }

@@ -20,6 +20,7 @@ import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BindingUtils
+import com.tech.young.base.utils.Resource
 import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.UserData
@@ -36,6 +37,7 @@ import com.tech.young.databinding.FragmentUserProfileBinding
 import com.tech.young.databinding.ShareProfileItemViewBinding
 import com.tech.young.databinding.YourPhotosItemViewBinding
 import com.tech.young.ui.common.CommonActivity
+import com.tech.young.ui.home.HomeActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -168,6 +170,10 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
                 R.id.icRatingArrow -> {
                     showRatingDialog()
                 }
+//                R.id.actionToggleBtn ->{
+//                    HomeActivity.navClick.postValue(Resource.success("clicked",true))
+//                }
+
 
 
             }

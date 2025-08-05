@@ -289,18 +289,28 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
             data[selectedKey!!] = true
         }
 
-        if (userSelectedKey?.isNotEmpty() == true) {
-            data[userSelectedKey!!] = true
-        }
+//        if (userSelectedKey?.isNotEmpty() == true) {
+//            data[userSelectedKey!!] = true
+//        }
 
         if (searchData?.isNotEmpty() == true){
             data["search"] = searchData!!
         }
         // New support for key-value pair (e.g., rating = 1)
+//        if (selectedFilterData != null){
+//            selectedFilterData?.let {
+//                if (it.key.isNotEmpty() && it.value != null) {
+//                    data[it.key] = it.value
+//                }
+//            }
+//        }
+
         if (selectedFilterData != null){
             selectedFilterData?.let {
                 if (it.key.isNotEmpty() && it.value != null) {
-                    data[it.key] = it.value
+                    if (selectedKey.isNullOrEmpty() || it.key == "rating") {
+                        data[it.key] = it.value
+                    }
                 }
             }
         }

@@ -34,6 +34,8 @@ import com.tech.young.databinding.BotttomSheetTopicsBinding
 import com.tech.young.databinding.FragmentCommonStreamBinding
 import com.tech.young.databinding.ItemLayoutDropDownBinding
 import com.tech.young.ui.common.CommonActivity
+import com.tech.young.ui.ecosystem.EcosystemFragment
+import com.tech.young.ui.exchange.ExchangeFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -93,6 +95,21 @@ class CommonStreamFragment : BaseFragment<FragmentCommonStreamBinding>() ,BaseCu
                 MotionEvent.ACTION_UP -> parent.requestDisallowInterceptTouchEvent(false)
             }
             false
+        }
+
+
+        binding.tabLayoutBottom.tabExchange.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, ExchangeFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.tabLayoutBottom.tabEcosystem.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, EcosystemFragment())
+                .addToBackStack(null)
+                .commit()
         }
         
     }

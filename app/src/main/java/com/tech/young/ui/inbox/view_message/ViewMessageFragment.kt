@@ -88,6 +88,7 @@ class ViewMessageFragment : BaseFragment<FragmentViewMessageBinding>() {
                 if (messageData != null && messageData.message != null) {
                     //val chatData = convertToChatHistoryApiResponseData(messageData.data)
                     // Add the new message to the chat adapter and refresh the RecyclerView
+                    threadId = messageData.chatId
                     Log.i("dfdfd", "receivedMessage: ${messageData.message} ")
 
                     val chatData = convertToChatMessage(messageData!!)
@@ -292,10 +293,14 @@ class ViewMessageFragment : BaseFragment<FragmentViewMessageBinding>() {
         }
 
         try {
-            val jsonData = JSONObject().apply {
-                put("chatId", threadId)
-                put("receiverId", recId)
-                put("message", message)
+            val jsonData = JSONObject()
+
+            if (threadId != null) {
+                jsonData.put("chatId", threadId)
+                jsonData.put("message", message)
+            } else {
+                jsonData.put("receiverId", recId)
+                jsonData.put("message", message)
             }
 
             Log.d("SocketMessage", "Constructed JSON: $jsonData")
@@ -312,6 +317,7 @@ class ViewMessageFragment : BaseFragment<FragmentViewMessageBinding>() {
             Log.e("SocketMessage", "Exception while sending message: ${e.localizedMessage}")
             e.printStackTrace()
         }
+
     }
 
 

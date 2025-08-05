@@ -68,28 +68,30 @@ class MainSplashActivity : BaseActivity<ActivityMainSplashBinding>(), LocationRe
             object : PermissionHandler() {
                 override fun onGranted() {
                     createLocationHandler()
-                    android.os.Handler().postDelayed({
-                        val loginData = sharedPrefManager.getLoginData()
-                        if (loginData == null) {
-                            // Not logged in
-                            val intent =
-                                Intent(this@MainSplashActivity, MySplashActivity::class.java)
-                            startActivity(intent)
-                        } else {
-                            val intent =
-                                Intent(this@MainSplashActivity, HomeActivity::class.java)
-                            startActivity(intent)
-
-                        }
-                    }, 1000)
+                    proceedToNextScreen()
                 }
 
                 override fun onDenied(context: Context?, deniedPermissions: ArrayList<String>?) {
-                    super.onDenied(context, deniedPermissions)
+                    // Proceed even if location is denied
+                    proceedToNextScreen()
                 }
-            })
-
+            }
+        )
     }
+
+    private fun proceedToNextScreen() {
+        android.os.Handler().postDelayed({
+            val loginData = sharedPrefManager.getLoginData()
+            if (loginData == null) {
+                // Not logged in
+                startActivity(Intent(this@MainSplashActivity, MySplashActivity::class.java))
+            } else {
+                startActivity(Intent(this@MainSplashActivity, HomeActivity::class.java))
+            }
+            finish() // optional: close splash screen
+        }, 1000)
+    }
+
 
 
     private fun createLocationHandler() {

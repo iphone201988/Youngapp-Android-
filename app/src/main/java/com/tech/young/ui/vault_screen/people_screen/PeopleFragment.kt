@@ -7,6 +7,8 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -36,8 +38,17 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
     private var searchJob: Job? = null
     private var searchData : String ? = null
 
+    private var selectedActualValues : String ?= null
+
     private var selectedCategory: ArrayList<DropDownData>? = null
     private lateinit var userAdapter : SimpleRecyclerViewAdapter<GetUserApiResponse.Data.User, ItemLayoutPeoplesBinding>
+
+
+    private var page  = 1
+    private var isLoading = false
+    private var isLastPage = false
+    private var totalPages : Int ? = null
+
     override fun onCreateView(view: View) {
         initOnClick()
         viewModel.getAds(Constants.GET_ADS)
@@ -45,8 +56,49 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
         searchView()
         initAdapter()
         setObserver()
+
+
+        binding.rvPeople.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                // 👇 Only continue if scrolling down
+                if (dy <= 0) return
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (!isLoading && page < totalPages!!) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
+                        firstVisibleItemPosition >= 0
+                    ) {
+                        isLoading = true // ✅ Lock before load
+
+                        loadMoreUsers()
+                   //     selectedCategoryTitle?.let { loadNextPage(it) }
+                    }
+                }
+            }
+        })
     }
 
+    private fun loadMoreUsers() {
+
+        isLoading = true
+        page ++
+        if (selectedActualValues != null){
+            val data = HashMap<String, Any>().apply {
+                put("category", selectedActualValues!!)  // <- set as comma-separated string
+                put("page", page)
+                put("limit", 20)
+
+                if (searchData != null){
+                    put("search",searchData.toString())
+                }
+            }
+            viewModel.getUsers(data, Constants.GET_USERS)
+        }
+    }
 
 
     private fun searchView() {
@@ -154,13 +206,14 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
         selectedCategory = arguments?.getParcelableArrayList("selectedCategory")
         Log.i("dsadasda", "getUsers: $selectedCategory")
 
-        val selectedActualValues = selectedCategory?.joinToString(",") { it.actualValue }
+        selectedActualValues = selectedCategory?.joinToString(",") { it.actualValue }
         Log.i("dsdsa", "getUsers: $selectedActualValues")
 
 
+        page = 1
         if (selectedActualValues != null){
             val data = HashMap<String, Any>().apply {
-                put("category", selectedActualValues)  // <- set as comma-separated string
+                put("category", selectedActualValues!!)  // <- set as comma-separated string
                 put("page", 1)
                 put("limit", 20)
 

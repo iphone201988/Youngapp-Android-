@@ -35,6 +35,7 @@
             android:id="@+id/clTopBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginHorizontal="@dimen/_18sdp"
             android:layout_marginTop="@dimen/_10sdp"
             app:layout_constraintTop_toTopOf="parent">
@@ -67,7 +68,7 @@
                 android:layout_height="@dimen/_35sdp"
                 android:onClick="@{v -> vm.onClick(v)}"
                 android:src="@drawable/iv_drawer"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

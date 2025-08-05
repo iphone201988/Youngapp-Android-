@@ -77,14 +77,39 @@ object BindingUtils {
         }
     }
 
+//    @BindingAdapter("setUserImageFromBaseUrl")
+//    @JvmStatic
+//    fun setUserImageFromBaseUrl(image: ShapeableImageView, url: String?) {
+//        if (url != null) {
+//            Glide.with(image.context).load(Constants.BASE_URL_IMAGE+url).placeholder(R.drawable.dummy_profile)
+//                .error(R.drawable.dummy_profile).into(image)
+//        }
+//    }
+
     @BindingAdapter("setUserImageFromBaseUrl")
     @JvmStatic
     fun setUserImageFromBaseUrl(image: ShapeableImageView, url: String?) {
-        if (url != null) {
-            Glide.with(image.context).load(Constants.BASE_URL_IMAGE+url).placeholder(R.drawable.dummy_profile)
-                .error(R.drawable.dummy_profile).into(image)
+        val padding = image.context.resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._5sdp)
+
+        if (!url.isNullOrEmpty()) {
+            // Image from API
+            Glide.with(image.context)
+                .load(Constants.BASE_URL_IMAGE + url)
+                .centerCrop()
+                .placeholder(R.drawable.dummy_profile)
+                .error(R.drawable.dummy_profile)
+                .into(image)
+
+            image.scaleType = ImageView.ScaleType.CENTER_CROP
+            image.setPadding(0, 0, 0, 0)
+        } else {
+            // Fallback image
+            image.setImageResource(R.drawable.dummy_profile)
+            image.scaleType = ImageView.ScaleType.FIT_CENTER
+            image.setPadding(padding, padding, padding, padding)
         }
     }
+
 
     @BindingAdapter("setRating")
     @JvmStatic

@@ -15,6 +15,7 @@ import java.net.URISyntaxException
 
 object SocketManager {
     private const val SERVER_URL = "https://3.148.147.103:8000"
+   // private const val SERVER_URL = "http://192.168.0.199:8888"
     var mSocket: Socket? = null
 
 

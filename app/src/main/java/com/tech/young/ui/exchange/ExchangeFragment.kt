@@ -26,6 +26,7 @@ import com.tech.young.data.FilterItem
 import com.tech.young.data.SortingItem
 import com.tech.young.databinding.ItemLayoutFiterBinding
 import com.tech.young.databinding.ItemLayoutSortDataBinding
+import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.screens.StreamExchangeFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -53,6 +54,20 @@ class ExchangeFragment : BaseFragment<FragmentExchangeBinding>() {
         // Search TextListener
         binding.etSearch.doAfterTextChanged {
             sendSearchQueryToActiveFragment(it.toString())
+        }
+
+        binding.tabLayoutBottom.tabEcosystem.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, EcosystemFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.tabLayoutBottom.tabExchange.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, ExchangeFragment())
+                .addToBackStack(null)
+                .commit()
         }
     }
 
