@@ -241,6 +241,7 @@
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:focusable="false"
+                    android:paddingEnd="@dimen/_40sdp"
                     android:onClick="@{v -> vm.onClick(v)}"
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"

@@ -33,6 +33,7 @@ import com.tech.young.databinding.ItemLayoutVaultExchangeBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.exchange.ExchangeVM
 import com.tech.young.ui.exchange.Filterable
+import com.tech.young.ui.vault_screen.CommonVaultFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -325,8 +326,13 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
         viewModel.onClick.observe(viewLifecycleOwner,  Observer {
             when(it?.id){
                 R.id.addVault ->{
-                    val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_vault")
-                    startActivity(intent)
+//                    val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_vault")
+//                    startActivity(intent)
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, CommonVaultFragment())
+                        .addToBackStack(null)
+                        .commit()
                 }
                 R.id.tvSort, R.id.ivSort -> {
                     binding.rvSort.visibility =

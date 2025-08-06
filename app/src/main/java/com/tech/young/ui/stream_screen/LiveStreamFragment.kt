@@ -176,6 +176,7 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
                 put("appData", appDataJson)
             }
 
+
             SocketManager.mSocket?.emit("transport-produce", messageTemp, Ack { args ->
                 val responseJson = args[0] as JSONObject
                 val transportProduceModel: transprtProduceModel? =
@@ -228,19 +229,26 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
 
 
     private fun createTrasport() {
+        Log.i("WebRTC", "Emitting createWebRtcTransport...")
+
         SocketManager.mSocket?.emit("createWebRtcTransport",
             JSONObject().put(
                 "consumer", false
             ),
             Ack { argsProducer ->
 
+                Log.i("WebRTC", "Received response for createWebRtcTransport")
+
+
                 createTransportModel =
                     BindingUtils.parseJson((argsProducer[0] as JSONObject).toString())
                 Log.i("dasdas", "CreateTransport: ${(argsProducer[0] as JSONObject).toString()}")
+                Log.i("WebRTC", "Parsed createTransportModel: $createTransportModel")
 
                 if (createTransportModel != null){
                     Handler(Looper.getMainLooper()).postDelayed(
                         {
+                            Log.i("WebRTC", "Starting SendTransport creation")
 
                             val listener: SendTransport.Listener =
                                 object : SendTransport.Listener {
@@ -248,6 +256,8 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
                                         transport: Transport,
                                         dtlsParameters: String
                                     ) {
+                                        Log.i("WebRTC", "onConnect called with DTLS parameters")
+
                                         try {
                                             val dtlsJson = JSONObject(dtlsParameters) // ✅ convert to JSON
                                             val connectPayload = JSONObject().apply {
@@ -270,13 +280,14 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
                                         appData: String
                                     ): String {
 
-                                        Log.i("dasdasd", "onProduce: $kind")
+                                        Log.i("WebRTC", "onProduce triggered for kind: $kind")
                                         return produceTransport(
                                             kind,
                                             rtpParameters ,
                                             appData
 //
                                         ).get().id
+
                                     }
 
                                     override fun onProduceData(
@@ -286,6 +297,7 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
                                         protocol: String?,
                                         appData: String?
                                     ): String {
+                                        Log.i("WebRTC", "onProduceData triggered")
 
                                         return produceTransport2(
                                             transport!!,
@@ -300,12 +312,15 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
                                         transport: Transport,
                                         newState: String
                                     ) {
+                                        Log.i("WebRTC", "Connection state changed: $newState")
 
                                     }
                                 }
 
                             val mSendTransport =
                                 createTransportModel!!.params?.id?.let {
+                                    Log.i("WebRTC", "Calling createSendTransport...")
+
                                     mediaSoupDevice.createSendTransport(
                                         listener,
                                         it,
@@ -321,6 +336,7 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
                                     )
                                 }
 
+                            Log.i("WebRTC", "Producing audio...")
 
                             producerAudio = mSendTransport?.produce(
                                 { _ ->
@@ -331,6 +347,7 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
                                 null,
                                 null,
                             )
+                            Log.i("WebRTC", "Producing video...")
 
                             producerVideo = mSendTransport?.produce(
                                 { _ ->
@@ -342,6 +359,8 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
                                 null,
                                 null,
                             )
+                            Log.i("WebRTC", "Transport and producers setup complete")
+
 //                            val timer = Timer()
 //                            timer.scheduleAtFixedRate(0, 5000) {
 //                                Log.i("fdsfds", "Task executed at: ${producerVideo?.stats}")

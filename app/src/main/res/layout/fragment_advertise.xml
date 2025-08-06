@@ -239,6 +239,7 @@
             android:layout_marginTop="@dimen/_3sdp"
             android:onClick="@{v -> vm.onClick(v)}"
             android:focusable="false"
+            android:paddingEnd="@dimen/_40sdp"
             android:background="@drawable/radius_border_gray"
             android:gravity="start|center"
             android:hint="Upload file"

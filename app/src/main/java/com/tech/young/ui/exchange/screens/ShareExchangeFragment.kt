@@ -34,6 +34,7 @@ import com.tech.young.databinding.ItemLayoutSortDataBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.exchange.ExchangeVM
 import com.tech.young.ui.exchange.Filterable
+import com.tech.young.ui.share_screen.CommonShareFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -411,8 +412,13 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
         viewModel.onClick.observe(viewLifecycleOwner, Observer {
             when(it?.id){
                 R.id.addShare ->{
-                    val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_share")
-                    startActivity(intent)
+//                    val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_share")
+//                    startActivity(intent)
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, CommonShareFragment())
+                        .addToBackStack(null)
+                        .commit()
                 }
                 R.id.tvSort, R.id.ivSort -> {
                     binding.rvSort.visibility =

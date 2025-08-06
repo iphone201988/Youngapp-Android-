@@ -36,7 +36,9 @@ import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.exchange.screens.ShareExchangeFragment
 import com.tech.young.ui.share_screen.CommonShareFragment
+import com.tech.young.ui.stream_screen.CommonStreamFragment
 import com.tech.young.ui.streaming_activity.StreamActivity
+import com.tech.young.ui.vault_screen.CommonVaultFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -286,7 +288,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 //            startActivity(intent)
 
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.frameLayout, CommonShareFragment())
+                .replace(R.id.frameLayout, CommonStreamFragment())
                 .addToBackStack(null)
                 .commit()
         }
@@ -297,7 +299,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 //            startActivity(intent)
 
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.frameLayout, CommonShareFragment())
+                .replace(R.id.frameLayout, CommonVaultFragment())
                 .addToBackStack(null)
                 .commit()
         }
@@ -318,11 +320,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         setupTickerRecycler()
 
 
-        loadRSS()
 
         initAdapterTrending()
 
         initAdapterNews()
+        loadRSS()
+
 
         initAdapter()
 
@@ -525,8 +528,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 //        binding.rvNews.adapter = newsAdapter
 //        binding.rvNews.itemAnimator = null
 
-        newsAdapter =
-            SimpleRecyclerViewAdapter(R.layout.item_layout_home_news, BR.bean) { v, m, pos ->
+        newsAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_home_news, BR.bean) { v, m, pos ->
                 when (v.id) {
                     R.id.consMain->{
                         val intent= Intent(requireContext(),CommonActivity::class.java).apply {
@@ -541,8 +543,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
         binding.rvNews.adapter = newsAdapter
         binding.rvNews.layoutManager = layoutManager
-        binding.rvNews.setHasFixedSize(true)
-        newsAdapter.list = rssItems
+//        binding.rvNews.setHasFixedSize(true)
+
+
+
 
         binding.rvMembers.layoutManager = layoutManager2
         binding.rvMembers.setHasFixedSize(true)

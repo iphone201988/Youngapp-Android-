@@ -1,14 +1,21 @@
 package com.tech.young.ui.vault_screen
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.tech.young.BR
@@ -33,7 +40,10 @@ import com.tech.young.ui.common.CommonActivity
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.util.FileUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.tech.young.base.permission.PermissionHandler
+import com.tech.young.base.permission.Permissions
 import com.tech.young.data.model.GetAdsAPiResponse
+import com.tech.young.databinding.BottomSheetCameraGalleryBinding
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,17 +52,18 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 
 @AndroidEntryPoint
 class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCustomBottomSheet.Listener{
     private val viewModel: VaultVM by viewModels()
 
-    private var imageUri : Uri ?= null
 
     // adapter
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private lateinit var topicBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
     private lateinit var categoryBottomSheet : BaseCustomBottomSheet<BottomSheetCategoryBinding>
+    private lateinit var cameraGalleryBottomSheet: BaseCustomBottomSheet<BottomSheetCameraGalleryBinding>
 
     private lateinit var topicAdapter : SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
     private lateinit var categoryAdapter : SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
@@ -63,6 +74,15 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
     private var selectedPlayer = ArrayList<String>()
 
     private var visibilityMode : String = "public"
+
+
+    private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
+    private var selectedImagePart: MultipartBody.Part? = null
+
+    //// camera
+    private var photoFile: File? = null
+    private var photoURI: Uri? = null
+    private var imageUri : Uri? = null
 
 
     companion object{
@@ -89,6 +109,7 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
     /** handle view **/
     private fun initView() {
         initBottomsheet()
+        galleryLauncher()
         viewModel.getAds(Constants.GET_ADS)
         getTopicsList()
         selectedCateGoryList()
@@ -154,7 +175,130 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
 
         categoryBottomSheet.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         categoryBottomSheet.behavior.isDraggable = true
+
+
+        cameraGalleryBottomSheet =
+            BaseCustomBottomSheet(requireContext(), R.layout.bottom_sheet_camera_gallery) {
+                when (it.id) {
+                    R.id.openCamara, R.id.openCamaraImage -> {
+                        openCamera()
+                        cameraGalleryBottomSheet.dismiss()
+                    }
+
+                    R.id.icon_emoji_new, R.id.tvChooseFromGallery -> {
+                        if (!BindingUtils.hasPermissions(
+                                requireContext(),
+                                BindingUtils.permissions
+                            )
+                        ) {
+                            permissionResultLauncher.launch(BindingUtils.permissions)
+                        } else {
+                            selectImage()
+                        }
+                        cameraGalleryBottomSheet.dismiss()
+                    }
+                }
+
+            }
+        cameraGalleryBottomSheet.behavior.isDraggable = true
+        cameraGalleryBottomSheet.setCancelable(true)
     }
+
+    private fun galleryLauncher() {
+        pickImageLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val data = result.data
+                    imageUri = data?.data
+                    if (imageUri != null){
+                        binding.ivUploadImage.setImageURI(imageUri)
+                    }
+
+//                    if (imageUri != null) {
+//                        selectedImagePart = BindingUtils.createImageMultipartFromUri(
+//                            requireContext(),
+//                            imageUri!!,
+//                            "file" // <-- or any string key like "profile", "photo"
+//                        )
+//                        Log.i("ImageUpload", "galleryLauncher: $imageUri")
+//                    }
+                }
+            }
+    }
+
+    private var allGranted = false
+    private val permissionResultLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            for (it in permissions.entries) {
+                it.key
+                val isGranted = it.value
+                allGranted = isGranted
+            }
+            when {
+                allGranted -> {
+                    selectImage()
+                }
+
+            }
+        }
+
+    private fun selectImage() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "image/*"
+        }
+        pickImageLauncher.launch(Intent.createChooser(intent, "Select Picture"))
+    }
+
+
+    private fun openCamera() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Permissions.check(requireContext(), Manifest.permission.CAMERA, 0, object : PermissionHandler() {
+                override fun onGranted() {
+                    openCameraIntent()
+                }
+            })
+        } else {
+            openCameraIntent()
+        }
+    }
+
+
+    private fun openCameraIntent() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        photoFile = BindingUtils.createImageFile(requireContext())
+        val authority = "${requireContext().packageName}.provider"
+        val photoURI: Uri = FileProvider.getUriForFile(
+            requireContext(), authority, photoFile!!
+        )
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+        cameraLauncher.launch(cameraIntent)
+
+    }
+
+    private var cameraLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                try {
+                    imageUri = photoFile!!.absoluteFile.toUri()
+                    if (imageUri != null){
+                        binding.ivUploadImage.setImageURI(imageUri)
+                    }
+//                    if (photoURI != null) {
+//                        selectedImagePart = BindingUtils.createImageMultipartFromUri(
+//                            requireContext(),
+//                            photoURI!!,
+//                            "file" // or appropriate key
+//                        )
+//                        Log.i("ImageUpload", "cameraLauncher: $photoURI")
+//                    }
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
+                }
+            }
+        }
 
     /** handle click **/
     private fun initOnClick() {
@@ -166,12 +310,14 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
 
                 }
                 R.id.ivUploadImage ->{
-                    ImagePicker.with(this)
-                        .compress(1024)
-                        .maxResultSize(1080, 1080)
-                        .createIntent { intent ->
-                            startForImageResult.launch(intent)
-                        }
+//                    ImagePicker.with(this)
+//                        .compress(1024)
+//                        .maxResultSize(1080, 1080)
+//                        .createIntent { intent ->
+//                            startForImageResult.launch(intent)
+//                        }
+
+                    cameraGalleryBottomSheet.show()
                 }
 
                 R.id.tvCreate -> {
@@ -214,23 +360,23 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
 
     }
 
-    private val startForImageResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        try {
-            val resultCode = result.resultCode
-            val data = result.data
-            if (resultCode == Activity.RESULT_OK) {
-                val fileUri = data?.data
-                imageUri = fileUri
-                binding.ivUploadImage.setImageURI(fileUri)
-
-                //  Log.i("dasd", ": $imageUri")
-            } else if (resultCode == ImagePicker.RESULT_ERROR) {
-
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
+//    private val startForImageResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+//        try {
+//            val resultCode = result.resultCode
+//            val data = result.data
+//            if (resultCode == Activity.RESULT_OK) {
+//                val fileUri = data?.data
+//                imageUri = fileUri
+//                binding.ivUploadImage.setImageURI(fileUri)
+//
+//                //  Log.i("dasd", ": $imageUri")
+//            } else if (resultCode == ImagePicker.RESULT_ERROR) {
+//
+//            }
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+//    }
 
 
 

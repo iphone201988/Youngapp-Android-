@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_18sdp"
             android:layout_marginTop="@dimen/_10sdp"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView

@@ -3,12 +3,14 @@ package com.tech.young.ui.advertise_screen
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -129,6 +131,11 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
                     val data = result.data
                     imageUri = data?.data
                     if (imageUri != null) {
+
+                        imageUri?.let { uri ->
+                            val fileName = getFileNameFromUri(requireContext(), uri)
+                            binding.etUploadFile.setText(fileName)
+                        }
                         selectedImagePart = BindingUtils.createImageMultipartFromUri(
                             requireContext(),
                             imageUri!!,
@@ -139,6 +146,8 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
                 }
             }
     }
+
+
 
     /** show camera & gallery bottom sheet **/
     private fun initBottomSheet() {
@@ -307,6 +316,10 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
                 try {
                     photoURI = photoFile!!.absoluteFile.toUri()
                     if (photoURI != null) {
+                        photoURI?.let { uri ->
+                            val fileName = getFileNameFromUri(requireContext(), uri)
+                            binding.etUploadFile.setText(fileName)
+                        }
                         selectedImagePart = BindingUtils.createImageMultipartFromUri(
                             requireContext(),
                             photoURI!!,
@@ -321,6 +334,29 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
         }
 
 
+    private fun getFileNameFromUri(context: Context, uri: Uri): String {
+        var result: String? = null
+        if (uri.scheme == "content") {
+            val cursor = context.contentResolver.query(uri, null, null, null, null)
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME))
+                }
+            } finally {
+                cursor?.close()
+            }
+        }
+
+        if (result == null) {
+            result = uri.path
+            val cut = result?.lastIndexOf('/')
+            if (cut != null && cut != -1) {
+                result = result?.substring(cut + 1)
+            }
+        }
+
+        return result ?: "unknown_file"
+    }
 
     private fun isEmptyField() : Boolean {
         if (TextUtils.isEmpty(binding.etName.text.toString().trim())){
@@ -338,9 +374,11 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
         if (TextUtils.isEmpty(binding.etWebsite.text.toString().trim())){
             showToast("Please enter website")
             return false
-
         }
-
+        if (TextUtils.isEmpty(binding.etUploadFile.text.toString().trim())){
+            showToast("Please select image")
+            return false
+        }
 
 
         return true

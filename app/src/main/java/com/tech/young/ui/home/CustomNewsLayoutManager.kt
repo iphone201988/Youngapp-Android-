@@ -1,7 +1,11 @@
 package com.tech.young.ui.home
 
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+
+//
+
 
 class CustomNewsLayoutManager : RecyclerView.LayoutManager() {
 
@@ -26,17 +30,22 @@ class CustomNewsLayoutManager : RecyclerView.LayoutManager() {
         for (i in 0 until itemCount) {
             val view = recycler.getViewForPosition(i)
             addView(view)
-            measureChildWithMargins(view, 0, 0)
 
-            val isLeft = i < 2
+            val isLeft = i % 2 == 0  // Even positions go to left (0, 2, etc.)
             val width = if (isLeft) leftColumnWidth else rightColumnWidth
             val height = if (isLeft) 500 else 250
-
             val left = if (isLeft) 0 else leftColumnWidth
             val top = if (isLeft) leftTop else rightTop
 
+            // Measure view exactly
+            val widthSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY)
+            val heightSpec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
+            view.measure(widthSpec, heightSpec)
+
+            // Layout the child
             layoutDecorated(view, left, top, left + width, top + height)
 
+            // Update top offset
             if (isLeft) {
                 leftTop += height
             } else {
@@ -45,7 +54,10 @@ class CustomNewsLayoutManager : RecyclerView.LayoutManager() {
         }
     }
 
-    override fun canScrollVertically(): Boolean = false
+    override fun canScrollVertically(): Boolean = false // Optional: make true for scrollable layout
 }
+
+
+
 
 

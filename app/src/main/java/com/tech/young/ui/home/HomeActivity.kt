@@ -34,6 +34,14 @@ import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.exchange.screens.ShareExchangeFragment.Companion.selectedCategoryForExchange
 import com.tech.young.ui.inbox.InboxFragment
 import com.tech.young.ui.my_profile_screens.YourProfileFragment
+import com.tech.young.ui.my_profile_screens.common_ui.BusinessInfoFragment
+import com.tech.young.ui.my_profile_screens.common_ui.EditProfileDetailFragment
+import com.tech.young.ui.my_profile_screens.common_ui.FormUploadFragment
+import com.tech.young.ui.my_profile_screens.forFinance.PersonalPreferencesFragment
+import com.tech.young.ui.my_profile_screens.forFinance.ProfessionalInformationFragment
+import com.tech.young.ui.my_profile_screens.forNormal.FamilyDetailsFragment
+import com.tech.young.ui.my_profile_screens.forNormal.FinanceInfoFragment
+import com.tech.young.ui.my_profile_screens.forNormal.InvestmentInfoFragment
 import com.tech.young.ui.policies_about.AboutFragment
 import com.tech.young.ui.policies_about.PoliciesFragment
 import com.tech.young.ui.share_screen.CommonShareFragment
@@ -190,6 +198,38 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                     is UserProfileFragment ->{
                         updateOtherUI(userName.toString())
                     }
+                    is EditProfileDetailFragment ->{
+                        updateOtherUI("Profile Details")
+                    }
+                    is ProfessionalInformationFragment ->{
+                        updateOtherUI("Professional Information")
+                    }
+                    is PersonalPreferencesFragment -> {
+                        val role = sharedPrefManager.getLoginData()?.role
+                        when (role) {
+                            "financial_advisor", "financial_firm" -> updateOtherUI("Personal Preferences")
+                            else -> updateOtherUI("Additional Information")
+                        }
+                    }
+                    is FormUploadFragment ->{
+                        updateOtherUI("Form Upload")
+                    }
+
+                    is FamilyDetailsFragment ->{
+                        updateOtherUI("Family & Education")
+                    }
+
+                    is FinanceInfoFragment ->{
+                        updateOtherUI("Financial Information")
+                    }
+                    is  InvestmentInfoFragment ->{
+                        updateOtherUI("Investment Summary")
+                    }
+
+                    is BusinessInfoFragment ->{
+                        updateOtherUI("Business & Financial Information")
+                    }
+
                 }
 
             }

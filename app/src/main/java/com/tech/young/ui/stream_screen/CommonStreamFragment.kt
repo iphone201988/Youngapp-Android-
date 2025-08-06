@@ -1,17 +1,24 @@
 package com.tech.young.ui.stream_screen
 
+import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.github.dhaval2404.imagepicker.ImagePicker
@@ -21,6 +28,8 @@ import com.tech.young.R
 import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
+import com.tech.young.base.permission.PermissionHandler
+import com.tech.young.base.permission.Permissions
 import com.tech.young.base.utils.BaseCustomBottomSheet
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
@@ -30,6 +39,7 @@ import com.tech.young.data.api.Constants
 import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.StreamData
 import com.tech.young.databinding.AdsItemViewBinding
+import com.tech.young.databinding.BottomSheetCameraGalleryBinding
 import com.tech.young.databinding.BotttomSheetTopicsBinding
 import com.tech.young.databinding.FragmentCommonStreamBinding
 import com.tech.young.databinding.ItemLayoutDropDownBinding
@@ -37,6 +47,8 @@ import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.MultipartBody
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -48,11 +60,19 @@ class CommonStreamFragment : BaseFragment<FragmentCommonStreamBinding>() ,BaseCu
 
     private val viewModel: StreamVM by viewModels()
     private var topicList = ArrayList<DropDownData>()
+    private lateinit var cameraGalleryBottomSheet: BaseCustomBottomSheet<BottomSheetCameraGalleryBinding>
     private lateinit var topicBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
     private lateinit var topicAdapter : SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
-    private var imageUri : Uri?= null
     private var formattedApiDate : String ? = null
     private  var scheduleDateToSend: String? = null
+    private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
+    private var selectedImagePart: MultipartBody.Part? = null
+
+    //// camera
+    private var photoFile: File? = null
+    private var photoURI: Uri? = null
+    private var imageUri : Uri? = null
+
 
     // adapter
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
@@ -61,10 +81,10 @@ class CommonStreamFragment : BaseFragment<FragmentCommonStreamBinding>() ,BaseCu
         "", "", "", "", ""
     )
     override fun onCreateView(view: View) {
+        initBottomSheet()
+        galleryLauncher()
         // view
         initView()
-
-
         // click
         initOnClick()
     }
@@ -114,6 +134,134 @@ class CommonStreamFragment : BaseFragment<FragmentCommonStreamBinding>() ,BaseCu
         
     }
 
+
+    private fun galleryLauncher() {
+        pickImageLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val data = result.data
+                    imageUri = data?.data
+                    if (imageUri != null){
+                        binding.ivUploadImage.setImageURI(imageUri)
+                    }
+
+//                    if (imageUri != null) {
+//                        selectedImagePart = BindingUtils.createImageMultipartFromUri(
+//                            requireContext(),
+//                            imageUri!!,
+//                            "file" // <-- or any string key like "profile", "photo"
+//                        )
+//                        Log.i("ImageUpload", "galleryLauncher: $imageUri")
+//                    }
+                }
+            }
+    }
+
+    /** show camera & gallery bottom sheet **/
+    private fun initBottomSheet() {
+        cameraGalleryBottomSheet =
+            BaseCustomBottomSheet(requireContext(), R.layout.bottom_sheet_camera_gallery) {
+                when (it.id) {
+                    R.id.openCamara, R.id.openCamaraImage -> {
+                        openCamera()
+                        cameraGalleryBottomSheet.dismiss()
+                    }
+
+                    R.id.icon_emoji_new, R.id.tvChooseFromGallery -> {
+                        if (!BindingUtils.hasPermissions(
+                                requireContext(),
+                                BindingUtils.permissions
+                            )
+                        ) {
+                            permissionResultLauncher.launch(BindingUtils.permissions)
+                        } else {
+                            selectImage()
+                        }
+                        cameraGalleryBottomSheet.dismiss()
+                    }
+                }
+
+            }
+        cameraGalleryBottomSheet.behavior.isDraggable = true
+        cameraGalleryBottomSheet.setCancelable(true)
+    }
+
+    private var allGranted = false
+    private val permissionResultLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            for (it in permissions.entries) {
+                it.key
+                val isGranted = it.value
+                allGranted = isGranted
+            }
+            when {
+                allGranted -> {
+                    selectImage()
+                }
+
+            }
+        }
+
+    private fun selectImage() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "image/*"
+        }
+        pickImageLauncher.launch(Intent.createChooser(intent, "Select Picture"))
+    }
+
+
+    private fun openCamera() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Permissions.check(requireContext(), Manifest.permission.CAMERA, 0, object : PermissionHandler() {
+                override fun onGranted() {
+                    openCameraIntent()
+                }
+            })
+        } else {
+            openCameraIntent()
+        }
+    }
+
+
+    private fun openCameraIntent() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        photoFile = BindingUtils.createImageFile(requireContext())
+        val authority = "${requireContext().packageName}.provider"
+        val photoURI: Uri = FileProvider.getUriForFile(
+            requireContext(), authority, photoFile!!
+        )
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+        cameraLauncher.launch(cameraIntent)
+
+    }
+
+    private var cameraLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                try {
+                    imageUri = photoFile!!.absoluteFile.toUri()
+                    if (imageUri != null){
+                        binding.ivUploadImage.setImageURI(imageUri)
+                    }
+//                    if (photoURI != null) {
+//                        selectedImagePart = BindingUtils.createImageMultipartFromUri(
+//                            requireContext(),
+//                            photoURI!!,
+//                            "file" // or appropriate key
+//                        )
+//                        Log.i("ImageUpload", "cameraLauncher: $photoURI")
+//                    }
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
+                }
+            }
+        }
+
+
+
     private fun initObserver() {
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when(it?.status){
@@ -155,12 +303,15 @@ class CommonStreamFragment : BaseFragment<FragmentCommonStreamBinding>() ,BaseCu
                     topicBottomSheet.show()
                 }
                 R.id.ivUploadImage ->{
-                    ImagePicker.with(this)
-                        .compress(1024)
-                        .maxResultSize(1080, 1080)
-                        .createIntent { intent ->
-                            startForImageResult.launch(intent)
-                        }
+//                    ImagePicker.with(this)
+//                        .compress(1024)
+//                        .maxResultSize(1080, 1080)
+//                        .createIntent { intent ->
+//                            startForImageResult.launch(intent)
+//                        }
+
+                    cameraGalleryBottomSheet.show()
+
                 }
                 R.id.etDate ->{
                     calendarOpen()
@@ -191,23 +342,23 @@ class CommonStreamFragment : BaseFragment<FragmentCommonStreamBinding>() ,BaseCu
     }
 
 
-    private val startForImageResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        try {
-            val resultCode = result.resultCode
-            val data = result.data
-            if (resultCode == Activity.RESULT_OK) {
-                val fileUri = data?.data
-                imageUri = fileUri
-                binding.ivUploadImage.setImageURI(fileUri)
-
-                //  Log.i("dasd", ": $imageUri")
-            } else if (resultCode == ImagePicker.RESULT_ERROR) {
-
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
+//    private val startForImageResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+//        try {
+//            val resultCode = result.resultCode
+//            val data = result.data
+//            if (resultCode == Activity.RESULT_OK) {
+//                val fileUri = data?.data
+//                imageUri = fileUri
+//                binding.ivUploadImage.setImageURI(fileUri)
+//
+//                //  Log.i("dasd", ": $imageUri")
+//            } else if (resultCode == ImagePicker.RESULT_ERROR) {
+//
+//            }
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+//    }
 
     /** handle adapter **/
     private fun initAdapter() {

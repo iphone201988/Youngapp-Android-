@@ -33,7 +33,9 @@ import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.home.HomeActivity
 import com.tech.young.ui.share_screen.CommonShareFragment
+import com.tech.young.ui.stream_screen.CommonStreamFragment
 import com.tech.young.ui.user_profile.UserProfileFragment
+import com.tech.young.ui.vault_screen.CommonVaultFragment
 import com.tech.young.utils.VerticalPagination
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -222,7 +224,7 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
 //            startActivity(intent)
 
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.frameLayout, CommonShareFragment())
+                .replace(R.id.frameLayout, CommonStreamFragment())
                 .addToBackStack(null)
                 .commit()
         }
@@ -233,7 +235,7 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
 //            startActivity(intent)
 
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.frameLayout, CommonShareFragment())
+                .replace(R.id.frameLayout, CommonVaultFragment())
                 .addToBackStack(null)
                 .commit()
         }

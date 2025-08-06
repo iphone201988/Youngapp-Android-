@@ -32,6 +32,7 @@ import com.tech.young.databinding.ItemLayoutStreamExchangeBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.exchange.ExchangeVM
 import com.tech.young.ui.exchange.Filterable
+import com.tech.young.ui.stream_screen.CommonStreamFragment
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.internal.ignoreIoExceptions
 
@@ -284,8 +285,13 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                 }
 
                 R.id.addStream ->{
-                    val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_stream")
-                    startActivity(intent)
+//                    val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_stream")
+//                    startActivity(intent)
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, CommonStreamFragment())
+                        .addToBackStack(null)
+                        .commit()
                 }
             }
         })

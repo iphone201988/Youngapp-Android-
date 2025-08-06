@@ -883,4 +883,20 @@ object BindingUtils {
         }
     }
 
+    @BindingAdapter("gridManager")
+    @JvmStatic
+    fun gridManager(image : ImageView, pos : Int){
+        if (pos <= 4){
+            val layoutParams = image.layoutParams
+            layoutParams.height = if (pos  == 0 || pos == 3) 262 else 166
+            image.layoutParams = layoutParams
+        }else{
+
+        }
+
+        }
+
+
+
+
 }

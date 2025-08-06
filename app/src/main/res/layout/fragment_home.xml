@@ -96,9 +96,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_7sdp"
                     android:layout_marginTop="@dimen/_10sdp"
+                    android:nestedScrollingEnabled="false"
                     app:layout_constraintBottom_toTopOf="@id/tvMembers"
-                    app:layout_constraintTop_toBottomOf="@id/tvNews"
-                    tools:itemCount="5" />
+                    app:layout_constraintTop_toBottomOf="@id/tvNews" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvMembers"

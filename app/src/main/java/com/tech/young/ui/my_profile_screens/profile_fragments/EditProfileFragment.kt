@@ -1,6 +1,7 @@
 package com.tech.young.ui.my_profile_screens.profile_fragments
 
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -29,6 +30,14 @@ import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.my_profile_screens.YourProfileVM
+import com.tech.young.ui.my_profile_screens.common_ui.BusinessInfoFragment
+import com.tech.young.ui.my_profile_screens.common_ui.EditProfileDetailFragment
+import com.tech.young.ui.my_profile_screens.common_ui.FormUploadFragment
+import com.tech.young.ui.my_profile_screens.forFinance.PersonalPreferencesFragment
+import com.tech.young.ui.my_profile_screens.forFinance.ProfessionalInformationFragment
+import com.tech.young.ui.my_profile_screens.forNormal.FamilyDetailsFragment
+import com.tech.young.ui.my_profile_screens.forNormal.FinanceInfoFragment
+import com.tech.young.ui.my_profile_screens.forNormal.InvestmentInfoFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -217,38 +226,95 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                                 when (m.subTitle) {
                                     // edit profile
                                     getString(R.string.profile_details) -> {
-                                        val intent=Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("profileData",profileData)
-                                        intent.putExtra("from","edit_profile")
-                                        startActivity(intent)
+//                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+//                                        intent.putExtra("profileData",profileData)
+//                                        intent.putExtra("from","edit_profile")
+//                                        startActivity(intent)
+
+                                        val fragment = EditProfileDetailFragment().apply {
+                                            arguments = Bundle().apply {
+                                                putParcelable("profileData", profileData)
+                                            }
+                                        }
+
+                                        requireActivity().supportFragmentManager.beginTransaction()
+                                            .replace(R.id.frameLayout, fragment)
+                                            .addToBackStack(null)
+                                            .commit()
+
                                     }
                                     // other profile details
                                     getString(R.string.family_education) -> {
-                                        val intent=Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("profileData",profileData)
-                                        intent.putExtra("from","normal_family")
-                                        startActivity(intent)
+//                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+//                                        intent.putExtra("profileData",profileData)
+//                                        intent.putExtra("from","normal_family")
+//                                        startActivity(intent)
+
+                                        val fragment = FamilyDetailsFragment().apply {
+                                            arguments = Bundle().apply {
+                                                putParcelable("profileData", profileData)
+                                            }
+                                        }
+
+                                        requireActivity().supportFragmentManager.beginTransaction()
+                                            .replace(R.id.frameLayout, fragment)
+                                            .addToBackStack(null)
+                                            .commit()
                                     }
 
                                     getString(R.string.financial_information) -> {
-                                        val intent=Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("profileData",profileData)
-                                        intent.putExtra("from","normal_finance_detail")
-                                        startActivity(intent)
+//                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+//                                        intent.putExtra("profileData",profileData)
+//                                        intent.putExtra("from","normal_finance_detail")
+//                                        startActivity(intent)
+
+                                        val fragment = FinanceInfoFragment().apply {
+                                            arguments = Bundle().apply {
+                                                putParcelable("profileData", profileData)
+                                            }
+                                        }
+
+                                        requireActivity().supportFragmentManager.beginTransaction()
+                                            .replace(R.id.frameLayout, fragment)
+                                            .addToBackStack(null)
+                                            .commit()
                                     }
 
                                     "Investment Summary (Optional)" -> {
-                                        val intent=Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("profileData",profileData)
-                                        intent.putExtra("from","normal_investment")
-                                        startActivity(intent)
+//                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+//                                        intent.putExtra("profileData",profileData)
+//                                        intent.putExtra("from","normal_investment")
+//                                        startActivity(intent)
+
+
+                                        val fragment = InvestmentInfoFragment().apply {
+                                            arguments = Bundle().apply {
+                                                putParcelable("profileData", profileData)
+                                            }
+                                        }
+
+                                        requireActivity().supportFragmentManager.beginTransaction()
+                                            .replace(R.id.frameLayout, fragment)
+                                            .addToBackStack(null)
+                                            .commit()
                                     }
 
                                     getString(R.string.additional_information) -> {
-                                        val intent=Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("profileData",profileData)
-                                        intent.putExtra("from","personal_preference")
-                                        startActivity(intent)
+//                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+//                                        intent.putExtra("profileData",profileData)
+//                                        intent.putExtra("from","personal_preference")
+//                                        startActivity(intent)
+
+                                        val fragment = PersonalPreferencesFragment().apply {
+                                            arguments = Bundle().apply {
+                                                putParcelable("profileData", profileData)
+                                            }
+                                        }
+
+                                        requireActivity().supportFragmentManager.beginTransaction()
+                                            .replace(R.id.frameLayout, fragment)
+                                            .addToBackStack(null)
+                                            .commit()
                                     }
 
                                     getString(R.string.account_verification) -> {
@@ -268,27 +334,64 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                             1->{
                                 when(m.subTitle){
                                     getString(R.string.profile_details) -> {
-                                        val intent =
-                                            Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("profileData",profileData)
-                                        intent.putExtra("from", "edit_profile")
-                                        startActivity(intent)
+//                                        val intent =
+//                                            Intent(requireContext(), CommonActivity::class.java)
+//                                        intent.putExtra("profileData",profileData)
+//                                        intent.putExtra("from", "edit_profile")
+//                                        startActivity(intent)
+
+
+                                        val fragment = EditProfileDetailFragment().apply {
+                                            arguments = Bundle().apply {
+                                                putParcelable("profileData", profileData)
+                                            }
+                                        }
+
+                                        requireActivity().supportFragmentManager.beginTransaction()
+                                            .replace(R.id.frameLayout, fragment)
+                                            .addToBackStack(null)
+                                            .commit()
                                     }
+
                                     getString(R.string.professional_information)->{
-                                        val intent =
-                                            Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("profileData",profileData)
-                                        intent.putExtra("from", "professional_info")
-                                        startActivity(intent)
+//                                        val intent =
+//                                            Intent(requireContext(), CommonActivity::class.java)
+//                                        intent.putExtra("profileData",profileData)
+//                                        intent.putExtra("from", "professional_info")
+//                                        startActivity(intent)
+
+
+                                        val fragment = ProfessionalInformationFragment().apply {
+                                            arguments = Bundle().apply {
+                                                putParcelable("profileData", profileData)
+                                            }
+                                        }
+
+                                        requireActivity().supportFragmentManager.beginTransaction()
+                                            .replace(R.id.frameLayout, fragment)
+                                            .addToBackStack(null)
+                                            .commit()
 
                                     }
 
                                     getString(R.string.personal_preferences)->{
-                                        val intent =
-                                            Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("profileData",profileData)
-                                        intent.putExtra("from", "personal_preference")
-                                        startActivity(intent)
+//                                        val intent =
+//                                            Intent(requireContext(), CommonActivity::class.java)
+//                                        intent.putExtra("profileData",profileData)
+//                                        intent.putExtra("from", "personal_preference")
+//                                        startActivity(intent)
+
+
+                                        val fragment = PersonalPreferencesFragment().apply {
+                                            arguments = Bundle().apply {
+                                                putParcelable("profileData", profileData)
+                                            }
+                                        }
+
+                                        requireActivity().supportFragmentManager.beginTransaction()
+                                            .replace(R.id.frameLayout, fragment)
+                                            .addToBackStack(null)
+                                            .commit()
 
                                     }
 
@@ -299,10 +402,21 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                                         startActivity(intent)
                                     }
                                     getString(R.string.form_upload)->{
-                                        val intent=Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("profileData",profileData)
-                                        intent.putExtra("from","form_upload")
-                                        startActivity(intent)
+//                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+//                                        intent.putExtra("profileData",profileData)
+//                                        intent.putExtra("from","form_upload")
+//                                        startActivity(intent)
+
+                                        val fragment = FormUploadFragment().apply {
+                                            arguments = Bundle().apply {
+                                                putParcelable("profileData", profileData)
+                                            }
+                                        }
+
+                                        requireActivity().supportFragmentManager.beginTransaction()
+                                            .replace(R.id.frameLayout, fragment)
+                                            .addToBackStack(null)
+                                            .commit()
                                     }
                                     "Logout"->{
                                         logoutPopup.show()
@@ -316,28 +430,76 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                             2->{
                                 when(m.subTitle){
                                     getString(R.string.profile_details) -> {
-                                        val intent=Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("profileData",profileData)
-                                        intent.putExtra("from","edit_profile")
-                                        startActivity(intent)
-                                    }
-                                    getString(R.string.business_financial_information)->{
-                                        val intent=Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("profileData",profileData)
-                                        intent.putExtra("from","business_info")
-                                        startActivity(intent)
+//                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+//                                        intent.putExtra("profileData",profileData)
+//                                        intent.putExtra("from","edit_profile")
+//                                        startActivity(intent)
+
+                                        val fragment = EditProfileDetailFragment().apply {
+                                            arguments = Bundle().apply {
+                                                putParcelable("profileData", profileData)
+                                            }
+                                        }
+
+                                        requireActivity().supportFragmentManager.beginTransaction()
+                                            .replace(R.id.frameLayout, fragment)
+                                            .addToBackStack(null)
+                                            .commit()
+
 
                                     }
+                                    getString(R.string.business_financial_information)->{
+//                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+//                                        intent.putExtra("profileData",profileData)
+//                                        intent.putExtra("from","business_info")
+//                                        startActivity(intent)
+
+                                        val fragment = BusinessInfoFragment().apply {
+                                            arguments = Bundle().apply {
+                                                putParcelable("profileData", profileData)
+                                            }
+                                        }
+
+                                        requireActivity().supportFragmentManager.beginTransaction()
+                                            .replace(R.id.frameLayout, fragment)
+                                            .addToBackStack(null)
+                                            .commit()
+                                    }
                                     getString(R.string.additional_information)->{
-                                        val intent=Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("from","personal_preference")
-                                        startActivity(intent)
+//                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+//                                        intent.putExtra("from","personal_preference")
+//                                        startActivity(intent)
+
+
+                                        val fragment = PersonalPreferencesFragment().apply {
+                                            arguments = Bundle().apply {
+                                                putParcelable("profileData", profileData)
+                                            }
+                                        }
+
+                                        requireActivity().supportFragmentManager.beginTransaction()
+                                            .replace(R.id.frameLayout, fragment)
+                                            .addToBackStack(null)
+                                            .commit()
+
                                     }
                                     getString(R.string.form_upload)->{
-                                        val intent=Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("profileData",profileData)
-                                        intent.putExtra("from","form_upload")
-                                        startActivity(intent)
+//                                        val intent=Intent(requireContext(), CommonActivity::class.java)
+//                                        intent.putExtra("profileData",profileData)
+//                                        intent.putExtra("from","form_upload")
+//                                        startActivity(intent)
+
+
+                                        val fragment = FormUploadFragment().apply {
+                                            arguments = Bundle().apply {
+                                                putParcelable("profileData", profileData)
+                                            }
+                                        }
+
+                                        requireActivity().supportFragmentManager.beginTransaction()
+                                            .replace(R.id.frameLayout, fragment)
+                                            .addToBackStack(null)
+                                            .commit()
                                     }
                                     getString(R.string.account_verification) -> {
                                         val intent =
