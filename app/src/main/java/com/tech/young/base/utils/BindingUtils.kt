@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -49,6 +50,7 @@ import com.tech.young.data.SubViewClickBean
 import com.tech.young.data.model.GetOtherUserProfileData
 import com.tech.young.data.model.GetProfileApiResponse
 import com.tech.young.databinding.ItemLayoutSubNewsBinding
+import com.tech.young.databinding.VaultItemViewBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.home.ViewMoreFragment
 import com.tech.young.ui.news.NewsItemClickListener
@@ -403,7 +405,17 @@ object BindingUtils {
 
     }
 
+    @BindingAdapter("saveExchangeMemberView")
+    @JvmStatic
+    fun saveExchangeMemberView(view : RecyclerView, memberList : List<GetVaultApiResponse.Data.Vault.Member?>?) {
+        val limitedList = memberList?.take(3)
+        val memberAdapter = SimpleRecyclerViewAdapter<GetVaultApiResponse.Data.Vault.Member, ItemLayoutRvMembersBinding>(R.layout.item_layout_rv_members, BR.bean) { v, m, pos ->
 
+        }
+        view.adapter = memberAdapter
+        memberAdapter.list  = limitedList
+
+    }
     @BindingAdapter("setFormattedCreatedAt")
     @JvmStatic
     fun setFormattedCreatedAt(textView: TextView, createdAt: String?) {
@@ -897,6 +909,32 @@ object BindingUtils {
         }
 
 
+
+
+    @BindingAdapter("eventTypeColor")
+    @JvmStatic
+    fun View.setEventTypeColor(type: String?) {
+        val color = when (type) {
+            "scheduled_lives" -> Color.parseColor("#BF9000")
+            "general_events_by_admin" -> Color.parseColor("#AB8BC3")
+            "own_events" -> Color.parseColor("#00B050")
+            else -> Color.LTGRAY
+        }
+        this.backgroundTintList = ColorStateList.valueOf(color)
+    }
+
+
+    @BindingAdapter("setEventTypeTextColor")
+    @JvmStatic
+    fun TextView.setEventTypeTextColor(type: String?) {
+        val color = when (type) {
+            "scheduled_lives" -> Color.parseColor("#BF9000")
+            "general_events_by_admin" -> Color.parseColor("#AB8BC3")
+            "own_events" -> Color.parseColor("#00B050")
+            else -> Color.DKGRAY
+        }
+        setTextColor(color)
+    }
 
 
 }

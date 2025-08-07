@@ -126,6 +126,7 @@
             android:id="@+id/tvDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            convertUtcToLocalTimeText="@{bean.createdAt}"
             android:text="12 January at 09:28PM"
             style="@style/TextView_400_Regular"
             android:textColor="@color/text_gray"
@@ -133,8 +134,22 @@
             android:paddingHorizontal="@dimen/_8sdp"
             app:layout_constraintStart_toEndOf="@id/ivUserImage"
             app:layout_constraintTop_toBottomOf="@id/tvUserName"/>
+
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvTitle"
+            android:id="@+id/title"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:text="@{bean.title}"
+            android:singleLine="true"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivUserImage" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{bean.description}"
@@ -144,7 +159,7 @@
             android:paddingHorizontal="@dimen/_8sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivUserImage"/>
+            app:layout_constraintTop_toBottomOf="@id/title"/>
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivHeart"
             android:layout_width="@dimen/_20sdp"
@@ -154,8 +169,8 @@
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:layout_marginVertical="@dimen/_8sdp"
             android:layout_marginStart="@dimen/_8sdp"
-            app:layout_constraintStart_toStartOf="@id/tvTitle"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+            app:layout_constraintStart_toStartOf="@id/tvDescription"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvSaves"
@@ -176,7 +191,7 @@
             android:src="@drawable/ic_message"
             android:layout_marginTop="@dimen/_8sdp"
             app:layout_constraintStart_toEndOf="@id/tvSaves"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription"
             android:layout_marginStart="@dimen/_10sdp"/>
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -234,7 +249,7 @@
             android:visibility="visible"
             android:clipToPadding="false"
             android:overScrollMode="never"
-            tools:listitem="@layout/item_layout_rv_members"
+            tools:listitem="@layout/item_layout_rv_exchange_member"
             android:layout_marginEnd="@dimen/_8sdp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"

@@ -28,6 +28,8 @@ import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentVaultRoomBinding
 import com.tech.young.databinding.ItemLayoutCommentViewBinding
 import com.tech.young.databinding.ItemLayoutMemberViewBinding
+import com.tech.young.ui.ecosystem.EcosystemFragment
+import com.tech.young.ui.exchange.ExchangeFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -55,6 +57,22 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
         initAdapter()
 
         setObserver()
+
+
+        binding.tabLayoutBottom.tabExchange.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, ExchangeFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.tabLayoutBottom.tabEcosystem.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, EcosystemFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
 
         binding.ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
             if (fromUser) {

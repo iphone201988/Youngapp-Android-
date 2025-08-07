@@ -17,6 +17,9 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.Tab
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tech.young.ui.common.CommonActivity
+import com.tech.young.ui.share_screen.CommonShareFragment
+import com.tech.young.ui.stream_screen.CommonStreamFragment
+import com.tech.young.ui.vault_screen.CommonVaultFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,16 +47,32 @@ class SavedFragment : BaseFragment<FragmentSavedBinding>() {
     private fun initView(){
         initViewPagerAdapter()
         binding.shareLayout.tabShare.setOnClickListener {
-            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_share")
-            startActivity(intent)
+//            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_share")
+//            startActivity(intent)
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, CommonShareFragment())
+                .addToBackStack(null)
+                .commit()
+
         }
         binding.shareLayout.tabStream.setOnClickListener {
-            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_stream")
-            startActivity(intent)
+//            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_stream")
+//            startActivity(intent)
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, CommonStreamFragment())
+                .addToBackStack(null)
+                .commit()
         }
         binding.shareLayout.tabVault.setOnClickListener {
-            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_vault")
-            startActivity(intent)
+//            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_vault")
+//            startActivity(intent)
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, CommonVaultFragment())
+                .addToBackStack(null)
+                .commit()
         }
     }
 

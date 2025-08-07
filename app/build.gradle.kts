@@ -102,11 +102,11 @@ dependencies {
 
 
     // Video Player
-    implementation ("com.google.android.exoplayer:exoplayer-core:2.18.1")
-    implementation ("com.google.android.exoplayer:exoplayer-ui:2.18.1")
-    implementation ("com.google.android.exoplayer:exoplayer-smoothstreaming:2.18.1")
+    implementation("androidx.media3:media3-exoplayer:1.8.0")
+    implementation("androidx.media3:media3-ui:1.8.0")
 
     implementation("org.jsoup:jsoup:1.16.1")
 
 
+    
 }

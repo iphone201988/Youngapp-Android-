@@ -1,6 +1,7 @@
 package com.tech.young.ui.exchange.screens
 
 import android.content.Intent
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -34,6 +35,8 @@ import com.tech.young.databinding.ItemLayoutSortDataBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.exchange.ExchangeVM
 import com.tech.young.ui.exchange.Filterable
+import com.tech.young.ui.exchange.exchange_share_detail.ExchangeShareDetailFragment
+import com.tech.young.ui.my_profile_screens.common_ui.EditProfileDetailFragment
 import com.tech.young.ui.share_screen.CommonShareFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -215,10 +218,21 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
 
                 }
                 R.id.consMain ->{
-                    val intent = Intent(requireContext(), CommonActivity::class.java)
-                    intent.putExtra("from", "exchange_share_details")
-                    intent.putExtra("userId", m._id)
-                    startActivity(intent)
+//                    val intent = Intent(requireContext(), CommonActivity::class.java)
+//                    intent.putExtra("from", "exchange_share_details")
+//                    intent.putExtra("userId", m._id)
+//                    startActivity(intent)
+
+                    val fragment = ExchangeShareDetailFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("userId", m._id)
+                        }
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
             }
         }

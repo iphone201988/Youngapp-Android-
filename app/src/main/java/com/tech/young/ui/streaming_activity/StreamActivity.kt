@@ -12,12 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.upstream.DefaultDataSource
-import com.google.android.exoplayer2.util.MimeTypes
+
 import com.google.gson.Gson
 import com.tech.MediaCapturer
 import com.tech.young.R
@@ -73,61 +68,61 @@ class StreamActivity : BaseActivity<ActivityStreamBinding>() {
     }
 
     override fun onCreateView() {
-       initializePlayer()
+    //   initializePlayer()
 
     }
 
     /**** video play function ***/
-    private fun initializePlayer() {
-      var   player = ExoPlayer.Builder(this) // <- context
-            .build()
-        // create a media item.
-        val mediaItem =
-            MediaItem.Builder().setUri("https://youngappbucket.s3.us-east-2.amazonaws.com/recordings/recording_6874e4e0b21418a1842b42ee_qrQMbTYHckGS9CWGAAAF_2025-07-14T11-07-15-591Z.mkv").setMimeType(MimeTypes.APPLICATION_MP4).build()
-        // Create a media source and pass the media item
-        val mediaSource = ProgressiveMediaSource.Factory(
-            DefaultDataSource.Factory(this) // <- context
-        ).createMediaSource(mediaItem)
-        // Finally assign this media source to the player
-        player!!.apply {
-            setMediaSource(mediaSource)
-            playWhenReady = true // start playing when the exoplayer has setup
-            seekTo(0, 0L) // Start from the beginning
-            prepare()
-            play()// Change the state from idle.
-            player?.addListener(object : Player.Listener {
-                override fun onIsPlayingChanged(isPlaying: Boolean) {
-                    super.onIsPlayingChanged(isPlaying)
-                    /*       if (isPlaying) {
-                               hideLoading()
-                           } else {
-                               if (stopProgress == 1) {
-                                   hideLoading()
-                                   stopProgress = 0
-                               } else {
-                                   showLoading()
-                               }
-                           }*/
-                    hideLoading()
-                }
-
-                override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
-                    if (playWhenReady) {
-                        // Video is playing, hide the loading indicator
-                        hideLoading()
-                    } else {
-
-                        // Video is paused, show the loading indicator
-                        hideLoading()
-                    }
-                }
-            })
-        }.also {
-            // Do not forget to attach the player to the view
-            binding.playerView.player = it
-        }
-
-    }
+//    private fun initializePlayer() {
+//      var   player = ExoPlayer.Builder(this) // <- context
+//            .build()
+//        // create a media item.
+//        val mediaItem =
+//            MediaItem.Builder().setUri("https://youngappbucket.s3.us-east-2.amazonaws.com/recordings/recording_6874e4e0b21418a1842b42ee_qrQMbTYHckGS9CWGAAAF_2025-07-14T11-07-15-591Z.mkv").setMimeType(MimeTypes.APPLICATION_MP4).build()
+//        // Create a media source and pass the media item
+//        val mediaSource = ProgressiveMediaSource.Factory(
+//            DefaultDataSource.Factory(this) // <- context
+//        ).createMediaSource(mediaItem)
+//        // Finally assign this media source to the player
+//        player!!.apply {
+//            setMediaSource(mediaSource)
+//            playWhenReady = true // start playing when the exoplayer has setup
+//            seekTo(0, 0L) // Start from the beginning
+//            prepare()
+//            play()// Change the state from idle.
+//            player?.addListener(object : Player.Listener {
+//                override fun onIsPlayingChanged(isPlaying: Boolean) {
+//                    super.onIsPlayingChanged(isPlaying)
+//                    /*       if (isPlaying) {
+//                               hideLoading()
+//                           } else {
+//                               if (stopProgress == 1) {
+//                                   hideLoading()
+//                                   stopProgress = 0
+//                               } else {
+//                                   showLoading()
+//                               }
+//                           }*/
+//                    hideLoading()
+//                }
+//
+//                override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+//                    if (playWhenReady) {
+//                        // Video is playing, hide the loading indicator
+//                        hideLoading()
+//                    } else {
+//
+//                        // Video is paused, show the loading indicator
+//                        hideLoading()
+//                    }
+//                }
+//            })
+//        }.also {
+//            // Do not forget to attach the player to the view
+//            binding.playerView.player = it
+//        }
+//
+//    }
 
     /**** on stop methid call ***/
     override fun onStop() {

@@ -31,7 +31,9 @@ import com.tech.young.ui.contact_screens.ContactUsFragment
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.ecosystem.EcosystemFragment.Companion.selectedCategoryForEcosystem
 import com.tech.young.ui.exchange.ExchangeFragment
+import com.tech.young.ui.exchange.exchange_share_detail.ExchangeShareDetailFragment
 import com.tech.young.ui.exchange.screens.ShareExchangeFragment.Companion.selectedCategoryForExchange
+import com.tech.young.ui.exchange.stream_detail_fragment.StreamDetailFragment
 import com.tech.young.ui.inbox.InboxFragment
 import com.tech.young.ui.my_profile_screens.YourProfileFragment
 import com.tech.young.ui.my_profile_screens.common_ui.BusinessInfoFragment
@@ -48,6 +50,8 @@ import com.tech.young.ui.share_screen.CommonShareFragment
 import com.tech.young.ui.stream_screen.CommonStreamFragment
 import com.tech.young.ui.user_profile.UserProfileFragment
 import com.tech.young.ui.vault_screen.CommonVaultFragment
+import com.tech.young.ui.vault_screen.people_screen.PeopleFragment
+import com.tech.young.ui.vault_screen.vault_room.VaultRoomFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -230,6 +234,20 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                         updateOtherUI("Business & Financial Information")
                     }
 
+                    is ExchangeShareDetailFragment ->{
+                        updateOtherUI("Share")
+                    }
+                    is StreamDetailFragment -> {
+                        updateOtherUI("Stream")
+                    }
+                    is VaultRoomFragment ->{
+                        updateOtherUI("Vault Room")
+                    }
+                    is PeopleFragment ->{
+                        updateOtherUI("Peoples")
+                    }
+
+
                 }
 
             }
@@ -316,8 +334,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
         list.add(SideMenuBar(false, name.toString(), null))
         list.add(SideMenuBar(false, "Profile"))
         list.add(SideMenuBar(false, "Inbox"))
-        list.add(SideMenuBar(false, "Dashboard"))
-        list.add(SideMenuBar(false, "Analytics"))
+//        list.add(SideMenuBar(false, "Dashboard"))
+//        list.add(SideMenuBar(false, "Analytics"))
         list.add(SideMenuBar(false, "Member", "Exchange", true))
         list.add(SideMenuBar(false, "Financial Advisors", "Exchange"))
         list.add(SideMenuBar(false, "Startups", "Exchange"))

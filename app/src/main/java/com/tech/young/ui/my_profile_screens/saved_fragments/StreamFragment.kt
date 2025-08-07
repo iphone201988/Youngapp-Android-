@@ -1,6 +1,7 @@
 package com.tech.young.ui.my_profile_screens.saved_fragments
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -19,6 +20,7 @@ import com.tech.young.databinding.CategoryItemViewBinding
 import com.tech.young.databinding.FragmentStreamBinding
 import com.tech.young.databinding.StreamItemViewBinding
 import com.tech.young.ui.common.CommonActivity
+import com.tech.young.ui.exchange.stream_detail_fragment.StreamDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -134,7 +136,31 @@ class StreamFragment : BaseFragment<FragmentStreamBinding>() {
         streamAdapter=SimpleRecyclerViewAdapter(R.layout.stream_item_view, BR.bean){
                 v,m,pos->
             when(v.id){
+                R.id.consMain ->{
 
+//                    val intent= Intent(requireContext(), CommonActivity::class.java)
+//                    intent.putExtra("from","consumer_live_stream")
+//                    intent.putExtra("room_id",m._id)
+//                    startActivity(intent)
+
+//                    val intent= Intent(requireContext(), CommonActivity::class.java)
+//                    intent.putExtra("from","stream_detail")
+//                    intent.putExtra("streamId", m._id)
+//                    startActivity(intent)
+
+
+                    val fragment = StreamDetailFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("streamId", m._id)
+                        }
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+
+                }
             }
         }
         binding.rvShare.adapter=streamAdapter

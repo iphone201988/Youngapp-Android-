@@ -1,6 +1,7 @@
 package com.tech.young.ui.my_profile_screens.saved_fragments
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -19,6 +20,7 @@ import com.tech.young.databinding.CategoryItemViewBinding
 import com.tech.young.databinding.FragmentShareBinding
 import com.tech.young.databinding.ShareItemViewBinding
 import com.tech.young.ui.common.CommonActivity
+import com.tech.young.ui.exchange.exchange_share_detail.ExchangeShareDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -132,7 +134,23 @@ class ShareFragment : BaseFragment<FragmentShareBinding>() {
         shareAdapter=SimpleRecyclerViewAdapter(R.layout.share_item_view,BR.bean){
                 v,m,pos->
             when(v.id){
+                R.id.consMain ->{
+//                    val intent = Intent(requireContext(), CommonActivity::class.java)
+//                    intent.putExtra("from", "exchange_share_details")
+//                    intent.putExtra("userId", m._id)
+//                    startActivity(intent)
 
+                    val fragment = ExchangeShareDetailFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("userId", m._id)
+                        }
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
         }
         binding.rvShare.adapter=shareAdapter

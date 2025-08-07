@@ -6,58 +6,69 @@
 
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/consLeft"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:orientation="vertical"
         android:layout_marginVertical="@dimen/_5sdp">
+
+        <!-- Vertical Guideline at 30% (adjust as needed) -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:maxWidth="@dimen/_200sdp"
             android:background="@drawable/unselected_side_menu_bg"
-            android:layout_gravity="start"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guidelineStart"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvLeft"
                 style="@style/TextView_400_Regular"
                 android:layout_width="wrap_content"
-                android:maxWidth="@dimen/_200sdp"
                 android:layout_height="wrap_content"
-                android:gravity="start"
+                android:maxWidth="@dimen/_140sdp"
                 android:minWidth="@dimen/_140sdp"
                 android:minHeight="@dimen/_30sdp"
                 android:paddingTop="@dimen/_7sdp"
                 android:paddingBottom="@dimen/_3sdp"
                 android:paddingHorizontal="@dimen/_7sdp"
+                android:gravity="start"
                 android:textColor="@color/text_black"
                 android:textSize="@dimen/_12ssp"
-                app:layout_constraintBottom_toTopOf="@id/tvLeftDate"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="3 I have a class which i inject into a ViewModel + ViewModel factory, when initialise the view model in the onCreate method in activity, its says the value being passed through is not initialised." />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tvLeftDate"
+                tools:text="3 I have a class which I inject into a ViewModel..." />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvLeftDate"
                 style="@style/TextView_400_Regular"
                 android:layout_width="0dp"
-                android:maxWidth="@dimen/_200sdp"
                 android:layout_height="wrap_content"
-                android:gravity="start"
+                android:maxWidth="@dimen/_200sdp"
                 android:minWidth="@dimen/_3sdp"
                 android:paddingHorizontal="@dimen/_7sdp"
                 android:paddingBottom="@dimen/_7sdp"
+                android:gravity="start"
                 android:textColor="@color/text_black"
                 android:textSize="@dimen/_10ssp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/tvLeft"
-                app:layout_constraintStart_toStartOf="@id/tvLeft"
                 app:layout_constraintTop_toBottomOf="@id/tvLeft"
-                tools:text="May 12,2025 4:35PM" />
+                app:layout_constraintStart_toStartOf="@id/tvLeft"
+                app:layout_constraintEnd_toEndOf="@id/tvLeft"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="May 12, 2025 4:35 PM" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

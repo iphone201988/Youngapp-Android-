@@ -134,20 +134,87 @@ class MainSplashActivity : BaseActivity<ActivityMainSplashBinding>(), LocationRe
             }
         }
     /** check audio permission **/
-    private fun checkAudioPermission(): Boolean {
-        if (ContextCompat.checkSelfPermission(
-                this@MainSplashActivity, Manifest.permission.RECORD_AUDIO
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this@MainSplashActivity,
-                arrayOf(Manifest.permission.RECORD_AUDIO),
-                REQUEST_RECORD_AUDIO_PERMISSION
-            )
-            return false
-        } else {
-            return true
-        }
+//    private fun checkAudioPermission(): Boolean {
+//        if (ContextCompat.checkSelfPermission(
+//                this@MainSplashActivity, Manifest.permission.RECORD_AUDIO
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            ActivityCompat.requestPermissions(
+//                this@MainSplashActivity,
+//                arrayOf(Manifest.permission.RECORD_AUDIO),
+//                REQUEST_RECORD_AUDIO_PERMISSION
+//            )
+//            return false
+//        } else {
+//            return true
+//        }
+//    }
+
+
+//    private fun checkAudioPermission(): Boolean {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            // From Android 6.0+, need to request runtime permission
+//            if (ContextCompat.checkSelfPermission(
+//                    this,
+//                    Manifest.permission.RECORD_AUDIO
+//                ) != PackageManager.PERMISSION_GRANTED
+//            ) {
+//
+//                // For Android 10+, you might want to show rationale if denied before
+//                if (ActivityCompat.shouldShowRequestPermissionRationale(
+//                        this,
+//                        Manifest.permission.RECORD_AUDIO
+//                    )
+//                ) {
+//                    // Optional: Show custom rationale dialog explaining why the permission is needed
+//                }
+//
+//                ActivityCompat.requestPermissions(
+//                    this,
+//                    arrayOf(Manifest.permission.RECORD_AUDIO),
+//                    REQUEST_RECORD_AUDIO_PERMISSION
+//                )
+//                return false
+//            }
+//        }
+//        return true
+//    }
+
+
+    private fun checkAudioPermission() {
+        val micPermission = arrayOf(Manifest.permission.RECORD_AUDIO)
+
+        Permissions.check(
+           this,
+            micPermission,
+            "Microphone permission is required to record audio.",
+            null,
+            object : PermissionHandler() {
+                override fun onGranted() {
+                    // ✅ Permission granted – safe to record audio
+                }
+
+                override fun onDenied(context: Context?, deniedPermissions: ArrayList<String>?) {
+                    // 🚫 Permission denied – optionally re-request or show warning
+                    deniedPermissions?.let {
+                        Permissions.check(
+                            this@MainSplashActivity,
+                            it.toTypedArray(),
+                            "Microphone access is required for this feature.",
+                            null,
+                            object : PermissionHandler() {
+                                override fun onGranted() {
+                                    // ✅ Permission granted after re-request
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+        )
     }
 
-    }
+
+
+
+}

@@ -23,6 +23,8 @@ import com.tech.young.data.model.GetUserApiResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentPeopleBinding
 import com.tech.young.databinding.ItemLayoutPeoplesBinding
+import com.tech.young.ui.ecosystem.EcosystemFragment
+import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.vault_screen.CommonVaultFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -56,6 +58,21 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
         searchView()
         initAdapter()
         setObserver()
+
+
+        binding.tabLayoutBottom.tabExchange.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, ExchangeFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.tabLayoutBottom.tabEcosystem.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, EcosystemFragment())
+                .addToBackStack(null)
+                .commit()
+        }
 
 
         binding.rvPeople.addOnScrollListener(object : RecyclerView.OnScrollListener() {

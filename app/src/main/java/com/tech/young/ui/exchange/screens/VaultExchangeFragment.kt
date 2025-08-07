@@ -1,6 +1,7 @@
 package com.tech.young.ui.exchange.screens
 
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +34,9 @@ import com.tech.young.databinding.ItemLayoutVaultExchangeBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.exchange.ExchangeVM
 import com.tech.young.ui.exchange.Filterable
+import com.tech.young.ui.exchange.stream_detail_fragment.StreamDetailFragment
 import com.tech.young.ui.vault_screen.CommonVaultFragment
+import com.tech.young.ui.vault_screen.vault_room.VaultRoomFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -207,10 +210,21 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
                   //  viewModel.likeDislike(Constants.LIKE_DISLIKE_POST+m._id)
                 }
                 R.id.consMain ->{
-                    val intent= Intent(requireContext(), CommonActivity::class.java)
-                    intent.putExtra("from","vault_room")
-                    intent.putExtra("vaultId",m._id)
-                    startActivity(intent)
+//                    val intent= Intent(requireContext(), CommonActivity::class.java)
+//                    intent.putExtra("from","vault_room")
+//                    intent.putExtra("vaultId",m._id)
+//                    startActivity(intent)
+
+                    val fragment = VaultRoomFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("vaultId", m._id)
+                        }
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
 
                 R.id.reportBtn -> {

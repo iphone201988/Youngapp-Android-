@@ -109,6 +109,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/text_gray"
             android:textSize="@dimen/_10ssp"
+            android:visibility="gone"
             android:text="Apr 05, 2025"
             android:layout_marginEnd="@dimen/_15sdp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -134,6 +135,7 @@
             android:textColor="@color/text_gray"
             android:textSize="@dimen/_10ssp"
             android:text="10:00 AM"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="@id/tvRole"
             app:layout_constraintBottom_toBottomOf="@id/tvRole"
             app:layout_constraintEnd_toEndOf="@id/dateTime"/>

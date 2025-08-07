@@ -150,6 +150,22 @@
             app:layout_constraintTop_toBottomOf="@id/tvUserName" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSymbol"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:text="@{bean.symbol}"
+            android:visibility="gone"
+            android:singleLine="true"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivUserImage" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvTitle"
             style="@style/TextView_500_Medium"
             android:layout_width="0dp"
@@ -157,10 +173,25 @@
             android:layout_marginTop="@dimen/_8sdp"
             android:paddingHorizontal="@dimen/_8sdp"
             android:text="@{bean.title}"
+            android:singleLine="true"
             android:textSize="@dimen/_12ssp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivUserImage" />
+            app:layout_constraintTop_toBottomOf="@id/tvSymbol" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDescription"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:text="@{bean.description}"
+            android:singleLine="true"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivHeart"
@@ -172,7 +203,7 @@
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:src="@drawable/ic_heart"
             app:layout_constraintStart_toStartOf="@id/tvTitle"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+            app:layout_constraintTop_toBottomOf="@id/tvDescription" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvSaves"

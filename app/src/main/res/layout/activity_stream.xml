@@ -15,12 +15,12 @@
         android:layout_height="match_parent"
         tools:context=".ui.streaming_activity.StreamActivity">
 
-        <com.google.android.exoplayer2.ui.PlayerView
-            android:id="@+id/playerView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--        <com.google.android.exoplayer2.ui.PlayerView-->
+<!--            android:id="@+id/playerView"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

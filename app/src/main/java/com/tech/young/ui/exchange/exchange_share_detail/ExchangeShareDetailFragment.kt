@@ -30,6 +30,8 @@ import com.tech.young.data.model.GetPostDetailsApiResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentExchangeShareDetailBinding
 import com.tech.young.databinding.ItemLayoutPostCommentBinding
+import com.tech.young.ui.ecosystem.EcosystemFragment
+import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.exchange.ExchangeVM
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -59,6 +61,20 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
                 Log.i("RatingBar", "User selected rating: $rating")
                 // Handle the rating value
             }
+        }
+
+        binding.tabLayoutBottom.tabExchange.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, ExchangeFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.tabLayoutBottom.tabEcosystem.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, EcosystemFragment())
+                .addToBackStack(null)
+                .commit()
         }
     }
 

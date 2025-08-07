@@ -36,6 +36,9 @@ import com.tech.young.ui.my_profile_screens.YourProfileVM
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.util.FileUtil
 import com.tech.young.data.api.SimpleApiResponse
+import com.tech.young.ui.share_screen.CommonShareFragment
+import com.tech.young.ui.stream_screen.CommonStreamFragment
+import com.tech.young.ui.vault_screen.CommonVaultFragment
 import com.tech.young.utils.VerticalPagination
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -57,6 +60,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
     private var imageUri : Uri ?= null
     private var userSelectedDate: String? = null
     private var pagination: VerticalPagination? = null
+    var eventsList = listOf<GetEventsApiResponse.Data.Event?>()
     var page  = 1
     private var getList = listOf(
         "", "", "", "", ""
@@ -130,21 +134,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         topicAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_drop_down,BR.bean){v,m,pos ->
             when(v.id){
                 R.id.consMain , R.id.title->{
@@ -201,7 +190,34 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
         })
 
 
+        binding.shareLayout.tabShare.setOnClickListener {
+//            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_share")
+//            startActivity(intent)
 
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, CommonShareFragment())
+                .addToBackStack(null)
+                .commit()
+
+        }
+        binding.shareLayout.tabStream.setOnClickListener {
+//            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_stream")
+//            startActivity(intent)
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, CommonStreamFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+        binding.shareLayout.tabVault.setOnClickListener {
+//            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_vault")
+//            startActivity(intent)
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, CommonVaultFragment())
+                .addToBackStack(null)
+                .commit()
+        }
 
         binding.rangeCalenderOneTime.setOnPreviousPageChangeListener(object :
             OnCalendarPageChangeListener {
@@ -335,6 +351,8 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                             val myDataModel: GetEventsApiResponse? = BindingUtils.parseJson(it.data.toString())
 
                             myDataModel?.data?.let { eventData ->
+                                eventsList = myDataModel.data!!.events!!
+                                Log.i("dasdasdasdasd", "initObserver: $eventsList")
                                 eventData.pagination?.total?.let { total ->
                                     if (page <= total) {
                                         pagination?.isLoading = false
@@ -346,6 +364,10 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                                     reminderAdapter.list = events
                                 } else {
                                     reminderAdapter.addToList(events)
+                                }
+                                if (events != null) {
+                                   markUnderlineEvents(events)
+
                                 }
                             }
                         }
@@ -402,6 +424,29 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
             binding.tvYear.text = ""
         }
     }
+
+    private fun markUnderlineEvents(events: List<GetEventsApiResponse.Data.Event?>) {
+        val underlineEvents = mutableListOf<EventDay>()
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        sdf.timeZone = TimeZone.getTimeZone("UTC")
+
+        events.forEach { event ->
+            event?.scheduledDate?.let { dateStr ->
+                try {
+                    val date = sdf.parse(dateStr)
+                    val calendar = Calendar.getInstance()
+                    calendar.time = date!!
+                    underlineEvents.add(EventDay(calendar, R.drawable.line_base))
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+
+        binding.rangeCalenderOneTime.setEvents(underlineEvents)
+    }
+
+
 
 
     private fun isEmptyField() : Boolean {

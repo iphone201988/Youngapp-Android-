@@ -32,6 +32,8 @@ import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentStreamDetailBinding
 import com.tech.young.databinding.ItemLayoutPostCommentBinding
 import com.tech.young.ui.common.CommonActivity
+import com.tech.young.ui.ecosystem.EcosystemFragment
+import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.exchange.ExchangeVM
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
@@ -61,6 +63,20 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
         initAdapter()
         initObserver()
 
+
+        binding.tabLayoutBottom.tabExchange.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, ExchangeFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.tabLayoutBottom.tabEcosystem.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, EcosystemFragment())
+                .addToBackStack(null)
+                .commit()
+        }
 
         binding.ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
             if (fromUser) {

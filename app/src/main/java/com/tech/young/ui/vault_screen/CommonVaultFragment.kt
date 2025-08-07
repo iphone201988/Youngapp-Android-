@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
@@ -46,6 +47,8 @@ import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.databinding.BottomSheetCameraGalleryBinding
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
+import com.tech.young.ui.my_profile_screens.common_ui.EditProfileDetailFragment
+import com.tech.young.ui.vault_screen.people_screen.PeopleFragment
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -342,11 +345,23 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
                 }
                 R.id.etUsers -> {
                     selectedUserId = ""
-                    val intent = Intent(requireContext(), CommonActivity::class.java).apply {
-                        putExtra("from", "people")
-                        putParcelableArrayListExtra("selectedCategory", ArrayList(selectedCategory))
+//                    val intent = Intent(requireContext(), CommonActivity::class.java).apply {
+//                        putExtra("from", "people")
+//                        putParcelableArrayListExtra("selectedCategory", ArrayList(selectedCategory))
+//                    }
+//                    startActivity(intent)
+
+                    val fragment = PeopleFragment().apply {
+                        arguments = Bundle().apply {
+                            putParcelableArrayList("selectedCategory", ArrayList(selectedCategory))
+                        }
                     }
-                    startActivity(intent)
+
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
 
                 R.id.etTopic -> {

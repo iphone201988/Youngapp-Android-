@@ -7,15 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.OptIn
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.PlaybackException
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.upstream.DefaultDataSource
-import com.google.android.exoplayer2.util.MimeTypes
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MimeTypes
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DefaultDataSource
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.ProgressiveMediaSource
+
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
@@ -53,6 +56,8 @@ class RecordedStreamFragment : BaseFragment<FragmentRecordedStreamBinding>() {
         if (streamUrl != null){
             initializePlayer()
         }
+
+
     }
 
     override fun getLayoutResource(): Int {
@@ -66,52 +71,27 @@ class RecordedStreamFragment : BaseFragment<FragmentRecordedStreamBinding>() {
 
 
 
+
     private fun initializePlayer() {
-        try {
+
             val fullUrl = Constants.BASE_URL_IMAGE + (streamUrl ?: "")
-            if (streamUrl.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "Stream URL is empty", Toast.LENGTH_SHORT).show()
-                return
-            }
 
-            val mediaItem = MediaItem.Builder()
-                .setUri(fullUrl)
-                .setMimeType(MimeTypes.APPLICATION_MP4) // Make sure it's actually MP4
-                .build()
+        if (fullUrl.isNotEmpty()){
+            val playerView = binding.playerView
+            playerView.visibility = View.VISIBLE
 
-            player = ExoPlayer.Builder(requireContext()).build().also { exoPlayer ->
+            player = ExoPlayer.Builder(requireContext()).build()
+            playerView.player = player
 
-                val mediaSource = ProgressiveMediaSource.Factory(
-                    DefaultDataSource.Factory(requireContext())
-                ).createMediaSource(mediaItem)
-
-                exoPlayer.setMediaSource(mediaSource)
-                exoPlayer.playWhenReady = true
-                exoPlayer.seekTo(0, 0L)
-                exoPlayer.prepare()
-
-                exoPlayer.addListener(object : Player.Listener {
-                    override fun onIsPlayingChanged(isPlaying: Boolean) {
-                        hideLoading()
-                    }
-
-                    override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
-                        hideLoading()
-                    }
-
-                    override fun onPlayerError(error: PlaybackException) {
-                        Log.e("PlayerError", "Playback failed: ${error.errorCodeName}", error)
-                        Toast.makeText(requireContext(), "Playback failed", Toast.LENGTH_SHORT).show()
-                    }
-                })
-
-                binding.playerView.player = exoPlayer
-            }
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(requireContext(), "Failed to load video", Toast.LENGTH_SHORT).show()
+            val videoUrl =fullUrl
+            val mediaItem = MediaItem.fromUri(videoUrl)
+            player?.setMediaItem(mediaItem)
+            player?.prepare()
+            player?.playWhenReady = true
         }
+
+
+
     }
 
     override fun onDestroyView() {

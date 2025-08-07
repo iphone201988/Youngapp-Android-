@@ -1,6 +1,7 @@
 package com.tech.young.ui.exchange.screens
 
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -32,6 +33,8 @@ import com.tech.young.databinding.ItemLayoutStreamExchangeBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.exchange.ExchangeVM
 import com.tech.young.ui.exchange.Filterable
+import com.tech.young.ui.exchange.exchange_share_detail.ExchangeShareDetailFragment
+import com.tech.young.ui.exchange.stream_detail_fragment.StreamDetailFragment
 import com.tech.young.ui.stream_screen.CommonStreamFragment
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.internal.ignoreIoExceptions
@@ -199,10 +202,22 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
 //                    intent.putExtra("room_id",m._id)
 //                    startActivity(intent)
 
-                    val intent= Intent(requireContext(), CommonActivity::class.java)
-                    intent.putExtra("from","stream_detail")
-                    intent.putExtra("streamId", m._id)
-                    startActivity(intent)
+//                    val intent= Intent(requireContext(), CommonActivity::class.java)
+//                    intent.putExtra("from","stream_detail")
+//                    intent.putExtra("streamId", m._id)
+//                    startActivity(intent)
+
+
+                    val fragment = StreamDetailFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("streamId", m._id)
+                        }
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
 
                 }
                 R.id.ivSaves -> {

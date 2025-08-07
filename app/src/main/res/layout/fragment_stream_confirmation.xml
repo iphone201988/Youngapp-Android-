@@ -30,6 +30,7 @@
                 android:layout_height="@dimen/_35sdp"
                 android:background="@drawable/rounded_bg"
                 android:padding="@dimen/_8sdp"
+                android:onClick="@{v -> vm.onClick(v)}"
                 android:src="@drawable/iv_back_symbol"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -53,17 +53,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.exoplayer2.ui.PlayerView
-            android:id="@+id/playerView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="@dimen/_10sdp"
-            app:layout_constraintStart_toStartOf="@id/clTopBar"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/clTopBar" />
-
 
 
         <org.webrtc.SurfaceViewRenderer
