@@ -49,6 +49,7 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
     private var sortList = ArrayList<SortingItem>()
 
     private var selectedCategoryTitle: String? = null
+    private var adapterSelectedCategory : String ? = null
     private var selectedKey : String ?= null
     private var userSelectedKey : String ? = null
     private var selectedFilterData : FilterItem ? = null
@@ -140,15 +141,14 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
 
 
         // Set category list
-        categoryData = categoryList(selectedCategoryForExchange)
-        selectedCategoryTitle = categoryData.find { it.isSelected }?.title
-
-        categoryAdapter.list = categoryData
-        binding.rvCategories.adapter = categoryAdapter
-
-        // Initial fetch
-        selectedCategoryTitle?.let { getStreamExchange(it) }
-        Log.i("fsdfsdfsd", "initView: $categoryData , $selectedCategoryTitle  ,$selectedCategoryForExchange")
+//        categoryData = categoryList(selectedCategoryForExchange)
+//        selectedCategoryTitle = categoryData.find { it.isSelected }?.title
+//
+//        categoryAdapter.list = categoryData
+//        binding.rvCategories.adapter = categoryAdapter
+//
+//        // Initial fetch
+//        selectedCategoryTitle?.let { getStreamExchange(it) }
     }
 
     private fun getSortList() {
@@ -164,6 +164,7 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                         categoryData.forEach { it.isSelected = false }
                         categoryData[pos].isSelected = true
                         selectedCategoryTitle = m.title
+                        adapterSelectedCategory = m.title
                         categoryAdapter.notifyDataSetChanged()
 
                         getStreamExchange(m.title)
@@ -456,7 +457,27 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
 
     override fun onResume() {
         super.onResume()
+        if (adapterSelectedCategory != null){
+            categoryData = categoryList(adapterSelectedCategory)
+            selectedCategoryTitle = categoryData.find { it.isSelected }?.title
+
+            categoryAdapter.list = categoryData
+            binding.rvCategories.adapter = categoryAdapter
+
+            // Initial fetch
+            getStreamExchange(selectedCategoryTitle.toString())
+        }else{
+            categoryData = categoryList(selectedCategoryForExchange)
+            selectedCategoryTitle = categoryData.find { it.isSelected }?.title
+
+            categoryAdapter.list = categoryData
+            binding.rvCategories.adapter = categoryAdapter
+
+            // Initial fetch
+            selectedCategoryTitle?.let { getStreamExchange(it) }
+        }
+
         Log.i("dsadsad", "onResume: $selectedCategoryTitle")
-        getStreamExchange(selectedCategoryTitle.toString())
+
     }
 }

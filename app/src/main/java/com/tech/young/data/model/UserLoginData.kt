@@ -513,6 +513,7 @@ data class GetUserApiResponse(
             var profileImage: String?,
             var role: String?,
             var username: String?,
+            var isRated: Double?,
             var isSelected: Boolean = false,
         )
     }
@@ -875,6 +876,7 @@ data class GetOtherUserProfileData(
     val isConnectedWithProfile: Boolean?,
     val isFollowed: Boolean?,
     val isRated: Double?,
+    var averageRating: Double?,
     val isRegistrationCompleted: Boolean?,
     val isReported: Boolean?,
     val isVerified: Boolean?,
@@ -1030,7 +1032,8 @@ data class GetLatestUserApiResponse(
             var profileImage: String?,
             var role: String?,
             var username: String?,
-            var ratings: Double?
+            var ratings: Double?,
+            var isRated: Double?
 
             )
     }

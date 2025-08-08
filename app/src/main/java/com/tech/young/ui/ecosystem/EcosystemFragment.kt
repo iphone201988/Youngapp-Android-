@@ -68,7 +68,7 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
     private var isLoading = false
     private var isLastPage = false
     private var totalPages : Int ? = null
-
+    private var adapterSelectedCategory : String ? = null
 
     companion object {
         var selectedCategoryForEcosystem: String? = null
@@ -243,11 +243,7 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
         initAdapters()
 
         // Initialize and set category list once
-        categoryData = categoryList(selectedCategoryForEcosystem)
-        selectedCategoryTitle = categoryData.find { it.isSelected }?.title
 
-        categoryAdapter.list = categoryData
-        binding.rvCategories.adapter = categoryAdapter
 
    //     selectedCategoryTitle?.let { getLatestUser(it) }
 
@@ -372,6 +368,8 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
                         categoryData.forEach { it.isSelected = false }
                         categoryData[pos].isSelected = true
                         selectedCategoryTitle = m.title
+                        adapterSelectedCategory = m.title
+                        Log.i("DSAdsa", "initAdapters: $selectedCategoryTitle")
                         categoryAdapter.notifyDataSetChanged()
 
                         getLatestUser(m.title)
@@ -506,7 +504,31 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
 
     override fun onResume() {
         super.onResume()
-        getLatestUser(selectedCategoryTitle.toString())
+
+        if (adapterSelectedCategory != null){
+            categoryData = categoryList(adapterSelectedCategory)
+            selectedCategoryTitle = categoryData.find { it.isSelected }?.title
+
+            categoryAdapter.list = categoryData
+            binding.rvCategories.adapter = categoryAdapter
+
+            getLatestUser(adapterSelectedCategory.toString())
+
+
+        }
+        else{
+            categoryData = categoryList(selectedCategoryForEcosystem)
+            selectedCategoryTitle = categoryData.find { it.isSelected }?.title
+
+            categoryAdapter.list = categoryData
+            binding.rvCategories.adapter = categoryAdapter
+
+            getLatestUser(selectedCategoryTitle.toString())
+
+        }
+
+
+        Log.i("Dsdsad", "onResume: $selectedCategoryTitle")
 
     }
 }

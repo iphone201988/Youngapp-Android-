@@ -205,6 +205,7 @@
             android:rating="0"
             android:scaleX="1"
             android:scaleY="1"
+            android:stepSize="1"
             app:bgColor="@color/yellow_star"
             app:bgDrawable="@drawable/ic_star_unfilled"
             app:layout_constraintStart_toStartOf="@id/tvRatings"

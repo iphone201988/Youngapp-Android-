@@ -3,8 +3,8 @@
     <item android:gravity="bottom">
         <shape android:shape="rectangle">
             <size
-                android:height="3dp"
-                android:width="20dp"/>
+                android:height="@dimen/_5sdp"
+                android:width="100dp" /> <!-- Approximate width of calendar cell -->
             <solid android:color="@color/black" />
         </shape>
     </item>

@@ -55,6 +55,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
     private var userSelectedKey : String ? = null
     private var selectedFilterData : FilterItem ? = null
     private var searchData : String ? = null
+    private var adapterSelectedCategory : String ? = null
 
     private lateinit var categoryData: ArrayList<CategoryModel>
     private var selectedCategoryTitle: String? = null
@@ -153,14 +154,14 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
         initAdapters()
 
         // Set category list
-        categoryData = categoryList(selectedCategoryForExchange)
-        selectedCategoryTitle = categoryData.find { it.isSelected }?.title
-
-        categoryAdapter.list = categoryData
-        binding.rvCategories.adapter = categoryAdapter
-
-        // Initial fetch
-        selectedCategoryTitle?.let { getShareExchange(it) }
+//        categoryData = categoryList(selectedCategoryForExchange)
+//        selectedCategoryTitle = categoryData.find { it.isSelected }?.title
+//
+//        categoryAdapter.list = categoryData
+//        binding.rvCategories.adapter = categoryAdapter
+//
+//        // Initial fetch
+//        selectedCategoryTitle?.let { getShareExchange(it) }
     }
 
     /** Adapter setup **/
@@ -243,6 +244,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                 categoryData.forEach { it.isSelected = false }
                 categoryData[pos].isSelected = true
                 selectedCategoryTitle = m.title
+                adapterSelectedCategory = m.title
                 categoryAdapter.notifyDataSetChanged()
 
                 getShareExchange(m.title)
@@ -473,7 +475,31 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
 
     override fun onResume() {
         super.onResume()
-        getShareExchange(selectedCategoryTitle.toString())
+
+        if (adapterSelectedCategory != null){
+            categoryData = categoryList(adapterSelectedCategory)
+            selectedCategoryTitle = categoryData.find { it.isSelected }?.title
+
+            categoryAdapter.list = categoryData
+            binding.rvCategories.adapter = categoryAdapter
+
+            // Initial fetch
+            getShareExchange(selectedCategoryTitle.toString())
+        }else{
+            categoryData = categoryList(selectedCategoryForExchange)
+            selectedCategoryTitle = categoryData.find { it.isSelected }?.title
+
+            categoryAdapter.list = categoryData
+            binding.rvCategories.adapter = categoryAdapter
+
+            // Initial fetch
+            selectedCategoryTitle?.let { getShareExchange(it) }
+        }
+
+
+
+
+       // getShareExchange(selectedCategoryTitle.toString())
     }
 
     override fun onFilterApplied(selectedFilter: FilterItem?) {

@@ -224,6 +224,7 @@
                     android:scaleX="1"
                     android:scaleY="1"
                     android:rating="0"
+                    android:stepSize="1"
                     app:starSpacing="@dimen/_5sdp"
                     app:starColor="@color/yellow_star"
                     app:starDrawable="@drawable/ic_star"

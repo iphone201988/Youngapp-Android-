@@ -49,6 +49,8 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
     private lateinit var sortAdapter : SimpleRecyclerViewAdapter<SortingItem, ItemLayoutSortDataBinding>
     private var sortList = ArrayList<SortingItem>()
     private var selectedCategoryTitle: String? = null
+    private var adapterSelectedCategory : String ? = null
+
     private  lateinit  var categoryData : ArrayList<CategoryModel>
     private var selectedKey : String ?= null
     private var userSelectedKey : String ? = null
@@ -160,6 +162,7 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
                         categoryData.forEach { it.isSelected = false }
                         categoryData[pos].isSelected = true
                         selectedCategoryTitle = m.title
+                        adapterSelectedCategory = m.title
                         categoryAdapter.notifyDataSetChanged()
 
                         getVault(m.title)
@@ -321,14 +324,14 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
 
 
         // Set category list
-        categoryData = categoryList(selectedCategoryForExchange)
-        selectedCategoryTitle = categoryData.find { it.isSelected }?.title
-
-        categoryAdapter.list = categoryData
-        binding.rvCategories.adapter = categoryAdapter
-
-        // Initial fetch
-        selectedCategoryTitle?.let { getVault(it) }
+//        categoryData = categoryList(selectedCategoryForExchange)
+//        selectedCategoryTitle = categoryData.find { it.isSelected }?.title
+//
+//        categoryAdapter.list = categoryData
+//        binding.rvCategories.adapter = categoryAdapter
+//
+//        // Initial fetch
+//        selectedCategoryTitle?.let { getVault(it) }
     }
     private fun getSortList() {
         sortList.add(SortingItem("Followed", "byFollowers"))
@@ -451,7 +454,28 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
 
     override fun onResume() {
         super.onResume()
-        getVault(selectedCategoryTitle.toString())
+
+        if (adapterSelectedCategory != null){
+            categoryData = categoryList(adapterSelectedCategory)
+            selectedCategoryTitle = categoryData.find { it.isSelected }?.title
+
+            categoryAdapter.list = categoryData
+            binding.rvCategories.adapter = categoryAdapter
+
+            getVault(selectedCategoryTitle.toString())
+        }
+        else {
+            categoryData = categoryList(selectedCategoryForExchange)
+            selectedCategoryTitle = categoryData.find { it.isSelected }?.title
+
+            categoryAdapter.list = categoryData
+            binding.rvCategories.adapter = categoryAdapter
+
+            // Initial fetch
+            selectedCategoryTitle?.let { getVault(it) }
+        }
+
+
     }
 
     override fun onFilterApplied(selectedFilter: FilterItem?) {

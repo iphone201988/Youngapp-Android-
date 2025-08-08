@@ -2,10 +2,16 @@ package com.tech.young.ui.my_profile_screens.profile_fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.InsetDrawable
+import android.graphics.drawable.LayerDrawable
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.text.TextUtils
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.activity.result.ActivityResult
@@ -81,6 +87,18 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
         initAdapter()
         // observer
         initObserver()
+
+
+
+        binding.etDescription.setOnTouchListener { v, event ->
+            val parent = v.parent ?: return@setOnTouchListener false  // Safely accessing the parent
+            parent.requestDisallowInterceptTouchEvent(true)
+            when (event.action and MotionEvent.ACTION_MASK) {
+                MotionEvent.ACTION_UP -> parent.requestDisallowInterceptTouchEvent(false)
+            }
+            false
+        }
+
 
     }
 
@@ -431,20 +449,43 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
         sdf.timeZone = TimeZone.getTimeZone("UTC")
 
         events.forEach { event ->
-            event?.scheduledDate?.let { dateStr ->
+            event?.let {
                 try {
-                    val date = sdf.parse(dateStr)
+                    val date = sdf.parse(it.scheduledDate)
                     val calendar = Calendar.getInstance()
                     calendar.time = date!!
-                    underlineEvents.add(EventDay(calendar, R.drawable.line_base))
+
+                    val color = when (it.type) {
+                        "scheduled_lives" -> Color.parseColor("#BF9000")
+                        "general_events_by_admin" -> Color.parseColor("#AB8BC3")
+                        "own_events" -> Color.parseColor("#00B050")
+                        else -> Color.BLACK // Default fallback
+                    }
+
+                    val drawable = createInsetLineDrawable(color, bottomInset = 25)
+                    underlineEvents.add(EventDay(calendar, drawable))
+
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
         }
 
+
         binding.rangeCalenderOneTime.setEvents(underlineEvents)
     }
+
+
+    fun createInsetLineDrawable(color: Int, bottomInset: Int = 8): InsetDrawable {
+        val line = GradientDrawable()
+        line.shape = GradientDrawable.RECTANGLE
+        line.setColor(color)
+        line.setSize(100, 10) // Width and height of the underline
+
+        // Apply inset at bottom only (left, top, right, bottom)
+        return InsetDrawable(line, 0, 0, 0, bottomInset)
+    }
+
 
 
 

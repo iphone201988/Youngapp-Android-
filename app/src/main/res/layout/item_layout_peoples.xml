@@ -76,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/TextView_500_Medium"
-                android:text="0.0"
+                android:text="@{bean.isRated() != null ? bean.isRated().toString() : `0.0`}"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintEnd_toEndOf="parent"

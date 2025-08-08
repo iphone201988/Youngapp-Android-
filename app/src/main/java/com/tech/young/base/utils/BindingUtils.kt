@@ -937,4 +937,15 @@ object BindingUtils {
     }
 
 
+    @BindingAdapter("setTrendingIndex")
+    @JvmStatic
+    fun setTrendingIndex(textView: TextView, position: Int?) {
+        if (position != null && position >= 0) {
+            textView.text = "Trending no. ${position + 1}"
+        } else {
+            textView.text = "" // or "Trending"
+        }
+    }
+
+
 }

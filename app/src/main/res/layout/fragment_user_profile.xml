@@ -105,7 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_18sdp"
-                    android:text='@{bean.isRated() != null ? bean.isRated().toString().concat(" Ratings") : "0.0 Ratings"}'
+                    android:text='@{bean.averageRating != null ? bean.averageRating.toString().concat(" Ratings") : "0.0 Ratings"}'
                     android:textSize="@dimen/_12ssp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/ivImage" />
@@ -686,6 +686,7 @@
                         android:numStars="5"
                         android:scaleX="1"
                         android:scaleY="1"
+                        android:stepSize="1"
                         app:bgColor="@color/yellow_star"
                         app:bgDrawable="@drawable/ic_star_unfilled"
                         app:layout_constraintStart_toStartOf="@id/tvRatings"

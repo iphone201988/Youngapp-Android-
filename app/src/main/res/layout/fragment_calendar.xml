@@ -153,6 +153,7 @@
                             app:abbreviationsLabelsColor="@color/black"
                             app:daysLabelsColor="@color/black"
                             app:headerColor="@color/white"
+                            app:eventsEnabled="true"
                             app:headerLabelColor="@color/white"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -190,17 +191,17 @@
                         android:layout_height="@dimen/_24sdp"
                         android:src="@drawable/ic_arrow_right"
                         app:layout_constraintBottom_toBottomOf="@id/tvReminder"
-                        app:layout_constraintEnd_toEndOf="parent"
+                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/tvReminder"
                         app:tint="@color/colorPrimary" />
 
 
                     <TextView
                         android:id="@+id/tvViewAll"
-                        style="@style/TextView_500_Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/view_all"
+                        android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/_14ssp"
                         app:layout_constraintBottom_toBottomOf="@id/tvReminder"
