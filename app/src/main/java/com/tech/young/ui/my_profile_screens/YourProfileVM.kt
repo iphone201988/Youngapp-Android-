@@ -140,6 +140,30 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
         }
     }
 
+    fun getRating(data : HashMap<String,Any> , url : String){
+        CoroutineScope(Dispatchers.IO).launch {
+            observeCommon.postValue(Resource.loading(null))
+            try {
+                val response = apiHelper.apiGetWithQueryAuth(url,data)
+                if (response.isSuccessful && response.body() != null){
+                    observeCommon.postValue(Resource.success("getRating", response.body()))
+                }
+                else{
+                    observeCommon.postValue(
+                        Resource.error(
+                            handleErrorResponse(
+                                response.errorBody(),
+                                response.code()
+                            ), null
+                        )
+                    )
+                }
+            }catch (e : Exception){
+                observeCommon.postValue(Resource.error(e.message.toString(), null))
+            }
+        }
+    }
+
     fun logout(url: String){
         CoroutineScope(Dispatchers.IO).launch {
             observeCommon.postValue(Resource.loading(null))

@@ -211,6 +211,7 @@ data class GetProfileApiResponse(
             val customers: Int?,
             val email: String?,
             val firstName: String?,
+            val averageRating: Double?,
             val followers: Int?,
             val following: Int?,
             val formUpload: List<String?>?,
@@ -1472,6 +1473,29 @@ data class DownloadHistoryApiResponse(
             var topic: String?,
             var type: String?,
             var updatedAt: String?
+        )
+    }
+}
+
+
+/***************  get rating   api response *********************/
+
+data class GetRatingApiResponse(
+    var `data`: Data?,
+    var message: String?,
+    var success: Boolean?
+) {
+    data class Data(
+        var averageRating: Double?,
+        var ratingsCount: RatingsCount?,
+        var totalCount: Int?
+    ) {
+        data class RatingsCount(
+            var `1`: Int?,
+            var `2`: Int?,
+            var `3`: Int?,
+            var `4`: Int?,
+            var `5`: Int?
         )
     }
 }

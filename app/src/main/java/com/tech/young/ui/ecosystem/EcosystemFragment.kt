@@ -390,7 +390,8 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
                         putString("from", "user_profile")
                         putString("userId", m._id) // assuming m._id is a String
                     }
-                    val name = m.firstName + " " + m.lastName  // ← add space here
+//                    val name = m.firstName + " " + m.lastName  // ← add space here
+                    val name  = m.username
                     HomeActivity.userName  = name
                     val userProfileFragment = UserProfileFragment().apply {
                         arguments = bundle

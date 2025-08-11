@@ -55,6 +55,7 @@
                 android:layout_width="0dp"
                 android:text='@{bean.firstName + " " + bean.lastName}'
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/_12ssp"
                 android:layout_marginHorizontal="@dimen/_5sdp"
                 app:layout_constraintEnd_toStartOf="@id/ivStar"
                 app:layout_constraintStart_toEndOf="@id/profileImage"

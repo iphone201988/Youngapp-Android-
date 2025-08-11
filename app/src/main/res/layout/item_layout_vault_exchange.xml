@@ -29,11 +29,13 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivImage"
             setUserImageFromBaseUrl="@{bean.image}"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="@dimen/_150sdp"
             android:src="@drawable/ic_dummy_2"
             android:scaleType="centerCrop"
-            android:padding="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
             app:shapeAppearance="@style/Shape10"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -46,8 +48,8 @@
             android:src="@drawable/ic_dots_bg"
             android:visibility="@{bean.isReported() ? View.GONE : View.VISIBLE}"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
-            android:layout_marginTop="@dimen/_7sdp"
-            android:layout_marginStart="@dimen/_7sdp"
+            android:translationY="-1dp"
+            android:translationX="-1dp"
             app:layout_constraintTop_toTopOf="@id/ivImage"
             app:layout_constraintStart_toStartOf="@id/ivImage"/>
 

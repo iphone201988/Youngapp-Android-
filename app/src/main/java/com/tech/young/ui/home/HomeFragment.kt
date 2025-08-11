@@ -452,7 +452,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         rvTicker.adapter = adapter
         rvTicker.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
-        val symbols = listOf("AAPL", "TSLA", "BTC")
+        val symbols = listOf("AAPL","SPY", "QQQ", "DIA" , "IWM")
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             // Fetch data from API

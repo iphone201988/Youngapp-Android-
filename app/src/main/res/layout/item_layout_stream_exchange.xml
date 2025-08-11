@@ -31,11 +31,13 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivImage"
             setUserImageFromBaseUrl="@{bean.image}"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="@dimen/_150sdp"
-            android:padding="@dimen/_8sdp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_dummy_2"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -55,12 +57,14 @@
             android:id="@+id/reportBtn"
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
-            android:layout_marginStart="@dimen/_7sdp"
-            android:layout_marginTop="@dimen/_7sdp"
-            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:src="@drawable/ic_dots_bg"
-            app:layout_constraintStart_toStartOf="@id/ivImage"
-            app:layout_constraintTop_toTopOf="@id/ivImage" />
+            android:translationX="-1dp"
+            android:translationY="-1dp"
+            android:visibility="@{bean.isReported() ? View.GONE : View.VISIBLE}"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            app:layout_constraintTop_toTopOf="@id/ivImage"
+            app:layout_constraintStart_toStartOf="@id/ivImage"/>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/consReport"

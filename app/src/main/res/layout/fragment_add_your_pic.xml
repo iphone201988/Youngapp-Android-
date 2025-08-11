@@ -74,7 +74,7 @@
                     android:onClick="@{v ->vm.onClick(v)}"
                     android:padding="@dimen/_2sdp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/dummy_profile"
+                    android:src="@drawable/iv_add_pic"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

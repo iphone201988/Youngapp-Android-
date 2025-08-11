@@ -113,6 +113,27 @@ object BindingUtils {
     }
 
 
+    @BindingAdapter("setUserImageFromBaseUrlWithoutPadding")
+    @JvmStatic
+    fun setUserImageFromBaseUrlWithoutPadding(image: ShapeableImageView, url: String?) {
+        if (!url.isNullOrEmpty()) {
+            // Image from API
+            Glide.with(image.context)
+                .load(Constants.BASE_URL_IMAGE + url)
+                .centerCrop()
+                .placeholder(R.drawable.dummy_profile)
+                .error(R.drawable.dummy_profile)
+                .into(image)
+
+            image.scaleType = ImageView.ScaleType.CENTER_CROP
+        } else {
+            // Fallback image
+            image.setImageResource(R.drawable.dummy_profile)
+            image.scaleType = ImageView.ScaleType.FIT_CENTER
+        }
+    }
+
+
     @BindingAdapter("setRating")
     @JvmStatic
     fun setRating(view: per.wsj.library.AndRatingBar, ratingValue: Double?) {

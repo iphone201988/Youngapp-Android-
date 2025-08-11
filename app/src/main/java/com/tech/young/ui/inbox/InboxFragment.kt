@@ -1,6 +1,7 @@
 package com.tech.young.ui.inbox
 
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -21,6 +22,9 @@ import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentInboxBinding
 import com.tech.young.databinding.ItemLayoutInboxBinding
 import com.tech.young.ui.common.CommonActivity
+import com.tech.young.ui.home.HomeActivity
+import com.tech.young.ui.payment.PaymentDetailsFragment
+import com.tech.young.ui.user_profile.UserProfileFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -81,10 +85,23 @@ class InboxFragment : BaseFragment<FragmentInboxBinding>() {
                     startActivity(intent)
                 }
                 R.id.ivAboutIcon->{
-                    val intent=Intent(requireContext(),CommonActivity::class.java)
-                    intent.putExtra("from","user_profile")
-                    intent.putExtra("userId","${m.chatUsers?.get(0)?._id}")
-                    startActivity(intent)
+//                    val intent=Intent(requireContext(),CommonActivity::class.java)
+//                    intent.putExtra("from","user_profile")
+//                    intent.putExtra("userId","${m.chatUsers?.get(0)?._id}")
+//                    startActivity(intent)
+
+                    val name = m.chatUsers?.get(0)?.username  // ← add space here
+                    HomeActivity.userName  = name
+                    val fragment = UserProfileFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("userId", m.chatUsers?.get(0)?._id)
+                        }
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
 
                 }
 

@@ -44,6 +44,7 @@ import com.tech.young.ui.my_profile_screens.forFinance.ProfessionalInformationFr
 import com.tech.young.ui.my_profile_screens.forNormal.FamilyDetailsFragment
 import com.tech.young.ui.my_profile_screens.forNormal.FinanceInfoFragment
 import com.tech.young.ui.my_profile_screens.forNormal.InvestmentInfoFragment
+import com.tech.young.ui.payment.PaymentDetailsFragment
 import com.tech.young.ui.policies_about.AboutFragment
 import com.tech.young.ui.policies_about.PoliciesFragment
 import com.tech.young.ui.share_screen.CommonShareFragment
@@ -245,6 +246,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                     }
                     is PeopleFragment ->{
                         updateOtherUI("Peoples")
+                    }
+                    is PaymentDetailsFragment ->{
+                        updateOtherUI("Account Details")
                     }
 
 
@@ -469,6 +473,16 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                 logoutPopup.dismiss()
             }
         }
+    }
+
+    override fun onBackPressed() {
+
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressedDispatcher.onBackPressed()
+        }
+        finishAffinity()
     }
 
 //    override fun onResume() {

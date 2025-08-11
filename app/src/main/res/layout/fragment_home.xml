@@ -45,7 +45,7 @@
                     android:layout_marginStart="@dimen/_12sdp"
                     android:layout_marginTop="@dimen/_20sdp"
                     android:text="@string/trending_topic"
-                    android:textSize="@dimen/_16ssp"
+                    android:textSize="@dimen/_14ssp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rvTicker" />
 
@@ -70,6 +70,7 @@
                     android:layout_marginStart="@dimen/_12sdp"
                     android:layout_marginTop="@dimen/_28sdp"
                     android:text="@string/news"
+                    android:textSize="@dimen/_14ssp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rvTrendingTopic" />
 
@@ -108,8 +109,9 @@
                     android:layout_marginStart="@dimen/_12sdp"
                     android:layout_marginTop="@dimen/_18sdp"
                     android:text="@string/members"
+                    android:textSize="@dimen/_14ssp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rvNews" />\
+                    app:layout_constraintTop_toBottomOf="@+id/rvNews" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvMembers"
@@ -121,6 +123,7 @@
                     app:layout_constraintBottom_toTopOf="@id/tvSmallBusiness"
                     app:layout_constraintTop_toBottomOf="@id/tvMembers"
                     app:spanCount="2"
+                    android:visibility="invisible"
                     tools:itemCount="5"
                     tools:listitem="@layout/news_item_view" />
 
@@ -148,6 +151,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_12sdp"
                     android:layout_marginTop="@dimen/_18sdp"
+                    android:textSize="@dimen/_14ssp"
                     android:text="@string/small_business"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rvMembers" />
@@ -180,6 +184,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tvSmallBusiness"
                     app:spanCount="2"
                     tools:itemCount="5"
+                    android:visibility="invisible"
                     tools:listitem="@layout/news_item_view" />
 
                 <androidx.appcompat.widget.AppCompatTextView

@@ -1,9 +1,11 @@
 package com.tech.young.ui.payment
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
+import android.util.Log
 import android.view.View
 import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
@@ -35,6 +37,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 
@@ -63,7 +67,6 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
         deactivateAccount = BaseCustomDialog(requireContext(),R.layout.item_layout_deactivate_account,this)
         deleteAccount = BaseCustomDialog(requireContext(),R.layout.item_layout_delete_account_popup, this)
     }
-
     override fun getLayoutResource(): Int {
         return R.layout.fragment_payment_details
     }
@@ -200,9 +203,20 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
 
     fun generatePdfFromRawJson(context: Context, jsonString: String) {
         try {
+            // 1️⃣ Pretty-print the JSON
+            val prettyJson = try {
+                if (jsonString.trim().startsWith("[")) {
+                    JSONArray(jsonString).toString(4) // 4 spaces indentation
+                } else {
+                    JSONObject(jsonString).toString(4)
+                }
+            } catch (e: Exception) {
+                jsonString // fallback to original if parsing fails
+            }
+
+            // 2️⃣ Create PDF
             val pdfDocument = PdfDocument()
-            val paint = Paint()
-            paint.textSize = 12f
+            val paint = Paint().apply { textSize = 12f }
 
             val pageWidth = 595
             val pageHeight = 842
@@ -214,9 +228,16 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
             var page = pdfDocument.startPage(pageInfo)
             var canvas = page.canvas
 
-            // Split JSON into lines that fit the page width
-            val wrappedLines = jsonString.chunked(100) // Adjust chunk size if needed
+            // 3️⃣ Wrap text properly
+            val wrappedLines = mutableListOf<String>()
+            var start = 0
+            while (start < prettyJson.length) {
+                val count = paint.breakText(prettyJson, start, prettyJson.length, true, (pageWidth - 40).toFloat(), null)
+                wrappedLines.add(prettyJson.substring(start, start + count))
+                start += count
+            }
 
+            // 4️⃣ Draw lines to PDF pages
             for (line in wrappedLines) {
                 if (yPosition > pageHeight - 40) {
                     pdfDocument.finishPage(page)
@@ -226,43 +247,35 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
                     canvas = page.canvas
                     yPosition = 40f
                 }
-
                 canvas.drawText(line, 20f, yPosition, paint)
                 yPosition += lineSpacing
             }
 
             pdfDocument.finishPage(page)
 
-            // Save the PDF file
-            val file = File(context.cacheDir, "raw_json_data.pdf")
-            try {
-                file.outputStream().use { pdfDocument.writeTo(it) }
-            } catch (e: IOException) {
-                e.printStackTrace()
-                return
-            } finally {
-                pdfDocument.close()
-            }
+            // 5️⃣ Save PDF file
+            val file = File(context.cacheDir, "myFile.pdf")
+            file.outputStream().use { pdfDocument.writeTo(it) }
+            pdfDocument.close()
+            Log.i("fdsfdsfdsfs", "generatePdfFromRawJson: $file ")
 
-            // Share the PDF
-            val uri = FileProvider.getUriForFile(
-                context,
-                "${context.packageName}.provider",
-                file
-            )
-
+            Log.d("PDF_SIZE", "PDF size = ${file.length()} bytes")
+            // 6️⃣ Share PDF
+            val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
+            Log.i("sdadsad", "generatePdfFromRawJson: $uri")
             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                 type = "application/pdf"
                 putExtra(Intent.EXTRA_STREAM, uri)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                if (context !is Activity) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
-
             context.startActivity(Intent.createChooser(shareIntent, "Share JSON PDF"))
-        }catch (e : Exception){
+
+        } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
+
 
 
 
