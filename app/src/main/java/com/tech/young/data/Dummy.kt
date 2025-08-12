@@ -129,3 +129,7 @@ data class ImageModel(
 data class AdditionalPhotos(
     var image: Uri?
 )
+
+data class SubscriptionFeatureList(
+    var title: String
+)

@@ -25,7 +25,7 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profileImage"
-            setUserImageFromBaseUrl="@{bean.chatUsers.get(0).profileImage}"
+            app:setUserImageFromBaseUrl="@{bean.chatUsers.size() > 0 ? bean.chatUsers.get(0).profileImage : null}"
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
             android:src="@drawable/dummy_person"
@@ -40,7 +40,7 @@
             style="@style/TextView_500_Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{bean.chatUsers.get(0).username}"
+            android:text="@{bean.chatUsers.size() > 0 ? bean.chatUsers.get(0).username : ``}"
             android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginStart="@dimen/_5sdp"
             android:textSize="@dimen/_14ssp"

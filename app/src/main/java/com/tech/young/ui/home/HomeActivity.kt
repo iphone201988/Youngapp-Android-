@@ -15,6 +15,7 @@ import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BaseCustomDialog
 import com.tech.young.base.utils.BindingUtils
+import com.tech.young.base.utils.Resource
 import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.event.SingleRequestEvent
 import com.tech.young.data.SubViewClickBean
@@ -60,7 +61,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
     private val viewModel: HomeActivityVM by viewModels()
     // private lateinit var navController: NavController
     private lateinit var logoutPopup : BaseCustomDialog<ItemLayoutLogoutPopupBinding>
-
+    private var currentFragment : Fragment ?= null
     private var name: String = "Your name"
 
     companion object{
@@ -146,8 +147,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
         displayFragment(HomeFragment())
         updateHomeUI()
         supportFragmentManager.addOnBackStackChangedListener {
-            val currentFragment = supportFragmentManager.findFragmentById(R.id.frameLayout)
-            if (currentFragment != null && currentFragment.isAdded) {
+            currentFragment = supportFragmentManager.findFragmentById(R.id.frameLayout)
+            if (currentFragment != null && currentFragment!!.isAdded) {
                 when (currentFragment) {
                     is HomeFragment -> {
                         updateHomeUI()
@@ -268,8 +269,17 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                 }
 
                 R.id.ivBack -> {
+                    currentFragment = supportFragmentManager.findFragmentById(R.id.frameLayout)
+                    if (currentFragment is PeopleFragment) {
+                        CommonVaultFragment.reload = true
+                        PeopleFragment.sendData.value = Resource.success("dasdas", true)
+                    } else {
+                        CommonVaultFragment.reload = false
+                    }
                     supportFragmentManager.popBackStack()
                 }
+
+
 
                 R.id.tvContactUs -> {
                     displayFragment(ContactUsFragment())

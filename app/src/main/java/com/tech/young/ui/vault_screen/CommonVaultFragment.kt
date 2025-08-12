@@ -90,6 +90,7 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
 
     companion object{
         var selectedUserId: String = ""
+        var reload   = false
     }
 
     override fun onCreateView(view: View) {
@@ -115,7 +116,13 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
         galleryLauncher()
         viewModel.getAds(Constants.GET_ADS)
         getTopicsList()
-        selectedCateGoryList()
+
+        Log.i("reload", "initView: $reload")
+        if (!reload){
+            selectedCateGoryList()
+            reload = false
+        }
+
         getCategoryList()
         initAdapter()
 
@@ -533,6 +540,7 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
     }
 
     private fun isEmptyField() : Boolean{
+        Log.i("dasdasdasdas", "isEmptyField: $selectedUserId")
         if (TextUtils.isEmpty(binding.etTitle.text.toString().trim())){
             showToast("Please enter title")
             return false

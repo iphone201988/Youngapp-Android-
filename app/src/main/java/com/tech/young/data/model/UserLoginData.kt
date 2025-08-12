@@ -1065,6 +1065,7 @@ data class GetPostDetailsApiResponse(
             var topic: String?,
             var type: String?,
             var userId: UserId?,
+            var rating : Double?,
         ) {
             data class UserId(
                 var _id: String?,

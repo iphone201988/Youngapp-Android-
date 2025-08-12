@@ -398,6 +398,10 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                             if (myDataModel != null){
                                 showToast(myDataModel.message.toString())
                                 getEventsData()
+                                binding.etDescription.setText("")
+                                binding.etTitle.setText("")
+                                binding.etTopic.setText("")
+                                binding.etUploadFile.setText("")
                                 binding.calendarCons.visibility = View.VISIBLE
                                 binding.consAddEvent.visibility = View.GONE
                             }

@@ -51,7 +51,6 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
         initOnClick()
         initAdapter()
         initObserver()
-
         binding.ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
             if (fromUser) {
                 binding.ratings.text = "($rating)"
@@ -160,6 +159,8 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
                                 if (myDataModel.data != null){
                                     if (myDataModel.data?.post != null)
                                     binding.bean  = myDataModel.data?.post
+
+
                                 }
                             }
                         }

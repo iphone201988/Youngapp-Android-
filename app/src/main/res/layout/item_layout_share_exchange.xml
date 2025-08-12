@@ -73,10 +73,36 @@
                 style="@style/TextView_400_Regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Report"
-                android:textSize="@dimen/_14ssp"
+                android:textSize="@dimen/_12ssp"
                 android:textColor="@color/black"
                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/consFeatures"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="@dimen/_5sdp"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/_1sdp"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            app:layout_constraintTop_toBottomOf="@id/consReport"
+            app:layout_constraintStart_toStartOf="@id/consReport"
+            app:layout_constraintEnd_toEndOf="@id/consReport">
+
+            <TextView
+                android:id="@+id/tvFeatures"
+                style="@style/TextView_400_Regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Feature"
+                android:textSize="@dimen/_12ssp"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>

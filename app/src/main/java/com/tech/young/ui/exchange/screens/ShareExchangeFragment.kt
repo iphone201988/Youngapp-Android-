@@ -170,18 +170,13 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
         shareAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_share_exchange, BR.bean) { v, m, pos ->
             val consReport = v.rootView.findViewById<ConstraintLayout>(R.id.consReport)
             val title = v.rootView.findViewById<TextView>(R.id.tvReport)
+            val consFeature = v.rootView.findViewById<ConstraintLayout>(R.id.consFeatures)
 
             // Initial visibility
             consReport.visibility = if (m.isReportVisible) View.VISIBLE else View.GONE
 
 
-            if (sharedPrefManager.getUserId() == m.userId?._id){
-                title.text = "Delete share"
-            }
-            else{
-                title.text = "Report"
 
-            }
 
             when (v.id) {
                 R.id.ivSaves -> {
@@ -197,8 +192,24 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                 }
                 R.id.iv_reshare -> viewModel.reshare(Constants.RESHARE_POST + m._id)
                 R.id.reportBtn -> {
+
+
+                    shareAdapter.list.forEach { it.isReportVisible = false }
+
+
+                    Log.i("dasdasd", "initAdapters: ${sharedPrefManager.getUserId()}")
+                    if (sharedPrefManager.getUserId() == m.userId?._id){
+                        title.text = "Delete share"
+                        consFeature.visibility = View.VISIBLE
+                    }
+                    else{
+                        title.text = "Report"
+                        consFeature.visibility = View.GONE
+                    }
+
                     m.isReportVisible = !m.isReportVisible
                     shareAdapter.notifyDataSetChanged()
+
                 }
                 R.id.consReport ->{
                     if (title.text == "Report"){

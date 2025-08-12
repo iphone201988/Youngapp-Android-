@@ -1,5 +1,6 @@
 package com.tech.young.ui.vault_screen.people_screen
 
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -16,7 +17,9 @@ import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
+import com.tech.young.base.utils.event.SingleRequestEvent
 import com.tech.young.data.DropDownData
+import com.tech.young.data.SubViewClickBean
 import com.tech.young.data.api.Constants
 import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.GetUserApiResponse
@@ -51,6 +54,9 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
     private var isLastPage = false
     private var totalPages : Int ? = null
 
+     companion object{
+         var sendData = SingleRequestEvent<Boolean>()
+     }
     override fun onCreateView(view: View) {
         initOnClick()
         viewModel.getAds(Constants.GET_ADS)
@@ -98,6 +104,27 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
             }
         })
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        sendData.observe(viewLifecycleOwner) {
+            when (it?.status) {
+                Status.LOADING -> {
+                    Log.i("sdfsdfsdfsd", "Loading")
+                }
+                Status.SUCCESS -> {
+                    CommonVaultFragment.selectedUserId = selectedUserIds
+                    Log.i("sdfsdfsdfsd", "Selected IDs: $selectedUserIds")
+                }
+                Status.ERROR -> {
+                    Log.i("sdfsdfsdfsd", "Error")
+                }
+                else -> {}
+            }
+        }
+    }
+
 
     private fun loadMoreUsers() {
 
@@ -248,8 +275,9 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
         viewModel.onClick.observe(viewLifecycleOwner , Observer {
             when(it?.id){
                 R.id.ivBack ->{
-                    requireActivity().onBackPressedDispatcher.onBackPressed()
+                 //   requireActivity().onBackPressedDispatcher.onBackPressed()
                     CommonVaultFragment.selectedUserId = selectedUserIds
+                    Log.i("sdfsdfsdfsd", "initOnClick: $selectedUserIds")
                 }
             }
         })
@@ -262,6 +290,5 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
     override fun getViewModel(): BaseViewModel {
         return viewModel
     }
-
 
 }

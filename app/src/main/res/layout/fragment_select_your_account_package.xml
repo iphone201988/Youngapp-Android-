@@ -48,7 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_23sdp"
-                    android:text="@string/select_your_interest"
+                    android:text="Select your account package"
                     android:textSize="@dimen/_20ssp"
                     app:layout_constraintStart_toStartOf="@+id/ivBack"
                     app:layout_constraintTop_toBottomOf="@+id/ivBack" />
@@ -73,6 +73,7 @@
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_standard"
                     android:clickable="true"
+                    android:visibility="gone"
                     android:onClick="@{v ->vm.onClick(v)}"
                     android:focusable="true"
                     android:paddingVertical="@dimen/_15sdp"
@@ -129,8 +130,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_premium"
                     android:clickable="true"
+                    android:background="@drawable/bg_standard"
                     android:focusable="true"
                     android:onClick="@{v ->vm.onClick(v)}"
                     android:paddingVertical="@dimen/_15sdp"
@@ -161,6 +162,7 @@
                         app:layout_constraintTop_toBottomOf="@id/tvPremiumTitle" />
 
                     <TextView
+                        android:id="@+id/tvPremiumMonth"
                         style="@style/TextView_500_Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -181,6 +183,18 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvSubscription"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="vertical"
+                    android:layout_marginVertical="@dimen/_10sdp"
+                    tools:listitem="@layout/item_layout_subscription_features"
+                    app:layout_constraintTop_toBottomOf="@id/premiumPlan"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/tvNext"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvNext"
@@ -193,7 +207,7 @@
                     android:onClick="@{v ->vm.onClick(v)}"
                     android:text="@string/next"
                     android:textColor="@color/white"
-                    app:layout_constraintTop_toBottomOf="@+id/premiumPlan" />
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
