@@ -114,6 +114,7 @@
             android:layout_height="@dimen/_32sdp"
             android:layout_marginStart="@dimen/_8sdp"
             android:src="@drawable/dummy_person"
+            android:layout_marginTop="@dimen/_10sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivImage"
             app:shapeAppearance="@style/Shape50" />

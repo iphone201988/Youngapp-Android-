@@ -10,24 +10,16 @@
             type="com.tech.young.ui.signup_process.SignUpVm" />
     </data>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:paddingBottom="@dimen/_10sdp"
             tools:context=".ui.auth.login_flow.LoginFragment">
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="@dimen/_18sdp"
-                android:paddingBottom="@dimen/_15sdp">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ivBack"
@@ -46,6 +38,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:fillViewport="true"
+                    android:fitsSystemWindows="true"
                     android:layout_marginBottom="@dimen/_10sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ivBack"
@@ -216,10 +209,6 @@
 
                 </androidx.core.widget.NestedScrollView>
 
-
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+
 </layout>

@@ -103,6 +103,7 @@
             android:layout_width="@dimen/_32sdp"
             android:layout_height="@dimen/_32sdp"
             android:src="@drawable/dummy_person"
+            android:layout_marginTop="@dimen/_10sdp"
             app:shapeAppearance="@style/Shape50"
             android:layout_marginStart="@dimen/_8sdp"
             app:layout_constraintStart_toStartOf="parent"

@@ -189,22 +189,22 @@ class OtpFragment : BaseFragment<FragmentOtpBinding>() {
     private fun isPasswordInputValid(): Boolean {
         return when {
             binding.edtOtpOne.text.toString().trim().isBlank() -> {
-                showErrorToast("Enter complete opt pls")
+                showErrorToast("Please enter complete OTP")
                 false
             }
 
             binding.edtOtpTwo.text.toString().trim().isBlank() -> {
-                showErrorToast("Enter complete opt pls")
+                showErrorToast("Please enter complete OTP")
                 false
             }
 
             binding.edtOtpThree.text.toString().trim().isBlank() -> {
-                showErrorToast("Enter complete opt pls")
+                showErrorToast("Please enter complete OTP")
                 false
             }
 
             binding.edtOtpFour.text.toString().trim().isBlank() -> {
-                showErrorToast("Enter complete opt pls")
+                showErrorToast("Please enter complete OTP")
                 false
             }
 

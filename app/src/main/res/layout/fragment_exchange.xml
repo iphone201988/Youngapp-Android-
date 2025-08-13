@@ -112,6 +112,7 @@
             android:orientation="vertical"
             android:background="@drawable/bg_cons"
             android:visibility="gone"
+            android:layout_marginEnd="@dimen/_10sdp"
             android:elevation="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_10sdp"
             tools:listitem="@layout/item_layout_fiter"

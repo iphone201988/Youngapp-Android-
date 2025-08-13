@@ -102,6 +102,7 @@
             setUserImageFromBaseUrl="@{bean.userId.profileImage}"
             android:layout_width="@dimen/_32sdp"
             android:layout_height="@dimen/_32sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:src="@drawable/dummy_person"
             app:shapeAppearance="@style/Shape50"
             android:layout_marginStart="@dimen/_8sdp"

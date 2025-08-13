@@ -524,6 +524,15 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
             categoryAdapter.list = categoryData
             binding.rvCategories.adapter = categoryAdapter
 
+
+            // ✅ Find index of initially selected category
+            val scrollToIndex = categoryData.indexOfFirst { it.isSelected }
+            if (scrollToIndex != -1) {
+                binding.rvCategories.post {
+                    binding.rvCategories.smoothScrollToPosition(scrollToIndex)
+                }
+            }
+
             getLatestUser(selectedCategoryTitle.toString())
 
         }

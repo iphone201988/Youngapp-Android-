@@ -42,6 +42,8 @@ import com.tech.young.ui.my_profile_screens.YourProfileVM
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.util.FileUtil
 import com.tech.young.data.api.SimpleApiResponse
+import com.tech.young.ui.ecosystem.EcosystemFragment
+import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.share_screen.CommonShareFragment
 import com.tech.young.ui.stream_screen.CommonStreamFragment
 import com.tech.young.ui.vault_screen.CommonVaultFragment
@@ -67,7 +69,11 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
     private var userSelectedDate: String? = null
     private var pagination: VerticalPagination? = null
     var eventsList = listOf<GetEventsApiResponse.Data.Event?>()
-    var page  = 1
+
+    private var page  = 1
+    private var isLoading = false
+    private var isLastPage = false
+    private var totalPages : Int ? = null
     private var getList = listOf(
         "", "", "", "", ""
     )
@@ -100,6 +106,36 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
         }
 
 
+        binding.rvReminder.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                // 👇 Only continue if scrolling down
+                if (dy <= 0) return
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (!isLoading && page < totalPages!!) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
+                        firstVisibleItemPosition >= 0
+                    ) {
+                        isLoading = true // ✅ Lock before load
+                        loadMoreData()
+                    }
+                }
+            }
+        })
+
+    }
+
+    private fun loadMoreData() {
+        isLoading = true
+        page++
+        Log.i("dsadasd", "onLoadMore: $page")
+        val data =  HashMap<String,Any>()
+        data["page"] = page
+        viewModel.getEvents(data, Constants.GET_EVENTS)
     }
 
     private fun getTopicsList() {
@@ -135,21 +171,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
 
         }
         binding.rvReminder.adapter = reminderAdapter
-        val lm = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        pagination = VerticalPagination(lm, 2)
-        pagination?.setListener(object : VerticalPagination.VerticalScrollListener {
-            override fun onLoadMore() {
-                page++
-                Log.i("dsadasd", "onLoadMore: $page")
-                val data =  HashMap<String,Any>()
-                data["page"] = page
-                viewModel.getEvents(data, Constants.GET_EVENTS)
 
-            }
-        })
-        pagination?.let {
-            binding.rvReminder.addOnScrollListener(it)
-        }
 
 
         topicAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_drop_down,BR.bean){v,m,pos ->
@@ -208,7 +230,12 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
         })
 
 
+
+
+
         binding.shareLayout.tabShare.setOnClickListener {
+
+
 //            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_share")
 //            startActivity(intent)
 
@@ -237,6 +264,18 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                 .commit()
         }
 
+        binding.tabLayoutBottom.tabExchange.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, ExchangeFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+        binding.tabLayoutBottom.tabEcosystem.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, EcosystemFragment())
+                .addToBackStack(null)
+                .commit()
+        }
         binding.rangeCalenderOneTime.setOnPreviousPageChangeListener(object :
             OnCalendarPageChangeListener {
             override fun onChange() {
@@ -367,27 +406,34 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                     when(it.message){
                         "getEvents" -> {
                             val myDataModel: GetEventsApiResponse? = BindingUtils.parseJson(it.data.toString())
+                            try {
+                                myDataModel?.data?.let { eventData ->
+                                    totalPages = myDataModel.data!!.pagination?.total?: 1
 
-                            myDataModel?.data?.let { eventData ->
-                                eventsList = myDataModel.data!!.events!!
-                                Log.i("dasdasdasdasd", "initObserver: $eventsList")
-                                eventData.pagination?.total?.let { total ->
-                                    if (page <= total) {
-                                        pagination?.isLoading = false
+                                    eventsList = myDataModel.data!!.events!!
+
+                                    Log.i("dasdasdasdasd", "initObserver: $eventsList")
+                                    eventData.pagination?.total?.let { total ->
+                                        if (page <= totalPages!!) {
+                                            isLoading = false
+                                        }
+                                    }
+
+                                    val events = eventData.events
+                                    if (page == 1) {
+                                        reminderAdapter.list = events
+                                    } else {
+                                        reminderAdapter.addToList(events)
+                                    }
+                                    if (events != null) {
+                                        markUnderlineEvents(events)
+
                                     }
                                 }
-
-                                val events = eventData.events
-                                if (page == 1) {
-                                    reminderAdapter.list = events
-                                } else {
-                                    reminderAdapter.addToList(events)
-                                }
-                                if (events != null) {
-                                   markUnderlineEvents(events)
-
-                                }
+                            } catch (e : Exception){
+                                e.printStackTrace()
                             }
+
                         }
 
                         //  if (myDataModel.data?.events != null){

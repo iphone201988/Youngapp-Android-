@@ -129,6 +129,8 @@ class MainSplashActivity : BaseActivity<ActivityMainSplashBinding>(), LocationRe
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
             if (result.all { it.value }) {
                 // All permissions granted
+                proceedToNextScreen()
+
             } else {
                 // One or more permissions denied
             }
@@ -192,6 +194,8 @@ class MainSplashActivity : BaseActivity<ActivityMainSplashBinding>(), LocationRe
             object : PermissionHandler() {
                 override fun onGranted() {
                     // ✅ Permission granted – safe to record audio
+                    proceedToNextScreen()
+
                 }
 
                 override fun onDenied(context: Context?, deniedPermissions: ArrayList<String>?) {
@@ -205,6 +209,8 @@ class MainSplashActivity : BaseActivity<ActivityMainSplashBinding>(), LocationRe
                             object : PermissionHandler() {
                                 override fun onGranted() {
                                     // ✅ Permission granted after re-request
+                                    proceedToNextScreen()
+
                                 }
                             }
                         )

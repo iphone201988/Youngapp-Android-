@@ -103,12 +103,12 @@ object BindingUtils {
                 .into(image)
 
             image.scaleType = ImageView.ScaleType.CENTER_CROP
-            image.setPadding(0, 0, 0, 0)
+
         } else {
             // Fallback image
             image.setImageResource(R.drawable.dummy_profile)
             image.scaleType = ImageView.ScaleType.FIT_CENTER
-            image.setPadding(padding, padding, padding, padding)
+
         }
     }
 
