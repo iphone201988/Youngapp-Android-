@@ -219,7 +219,7 @@
             android:id="@+id/linearTab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_12sdp"
+            android:layout_marginHorizontal="@dimen/_20sdp"
             android:layout_marginBottom="@dimen/_10sdp"
             app:layout_constraintBottom_toTopOf="@id/bottomTabLayout">
 

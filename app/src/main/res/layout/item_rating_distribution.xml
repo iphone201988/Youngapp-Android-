@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -22,16 +23,29 @@
             android:textSize="@dimen/_12ssp"
             android:layout_marginEnd="@dimen/_6sdp" />
 
-        <ProgressBar
+<!--        <ProgressBar-->
+<!--            android:id="@+id/star_progress"-->
+<!--            style="?android:attr/progressBarStyleHorizontal"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_height="10dp"-->
+<!--            android:max="100"-->
+<!--            android:progress="80"-->
+<!--            android:progressDrawable="@drawable/custom_progress_bar"-->
+<!--            android:backgroundTint="@android:color/transparent" />-->
+
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/star_progress"
-            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="10dp"
+            android:layout_height="20dp"
             android:max="100"
             android:progress="80"
-            android:progressDrawable="@drawable/custom_progress_bar"
-            android:backgroundTint="@android:color/transparent" />
+            app:trackThickness="@dimen/_8sdp"
+            app:trackCornerRadius="10dp"
+            app:indicatorColor="@color/yellow_star"
+            app:trackColor="#EEEEEE" />
 
 
         <TextView
