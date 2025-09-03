@@ -114,7 +114,7 @@
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:inputType="number"
-                    android:textColorHint="@color/text_gray"
+                    app:hideKeyboardOnDone="@{true}"                    android:textColorHint="@color/text_gray"
                     android:textSize="@dimen/_13ssp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

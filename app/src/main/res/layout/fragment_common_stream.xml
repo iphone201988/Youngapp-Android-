@@ -78,7 +78,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Title"
-            android:layout_marginTop="@dimen/_20sdp"
             android:textColor="@color/colorPrimary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -93,6 +92,8 @@
             android:background="@drawable/radius_border_gray"
             android:gravity="start|center"
             android:hint="Title"
+            app:hideKeyboardOnDone="@{true}"
+
             android:paddingHorizontal="@dimen/_10sdp"
             android:singleLine="true"
             android:textColorHint="@color/text_gray"

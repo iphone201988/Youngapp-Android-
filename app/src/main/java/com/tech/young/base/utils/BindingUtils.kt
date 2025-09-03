@@ -19,6 +19,8 @@ import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.view.WindowInsetsController
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -965,6 +967,27 @@ object BindingUtils {
             textView.text = "Trending no. ${position + 1}"
         } else {
             textView.text = "" // or "Trending"
+        }
+    }
+
+
+
+    // keyboard done click
+    @BindingAdapter("hideKeyboardOnDone")
+    @JvmStatic
+    fun EditText.hideKeyboardOnDone(enable: Boolean) {
+        if (enable) {
+            this.imeOptions = EditorInfo.IME_ACTION_DONE
+            this.setOnEditorActionListener { v, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(v.windowToken, 0)
+                    this.clearFocus()
+                    true
+                } else {
+                    false
+                }
+            }
         }
     }
 

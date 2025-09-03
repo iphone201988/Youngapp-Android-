@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.google.gson.Gson
 import com.tech.MediaCapturer
 import com.tech.buckChats.ui.media_soup_webtrc.consumerTransport
@@ -76,6 +77,7 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() , B
     override fun onCreateView(view: View) {
         initView()
         initPopup()
+
         Handler(Looper.getMainLooper()).post{
             socketHandler()
             Handler(Looper.getMainLooper()).postDelayed({
@@ -89,11 +91,24 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() , B
                 audioManager.isSpeakerphoneOn = true
                 mediaCapture.initCamera(requireContext())
                 joinRoom()
+
+                setupSocketListeners(requireContext())
             },200)
 
-            setupSocketListeners(requireContext())
 
+            initOnClick()
         }
+    }
+
+    private fun initOnClick() {
+        viewModel.onClick.observe(viewLifecycleOwner , Observer {
+            when(view?.id){
+                R.id.ivBack , R.id.tvEndStream ->{
+                      requireActivity().onBackPressedDispatcher.onBackPressed()
+                    SocketManager.mSocket?.disconnect()
+                }
+            }
+        })
     }
 
     private fun initPopup() {

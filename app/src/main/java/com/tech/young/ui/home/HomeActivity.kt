@@ -246,7 +246,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                         updateOtherUI("Vault Room")
                     }
                     is PeopleFragment ->{
-                        updateOtherUI("Peoples")
+                        updateOtherUI("Members")
                     }
                     is PaymentDetailsFragment ->{
                         updateOtherUI("Account Details")

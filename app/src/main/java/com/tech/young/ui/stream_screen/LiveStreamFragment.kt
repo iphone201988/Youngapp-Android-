@@ -71,7 +71,6 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
                 initializeTheLocalView()
                 socketJoin()
             },200)
-
         }
     }
 
@@ -84,6 +83,13 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
             when(it?.id){
                 R.id.tvEndStream ->{
                     endStreamPopup.show()
+                }
+                R.id.ivBack ->{
+                    // Disconnect socket
+                    SocketManager.mSocket?.disconnect()
+
+                    // Go back
+                    requireActivity().onBackPressedDispatcher.onBackPressed()
                 }
             }
         })

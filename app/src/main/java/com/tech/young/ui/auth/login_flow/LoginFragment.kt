@@ -208,7 +208,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
                     }
                 }
 
-
                 Status.ERROR -> {
                     hideLoading()
                     showErrorToast(it.message.toString())

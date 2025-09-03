@@ -22,6 +22,7 @@
             android:layout_height="0dp"
             android:layout_marginHorizontal="@dimen/_15sdp"
             android:fillViewport="true"
+            android:layout_marginBottom="@dimen/_10sdp"
             android:fitsSystemWindows="true"
             app:layout_constraintBottom_toTopOf="@+id/shareLinear"
             app:layout_constraintEnd_toEndOf="parent"
@@ -85,40 +86,52 @@
                             app:tint="@color/colorPrimary" />
 
 
-                        <ImageView
-                            android:id="@+id/tvLeftArrowMonth"
-                            android:layout_width="@dimen/_14sdp"
-                            android:layout_height="@dimen/_14sdp"
-                            android:layout_marginStart="@dimen/_30sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:onClick="@{v -> vm.onClick(v)}"
-                            android:src="@drawable/iv_left_arrow"
-                            app:layout_constraintStart_toEndOf="@id/tvRightArrowYear"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:tint="@color/colorPrimary" />
 
-                        <TextView
-                            android:id="@+id/tvMonth"
-                            style="@style/TextView_500_Medium"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/consMonth"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="January"
-                            app:layout_constraintBottom_toBottomOf="@id/tvLeftArrowMonth"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="@dimen/_16ssp"
-                            app:layout_constraintStart_toEndOf="@id/tvLeftArrowMonth"
-                            app:layout_constraintTop_toTopOf="@id/tvLeftArrowMonth" />
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
-                        <ImageView
-                            android:id="@+id/tvRightArrowMonth"
-                            android:layout_width="@dimen/_14sdp"
-                            android:layout_height="@dimen/_14sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:onClick="@{v -> vm.onClick(v)}"
-                            android:src="@drawable/iv_right_arrow"
-                            app:layout_constraintStart_toEndOf="@id/tvMonth"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:tint="@color/colorPrimary" />
+                            <ImageView
+                                android:id="@+id/tvLeftArrowMonth"
+                                android:layout_width="@dimen/_14sdp"
+                                android:layout_height="@dimen/_14sdp"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:onClick="@{v -> vm.onClick(v)}"
+                                android:src="@drawable/iv_left_arrow"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/colorPrimary" />
+
+                            <TextView
+                                android:id="@+id/tvMonth"
+                                style="@style/TextView_500_Medium"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="January"
+                                app:layout_constraintBottom_toBottomOf="@id/tvLeftArrowMonth"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="@dimen/_16ssp"
+                                app:layout_constraintStart_toEndOf="@id/tvLeftArrowMonth"
+                                app:layout_constraintTop_toTopOf="@id/tvLeftArrowMonth" />
+
+                            <ImageView
+                                android:id="@+id/tvRightArrowMonth"
+                                android:layout_width="@dimen/_14sdp"
+                                android:layout_height="@dimen/_14sdp"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:onClick="@{v -> vm.onClick(v)}"
+                                android:src="@drawable/iv_right_arrow"
+                                app:layout_constraintStart_toEndOf="@id/tvMonth"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/colorPrimary" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
                         <ImageView
@@ -126,11 +139,12 @@
                             android:layout_width="@dimen/_26sdp"
                             android:layout_height="@dimen/_26sdp"
                             android:layout_marginEnd="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
                             android:src="@drawable/iv_add_icon"
                             android:onClick="@{v -> vm.onClick(v)}"
-                            app:layout_constraintBottom_toBottomOf="@id/tvRightArrowMonth"
+                            app:layout_constraintBottom_toBottomOf="@id/consMonth"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@id/tvRightArrowMonth" />
+                            app:layout_constraintTop_toTopOf="@id/consMonth" />
 
                         <View
                             android:id="@+id/viewLine"
