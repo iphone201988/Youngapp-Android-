@@ -121,7 +121,7 @@
             android:id="@+id/tvUserName"
             style="@style/TextView_500_Medium"
             android:layout_width="0dp"
-            android:text='@{bean.UserId.firstName + " " + bean.UserId.lastName}'
+            android:text='@{(bean.UserId.firstName != null ? bean.UserId.firstName : "") + " " + (bean.UserId.lastName != null ? bean.UserId.lastName : "")}'
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginStart="@dimen/_5sdp"

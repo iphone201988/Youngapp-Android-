@@ -316,6 +316,7 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
                         data["name"] = binding.etName.text.toString().trim().toRequestBody()
                         data["company"] = binding.etCompany.text.toString().trim().toRequestBody()
                         data["email"] = binding.etEmail.text.toString().trim().toRequestBody()
+                        data["message"] = binding.etMessage.text.toString().trim().toRequestBody()
                         viewModel.contactUs(data, Constants.CONTACT_US,multipartImage)
 
                     }
@@ -407,18 +408,10 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
             showToast("Please enter name")
             return false
         }
-        if (TextUtils.isEmpty(binding.etCompany.text.toString().trim())){
-            showToast("Please enter company name")
-            return false
-        }
         if (TextUtils.isEmpty(binding.etEmail.text.toString().trim())){
             showToast("Please enter email")
             return false
         }
-       if (TextUtils.isEmpty(binding.etUploadFile.text.toString().trim())){
-        showToast("Please select image")
-        return false
-    }
         return true
     }
 

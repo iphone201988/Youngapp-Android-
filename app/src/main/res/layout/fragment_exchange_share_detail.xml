@@ -117,7 +117,7 @@
             style="@style/TextView_500_Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text='@{bean.userId.firstName+" "+ bean.userId.lastName}'
+            android:text='@{(bean.userId.firstName != null ? bean.userId.firstName : "") + " " + (bean.userId.lastName != null ? bean.userId.lastName : "")}'
             android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginStart="@dimen/_5sdp"
             android:textSize="@dimen/_14ssp"

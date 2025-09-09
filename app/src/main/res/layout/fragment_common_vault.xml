@@ -250,7 +250,7 @@
                     android:enabled="false"
                     android:background="@drawable/bg_standard"
                     android:gravity="start|center"
-                    android:hint="isPublic"
+                    android:hint="Public"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"

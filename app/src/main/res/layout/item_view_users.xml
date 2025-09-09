@@ -32,8 +32,9 @@
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
+
+
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvUserName"
@@ -47,9 +48,35 @@
             android:singleLine="true"
             android:textColor="@color/text_gray"
             app:layout_constraintEnd_toStartOf="@id/ivStar"
-            app:layout_constraintBottom_toBottomOf="@id/ivImage"
             app:layout_constraintTop_toTopOf="@id/ivImage"
             app:layout_constraintStart_toEndOf="@id/ivImage"/>
+
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvRole"
+            setRoleText="@{bean.role}"
+            style="@style/TextView_400_Regular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/text_gray"
+            app:layout_constraintEnd_toEndOf="@id/tvUserName"
+            app:layout_constraintTop_toBottomOf="@id/tvUserName"
+            app:layout_constraintStart_toStartOf="@id/tvUserName"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTopics"
+            setTopicsList="@{bean.topicsOfInterest}"
+            style="@style/TextView_400_Regular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Household budgeting"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/text_gray"
+            app:layout_constraintEnd_toEndOf="@id/tvUserName"
+            app:layout_constraintTop_toBottomOf="@id/tvRole"
+            app:layout_constraintStart_toStartOf="@id/tvUserName"/>
 
 
         <androidx.appcompat.widget.AppCompatTextView

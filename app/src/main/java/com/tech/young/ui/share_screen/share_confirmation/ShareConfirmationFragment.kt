@@ -73,6 +73,7 @@ class ShareConfirmationFragment : BaseFragment<FragmentShareConfirmationBinding>
             binding.tvDescription.text = data.description
             binding.ivAdsImage.setImageURI(data.image)
             binding.etSymbol.text = data.symbolValue
+            binding.tvSymbol.text = data.symbol
 
         } ?: run {
             Log.w("StreamData", "No stream data found in arguments")

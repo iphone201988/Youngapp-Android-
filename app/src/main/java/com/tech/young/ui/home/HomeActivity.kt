@@ -304,6 +304,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                     logoutPopup.show()
                 }
 
+                R.id.ivAppLogoTop ->{
+                    displayFragment(YourProfileFragment())
+                    updateOtherUI(getString(R.string.your_profile))
+                }
+
             }
         })
     }

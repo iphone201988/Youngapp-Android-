@@ -268,7 +268,7 @@
                     android:layout_marginTop="@dimen/_15sdp"
                     android:src="@{check ? @drawable/ic_check_selected :@drawable/ic_check_unselected}"
                     android:scaleType="centerCrop"
-                    app:layout_constraintTop_toBottomOf="@+id/etUploadFile"
+                    app:layout_constraintTop_toBottomOf="@+id/etMessage"
                     app:layout_constraintStart_toStartOf="parent"/>
 
                 <TextView
@@ -324,9 +324,37 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintTop_toBottomOf="@id/tvAds" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvMessage"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Message"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintTop_toBottomOf="@id/etUploadFile"
+                    app:layout_constraintStart_toStartOf="@id/etUploadFile"/>
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etMessage"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_140sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="top|start"
+                    android:inputType="textMultiLine"
+                    android:maxLines="6"
+                    android:hint="Enter message"
+                    android:paddingVertical="@dimen/_10sdp"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@id/tvMessage"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
         </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

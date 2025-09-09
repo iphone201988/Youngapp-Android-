@@ -1018,28 +1018,57 @@ data class GetCommentApiResponse(
 }
 
 /*************** get latest user api response *********************/
+//data class GetLatestUserApiResponse(
+//    var `data`: Data?,
+//    var message: String?,
+//    var success: Boolean?,
+//) {
+//    data class Data(
+//        var users: List<User?>?,
+//    ) {
+//        data class User(
+//            var _id: String?,
+//            var firstName: String?,
+//            var lastName: String?,
+//            var profileImage: String?,
+//            var role: String?,
+//            var username: String?,
+//            var ratings: Double?,
+//            var isRated: Double?
+//
+//            )
+//    }
+//}
+//
+
 data class GetLatestUserApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?,
+    var pagination: Pagination?,
+    var success: Boolean?
 ) {
     data class Data(
-        var users: List<User?>?,
+        var users: List<User?>?
     ) {
         data class User(
             var _id: String?,
             var firstName: String?,
+            var isRated: Double?,
             var lastName: String?,
             var profileImage: String?,
             var role: String?,
-            var username: String?,
-            var ratings: Double?,
-            var isRated: Double?
-
-            )
+            var servicesInterested: String?,
+            var topicsOfInterest: List<String?>?,
+            var username: String?
+        )
     }
-}
 
+    data class Pagination(
+        var limit: Int?,
+        var page: Int?,
+        var totalPages: Int?
+    )
+}
 /*************** get post by id  api response *********************/
 
 

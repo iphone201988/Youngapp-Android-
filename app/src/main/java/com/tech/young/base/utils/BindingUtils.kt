@@ -179,6 +179,7 @@ object BindingUtils {
          if(data.heading!=null && data.headingShow){
              textView.visibility=View.VISIBLE
              textView.text = data.heading
+             textView.setTextColor(ContextCompat.getColor(textView.context, R.color.green))
          }
          else{
              textView.visibility=View.GONE
@@ -841,6 +842,37 @@ object BindingUtils {
         textView.text = label
     }
 
+    @BindingAdapter("setRoleText")
+    @JvmStatic
+    fun setRoleText(textView: TextView, role: String?) {
+        val label = when (role?.lowercase()) {
+            "small_business" -> "Small Business"
+            "investor" -> "Investor"
+            "financial_firm" -> "Financial Firm"
+            "startup" -> "Startup"
+            "financial_advisor" -> "Financial Advisor"
+            "general_member" -> "General Member"
+            else -> ""  // default fallback
+        }
+        textView.text = label
+    }
+
+
+    @BindingAdapter("setTopicsList")
+    @JvmStatic
+    fun setTopicsList(textView: AppCompatTextView, topics: List<String>?) {
+        try {
+            if (!topics.isNullOrEmpty()) {
+                textView.text = topics.joinToString(", ") { it.trim() }
+            } else {
+                textView.text = "" // you can also put "N/A" if you want
+            }
+        } catch (e: Exception) {
+            textView.text = "" // fallback to avoid crash
+            e.printStackTrace()
+        }
+    }
+
 
 
     @BindingAdapter("setDataOnRole")
@@ -964,7 +996,7 @@ object BindingUtils {
     @JvmStatic
     fun setTrendingIndex(textView: TextView, position: Int?) {
         if (position != null && position >= 0) {
-            textView.text = "Trending no. ${position + 1}"
+            textView.text = "# ${position + 1}"
         } else {
             textView.text = "" // or "Trending"
         }
