@@ -153,5 +153,14 @@
         android:name="com.tech.young.ui.ecosystem.EcosystemFragment"
         tools:layout="@layout/fragment_ecosystem"/>
 
+    <fragment
+        android:id="@+id/fragmentMyShare"
+        android:name="com.tech.young.ui.my_share.MyShareFragment"
+        tools:layout="@layout/fragment_my_share"/>
 
+
+    <fragment
+        android:id="@+id/fragmentImageZoom"
+        android:name="com.tech.young.ui.image_zoom.ImageZoomFragment"
+        tools:layout="@layout/fragment_image_zoom"/>
 </navigation>

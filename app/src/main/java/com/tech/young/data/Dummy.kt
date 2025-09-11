@@ -133,3 +133,8 @@ data class AdditionalPhotos(
 data class SubscriptionFeatureList(
     var title: String
 )
+
+data class SelectionItem(
+    val name: String,
+    var isSelected: Boolean = false
+)

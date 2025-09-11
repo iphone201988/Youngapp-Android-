@@ -18,16 +18,23 @@ import com.tech.young.databinding.FragmentSelectYourInterestBinding
 import com.tech.young.databinding.ItemLayoutAgeBinding
 import com.tech.young.ui.auth.AuthCommonVM
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.tech.young.data.SelectionItem
+import com.tech.young.databinding.BottomSheetMultipleSelectionBinding
+import com.tech.young.databinding.ItemLayoutMultipleSelectionBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SelectYourInterestFragment : BaseFragment<FragmentSelectYourInterestBinding>() {
     private val viewModel: AuthCommonVM by viewModels()
+
+    private val selectedItems = mutableSetOf<String>()
+
+
     override fun onCreateView(view: View) {
         initView()
         initOnClick()
         editCategoryBottomSheet()
-        Log.i("ewgweg", "initOnClick: "+ RegistrationDataHolder.industry)
+        Log.i("ewgweg", "initOnClick: " + RegistrationDataHolder.industry)
     }
 
     override fun getLayoutResource(): Int {
@@ -99,12 +106,12 @@ class SelectYourInterestFragment : BaseFragment<FragmentSelectYourInterestBindin
 
                 R.id.ivDropInvestments -> {
                     initAdapter("Investments")
-                    bottomSheetCommon.show()
+                    bottomSheetMultipleSelection.show()
                 }
 
                 R.id.ivDropServicesInterested -> {
                     initAdapter("ServicesInterested")
-                    bottomSheetCommon.show()
+                    bottomSheetMultipleSelection.show()
                 }
 
 
@@ -118,6 +125,7 @@ class SelectYourInterestFragment : BaseFragment<FragmentSelectYourInterestBindin
     }
 
     private lateinit var bottomSheetCommon: BaseCustomBottomSheet<CommonBottomLayoutBinding>
+    private lateinit var bottomSheetMultipleSelection: BaseCustomBottomSheet<BottomSheetMultipleSelectionBinding>
     private fun editCategoryBottomSheet() {
         bottomSheetCommon =
             BaseCustomBottomSheet(requireContext(), R.layout.common_bottom_layout) {}
@@ -127,9 +135,17 @@ class SelectYourInterestFragment : BaseFragment<FragmentSelectYourInterestBindin
         bottomSheetCommon.create()
 
 
+        bottomSheetMultipleSelection =
+            BaseCustomBottomSheet(requireContext(), R.layout.bottom_sheet_multiple_selection) {}
+        bottomSheetMultipleSelection.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetMultipleSelection.behavior.isDraggable = true
+        bottomSheetMultipleSelection.setCancelable(true)
+        bottomSheetMultipleSelection.create()
+
     }
 
     private lateinit var adapter: SimpleRecyclerViewAdapter<String, ItemLayoutAgeBinding>
+    private lateinit var multiSelectAdapter: SimpleRecyclerViewAdapter<SelectionItem, ItemLayoutMultipleSelectionBinding>
     private fun initAdapter(from: String) {
         val fieldMap = mapOf(
             "Objective" to binding.edtObjective,
@@ -142,18 +158,48 @@ class SelectYourInterestFragment : BaseFragment<FragmentSelectYourInterestBindin
         val listMap = mapOf(
             "Objective" to DummyLists.generalMemberObjective,
             "FinancialExperience" to DummyLists.generalMemberFinancialExperience,
-            "Investments" to DummyLists.generalMemberInvestments,
-            "ServicesInterested" to DummyLists.generalMemberServicesInterested
+            "Investments" to DummyLists.generalMemberInvestments.map { SelectionItem(it) }, // List<SelectionItem>
+            "ServicesInterested" to DummyLists.generalMemberServicesInterested.map {
+                SelectionItem(
+                    it
+                )
+            } // List<SelectionItem>
 
         )
 
-        adapter = SimpleRecyclerViewAdapter(R.layout.item_layout_age, BR.bean) { view, value, _ ->
-            if (view.id == R.id.consMain) {
-                fieldMap[from]?.setText(value)
-                bottomSheetCommon.dismiss()
+        when (from) {
+            "Objective", "FinancialExperience" -> {
+                adapter =
+                    SimpleRecyclerViewAdapter(R.layout.item_layout_age, BR.bean) { view, value, _ ->
+                        if (view.id == R.id.consMain) {
+                            fieldMap[from]?.setText(value as String)
+                            bottomSheetCommon.dismiss()
+                        }
+                    }
+                adapter.list = listMap[from] as List<String>
+                bottomSheetCommon.binding.rvCommonSelection.adapter = adapter
+            }
+
+            "Investments", "ServicesInterested" -> {
+                multiSelectAdapter = SimpleRecyclerViewAdapter(
+                    R.layout.item_layout_multiple_selection,
+                    BR.bean
+                ) { view, value, pos ->
+                    if (view.id == R.id.consMain) {
+                        val item = value as SelectionItem
+                        item.isSelected = !item.isSelected
+
+                        val selected = (multiSelectAdapter.list as List<SelectionItem>)
+                            .filter { it.isSelected }
+                            .joinToString(", ") { it.name }
+
+                        fieldMap[from]?.setText(selected)
+                        multiSelectAdapter.notifyItemChanged(pos)
+                    }
+                }
+                multiSelectAdapter.list = listMap[from] as List<SelectionItem>
+                bottomSheetMultipleSelection.binding.rvCommonSelection.adapter = multiSelectAdapter
             }
         }
-        bottomSheetCommon.binding.rvCommonSelection.adapter = adapter
-        adapter.list = listMap[from] ?: emptyList()
     }
 }

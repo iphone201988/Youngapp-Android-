@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="android.view.View" />
+        <import type="android.text.TextUtils"/>
+
+
         <variable
             name="callback"
             type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
@@ -26,6 +31,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivImage"
             setUserImageFromBaseUrl="@{bean.image}"
+            android:visibility='@{TextUtils.isEmpty(bean.image) ? View.GONE : View.VISIBLE}'
             android:layout_width="match_parent"
             android:layout_height="@dimen/_150sdp"
             android:layout_marginTop="@dimen/_8sdp"
@@ -39,12 +45,13 @@
             app:shapeAppearance="@style/Shape10" />
 
         <ImageView
+            android:id="@+id/imageData"
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
             android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginEnd="@dimen/_15sdp"
-            app:layout_constraintEnd_toEndOf="@id/ivImage"
-            app:layout_constraintTop_toTopOf="@id/ivImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:scheduleDate="@{bean.scheduleDate}"
             app:streamUrl="@{bean.streamUrl}" />
 
@@ -110,6 +117,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/ivStar" />
 
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/bottomBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:barrierAllowsGoneWidgets="false"
+            app:constraint_referenced_ids="ivImage,imageData" />
+
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivUserImage"
             android:layout_width="@dimen/_32sdp"
@@ -118,7 +134,7 @@
             android:src="@drawable/dummy_person"
             android:layout_marginTop="@dimen/_5sdp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivImage"
+            app:layout_constraintTop_toBottomOf="@id/bottomBarrier"
             app:shapeAppearance="@style/Shape50" />
 
         <androidx.appcompat.widget.AppCompatTextView

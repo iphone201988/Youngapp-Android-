@@ -119,7 +119,7 @@
                     style="@style/TextView_500_Medium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@{bean.Vault.Admin.username}"
+                    android:text='@{(bean.Vault.Admin.firstName != null ? bean.Vault.Admin.firstName : "") + " " + (bean.Vault.Admin.lastName != null ? bean.Vault.Admin.lastName : "")}'
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginStart="@dimen/_5sdp"
                     android:textSize="@dimen/_14ssp"

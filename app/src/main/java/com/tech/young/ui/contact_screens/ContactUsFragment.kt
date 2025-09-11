@@ -22,6 +22,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.tech.young.BR
@@ -71,6 +72,10 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
     private var photoFile: File? = null
     private var photoURI: Uri? = null
     private var imageUri : Uri? = null
+
+
+    private var isEdited = false
+
     override fun onCreateView(view: View) {
         initBottomSheet()
         galleryLauncher()
@@ -82,8 +87,25 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
         initAdapter()
 
         initObserver()
+
+        with(binding) {
+            // Watch all editable fields
+            etSubject.addTextChangedListener { isEdited = true }
+            etName.addTextChangedListener { isEdited = true }
+            etCompany.addTextChangedListener { isEdited = true }
+            etEmail.addTextChangedListener { isEdited = true }
+            etMessage.addTextChangedListener { isEdited = true }
+
+            // Upload file click → also counts as editing
+            etUploadFile.setOnClickListener {
+                isEdited = true
+                // your upload logic
+            }
+        }
     }
 
+
+    fun hasUserEdited(): Boolean = isEdited
     /** show camera & gallery bottom sheet **/
     private fun initBottomSheet() {
         cameraGalleryBottomSheet =

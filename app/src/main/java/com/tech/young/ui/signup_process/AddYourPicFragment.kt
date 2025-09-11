@@ -225,16 +225,36 @@ class AddYourPicFragment : BaseFragment<FragmentAddYourPicBinding>() {
 
     }
 
-    private fun convertMultipartPartGal(imageUri: Uri): MultipartBody.Part {
+//    private fun convertMultipartPartGal(imageUri: Uri): MultipartBody.Part {
+//        val file = FileUtil.getTempFile(requireContext(), imageUri)
+//        val fileName =
+//            "${file!!.nameWithoutExtension}_${System.currentTimeMillis()}.${file.extension}"
+//        val newFile = File(file.parent, fileName)
+//        file.renameTo(newFile)
+//        return MultipartBody.Part.createFormData(
+//            "additionalPhotos", newFile.name, newFile.asRequestBody("image/*".toMediaTypeOrNull())
+//        )
+//    }
+
+    private fun convertMultipartPartGal(imageUri: Uri): MultipartBody.Part? {
         val file = FileUtil.getTempFile(requireContext(), imageUri)
+        if (file == null) {
+            Log.e("convertMultipartPartGal", "FileUtil returned null for URI: $imageUri")
+            return null
+        }
+
         val fileName =
-            "${file!!.nameWithoutExtension}_${System.currentTimeMillis()}.${file.extension}"
+            "${file.nameWithoutExtension}_${System.currentTimeMillis()}.${file.extension}"
         val newFile = File(file.parent, fileName)
         file.renameTo(newFile)
+
         return MultipartBody.Part.createFormData(
-            "additionalPhotos", newFile.name, newFile.asRequestBody("image/*".toMediaTypeOrNull())
+            "additionalPhotos",
+            newFile.name,
+            newFile.asRequestBody("image/*".toMediaTypeOrNull())
         )
     }
+
 
 
 

@@ -343,7 +343,6 @@
                         android:text='@{bean.firstName + " " + bean.lastName}'
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvFullName"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvFullName"
                         app:layout_constraintTop_toTopOf="@id/tvFullName" />
@@ -371,10 +370,41 @@
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
                         android:visibility='@{bean.role.equals("general_member") ? View.VISIBLE : View.GONE}'
-                        app:layout_constraintBottom_toBottomOf="@id/tvMemberName"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvMemberName"
                         app:layout_constraintTop_toTopOf="@id/tvMemberName" />
+
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvMartialStatus"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="Marital Status"
+                        android:visibility='@{bean.role.equals("general_member") ? View.VISIBLE : View.GONE}'
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintEnd_toStartOf="@id/etMarital"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etMemberName" />
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/etMarital"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="@{bean.maritalStatus}"
+                        android:textColor="@color/gray"
+                        android:visibility='@{bean.role.equals("general_member") ? View.VISIBLE : View.GONE}'
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvMartialStatus"
+                        app:layout_constraintTop_toTopOf="@id/tvMartialStatus" />
+
+
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvCompanyName"
@@ -387,7 +417,7 @@
                         android:visibility='@{bean.role.equals("general_member") ? View.GONE : View.VISIBLE}'
                         app:layout_constraintEnd_toStartOf="@id/etCompanyName"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/etMemberName" />
+                        app:layout_constraintTop_toBottomOf="@id/etMarital" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/etCompanyName"
@@ -399,7 +429,6 @@
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
                         android:visibility='@{bean.role.equals("general_member") ? View.GONE : View.VISIBLE}'
-                        app:layout_constraintBottom_toBottomOf="@id/tvCompanyName"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvCompanyName"
                         app:layout_constraintTop_toTopOf="@id/tvCompanyName" />
@@ -425,7 +454,6 @@
                         android:text="@{bean.city}"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvCity"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvCity"
                         app:layout_constraintTop_toTopOf="@id/tvCity" />
@@ -451,7 +479,6 @@
                         android:text="@{bean.state}"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvState"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvState"
                         app:layout_constraintTop_toTopOf="@id/tvState" />
@@ -478,7 +505,6 @@
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
                         android:visibility='@{bean.role.equals("general_member") || bean.role.equals("financial_advisor") ? View.VISIBLE : View.GONE}'
-                        app:layout_constraintBottom_toBottomOf="@id/tvFinancialExperience"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvFinancialExperience"
                         app:layout_constraintTop_toTopOf="@id/tvFinancialExperience" />
@@ -506,7 +532,6 @@
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
                         android:visibility='@{bean.role.equals("general_member") || bean.role.equals("financial_advisor") ? View.GONE : View.VISIBLE}'
-                        app:layout_constraintBottom_toBottomOf="@id/tvFounded"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/tvFounded" />
 
@@ -532,7 +557,6 @@
                         android:gravity="end"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvMembership"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvMembership"
                         app:layout_constraintTop_toTopOf="@id/tvMembership" />
@@ -609,7 +633,6 @@
                         android:text="@{bean.productsOffered}"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvInterest"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvInterest"
                         app:layout_constraintTop_toTopOf="@id/tvInterest" />
@@ -635,7 +658,6 @@
                         setDataOnRoleOthers="@{bean}"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvGoals"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvGoals"
                         app:layout_constraintTop_toTopOf="@id/tvGoals" />

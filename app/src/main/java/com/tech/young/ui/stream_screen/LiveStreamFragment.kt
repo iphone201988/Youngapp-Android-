@@ -1,6 +1,7 @@
 package com.tech.young.ui.stream_screen
 
 import android.content.Context
+import android.content.Intent
 import android.media.AudioManager
 import android.os.Bundle
 import android.os.Handler
@@ -28,6 +29,7 @@ import com.tech.young.databinding.FragmentLiveStreamBinding
 import com.tech.young.databinding.ItemLayoutLogoutPopupBinding
 import com.tech.young.databinding.ItemLayoutStreamEndBinding
 import com.tech.young.databinding.ItemLayoutStreamPopupBinding
+import com.tech.young.ui.home.HomeActivity
 import dagger.hilt.android.AndroidEntryPoint
 import io.socket.client.Ack
 import io.socket.client.Socket
@@ -397,7 +399,8 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
                 SocketManager.mSocket?.disconnect()
 
                 // Go back
-                requireActivity().onBackPressedDispatcher.onBackPressed()
+                val intent = Intent(requireContext(), HomeActivity::class.java)
+                startActivity(intent)
 
                 // Close dialog
                 endStreamPopup.dismiss()

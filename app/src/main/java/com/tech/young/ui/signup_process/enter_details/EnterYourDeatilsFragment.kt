@@ -90,14 +90,30 @@ class EnterYourDeatilsFragment : BaseFragment<FragmentEnterYourDetailsBinding>()
     }
 
     private fun isEmptyField() : Boolean {
+        val firstName = binding.edtFirstName.text.toString().trim()
+        val lastName = binding.edtLastName.text.toString().trim()
+
+
        if (TextUtils.isEmpty(binding.edtFirstName.text.toString().trim())){
            showToast("Please enter first name")
            return false
        }
+        if (!firstName[0].isUpperCase()) {
+            showToast("First name must start with a capital letter")
+            return false
+        }
+
+
         if (TextUtils.isEmpty(binding.edtLastName.text.toString().trim())){
             showToast("Please enter last name")
             return false
         }
+
+        if (!lastName[0].isUpperCase()) {
+            showToast("Last name must start with a capital letter")
+            return false
+        }
+
         if (TextUtils.isEmpty(binding.edtEmail.text.toString().trim())){
             showToast("Please enter email")
             return false

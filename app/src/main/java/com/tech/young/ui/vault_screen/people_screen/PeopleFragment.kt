@@ -49,6 +49,10 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
     private lateinit var userAdapter : SimpleRecyclerViewAdapter<GetUserApiResponse.Data.User, ItemLayoutPeoplesBinding>
 
 
+    private var side = ""
+    private var type : String ? = null
+    private var userId : String ? = null
+
     private var page  = 1
     private var isLoading = false
     private var isLastPage = false
@@ -171,18 +175,23 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
         userAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_peoples,BR.bean){v,m,pos ->
             when(v.id){
                 R.id.consMain -> {
-                    // Toggle selection
-                    m.isSelected = !m.isSelected
+                    if (side == "profile"){
 
-                    // Update only the clicked item
-                    userAdapter.notifyItemChanged(pos)
+                    }else{
+                        // Toggle selection
+                        m.isSelected = !m.isSelected
 
-                    // Collect selected user IDs
-                    selectedUserIds = userAdapter.getList()
-                        .filter { it.isSelected }
-                        .joinToString(",") { it._id.orEmpty() }
+                        // Update only the clicked item
+                        userAdapter.notifyItemChanged(pos)
 
-                    Log.i("SelectedUserIds", selectedUserIds)
+                        // Collect selected user IDs
+                        selectedUserIds = userAdapter.getList()
+                            .filter { it.isSelected }
+                            .joinToString(",") { it._id.orEmpty() }
+
+                        Log.i("SelectedUserIds", selectedUserIds)
+                    }
+
 
                 }
             }
@@ -254,19 +263,45 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
         Log.i("dsdsa", "getUsers: $selectedActualValues")
 
 
-        page = 1
-        if (selectedActualValues != null){
-            val data = HashMap<String, Any>().apply {
-                put("category", selectedActualValues!!)  // <- set as comma-separated string
-                put("page", 1)
-                put("limit", 20)
+        type = arguments?.getString("type").toString()
+        side = arguments?.getString("side").toString()
+        userId = arguments?.getString("userId")
 
-                if (searchData != null){
-                    put("search",searchData.toString())
+        page = 1
+
+        if (side == "profile"){
+            if (type != null){
+                if (userId != null){
+                    val data = HashMap<String, Any>().apply {
+                        put("type", type!!)
+                        put("page", 1)
+                        put("limit", 20)
+                        put("id", userId!!)
+
+                        if (searchData != null){
+                            put("search",searchData.toString())
+                        }
+                    }
+                    viewModel.getUsers(data, Constants.GET_USERS)
                 }
+
             }
-            viewModel.getUsers(data, Constants.GET_USERS)
+
+        }else {
+            if (selectedActualValues != null){
+                val data = HashMap<String, Any>().apply {
+                    put("category", selectedActualValues!!)  // <- set as comma-separated string
+                    put("page", 1)
+                    put("limit", 20)
+
+                    if (searchData != null){
+                        put("search",searchData.toString())
+                    }
+                }
+                viewModel.getUsers(data, Constants.GET_USERS)
+            }
         }
+
 
     }
 
@@ -275,9 +310,14 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
         viewModel.onClick.observe(viewLifecycleOwner , Observer {
             when(it?.id){
                 R.id.ivBack ->{
-                 //   requireActivity().onBackPressedDispatcher.onBackPressed()
-                    CommonVaultFragment.selectedUserId = selectedUserIds
-                    Log.i("sdfsdfsdfsd", "initOnClick: $selectedUserIds")
+                    if (side == "profile"){
+                        requireActivity().onBackPressedDispatcher.onBackPressed()
+                    }else{
+                        //   requireActivity().onBackPressedDispatcher.onBackPressed()
+                        CommonVaultFragment.selectedUserId = selectedUserIds
+                        Log.i("sdfsdfsdfsd", "initOnClick: $selectedUserIds")
+                    }
+
                 }
             }
         })

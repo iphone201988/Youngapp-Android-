@@ -4,8 +4,8 @@
 
     <data>
 
-        <import type="android.view.View"/>
         <import type="android.text.TextUtils"/>
+        <import type="android.view.View"/>
 
 
         <variable
@@ -34,11 +34,11 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_150sdp"
             android:src="@drawable/ic_dummy_2"
+            android:visibility='@{TextUtils.isEmpty(bean.image) ? View.GONE : View.VISIBLE}'
             android:scaleType="centerCrop"
             android:layout_marginTop="@dimen/_8sdp"
             android:layout_marginStart="@dimen/_8sdp"
             android:layout_marginEnd="@dimen/_8sdp"
-            android:visibility='@{TextUtils.isEmpty(bean.image) ? View.GONE : View.VISIBLE}'
             app:shapeAppearance="@style/Shape10"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"

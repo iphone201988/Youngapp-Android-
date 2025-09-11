@@ -275,6 +275,7 @@ data class GetProfileApiResponse(
             val fundsRaised:String?,
             val stageOfBusiness:String?,
             var isRated: Double?,
+            var maritalStatus : String?
         ) : Parcelable {
             @Parcelize
             data class Location(
@@ -447,7 +448,8 @@ data class GetSavedPostApiResponse(
             var title: String?,
             var topic: String?,
             var type: String?,
-            var userId: UserId?
+            var userId: UserId?,
+            var symbolValue: String?
         ) {
             data class UserId(
                 var _id: String?,
@@ -498,23 +500,53 @@ data class GetChatApiResponse(
 
 
 /******************* get user  api response ********************/
+//data class GetUserApiResponse(
+//    var `data`: Data?,
+//    var message: String?,
+//    var pagination: Pagination?,
+//    var success: Boolean?,
+//) {
+//    data class Data(
+//        var users: List<User?>?,
+//    ) {
+//        data class User(
+//            var _id: String?,
+//            var firstName: String?,
+//            var lastName: String?,
+//            var profileImage: String?,
+//            var role: String?,
+//            var username: String?,
+//            var isRated: Double?,
+//            var isSelected: Boolean = false,
+//        )
+//    }
+//
+//    data class Pagination(
+//        var limit: Int?,
+//        var page: Int?,
+//        var totalPages: Int?,
+//    )
+//}
+
 data class GetUserApiResponse(
     var `data`: Data?,
     var message: String?,
     var pagination: Pagination?,
-    var success: Boolean?,
+    var success: Boolean?
 ) {
     data class Data(
-        var users: List<User?>?,
+        var users: List<User?>?
     ) {
         data class User(
             var _id: String?,
             var firstName: String?,
+            var isRated: Any?,
             var lastName: String?,
             var profileImage: String?,
             var role: String?,
+            var servicesInterested: String?,
+            var topicsOfInterest: List<String?>?,
             var username: String?,
-            var isRated: Double?,
             var isSelected: Boolean = false,
         )
     }
@@ -522,11 +554,9 @@ data class GetUserApiResponse(
     data class Pagination(
         var limit: Int?,
         var page: Int?,
-        var totalPages: Int?,
+        var totalPages: Int?
     )
 }
-
-
 /******************* get chat message   api response ********************/
 data class GetChatMessageApiResponse(
     var `data`: Data?,
@@ -723,6 +753,7 @@ data class ExchangeShareApiResponse(
             var topic: String?,
             var type: String?,
             var userId: UserId?,
+            var symbolValue : String?
         ) {
             data class UserId(
                 var _id: String?,

@@ -4,6 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
+
         <variable
             name="vm"
             type="com.tech.young.ui.exchange.ExchangeVM" />
@@ -180,6 +184,7 @@
             android:id="@+id/ivUploadImage"
             android:layout_width="match_parent"
             setUserImageFromBaseUrl="@{bean.image}"
+            android:visibility='@{TextUtils.isEmpty(bean.image) ? View.GONE : View.VISIBLE}'
             android:layout_height="@dimen/_160sdp"
             android:scaleType="centerCrop"
             android:onClick="@{v -> vm.onClick(v)}"

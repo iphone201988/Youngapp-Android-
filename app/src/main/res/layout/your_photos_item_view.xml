@@ -27,6 +27,7 @@
             android:layout_height="match_parent"
             app:shapeAppearance="@style/Shape10"
             android:scaleType="fitXY"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -105,11 +105,13 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
+
+
                 <LinearLayout
                     android:id="@+id/llStats"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:layout_marginHorizontal="@dimen/_8sdp"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:gravity="center"
                     android:orientation="horizontal"
@@ -121,8 +123,9 @@
                         android:id="@+id/llShare"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="0.45"
                         android:gravity="center"
+                        android:onClick="@{v -> vm.onClick(v)}"
                         android:orientation="vertical">
 
                         <androidx.appcompat.widget.AppCompatTextView
@@ -141,6 +144,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:singleLine="true"
                             android:text="@string/share"
                             android:textColor="@color/gray"
                             android:textSize="@dimen/_12ssp"
@@ -148,10 +152,12 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/llFollowing"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="0.5"
                         android:gravity="center"
+                        android:onClick="@{v -> vm.onClick(v)}"
                         android:orientation="vertical">
 
                         <androidx.appcompat.widget.AppCompatTextView
@@ -170,15 +176,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Following"
+                            android:singleLine="true"
                             android:textColor="@color/gray"
                             android:textSize="@dimen/_12ssp"
                             android:textStyle="normal" />
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/llFollowedBy"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="0.65"
+                        android:onClick="@{v -> vm.onClick(v)}"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -198,6 +207,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
+                            android:singleLine="true"
                             android:text="Followed by"
                             android:textColor="@color/gray"
                             android:textSize="@dimen/_12ssp"
@@ -209,6 +219,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:onClick="@{v -> vm.onClick(v)}"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -228,6 +239,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:singleLine="true"
                             android:text='@{bean.user.role != null &amp;&amp; bean.user.role.equals("general_member") ? @string/services_patronized : @string/customers}'
                             android:textColor="@color/gray"
                             android:textSize="@dimen/_12ssp"
@@ -265,7 +277,6 @@
                         android:text='@{bean.user.lastName != null &amp; !bean.user.lastName.isEmpty() ? bean.user.firstName + " " + bean.user.lastName : bean.user.firstName}'
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvFullName"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvFullName"
                         app:layout_constraintTop_toTopOf="@id/tvFullName" />
@@ -293,11 +304,39 @@
                         android:textColor="@color/gray"
                         android:visibility='@{bean.user.role.equals("general_member") ? View.VISIBLE : View.GONE}'
                         android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvMemberName"
+
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvMemberName"
                         app:layout_constraintTop_toTopOf="@id/tvMemberName" />
 
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvMartialStatus"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="Marital Status"
+                        android:visibility='@{bean.user.role.equals("general_member") ? View.VISIBLE : View.GONE}'
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintEnd_toStartOf="@id/etMarital"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etMemberName" />
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/etMarital"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="@{bean.user.maritalStatus}"
+                        android:textColor="@color/gray"
+                        android:visibility='@{bean.user.role.equals("general_member") ? View.VISIBLE : View.GONE}'
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvMartialStatus"
+                        app:layout_constraintTop_toTopOf="@id/tvMartialStatus" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvCompanyName"
@@ -310,7 +349,7 @@
                         android:textColor="@color/colorPrimary"
                         app:layout_constraintEnd_toStartOf="@id/etCompanyName"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/etMemberName" />
+                        app:layout_constraintTop_toBottomOf="@id/etMarital" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/etCompanyName"
@@ -322,7 +361,6 @@
                         android:visibility='@{bean.user.role.equals("general_member") ? View.GONE : View.VISIBLE}'
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvCompanyName"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvCompanyName"
                         app:layout_constraintTop_toTopOf="@id/tvCompanyName" />
@@ -348,7 +386,6 @@
                         android:text="@{bean.user.city}"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvCity"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvCity"
                         app:layout_constraintTop_toTopOf="@id/tvCity" />
@@ -374,7 +411,6 @@
                         android:text="@{bean.user.state}"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvState"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvState"
                         app:layout_constraintTop_toTopOf="@id/tvState" />
@@ -402,7 +438,6 @@
                         android:text="@{bean.user.financialExperience}"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvFinancialExperience"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvFinancialExperience"
                         app:layout_constraintTop_toTopOf="@id/tvFinancialExperience" />
@@ -430,7 +465,6 @@
                         android:textColor="@color/gray"
                         android:visibility='@{bean.user.role.equals("general_member") || bean.user.role.equals("financial_advisor") ? View.GONE : View.VISIBLE}'
                         android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvFounded"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/tvFounded"/>
 
@@ -457,7 +491,6 @@
                         android:gravity="end"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvMembership"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvMembership"
                         app:layout_constraintTop_toTopOf="@id/tvMembership" />
@@ -534,7 +567,6 @@
                         android:text="@{bean.user.productsOffered}"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvInterest"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvInterest"
                         app:layout_constraintTop_toTopOf="@id/tvInterest" />
@@ -560,7 +592,6 @@
                         setDataOnRole="@{bean.user}"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@id/tvGoals"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/tvGoals"
                         app:layout_constraintTop_toTopOf="@id/tvGoals" />

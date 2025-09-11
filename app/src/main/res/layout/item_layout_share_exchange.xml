@@ -5,6 +5,8 @@
     <data>
 
         <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
+
         <variable
             name="bean"
             type="com.tech.young.data.model.ExchangeShareApiResponse.Data.Post" />
@@ -32,27 +34,28 @@
             setUserImageFromBaseUrl="@{bean.image}"
             android:layout_width="0dp"
             android:layout_height="@dimen/_150sdp"
-            android:src="@drawable/ic_dummy_2"
-            android:scaleType="centerCrop"
-            android:layout_marginTop="@dimen/_8sdp"
             android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="@dimen/_8sdp"
-            app:shapeAppearance="@style/Shape10"
-            app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_dummy_2"
+            android:visibility='@{TextUtils.isEmpty(bean.image) ? View.GONE : View.VISIBLE}'            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/Shape10" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/reportBtn"
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
             android:src="@drawable/ic_dots_bg"
-            android:translationX="-1dp"
-            android:translationY="-1dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             android:visibility="@{bean.isReported() ? View.GONE : View.VISIBLE}"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
-            app:layout_constraintTop_toTopOf="@id/ivImage"
-            app:layout_constraintStart_toStartOf="@id/ivImage"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -60,6 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:elevation="@dimen/_5sdp"
             android:visibility="@{bean.isReportVisible ? View.VISIBLE : View.GONE}"
             android:padding="@dimen/_5sdp"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
@@ -129,17 +133,31 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/ivStar"
             app:layout_constraintBottom_toBottomOf="@id/ivStar"/>
+
+
+
+        <!-- Barrier that sits at the bottom-most edge of ivImage and reportBtn (ignores GONE) -->
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/bottomBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:barrierAllowsGoneWidgets="false"
+            app:constraint_referenced_ids="ivImage,reportBtn" />
+
+        <!-- user image that will always be placed under the barrier -->
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivUserImage"
-            setUserImageFromBaseUrl="@{bean.userId.profileImage}"
             android:layout_width="@dimen/_32sdp"
             android:layout_height="@dimen/_32sdp"
+            setUserImageFromBaseUrl="@{bean.userId.profileImage}"
             android:src="@drawable/dummy_person"
             app:shapeAppearance="@style/Shape50"
             android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginStart="@dimen/_8sdp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivImage"/>
+            app:layout_constraintTop_toBottomOf="@id/bottomBarrier"/>
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvUserName"
             android:layout_width="0dp"
@@ -171,7 +189,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_8sdp"
             android:paddingHorizontal="@dimen/_8sdp"
-            android:text="@{bean.symbol}"
+            android:text='@{bean.symbol+": "+ bean.symbolValue}'
             android:singleLine="true"
             android:textSize="@dimen/_12ssp"
             app:layout_constraintEnd_toEndOf="parent"

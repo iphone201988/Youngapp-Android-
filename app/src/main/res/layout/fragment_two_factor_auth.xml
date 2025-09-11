@@ -60,10 +60,80 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:text="@string/please_enter_the_authentication_code"
+                    android:text="@string/add_an_extra_layer_of_protection_to_your_account"
                     android:textColor="@color/text_gray"
                     app:layout_constraintStart_toStartOf="@+id/tvLoginTopText"
                     app:layout_constraintTop_toBottomOf="@+id/tvLoginTopText" />
+                
+                
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvMfaSetup"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="MFA Setup Instructions:"
+                    android:textSize="@dimen/_12ssp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:textColor="@color/text_black"
+                    app:layout_constraintTop_toBottomOf="@id/tvDes"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/point1"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_12ssp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:textColor="@color/text_black"
+                    android:text="1. Open your MFA app (e.g., Google Authenticator)."
+                    app:layout_constraintTop_toBottomOf="@id/tvMfaSetup"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/point2"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/_12ssp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/first_time_setup_scan_the_qr_code_shown_below_if_you_cannot_scan_use_the_setup_key_displayed_under_the_qr_code"
+                    app:layout_constraintTop_toBottomOf="@id/point1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/point3"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/_12ssp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/_3_if_using_the_same_device_take_a_screenshot_of_the_qr_code_then_open_your_mfa_app_and_add_the_account_using_the_saved_image"
+                    app:layout_constraintTop_toBottomOf="@id/point2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/point4"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/_12ssp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/_4_after_setup_your_mfa_app_will_display_a_6_digit_code_enter_this_code_below_to_complete_setup"
+                    app:layout_constraintTop_toBottomOf="@id/point3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvGetCode"
@@ -74,7 +144,7 @@
                     android:text="@string/get_authentication_code_by_authenticator_app"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="@+id/tvDes"
-                    app:layout_constraintTop_toBottomOf="@+id/tvDes" />
+                    app:layout_constraintTop_toBottomOf="@+id/point4" />
 
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -161,7 +231,7 @@
                     android:background="@drawable/corner_radius_10"
                     android:gravity="center"
                     android:onClick="@{v ->vm.onClick(v)}"
-                    android:text="@string/log_in_new"
+                    android:text="Verify"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="@dimen/_10sdp"

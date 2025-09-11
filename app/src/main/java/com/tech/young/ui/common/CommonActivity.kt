@@ -219,6 +219,19 @@ class CommonActivity : BaseActivity<ActivityCommonBinding>()  {
                                     setStartDestination(R.id.fragmentEcosystem)
 
                                 }
+                                "myShare" ->{
+                                    val role  = intent.getStringExtra("role").toString()
+                                    var id =  intent.getStringExtra("userId")
+
+                                    bundle.putString("role",role)
+                                    bundle.putString("userId",id)
+                                    setStartDestination(R.id.fragmentMyShare)
+                                }
+                                "image" ->{
+                                    val url  = intent.getStringExtra("url").toString()
+                                    bundle.putString("url", url)
+                                    setStartDestination(R.id.fragmentImageZoom)
+                                }
                             }
                             navController.setGraph(this, bundle)
                         }

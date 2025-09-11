@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="bean"
+            type="com.tech.young.data.SelectionItem" />
+
+        <variable
+            name="pos"
+            type="Integer" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="callback"
+            type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+        android:paddingVertical="@dimen/_5sdp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvName"
+            style="@style/TextView_400_Regular"
+            android:text="@{bean.name}"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_34sdp"
+            android:gravity="center"
+            android:textSize="@dimen/_13ssp"
+            android:hint="@string/name"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:textColorHint="@color/text_black"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/text_gray"
+            android:alpha="0.4"
+            app:layout_constraintBottom_toBottomOf="@+id/tvName"/>
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_14sdp"
+            android:src="@drawable/iv_tick"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:visibility='@{bean.isSelected ? View.VISIBLE : View.INVISIBLE}'            app:layout_constraintTop_toTopOf="@id/tvName"
+            app:layout_constraintBottom_toBottomOf="@id/tvName"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

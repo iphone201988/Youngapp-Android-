@@ -26,7 +26,7 @@
             android:layout_marginHorizontal="@dimen/_18sdp"
             android:background="@drawable/tab_bg"
             app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-            android:textSize="@dimen/_10ssp"
+            android:textSize="@dimen/_8ssp"
             app:tabIndicator="@drawable/tab_indicator"
             app:tabIndicatorFullWidth="false"
             app:tabTextColor="@color/white"

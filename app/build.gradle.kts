@@ -108,5 +108,8 @@ dependencies {
     implementation("org.jsoup:jsoup:1.16.1")
 
 
-    
+    //Image zoom
+    implementation ("com.github.chrisbanes:PhotoView:2.3.0")
+
+
 }

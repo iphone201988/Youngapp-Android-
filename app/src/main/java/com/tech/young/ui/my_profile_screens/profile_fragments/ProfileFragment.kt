@@ -34,10 +34,13 @@ import com.tech.young.databinding.YourPhotosItemViewBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.my_profile_screens.YourProfileVM
 import com.tech.young.ui.my_profile_screens.common_ui.EditProfileDetailFragment
+import com.tech.young.ui.my_share.MyShareFragment
 import com.tech.young.ui.payment.PaymentDetailsFragment
 import com.tech.young.ui.share_screen.CommonShareFragment
 import com.tech.young.ui.stream_screen.CommonStreamFragment
 import com.tech.young.ui.vault_screen.CommonVaultFragment
+import com.tech.young.ui.vault_screen.people_screen.PeopleFragment
+import com.tech.young.ui.vault_screen.vault_room.VaultRoomFragment
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.internal.ignoreIoExceptions
 
@@ -49,6 +52,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
     private lateinit var shareAdapter:SimpleRecyclerViewAdapter<String,ShareProfileItemViewBinding>
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private var userId : String ? = null
+    private var  role : String ? = null
     private var ratingsMap: GetRatingApiResponse.Data.RatingsCount? = null
     private var averageRating : Double = 0.0
     private var totalCount : Int = 0
@@ -140,7 +144,82 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                             .commit()
                     }
 
+
+
                 }
+
+                R.id.llShare ->{
+//                    val intent = Intent(requireContext(), CommonActivity::class.java)
+//                    intent.putExtra("from", "myShare")
+//                    intent.putExtra("userId", userId)
+//                    intent.putExtra("role", role)
+//                    startActivity(intent)
+
+                    val fragment = MyShareFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("userId", userId)
+                            putString("role", role)
+                        }
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+
+                R.id.llFollowing ->{
+
+                    val fragment = PeopleFragment().apply {
+                        arguments = Bundle().apply {
+                           putString("type", "followers")
+                            putString("side","profile")
+                            putString("userId",userId)
+
+                        }
+                    }
+
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+
+                R.id.llFollowedBy ->{
+                    val fragment = PeopleFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("type", "followedBy")
+                            putString("side","profile")
+                            putString("userId",userId)
+
+                        }
+                    }
+
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                R.id.llCustomers ->{
+                    val fragment = PeopleFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("type", "customers")
+                            putString("side","profile")
+                            putString("userId",userId)
+
+
+                        }
+                    }
+
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+
 
             }
         }
@@ -162,6 +241,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
                                     userId = myDataModel.data?.user?._id
+                                    role  = myDataModel.data?.user?.role
                                     binding.bean = myDataModel.data
                                     yourImageAdapter.list = myDataModel.data?.user?.additionalPhotos
                                     yourImageAdapter.notifyDataSetChanged()
@@ -219,7 +299,12 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
             R.layout.your_photos_item_view, BR.bean
         ) { v, m, pos ->
             when (v.id) {
-
+                R.id.ivImage1 ->{
+                    val intent = Intent(requireContext(), CommonActivity::class.java)
+                    intent.putExtra("from", "image")
+                    intent.putExtra("url", m)
+                    startActivity(intent)
+                }
             }
         }
         yourImageAdapter.list = getList

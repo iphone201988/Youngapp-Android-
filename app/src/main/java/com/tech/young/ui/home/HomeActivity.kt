@@ -24,6 +24,7 @@ import com.tech.young.data.api.SimpleApiResponse
 import com.tech.young.data.model.GetProfileApiResponse
 import com.tech.young.data.model.SideMenuBar
 import com.tech.young.databinding.ActivityHomeBinding
+import com.tech.young.databinding.ItemLayoutLeavePagePopupBinding
 import com.tech.young.databinding.ItemLayoutLogoutPopupBinding
 import com.tech.young.databinding.ItemLayoutSideNavBinding
 import com.tech.young.ui.MySplashActivity
@@ -45,6 +46,7 @@ import com.tech.young.ui.my_profile_screens.forFinance.ProfessionalInformationFr
 import com.tech.young.ui.my_profile_screens.forNormal.FamilyDetailsFragment
 import com.tech.young.ui.my_profile_screens.forNormal.FinanceInfoFragment
 import com.tech.young.ui.my_profile_screens.forNormal.InvestmentInfoFragment
+import com.tech.young.ui.my_share.MyShareFragment
 import com.tech.young.ui.payment.PaymentDetailsFragment
 import com.tech.young.ui.policies_about.AboutFragment
 import com.tech.young.ui.policies_about.PoliciesFragment
@@ -61,6 +63,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
     private val viewModel: HomeActivityVM by viewModels()
     // private lateinit var navController: NavController
     private lateinit var logoutPopup : BaseCustomDialog<ItemLayoutLogoutPopupBinding>
+    private lateinit var leavePagePopup : BaseCustomDialog<ItemLayoutLeavePagePopupBinding>
     private var currentFragment : Fragment ?= null
     private var name: String = "Your name"
 
@@ -86,6 +89,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
     }
     private fun initPopup() {
         logoutPopup = BaseCustomDialog(this , R.layout.item_layout_logout_popup,this )
+        leavePagePopup = BaseCustomDialog(this , R.layout.item_layout_leave_page_popup,this)
     }
     private fun initObserver() {
         viewModel.observeCommon.observe(this, Observer {
@@ -251,6 +255,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                     is PaymentDetailsFragment ->{
                         updateOtherUI("Account Details")
                     }
+                    is  MyShareFragment ->{
+                        updateOtherUI("My Shares")
+                    }
 
 
                 }
@@ -276,7 +283,21 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                     } else {
                         CommonVaultFragment.reload = false
                     }
-                    supportFragmentManager.popBackStack()
+
+
+
+                    val fragment = currentFragment
+                    if (fragment is ContactUsFragment) {
+                        if (fragment.hasUserEdited()) {
+                            leavePagePopup.show()
+                        } else {
+                            supportFragmentManager.popBackStack()
+                        }
+                    } else {
+                        supportFragmentManager.popBackStack()
+                    }
+
+
                 }
 
 
@@ -486,6 +507,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
             }
             R.id.tvNo ->{
                 logoutPopup.dismiss()
+            }
+            R.id.tvYes ->{
+                supportFragmentManager.popBackStack()
+                leavePagePopup.dismiss()
+            }
+            R.id.tvLeavePageNo ->{
+                leavePagePopup.dismiss()
             }
         }
     }

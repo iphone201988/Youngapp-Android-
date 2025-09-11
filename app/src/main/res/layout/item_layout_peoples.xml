@@ -72,7 +72,18 @@
                 app:layout_constraintTop_toBottomOf="@id/personName"
                 app:layout_constraintStart_toStartOf="@id/personName"/>
 
-
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvTopics"
+                setTopicsList="@{bean.topicsOfInterest}"
+                style="@style/TextView_400_Regular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Household budgeting"
+                android:textSize="@dimen/_12ssp"
+                android:textColor="@color/text_gray"
+                app:layout_constraintEnd_toEndOf="@id/tvRole"
+                app:layout_constraintTop_toBottomOf="@id/tvRole"
+                app:layout_constraintStart_toStartOf="@id/tvRole"/>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivStar"

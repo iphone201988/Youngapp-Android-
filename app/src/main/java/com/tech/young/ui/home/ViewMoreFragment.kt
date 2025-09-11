@@ -57,7 +57,7 @@ class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>(){
     private fun getNewsList() {
          newsSections = arrayListOf(
             NewsSection("Nasdaq",
-                "https://www.nasdaq.com/nasdaq-RSS-Feeds",
+                "",
                 arrayListOf(
                 NewsItem("Cryptocurrencies","https://www.nasdaq.com/feed/rssoutbound?category=Cryptocurrencies"),
                 NewsItem("Markets","https://www.nasdaq.com/feed/rssoutbound?category=Markets"),
@@ -79,7 +79,7 @@ class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>(){
             )
             ),
              NewsSection("MarketWatch",
-                 "https://www.marketwatch.com/site/rss",
+                 "",
                  arrayListOf(
                  NewsItem("Top Stories","https://feeds.content.dowjones.io/public/rss/mw_topstories"),
                  NewsItem("Real-time headlines","https://feeds.content.dowjones.io/public/rss/mw_realtimeheadlines"),
