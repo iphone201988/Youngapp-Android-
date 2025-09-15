@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="bean"
+            type="com.tech.young.data.model.MediaApiResponse.Data" />
+        
+        <variable
+            name="callback"
+            type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
+        
+        <variable
+            name="pos"
+            type="Integer" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/_10sdp"
+        android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+        android:background="@drawable/profile_share_bg"
+        android:layout_marginBottom="@dimen/_10sdp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivImage"
+            setUserImageFromBaseUrl="@{bean.imageUrl}"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:src="@drawable/ic_dummy_2"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            app:shapeAppearance="@style/Shape10"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/TextView_500_Medium"
+            android:text="@{bean.title}"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:textSize="@dimen/_14ssp"
+            android:paddingHorizontal="@dimen/_8sdp"
+            app:layout_constraintEnd_toEndOf="@id/ivImage"
+            app:layout_constraintStart_toStartOf="@id/ivImage"
+            app:layout_constraintTop_toBottomOf="@id/ivImage"/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

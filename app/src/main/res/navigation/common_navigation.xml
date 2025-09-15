@@ -163,4 +163,10 @@
         android:id="@+id/fragmentImageZoom"
         android:name="com.tech.young.ui.image_zoom.ImageZoomFragment"
         tools:layout="@layout/fragment_image_zoom"/>
+
+
+    <fragment
+        android:id="@+id/fragmentMedia"
+        android:name="com.tech.young.ui.media.MediaFragment"
+        tools:layout="@layout/fragment_media"/>
 </navigation>

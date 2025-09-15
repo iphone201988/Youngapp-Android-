@@ -690,6 +690,7 @@ data class VaultDetailApiResponse(
             var image: String?,
             var isMember: Boolean?,
             var members: List<Member?>?,
+            var chatId : String?,
             var title: String?,
             var topic: String?,
         ) {
@@ -1036,6 +1037,7 @@ data class GetCommentApiResponse(
                 var firstName: String?,
                 var lastName: String?,
                 var profileImage: String?,
+                var username :  String?,
                 var role: String?,
             )
         }
@@ -1048,6 +1050,24 @@ data class GetCommentApiResponse(
     }
 }
 
+
+data class ReceivedSocketComment(
+    var _id: String?,
+    var comment: String?,
+    var createdAt: String?,
+    var type: String?,
+    var userId: UserId?,
+    var vaultId: String?
+) {
+    data class UserId(
+        var _id: String?,
+        var firstName: String?,
+        var lastName: String?,
+        var profileImage: String?,
+        var role: String?,
+        var username: String?
+    )
+}
 /*************** get latest user api response *********************/
 //data class GetLatestUserApiResponse(
 //    var `data`: Data?,
@@ -1561,8 +1581,23 @@ data class GetRatingApiResponse(
     }
 }
 
+/***************  get media  api response *********************/
 
 
+data class MediaApiResponse(
+    var `data`: List<Data?>?,
+    var message: String?,
+    var success: Boolean?
+) {
+    data class Data(
+        var __v: Int?,
+        var _id: String?,
+        var createdAt: String?,
+        var imageUrl: String?,
+        var title: String?,
+        var updatedAt: String?
+    )
+}
 
 
 

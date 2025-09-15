@@ -8,8 +8,10 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.google.gson.Gson
 import com.tech.young.BR
 import com.tech.young.R
+import com.tech.young.SocketManager
 import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
@@ -23,6 +25,7 @@ import com.tech.young.data.model.CommentLikeDislikeApiResponse
 import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.GetCommentApiResponse
 import com.tech.young.data.model.JoinVaultRoomApiResponse
+import com.tech.young.data.model.ReceivedSocketComment
 import com.tech.young.data.model.VaultDetailApiResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentVaultRoomBinding
@@ -31,6 +34,8 @@ import com.tech.young.databinding.ItemLayoutMemberViewBinding
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
 import dagger.hilt.android.AndroidEntryPoint
+import io.socket.client.Socket
+import org.json.JSONObject
 
 @AndroidEntryPoint
 class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
@@ -39,7 +44,9 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
     private lateinit var commentAdapter: SimpleRecyclerViewAdapter<GetCommentApiResponse.Data.Comment, ItemLayoutCommentViewBinding>
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private var vaultId : String ? = null
-
+    private lateinit var handler: Handler
+    private lateinit var mSocket: Socket
+    private var chatId : String ? = null
     private var getList = listOf(
         "", "", "", "", ""
     )
@@ -47,8 +54,11 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
 
     private val viewModel: VaultRoomVM by viewModels()
     override fun onCreateView(view: View) {
-
         getVaultData()
+        socketHandler()
+        joinVault()
+
+        receivedMessage()
         viewModel.getAds(Constants.GET_ADS)
         getCommentData()
         // click
@@ -84,6 +94,120 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
                 // Handle the rating value
             }
         }
+    }
+
+    private fun receivedMessage() {
+        mSocket.on("vaultMessage") { data ->
+            if (data.isNotEmpty() && data[0] is JSONObject) {
+                val jsonData = data[0] as JSONObject
+                Log.i("SocketHandler", "📩 Received new vault message: $jsonData")
+
+                try {
+                    val gson = Gson()
+                    val socketComment = gson.fromJson(
+                        jsonData.toString(),
+                        ReceivedSocketComment::class.java
+                    )
+
+                    val apiComment = GetCommentApiResponse.Data.Comment(
+                        _id = socketComment._id,
+                        comment = socketComment.comment,
+                        createdAt = socketComment.createdAt,
+                        isLiked = false,
+                        likesCount = 0,
+                        type = socketComment.type,
+                        vaultId = socketComment.vaultId,
+                        userId = socketComment.userId?.let {
+                            GetCommentApiResponse.Data.Comment.UserId(
+                                _id = it._id,
+                                firstName = it.firstName,
+                                lastName = it.lastName,
+                                profileImage = it.profileImage,
+                                role = it.role,
+                                username = it.username
+                            )
+                        }
+                    )
+
+                    Handler(Looper.getMainLooper()).post {
+                        val newList = commentAdapter.list?.toMutableList() ?: mutableListOf()
+                        newList.add(0, apiComment)
+                        commentAdapter.list = newList
+                        commentAdapter.notifyItemInserted(0)
+                    }
+                } catch (e: Exception) {
+                    Log.e("SocketHandler", "❌ Failed to parse vaultMessage: ${e.message}", e)
+                }
+            } else {
+                Log.w("SocketHandler", "⚠️ vaultMessage event received with empty or invalid data")
+            }
+        }
+    }
+
+
+
+    fun joinVault() {
+            if (vaultId != null){
+                val params = JSONObject().apply {
+                    put("vaultId", vaultId)
+                }
+                // Emit the joinVault event
+                mSocket.emit("joinVault", params)
+                Log.i("SocketHandler", "Emitted joinRoom event: $params")
+
+            }
+            else {
+                Log.i("SocketHandler", "joinVault: failed to join")
+
+            }
+
+        }
+
+
+    private fun socketHandler() {
+        val token = sharedPrefManager.getLoginData()?.token
+        Log.i("dasdasd", "socketHandler: $token")
+        try {
+            if (!token.isNullOrEmpty()) {
+                SocketManager.setSocket(token)
+                SocketManager.establishConnection()
+                mSocket = SocketManager.getSocket()!!
+
+                mSocket?.on(Socket.EVENT_CONNECT) {
+                    if (!isAdded) {
+                        Log.w("VaultFragment", "⚠️ Fragment not attached, skipping joinVault")
+                        return@on
+                    }
+
+                    activity?.runOnUiThread {
+                        Log.i("VaultFragment", "✅ Socket connected/reconnected")
+
+                        vaultId?.let {
+                            joinVault()
+                        }
+                    }
+                }
+
+
+
+                mSocket?.on(Socket.EVENT_DISCONNECT) {
+                    if (!isAdded) {
+                        Log.w("VaultFragment", "⚠️ Fragment not attached, skipping disconnect UI update")
+                        return@on
+                    }
+
+                    activity?.runOnUiThread {
+                        Log.w("VaultFragment", "⚠️ Socket disconnected")
+                    }
+                }
+
+            } else {
+                Log.e("VaultFragment", "Token missing. Cannot connect socket.")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
     }
 
     private fun setRating(rating: Float) {
@@ -131,47 +255,59 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
                             if (myDataModel != null && myDataModel.data != null) {
                                 var userId = sharedPrefManager.getUserId()
                                 binding.bean = myDataModel.data
+                                chatId = myDataModel.data?.vault?.chatId
                                 if (myDataModel.data?.vault?.admin?._id.equals(userId)){
                                     binding.tvJoin.visibility = View.GONE
+                                    binding.etChat.visibility = View.VISIBLE
+                                    binding.rvComments.visibility = View.VISIBLE
+                                    binding.ivSendChat.visibility = View.VISIBLE
                                 }else{
                                     binding.tvJoin.visibility = View.VISIBLE
-                                }
-                                val isMember = myDataModel.data?.vault?.isMember == true
+                                    binding.etChat.visibility = View.GONE
+                                    binding.rvComments.visibility = View.GONE
+                                    binding.ivSendChat.visibility = View.GONE
 
-                                // Set members list
-                                myDataModel.data?.vault?.members?.let {
-                                    membersAdapter.list = it
-                                }
 
-                                // Update UI based on membership
-                                requireActivity().runOnUiThread {
-                                    binding.tvJoin.apply {
-                                        if (isMember) {
-                                            text = "Leave"
-                                            backgroundTintList = null
-                                            setBackgroundResource(R.drawable.bg_cons_stroke)
-                                            setTextColor(
-                                                ContextCompat.getColor(context, R.color.colorPrimary)
-                                            )
-                                            binding.rvComments.visibility = View.VISIBLE
-                                            binding.etChat.visibility = View.VISIBLE
-                                            binding.ivSendChat.visibility = View.VISIBLE
+                                    val isMember = myDataModel.data?.vault?.isMember == true
+                                    // Update UI based on membership
+                                    requireActivity().runOnUiThread {
+                                        binding.tvJoin.apply {
+                                            if (isMember) {
+                                                text = "Leave"
+                                                backgroundTintList = null
+                                                setBackgroundResource(R.drawable.bg_cons_stroke)
+                                                setTextColor(
+                                                    ContextCompat.getColor(context, R.color.colorPrimary)
+                                                )
+                                                binding.rvComments.visibility = View.VISIBLE
+                                                binding.etChat.visibility = View.VISIBLE
+                                                binding.ivSendChat.visibility = View.VISIBLE
 
-                                        } else {
-                                            text = "Join"
-                                            setBackgroundResource(R.drawable.corner_radius_10)
-                                            backgroundTintList =
-                                                ContextCompat.getColorStateList(context, R.color.colorPrimary)
-                                            setTextColor(
-                                                ContextCompat.getColor(context, android.R.color.white)
-                                            )
-                                            binding.rvComments.visibility = View.GONE
-                                            binding.etChat.visibility = View.GONE
-                                            binding.ivSendChat.visibility = View.GONE
+                                            } else {
+                                                text = "Join"
+                                                setBackgroundResource(R.drawable.corner_radius_10)
+                                                backgroundTintList =
+                                                    ContextCompat.getColorStateList(context, R.color.colorPrimary)
+                                                setTextColor(
+                                                    ContextCompat.getColor(context, android.R.color.white)
+                                                )
+                                                binding.rvComments.visibility = View.GONE
+                                                binding.etChat.visibility = View.GONE
+                                                binding.ivSendChat.visibility = View.GONE
+                                            }
                                         }
                                     }
                                 }
-                            }
+                                }
+
+
+                                // Set members list
+                                myDataModel?.data?.vault?.members?.let {
+                                    membersAdapter.list = it
+                                }
+
+
+
                         }
 
                         "getComment" ->{
@@ -254,25 +390,37 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
         viewModel.onClick.observe(requireActivity()) {
             when (it?.id) {
                 R.id.tvJoin -> {
-                    viewModel.joinLeaveRoom(Constants.JOIN_LEAVE_VAULT+vaultId)
+                    viewModel.joinLeaveRoom(Constants.JOIN_LEAVE_VAULT + vaultId)
 
                 }
-                R.id.ivBack ->{
+
+                R.id.ivBack -> {
                     requireActivity().onBackPressedDispatcher.onBackPressed()
                 }
-                R.id.ivSendChat ->{
-                    if (TextUtils.isEmpty(binding.etChat.text.toString().trim())){
-                        showToast("Please enter message")
-                    }
-                    else{
-                        val data = HashMap<String,Any>()
-                        data["id"] =  vaultId.toString()
-                        data["comment"] = binding.etChat.text.toString().trim()
-                        data["type"] = "vault"
-                        viewModel.addComment(data,Constants.ADD_COMMENT)
-                        binding.etChat.setText("")
 
-                }
+                R.id.ivSendChat -> {
+                    if (TextUtils.isEmpty(binding.etChat.text.toString().trim())) {
+                        showToast("Please enter message")
+                    } else {
+                        val params = JSONObject().apply {
+                            put("chatId", chatId ?: "")
+                            put("id", vaultId.toString())
+                            put("type", "vault")
+                            put("comment", binding.etChat.text.toString().trim())
+                        }
+
+                        if (mSocket.connected()) {
+                            Log.i("SocketHandler", "📤 Emitting messageInVault: $params")
+                            mSocket.emit("messageInVault", params)
+                            Log.i("SocketHandler", "✅ messageInVault event emitted")
+                        } else {
+                            Log.e("SocketHandler", "❌ Socket not connected. Message not sent.")
+                        }
+
+                        // clear input after sending
+                        binding.etChat.setText("")
+                    }
+
                 }
             }
         }
@@ -307,4 +455,11 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
         binding.rvMembers.adapter = membersAdapter
     }
 
+
+        override fun onDestroyView() {
+            super.onDestroyView()
+            mSocket.off(Socket.EVENT_CONNECT)
+            mSocket.off(Socket.EVENT_DISCONNECT)
+            mSocket.off("vaultMessage")
+        }
 }

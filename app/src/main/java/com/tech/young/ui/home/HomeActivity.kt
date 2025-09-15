@@ -37,6 +37,7 @@ import com.tech.young.ui.exchange.exchange_share_detail.ExchangeShareDetailFragm
 import com.tech.young.ui.exchange.screens.ShareExchangeFragment.Companion.selectedCategoryForExchange
 import com.tech.young.ui.exchange.stream_detail_fragment.StreamDetailFragment
 import com.tech.young.ui.inbox.InboxFragment
+import com.tech.young.ui.media.MediaFragment
 import com.tech.young.ui.my_profile_screens.YourProfileFragment
 import com.tech.young.ui.my_profile_screens.common_ui.BusinessInfoFragment
 import com.tech.young.ui.my_profile_screens.common_ui.EditProfileDetailFragment
@@ -307,6 +308,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                     updateOtherUI(getString(R.string.contact_us))
                 }
 
+                R.id.tvMedia ->{
+                    displayFragment(MediaFragment())
+                    updateOtherUI(getString(R.string.media))
+                }
                 R.id.tvAdvertise -> {
                     displayFragment(AdvertiseFragment())
                     updateOtherUI(getString(R.string.advertise))
