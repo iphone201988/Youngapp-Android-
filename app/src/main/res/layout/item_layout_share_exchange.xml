@@ -18,6 +18,10 @@
         <variable
             name="pos"
             type="Integer" />
+        <variable
+            name="currentUserId"
+            type="String" />
+
     </data>
 
 
@@ -64,7 +68,8 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:elevation="@dimen/_5sdp"
-            android:visibility="@{bean.isReportVisible ? View.VISIBLE : View.GONE}"
+            app:bindPostUserId="@{bean.userId._id}"
+            app:bindIsReportVisible="@{bean.isReportVisible}"
             android:padding="@dimen/_5sdp"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:layout_marginStart="@dimen/_5sdp"
@@ -91,6 +96,7 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:padding="@dimen/_5sdp"
+            android:elevation="@dimen/_5sdp"
             android:visibility="gone"
             android:layout_marginTop="@dimen/_1sdp"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"

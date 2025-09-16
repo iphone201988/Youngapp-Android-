@@ -26,6 +26,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -69,8 +70,34 @@ import java.util.TimeZone
 
 object BindingUtils {
 
+    var currentUserId =""
     var lastLogin : String ? = null
 
+    @BindingAdapter(value = ["bindPostUserId", "bindIsReportVisible"], requireAll = true)
+    @JvmStatic
+    fun bindReportLayout(
+        consReport: ConstraintLayout,
+        postUserId: String?,
+        isReportVisible: Boolean
+    ) {
+        val title: TextView? = consReport.findViewById(R.id.tvReport)
+        val consFeature: ConstraintLayout? = consReport.rootView.findViewById(R.id.consFeatures)
+
+        if (isReportVisible) {
+            consReport.visibility = View.VISIBLE
+
+            if (currentUserId == postUserId) {
+                title?.text = "Delete share"
+                consFeature?.visibility = View.VISIBLE
+            } else {
+                title?.text = "Report"
+                consFeature?.visibility = View.GONE
+            }
+        } else {
+            consReport.visibility = View.GONE
+            consFeature?.visibility = View.GONE
+        }
+    }
 
     @BindingAdapter("setImageFromUrl")
     @JvmStatic

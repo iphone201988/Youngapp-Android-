@@ -232,6 +232,7 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                     viewModel.likeDislike(data, Constants.LIKE_DISLIKE_POST + m._id)
                 }
                 R.id.reportBtn -> {
+                    streamAdapter.list.forEach { it.isReportVisible = false }
                     m.isReportVisible = !m.isReportVisible
                     streamAdapter.notifyDataSetChanged()
                 }

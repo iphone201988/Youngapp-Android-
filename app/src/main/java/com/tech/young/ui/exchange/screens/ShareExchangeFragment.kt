@@ -168,12 +168,12 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
     private fun initAdapters() {
 
         shareAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_share_exchange, BR.bean) { v, m, pos ->
-            val consReport = v.rootView.findViewById<ConstraintLayout>(R.id.consReport)
-            val title = v.rootView.findViewById<TextView>(R.id.tvReport)
-            val consFeature = v.rootView.findViewById<ConstraintLayout>(R.id.consFeatures)
-
-            // Initial visibility
-            consReport.visibility = if (m.isReportVisible) View.VISIBLE else View.GONE
+//            val consReport = v.rootView.findViewById<ConstraintLayout>(R.id.consReport)
+//            val title = v.rootView.findViewById<TextView>(R.id.tvReport)
+//            val consFeature = v.rootView.findViewById<ConstraintLayout>(R.id.consFeatures)
+//
+//            // Initial visibility
+//            consReport.visibility = if (m.isReportVisible) View.VISIBLE else View.GONE
 
 
 
@@ -193,42 +193,32 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                 R.id.iv_reshare -> viewModel.reshare(Constants.RESHARE_POST + m._id)
                 R.id.reportBtn -> {
 
-
+                    BindingUtils.currentUserId = sharedPrefManager.getUserId().toString()
                     shareAdapter.list.forEach { it.isReportVisible = false }
-
-
-                    Log.i("dasdasd", "initAdapters: ${sharedPrefManager.getUserId()}")
-                    if (sharedPrefManager.getUserId() == m.userId?._id){
-                        title.text = "Delete share"
-                        consFeature.visibility = View.VISIBLE
-                    }
-                    else{
-                        title.text = "Report"
-                        consFeature.visibility = View.GONE
-                    }
-
                     m.isReportVisible = !m.isReportVisible
                     shareAdapter.notifyDataSetChanged()
 
                 }
-                R.id.consReport ->{
-                    if (title.text == "Report"){
+                R.id.consReport -> {
+                    val isOwner = sharedPrefManager.getUserId() == m.userId?._id
+
+                    if (isOwner) {
+                        // Post belongs to current user → Delete
+                        viewModel.deletePost(Constants.DELETE_POST + m._id)
+                    } else {
+                        // Post belongs to someone else → Report
                         val intent = Intent(requireContext(), CommonActivity::class.java)
                         intent.putExtra("from", "report_user")
                         intent.putExtra("userId", m._id)
-                        intent.putExtra("reportType","share")
+                        intent.putExtra("reportType", "share")
                         startActivity(intent)
-//                        consReport.visibility = View.GONE
                     }
-                    else{
-                        viewModel.deletePost( Constants.DELETE_POST+m._id)
-//                        consReport.visibility = View.GONE
 
-                    }
+                    // Close menu
                     m.isReportVisible = false
                     shareAdapter.notifyItemChanged(pos)
-
                 }
+
                 R.id.consMain ->{
 //                    val intent = Intent(requireContext(), CommonActivity::class.java)
 //                    intent.putExtra("from", "exchange_share_details")

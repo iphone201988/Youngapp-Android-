@@ -231,6 +231,8 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
                 }
 
                 R.id.reportBtn -> {
+                    vaultAdapter.list.forEach { it.isReportVisible = false }
+
                     m.isReportVisible = !m.isReportVisible
                     vaultAdapter.notifyDataSetChanged()
                 }

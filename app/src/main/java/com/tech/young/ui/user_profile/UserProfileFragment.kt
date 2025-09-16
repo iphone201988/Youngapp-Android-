@@ -293,7 +293,12 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
             R.layout.your_photos_item_view, BR.bean
         ) { v, m, pos ->
             when (v.id) {
-
+                R.id.ivImage1 ->{
+                    val intent = Intent(requireContext(), CommonActivity::class.java)
+                    intent.putExtra("from", "image")
+                    intent.putExtra("url", m)
+                    startActivity(intent)
+                }
             }
         }
         yourImageAdapter.list = getList

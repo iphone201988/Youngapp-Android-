@@ -156,7 +156,7 @@
                         android:id="@+id/llShare"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="0.45"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -177,6 +177,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="@string/share"
+                            android:singleLine="true"
                             android:textColor="@color/gray"
                             android:textSize="@dimen/_12ssp"
                             android:textStyle="normal" />
@@ -185,7 +186,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="0.5"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -205,6 +206,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Following"
+                            android:singleLine="true"
+
                             android:textColor="@color/gray"
                             android:textSize="@dimen/_12ssp"
                             android:textStyle="normal" />
@@ -213,7 +216,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="0.65"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -234,6 +237,8 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="Followed by"
+                            android:singleLine="true"
+
                             android:textColor="@color/gray"
                             android:textSize="@dimen/_12ssp"
                             android:textStyle="normal" />
@@ -263,7 +268,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="@string/customers"
+                            android:breakStrategy="high_quality"
+                            android:singleLine="true"
+                            android:text='@{bean.role != null &amp;&amp; bean.role.equals("general_member") ? @string/services_patronized : @string/customers}'
                             android:textColor="@color/gray"
                             android:textSize="@dimen/_12ssp"
                             android:textStyle="normal" />

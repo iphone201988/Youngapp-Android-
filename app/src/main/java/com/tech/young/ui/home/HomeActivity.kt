@@ -1,6 +1,7 @@
 package com.tech.young.ui.home
 
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
@@ -21,6 +22,7 @@ import com.tech.young.base.utils.event.SingleRequestEvent
 import com.tech.young.data.SubViewClickBean
 import com.tech.young.data.api.Constants
 import com.tech.young.data.api.SimpleApiResponse
+import com.tech.young.data.model.FcmPayload
 import com.tech.young.data.model.GetProfileApiResponse
 import com.tech.young.data.model.SideMenuBar
 import com.tech.young.databinding.ActivityHomeBinding
@@ -87,6 +89,61 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
         viewModel.getProfile(Constants.GET_USER_PROFILE)
         initOnClick()
         initObserver()
+
+
+        val bundle = intent.extras
+        val payload: FcmPayload? = bundle?.getParcelable("notificationData")
+
+        if (payload != null) {
+            when(payload.type){
+                "share" ->{
+
+                    Log.i("dsadasdas", "onCreateView: shareload")
+                    val fragment = ExchangeShareDetailFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("userId", payload.postId)
+                        }
+                    }
+
+                     supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+
+
+                "message" ->{
+
+                }
+                "live_stream" ->{
+
+                }
+                "customer" ->{
+
+                }
+                "follower" ->{
+                    updateOtherUI(payload.username.toString())
+                    val userProfileFragment = UserProfileFragment().apply {
+                        arguments  = Bundle().apply {
+                            putString("from", "user_profile")
+                            putString("userId", payload.userId) // assuming m._id is a String
+                        }
+                    }
+
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, userProfileFragment)
+                        .addToBackStack(null)
+                        .commit()
+
+
+                }
+            }
+            Log.i("HomeActivity", "Payload received: $payload")
+        } else {
+            Log.w("HomeActivity", "No payload found in intent")
+        }
+
+
     }
     private fun initPopup() {
         logoutPopup = BaseCustomDialog(this , R.layout.item_layout_logout_popup,this )
@@ -499,6 +556,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
     }
 
     private fun updateOtherUI(title: String) {
+        Log.i("gfdggdfg", "updateOtherUI: $title ")
         binding.ivBack.visibility = View.VISIBLE
         binding.ivAppLogoTop.visibility = View.GONE
         binding.tvTitle.visibility = View.VISIBLE

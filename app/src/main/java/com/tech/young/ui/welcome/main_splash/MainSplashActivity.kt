@@ -41,6 +41,8 @@ class MainSplashActivity : BaseActivity<ActivityMainSplashBinding>(), LocationRe
     private var locationHandler: LocationHandler? = null
     private var mCurrentLocation: Location? = null
     private val REQUEST_RECORD_AUDIO_PERMISSION = 200
+    private val NOTIFICATION_PERMISSION_REQUEST_CODE = 1001
+
 
 
     override fun getLayoutResource(): Int {
@@ -55,8 +57,10 @@ class MainSplashActivity : BaseActivity<ActivityMainSplashBinding>(), LocationRe
         BindingUtils.statusBarStyleWhite(this)
         BindingUtils.styleSystemBars(this, getColor(R.color.white))
         checkLocation()
+       checkNotificationPermission()
         checkPermissions()
         checkAudioPermission()
+
     }
 
 
@@ -135,6 +139,8 @@ class MainSplashActivity : BaseActivity<ActivityMainSplashBinding>(), LocationRe
                 // One or more permissions denied
             }
         }
+
+
     /** check audio permission **/
 //    private fun checkAudioPermission(): Boolean {
 //        if (ContextCompat.checkSelfPermission(
@@ -182,7 +188,37 @@ class MainSplashActivity : BaseActivity<ActivityMainSplashBinding>(), LocationRe
 //        return true
 //    }
 
+    private fun checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13+
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // Request notification permission
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    NOTIFICATION_PERMISSION_REQUEST_CODE
+                )
+            }
+        }
+    }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == NOTIFICATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d("WelcomeActivity", "Notification permission granted")
+            } else {
+                Log.d("WelcomeActivity", "Notification permission denied")
+            }
+        }
+    }
     private fun checkAudioPermission() {
         val micPermission = arrayOf(Manifest.permission.RECORD_AUDIO)
 

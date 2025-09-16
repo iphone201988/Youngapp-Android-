@@ -1601,4 +1601,16 @@ data class MediaApiResponse(
 
 
 
+/***************  push notification model  api response *********************/
 
+
+@Parcelize
+data class FcmPayload(
+    val type: String? = null,
+    val postId: String? = null,
+    val userId: String? = null,
+    val username: String? = null,
+    val profileImage: String? = null,
+    val role: String? = null,
+    val chatId: String? = null
+) : Parcelable
