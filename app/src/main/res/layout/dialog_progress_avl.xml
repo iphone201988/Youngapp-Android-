@@ -9,7 +9,7 @@
         style="@style/SpinKitView.Large.DoubleBounce"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:SpinKit_Color="@color/green"
+        app:SpinKit_Color="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

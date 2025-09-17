@@ -109,7 +109,6 @@
             android:id="@+id/ivAdsImage"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_250sdp"
-            android:src="@drawable/iv_ads_image"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
             android:layout_marginTop="@dimen/_10sdp"

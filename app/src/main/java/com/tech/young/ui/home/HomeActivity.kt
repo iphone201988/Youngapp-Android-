@@ -4,8 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.tech.young.BR
@@ -84,6 +87,17 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
     }
 
     override fun onCreateView() {
+
+
+//        enableEdgeToEdge()
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+//
+//            // Apply only top + left + right, skip bottom (keyboard safe area is managed by adjustResize)
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+//
+//            insets
+//        }
         initView()
         initPopup()
         viewModel.getProfile(Constants.GET_USER_PROFILE)

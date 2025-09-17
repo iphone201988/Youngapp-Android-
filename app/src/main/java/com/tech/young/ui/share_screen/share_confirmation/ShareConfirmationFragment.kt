@@ -71,7 +71,14 @@ class ShareConfirmationFragment : BaseFragment<FragmentShareConfirmationBinding>
             binding.tvTitle.text = data.title
             binding.tvTopic.text = data.topic
             binding.tvDescription.text = data.description
-            binding.ivAdsImage.setImageURI(data.image)
+            if (data.image != null){
+                binding.ivAdsImage.visibility = View.VISIBLE
+                binding.ivAdsImage.setImageURI(data.image)
+            }
+            else{
+                binding.ivAdsImage.visibility = View.GONE
+            }
+
             binding.etSymbol.text = data.symbolValue
             binding.tvSymbol.text = data.symbol
 

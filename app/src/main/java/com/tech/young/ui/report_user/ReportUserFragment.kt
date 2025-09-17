@@ -358,7 +358,7 @@ class ReportUserFragment : BaseFragment<FragmentReportUserBinding>() , BaseCusto
 
         reasonAdapter  = SimpleRecyclerViewAdapter(R.layout.item_layout_drop_down,BR.bean){v,m,pos ->
             when(v.id){
-                R.id.consMain ->{
+                R.id.consMain , R.id.title->{
                     binding.etReasonForReport.setText(m.title)
                     reason = m.title
                     reasonBottomSheet.dismiss()

@@ -120,7 +120,6 @@
                     android:layout_marginHorizontal="@dimen/_7sdp"
                     android:layout_marginTop="@dimen/_10sdp"
                     app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-                    app:layout_constraintBottom_toTopOf="@id/tvSmallBusiness"
                     app:layout_constraintTop_toBottomOf="@id/tvMembers"
                     app:spanCount="2"
                     android:visibility="invisible"
@@ -180,8 +179,184 @@
                     android:layout_marginHorizontal="@dimen/_7sdp"
                     android:layout_marginTop="@dimen/_10sdp"
                     app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-                    app:layout_constraintBottom_toTopOf="@id/tvAd"
                     app:layout_constraintTop_toBottomOf="@id/tvSmallBusiness"
+                    app:spanCount="2"
+                    tools:itemCount="5"
+                    android:visibility="invisible"
+                    tools:listitem="@layout/news_item_view" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvFinancialAdvisor"
+                    style="@style/TextView_600_SemiBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_18sdp"
+                    android:textSize="@dimen/_14ssp"
+                    android:text="Financial Advisor..."
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rvSmallBusiness" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvAdvisorView"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_12sdp"
+                    android:background="@drawable/radius_border_green"
+                    android:gravity="center"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:padding="@dimen/_3sdp"
+                    android:text="@string/view_more"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_10ssp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvFinancialAdvisor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvFinancialAdvisor" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvFinancialAdvisor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_7sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/tvFinancialAdvisor"
+                    app:spanCount="2"
+                    tools:itemCount="5"
+                    android:visibility="invisible"
+                    tools:listitem="@layout/news_item_view" />
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvStartUp"
+                    style="@style/TextView_600_SemiBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_18sdp"
+                    android:textSize="@dimen/_14ssp"
+                    android:text="Startup..."
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rvFinancialAdvisor" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvStartUpView"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_12sdp"
+                    android:background="@drawable/radius_border_green"
+                    android:gravity="center"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:padding="@dimen/_3sdp"
+                    android:text="@string/view_more"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_10ssp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvStartUp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvStartUp" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvStartUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_7sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/tvStartUp"
+                    app:spanCount="2"
+                    tools:itemCount="5"
+                    android:visibility="invisible"
+                    tools:listitem="@layout/news_item_view" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvInvestor"
+                    style="@style/TextView_600_SemiBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_18sdp"
+                    android:textSize="@dimen/_14ssp"
+                    android:text="Investor..."
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rvStartUp" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvInvestorView"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_12sdp"
+                    android:background="@drawable/radius_border_green"
+                    android:gravity="center"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:padding="@dimen/_3sdp"
+                    android:text="@string/view_more"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_10ssp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvInvestor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvInvestor" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvInvestor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_7sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/tvInvestor"
+                    app:spanCount="2"
+                    tools:itemCount="5"
+                    android:visibility="invisible"
+                    tools:listitem="@layout/news_item_view" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvFinancialFirm"
+                    style="@style/TextView_600_SemiBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_18sdp"
+                    android:textSize="@dimen/_14ssp"
+                    android:text="Financial Firm..."
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rvInvestor"/>
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvFinancialView"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_12sdp"
+                    android:background="@drawable/radius_border_green"
+                    android:gravity="center"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:padding="@dimen/_3sdp"
+                    android:text="@string/view_more"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_10ssp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvFinancialFirm"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvFinancialFirm" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvFinancialView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_7sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/tvFinancialFirm"
                     app:spanCount="2"
                     tools:itemCount="5"
                     android:visibility="invisible"
@@ -194,8 +369,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_18sdp"
                     android:text="@string/ads"
-                    app:layout_constraintStart_toStartOf="@id/tvSmallBusiness"
-                    app:layout_constraintTop_toBottomOf="@id/rvSmallBusiness" />
+                    app:layout_constraintStart_toStartOf="@id/rvFinancialView"
+                    app:layout_constraintTop_toBottomOf="@id/rvFinancialView" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvAds"
@@ -211,6 +386,9 @@
                     app:layout_constraintTop_toBottomOf="@id/tvAd"
                     tools:itemCount="5"
                     tools:listitem="@layout/ads_item_view" />
+
+
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

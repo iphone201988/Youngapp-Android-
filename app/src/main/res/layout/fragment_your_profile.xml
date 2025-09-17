@@ -15,18 +15,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.my_profile_screens.YourProfileFragment">
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="0dp"
             android:layout_height="@dimen/_45sdp"
-            app:tabGravity="fill"
-            app:tabMode="fixed"
-            android:textAllCaps="false"
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginHorizontal="@dimen/_18sdp"
             android:background="@drawable/tab_bg"
-            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-            android:textSize="@dimen/_8ssp"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabMinWidth="0dp"
+            app:tabTextAppearance="@style/TabTextStyle"
             app:tabIndicator="@drawable/tab_indicator"
             app:tabIndicatorFullWidth="false"
             app:tabTextColor="@color/white"
@@ -35,6 +35,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
 
 
         <androidx.viewpager2.widget.ViewPager2

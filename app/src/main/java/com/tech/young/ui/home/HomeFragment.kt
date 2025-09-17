@@ -518,6 +518,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         val layoutManager2 = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         val layoutManager3 = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        val layoutManager4 = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        val layoutManager5 = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        val layoutManager6 = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        val layoutManager7 = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         val customOrder = listOf("1", "3", "2", "4", "", "5")
         val sortedNews = reorderNewsList(newsList(), customOrder)
         val adapter = NewsCustomAdapter(requireContext(), sortedNews)
@@ -554,7 +558,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         binding.rvMembers.adapter = adapter
         binding.rvMembers.itemAnimator = null
 
-        binding.rvSmallBusiness.layoutManager = layoutManager3
+        binding.rvFinancialView.layoutManager = layoutManager3
+        binding.rvFinancialView.setHasFixedSize(true)
+        binding.rvFinancialView.adapter = adapter
+        binding.rvFinancialView.itemAnimator = null
+
+        binding.rvInvestor.layoutManager = layoutManager4
+        binding.rvInvestor.setHasFixedSize(true)
+        binding.rvInvestor.adapter = adapter
+        binding.rvInvestor.itemAnimator = null
+
+
+        binding.rvStartUp.layoutManager = layoutManager5
+        binding.rvStartUp.setHasFixedSize(true)
+        binding.rvStartUp.adapter = adapter
+        binding.rvStartUp.itemAnimator = null
+
+
+        binding.rvFinancialAdvisor.layoutManager = layoutManager6
+        binding.rvFinancialAdvisor.setHasFixedSize(true)
+        binding.rvFinancialAdvisor.adapter = adapter
+        binding.rvFinancialAdvisor.itemAnimator = null
+
+
+        binding.rvSmallBusiness.layoutManager = layoutManager7
         binding.rvSmallBusiness.setHasFixedSize(true)
         binding.rvSmallBusiness.adapter = adapter
         binding.rvSmallBusiness.itemAnimator = null

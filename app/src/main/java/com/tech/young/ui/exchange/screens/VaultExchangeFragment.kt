@@ -336,6 +336,7 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
 //        selectedCategoryTitle?.let { getVault(it) }
     }
     private fun getSortList() {
+        sortList.clear()
         sortList.add(SortingItem("Followed", "byFollowers"))
         sortList.add(SortingItem("Saved", "bySave"))
     }

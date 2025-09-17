@@ -286,6 +286,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
     }
 
     private fun getSortList() {
+        sortList.clear()
         sortList.add(SortingItem("Followed", "byFollowers"))
         sortList.add(SortingItem("Saved", "bySave"))
         sortList.add(SortingItem("Booms", "byBoom"))
