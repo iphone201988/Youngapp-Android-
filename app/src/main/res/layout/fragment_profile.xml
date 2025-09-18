@@ -281,88 +281,127 @@
                         app:layout_constraintStart_toEndOf="@id/tvFullName"
                         app:layout_constraintTop_toTopOf="@id/tvFullName" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvMemberName"
-                        style="@style/TextView_500_Medium"
-                        android:layout_width="wrap_content"
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/viewUsername"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:text="Member Username"
                         android:visibility='@{bean.user.role.equals("general_member") ? View.VISIBLE : View.GONE}'
-                        android:textColor="@color/colorPrimary"
-                        app:layout_constraintEnd_toStartOf="@id/etMemberName"
+                        app:layout_constraintTop_toBottomOf="@id/etFullName"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/etFullName" />
+                        app:layout_constraintEnd_toEndOf="parent">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/etMemberName"
-                        style="@style/TextView_400_Regular"
-                        android:layout_width="0dp"
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvMemberName"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Member Username"
+                            android:visibility='@{bean.user.role.equals("general_member") ? View.VISIBLE : View.GONE}'
+                            android:textColor="@color/colorPrimary"
+                            app:layout_constraintEnd_toStartOf="@id/etMemberName"
+                            app:layout_constraintStart_toStartOf="@id/viewUsername"
+                            app:layout_constraintTop_toTopOf="@id/viewUsername" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/etMemberName"
+                            style="@style/TextView_400_Regular"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:text="@{bean.user.username}"
+                            android:textColor="@color/gray"
+                            android:visibility='@{bean.user.role.equals("general_member") ? View.VISIBLE : View.GONE}'
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintEnd_toEndOf="@id/viewUsername"
+                            app:layout_constraintStart_toEndOf="@id/tvMemberName"
+                            app:layout_constraintTop_toTopOf="@id/tvMemberName" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/consMartialStatus"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:text="@{bean.user.username}"
-                        android:textColor="@color/gray"
                         android:visibility='@{bean.user.role.equals("general_member") ? View.VISIBLE : View.GONE}'
-                        android:textSize="@dimen/_12ssp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tvMemberName"
-                        app:layout_constraintTop_toTopOf="@id/tvMemberName" />
-
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvMartialStatus"
-                        style="@style/TextView_500_Medium"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:text="Marital Status"
-                        android:visibility='@{bean.user.role.equals("general_member") ? View.VISIBLE : View.GONE}'
-                        android:textColor="@color/colorPrimary"
-                        app:layout_constraintEnd_toStartOf="@id/etMarital"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/etMemberName" />
+                        app:layout_constraintTop_toBottomOf="@id/viewUsername"
+                        app:layout_constraintStart_toStartOf="parent">
 
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/etMarital"
-                        style="@style/TextView_400_Regular"
-                        android:layout_width="0dp"
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvMartialStatus"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Marital Status"
+                            android:visibility='@{bean.user.role.equals("general_member") ? View.VISIBLE : View.GONE}'
+                            android:textColor="@color/colorPrimary"
+                            app:layout_constraintEnd_toStartOf="@id/etMarital"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/consMartialStatus" />
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/etMarital"
+                            style="@style/TextView_400_Regular"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:text="@{bean.user.maritalStatus}"
+                            android:textColor="@color/gray"
+                            android:visibility='@{bean.user.role.equals("general_member") ? View.VISIBLE : View.GONE}'
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/tvMartialStatus"
+                            app:layout_constraintTop_toTopOf="@id/tvMartialStatus" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/consCompanyName"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:text="@{bean.user.maritalStatus}"
-                        android:textColor="@color/gray"
-                        android:visibility='@{bean.user.role.equals("general_member") ? View.VISIBLE : View.GONE}'
-                        android:textSize="@dimen/_12ssp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tvMartialStatus"
-                        app:layout_constraintTop_toTopOf="@id/tvMartialStatus" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvCompanyName"
-                        style="@style/TextView_500_Medium"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        setRoleBasedLabel = "@{bean.user.role}"
                         android:visibility='@{bean.user.role.equals("general_member") ? View.GONE : View.VISIBLE}'
-                        android:textColor="@color/colorPrimary"
-                        app:layout_constraintEnd_toStartOf="@id/etCompanyName"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/etMarital" />
+                        android:layout_marginTop="@dimen/_10sdp"
+                        app:layout_constraintTop_toBottomOf="@id/consMartialStatus"
+                        app:layout_constraintStart_toStartOf="parent">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/etCompanyName"
-                        style="@style/TextView_400_Regular"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:text="@{bean.user.company}"
-                        android:visibility='@{bean.user.role.equals("general_member") ? View.GONE : View.VISIBLE}'
-                        android:textColor="@color/gray"
-                        android:textSize="@dimen/_12ssp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tvCompanyName"
-                        app:layout_constraintTop_toTopOf="@id/tvCompanyName" />
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvCompanyName"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            setRoleBasedLabel = "@{bean.user.role}"
+                            android:visibility='@{bean.user.role.equals("general_member") ? View.GONE : View.VISIBLE}'
+                            android:textColor="@color/colorPrimary"
+                            app:layout_constraintEnd_toStartOf="@id/etCompanyName"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/consCompanyName" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/etCompanyName"
+                            style="@style/TextView_400_Regular"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:text="@{bean.user.company}"
+                            android:visibility='@{bean.user.role.equals("general_member") ? View.GONE : View.VISIBLE}'
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/tvCompanyName"
+                            app:layout_constraintTop_toTopOf="@id/tvCompanyName" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvCity"
@@ -374,7 +413,7 @@
                         android:textColor="@color/colorPrimary"
                         app:layout_constraintEnd_toStartOf="@id/etCity"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/etCompanyName" />
+                        app:layout_constraintTop_toBottomOf="@id/consCompanyName" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/etCity"
@@ -415,85 +454,131 @@
                         app:layout_constraintTop_toTopOf="@id/tvState" />
 
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvFinancialExperience"
-                        style="@style/TextView_500_Medium"
-                        android:layout_width="wrap_content"
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/consFinancialExperience"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
                         android:visibility='@{bean.user.role.equals("general_member") || bean.user.role.equals("financial_advisor") ? View.VISIBLE : View.GONE}'
-                        android:text="@string/financial_experience"
-                        android:textColor="@color/colorPrimary"
-                        app:layout_constraintEnd_toStartOf="@id/etFinancialExperience"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/etState" />
+                        android:layout_marginTop="@dimen/_10sdp"
+                        app:layout_constraintTop_toBottomOf="@id/etState"
+                        app:layout_constraintStart_toStartOf="parent">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/etFinancialExperience"
-                        style="@style/TextView_400_Regular"
-                        android:layout_width="0dp"
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvFinancialExperience"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:visibility='@{bean.user.role.equals("general_member") || bean.user.role.equals("financial_advisor") ? View.VISIBLE : View.GONE}'
+                            android:text="@string/financial_experience"
+                            android:textColor="@color/colorPrimary"
+                            app:layout_constraintEnd_toStartOf="@id/etFinancialExperience"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/etFinancialExperience"
+                            style="@style/TextView_400_Regular"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:visibility='@{bean.user.role.equals("general_member") || bean.user.role.equals("financial_advisor") ? View.VISIBLE : View.GONE}'
+                            android:text="@{bean.user.financialExperience}"
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/tvFinancialExperience"
+                            app:layout_constraintTop_toTopOf="@id/tvFinancialExperience" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/consFounded"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:visibility='@{bean.user.role.equals("general_member") || bean.user.role.equals("financial_advisor") ? View.VISIBLE : View.GONE}'
-                        android:text="@{bean.user.financialExperience}"
-                        android:textColor="@color/gray"
-                        android:textSize="@dimen/_12ssp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tvFinancialExperience"
-                        app:layout_constraintTop_toTopOf="@id/tvFinancialExperience" />
+                        android:visibility='@{bean.user.role.equals("general_member") || bean.user.role.equals("financial_advisor") ? View.GONE : View.VISIBLE}'
+                        android:layout_marginTop="@dimen/_10sdp"
+                        app:layout_constraintTop_toBottomOf="@id/consFinancialExperience"
+                        app:layout_constraintStart_toStartOf="parent">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvFounded"
-                        style="@style/TextView_500_Medium"
-                        android:layout_width="0dp"
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvFounded"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            setFoundLabel="@{bean.user.role}"
+                            android:visibility='@{bean.user.role.equals("general_member") || bean.user.role.equals("financial_advisor") ? View.GONE : View.VISIBLE}'
+                            android:textColor="@color/colorPrimary"
+                            app:layout_constraintEnd_toStartOf="@id/etFounded"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/etFounded"
+                            style="@style/TextView_400_Regular"
+                            setFormattedDate="@{bean.user.createdAt}"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:textColor="@color/gray"
+                            android:visibility='@{bean.user.role.equals("general_member") || bean.user.role.equals("financial_advisor") ? View.GONE : View.VISIBLE}'
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintStart_toEndOf="@id/tvFounded"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/tvFounded"/>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/consMemberSince"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
-                        setFoundLabel="@{bean.user.role}"
-                        android:visibility='@{bean.user.role.equals("general_member") || bean.user.role.equals("financial_advisor") ? View.GONE : View.VISIBLE}'
-                        android:textColor="@color/colorPrimary"
-                        app:layout_constraintEnd_toStartOf="@id/etMembership"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/etFinancialExperience"/>
+                        app:layout_constraintTop_toBottomOf="@id/consFounded"
+                        app:layout_constraintStart_toStartOf="parent">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/etFounded"
-                        style="@style/TextView_400_Regular"
-                        setFormattedDate="@{bean.user.createdAt}"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:textColor="@color/gray"
-                        android:visibility='@{bean.user.role.equals("general_member") || bean.user.role.equals("financial_advisor") ? View.GONE : View.VISIBLE}'
-                        android:textSize="@dimen/_12ssp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/tvFounded"/>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvMembership"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:text="Member since"
+                            android:textColor="@color/colorPrimary"
+                            app:layout_constraintEnd_toStartOf="@id/etMembership"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/etMembership"
+                            style="@style/TextView_400_Regular"
+                            setFormattedDate="@{bean.user.createdAt}"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/tvMembership"
+                            app:layout_constraintTop_toTopOf="@id/tvMembership" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvMembership"
-                        style="@style/TextView_500_Medium"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:text="Member since"
-                        android:textColor="@color/colorPrimary"
-                        app:layout_constraintEnd_toStartOf="@id/etMembership"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/etFounded" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/etMembership"
-                        style="@style/TextView_400_Regular"
-                        setFormattedDate="@{bean.user.createdAt}"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:textColor="@color/gray"
-                        android:textSize="@dimen/_12ssp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tvMembership"
-                        app:layout_constraintTop_toTopOf="@id/tvMembership" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvYourPhotos"
@@ -504,7 +589,7 @@
                         android:text="@string/your_photos"
                         android:textColor="@color/colorPrimary"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/etMembership" />
+                        app:layout_constraintTop_toBottomOf="@id/consMemberSince" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvYourPhotos"
@@ -546,30 +631,45 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tvAbout" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvInterest"
-                        style="@style/TextView_500_Medium"
-                        android:layout_width="0dp"
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/consIntersted"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
-                        setServiceLabel="@{bean.user.role}"
-                        android:textColor="@color/colorPrimary"
-                        app:layout_constraintEnd_toStartOf="@id/etInterested"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/etAbout" />
+                        app:layout_constraintTop_toBottomOf="@id/etAbout"
+                        app:layout_constraintStart_toStartOf="parent">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/etInterested"
-                        style="@style/TextView_400_Regular"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:text="@{bean.user.productsOffered}"
-                        android:textColor="@color/gray"
-                        android:textSize="@dimen/_12ssp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tvInterest"
-                        app:layout_constraintTop_toTopOf="@id/tvInterest" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvInterest"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            setServiceLabel="@{bean.user.role}"
+                            android:textColor="@color/colorPrimary"
+                            app:layout_constraintEnd_toStartOf="@id/etInterested"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/etInterested"
+                            style="@style/TextView_400_Regular"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:text="@{bean.user.productsOffered}"
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/tvInterest"
+                            app:layout_constraintTop_toTopOf="@id/tvInterest" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvGoals"
@@ -581,7 +681,7 @@
                         android:textColor="@color/colorPrimary"
                         app:layout_constraintEnd_toStartOf="@id/etGoals"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/etInterested" />
+                        app:layout_constraintTop_toBottomOf="@id/consIntersted" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/etGoals"
