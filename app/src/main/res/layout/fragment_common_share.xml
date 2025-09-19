@@ -132,6 +132,7 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="Enter Symbol"
+                    android:inputType="textCapSentences"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"
