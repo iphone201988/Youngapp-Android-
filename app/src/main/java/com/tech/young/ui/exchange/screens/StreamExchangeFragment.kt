@@ -222,12 +222,12 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                         .commit()
 
                 }
-                R.id.ivSaves -> {
+                R.id.ivSaves , R.id.tvSaveData-> {
                     val data = HashMap<String,String>()
                     data["type"] = "stream"
                     viewModel.saveUnSave(data , Constants.SAVE_UNSAVE_POST + m._id)
                 }
-                R.id.ivHeart ->{
+                R.id.ivHeart , R.id.tvSaves->{
                     val data = HashMap<String,String>()
                     data["type"] = "stream"
                     viewModel.likeDislike(data, Constants.LIKE_DISLIKE_POST + m._id)

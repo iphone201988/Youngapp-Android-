@@ -248,6 +248,7 @@
             android:layout_height="wrap_content"
             style="@style/TextView_400_Regular"
             android:textColor="@color/gray"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:text='@{bean.likesCount.toString()+" Booms"}'
             android:textSize="@dimen/_9ssp"
             app:layout_constraintStart_toEndOf="@id/ivHeart"
@@ -273,6 +274,7 @@
             android:textColor="@color/gray"
             android:text='@{bean.commentsCount.toString()+" comments"}'
             android:textSize="@dimen/_9ssp"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             app:layout_constraintStart_toEndOf="@id/ivComment"
             app:layout_constraintBottom_toBottomOf="@id/ivComment"
             app:layout_constraintTop_toTopOf="@id/ivComment"
@@ -298,6 +300,7 @@
             style="@style/TextView_400_Regular"
             android:textColor="@color/gray"
             android:text= "Saves"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:textSize="@dimen/_9ssp"
             app:layout_constraintStart_toEndOf="@id/ivSaves"
             app:layout_constraintBottom_toBottomOf="@id/ivSaves"
@@ -323,6 +326,7 @@
             style="@style/TextView_400_Regular"
             android:textColor="@color/gray"
             android:text= "Reshare"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:textSize="@dimen/_9ssp"
             app:layout_constraintStart_toEndOf="@id/iv_reshare"
             app:layout_constraintBottom_toBottomOf="@id/ivSaves"

@@ -46,6 +46,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:singleLine="true"
                 android:text="@string/business_financial_information"
                 app:layout_constraintEnd_toStartOf="@id/actionToggleBtn"
                 app:layout_constraintStart_toEndOf="@id/ivBack"

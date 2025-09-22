@@ -404,10 +404,62 @@
                         android:text="*The minimum size should be 30 MB or 1000 x 1000 pixels"/>
 
 
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvVisibilityMode"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Visibility Mode"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvMinimumSize" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/consVisibility"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_42sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:background="@drawable/bg_standard"
+                        app:layout_constraintTop_toBottomOf="@id/tvVisibilityMode"
+                        app:layout_constraintStart_toStartOf="@id/etDescription"
+                        app:layout_constraintEnd_toEndOf="@id/etDescription">
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvPublic"
+                            style="@style/TextView_400_Regular"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Public"
+                            android:layout_marginStart="@dimen/_10ssp"
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/setPublic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_30sdp"
+                            android:thumb="@drawable/switch_thumb"
+                            app:track="@drawable/switch_track"
+                            android:checked="true"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvSubmit"
                         style="@style/TextView_500_Medium"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="@dimen/_42sdp"
                         android:layout_marginTop="@dimen/_30sdp"
                         android:background="@drawable/corner_radius_10"
@@ -416,7 +468,27 @@
                         android:text="@string/submit"
                         android:textColor="@color/white"
                         android:visibility="visible"
-                        app:layout_constraintTop_toBottomOf="@id/tvMinimumSize"/>
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/tvCancel"
+                        app:layout_constraintTop_toBottomOf="@id/consVisibility"/>
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvCancel"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_42sdp"
+                        android:background="@drawable/bg_cons_stroke"
+                        android:gravity="center"
+                        android:onClick="@{v ->vm.onClick(v)}"
+                        android:text="Cancel"
+                        android:textColor="@color/colorPrimary"
+                        android:visibility="visible"
+                        app:layout_constraintStart_toEndOf="@id/tvSubmit"
+                        app:layout_constraintBottom_toBottomOf="@id/tvSubmit"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvSubmit"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

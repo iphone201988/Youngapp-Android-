@@ -123,7 +123,7 @@
                         android:id="@+id/llShare"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.45"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:onClick="@{v -> vm.onClick(v)}"
                         android:orientation="vertical">
@@ -155,7 +155,7 @@
                         android:id="@+id/llFollowing"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.5"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:onClick="@{v -> vm.onClick(v)}"
                         android:orientation="vertical">
@@ -186,7 +186,7 @@
                         android:id="@+id/llFollowedBy"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.65"
+                        android:layout_weight="1"
                         android:onClick="@{v -> vm.onClick(v)}"
                         android:gravity="center"
                         android:orientation="vertical">
@@ -377,7 +377,6 @@
                             style="@style/TextView_500_Medium"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
                             setRoleBasedLabel = "@{bean.user.role}"
                             android:visibility='@{bean.user.role.equals("general_member") ? View.GONE : View.VISIBLE}'
                             android:textColor="@color/colorPrimary"
@@ -471,7 +470,6 @@
                             style="@style/TextView_500_Medium"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
                             android:visibility='@{bean.user.role.equals("general_member") || bean.user.role.equals("financial_advisor") ? View.VISIBLE : View.GONE}'
                             android:text="@string/financial_experience"
                             android:textColor="@color/colorPrimary"
@@ -514,7 +512,6 @@
                             style="@style/TextView_500_Medium"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
                             setFoundLabel="@{bean.user.role}"
                             android:visibility='@{bean.user.role.equals("general_member") || bean.user.role.equals("financial_advisor") ? View.GONE : View.VISIBLE}'
                             android:textColor="@color/colorPrimary"
@@ -554,7 +551,6 @@
                             style="@style/TextView_500_Medium"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
                             android:text="Member since"
                             android:textColor="@color/colorPrimary"
                             app:layout_constraintEnd_toStartOf="@id/etMembership"
@@ -646,7 +642,6 @@
                             style="@style/TextView_500_Medium"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
                             setServiceLabel="@{bean.user.role}"
                             android:textColor="@color/colorPrimary"
                             app:layout_constraintEnd_toStartOf="@id/etInterested"

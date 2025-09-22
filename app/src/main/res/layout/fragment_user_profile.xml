@@ -156,7 +156,7 @@
                         android:id="@+id/llShare"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.45"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -186,7 +186,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.5"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -216,7 +216,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.65"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -361,6 +361,7 @@
                         android:layout_marginTop="@dimen/_10sdp"
                         android:visibility='@{bean.role.equals("general_member") ? View.VISIBLE : View.GONE}'
                         app:layout_constraintTop_toBottomOf="@id/etFullName"
+                        app:layout_goneMarginTop="0dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent">
 
@@ -370,8 +371,8 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:text="Member Username"
-                            android:visibility='@{bean.role.equals("general_member") ? View.VISIBLE : View.GONE}'
                             android:textColor="@color/colorPrimary"
+                            android:visibility='@{bean.role.equals("general_member") ? View.VISIBLE : View.GONE}'
                             app:layout_constraintEnd_toStartOf="@id/etMemberName"
                             app:layout_constraintStart_toStartOf="@id/viewUsername"
                             app:layout_constraintTop_toTopOf="@id/viewUsername" />
@@ -400,6 +401,7 @@
                         android:visibility='@{bean.role.equals("general_member") ? View.VISIBLE : View.GONE}'
                         android:layout_marginTop="@dimen/_10sdp"
                         app:layout_constraintTop_toBottomOf="@id/viewUsername"
+                        app:layout_goneMarginTop="0dp"
                         app:layout_constraintStart_toStartOf="parent">
 
 
@@ -441,6 +443,7 @@
                         android:visibility='@{bean.role.equals("general_member") ? View.GONE : View.VISIBLE}'
                         android:layout_marginTop="@dimen/_10sdp"
                         app:layout_constraintTop_toBottomOf="@id/consMartialStatus"
+                        app:layout_goneMarginTop="0dp"
                         app:layout_constraintStart_toStartOf="parent">
 
                         <androidx.appcompat.widget.AppCompatTextView
@@ -448,7 +451,6 @@
                             style="@style/TextView_500_Medium"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
                             setRoleBasedLabel = "@{bean.role}"
                             android:visibility='@{bean.role.equals("general_member") ? View.GONE : View.VISIBLE}'
                             android:textColor="@color/colorPrimary"
@@ -542,7 +544,6 @@
                             style="@style/TextView_500_Medium"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
                             android:visibility='@{bean.role.equals("general_member") || bean.role.equals("financial_advisor") ? View.VISIBLE : View.GONE}'
                             android:text="@string/financial_experience"
                             android:textColor="@color/colorPrimary"
@@ -585,7 +586,6 @@
                             style="@style/TextView_500_Medium"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
                             setFoundLabel="@{bean.role}"
                             android:visibility='@{bean.role.equals("general_member") || bean.role.equals("financial_advisor") ? View.GONE : View.VISIBLE}'
                             android:textColor="@color/colorPrimary"
@@ -627,7 +627,6 @@
                             style="@style/TextView_500_Medium"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
                             android:text="Member since"
                             android:textColor="@color/colorPrimary"
                             app:layout_constraintEnd_toStartOf="@id/etMembership"
@@ -718,7 +717,6 @@
                             style="@style/TextView_500_Medium"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
                             setServiceLabel="@{bean.role}"
                             android:textColor="@color/colorPrimary"
                             app:layout_constraintEnd_toStartOf="@id/etInterested"

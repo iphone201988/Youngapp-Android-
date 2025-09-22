@@ -190,7 +190,7 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
 
             }
             when(v.id){
-                R.id.ivSaves ->{
+                R.id.ivSaves  , R.id.tvSaveData->{
                     viewModel.vaultSaveUnSave( Constants.SAVE_UNSAVE_VAULT+m._id)
                 }
                 R.id.ivSendChat ->{

@@ -179,18 +179,18 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
 
 
             when (v.id) {
-                R.id.ivSaves -> {
+                R.id.ivSaves , R.id.tvSaveData-> {
                     val data = HashMap<String,String>()
                     data["type"] = "share"
                     viewModel.saveUnSave(data , Constants.SAVE_UNSAVE_POST + m._id)
                 }
-                R.id.ivHeart ->{
+                R.id.ivHeart , R.id.tvSaves->{
                     val data = HashMap<String,String>()
                     data["type"] = "share"
                     viewModel.likeDislike(data, Constants.LIKE_DISLIKE_POST + m._id)
 
                 }
-                R.id.iv_reshare -> viewModel.reshare(Constants.RESHARE_POST + m._id)
+                R.id.iv_reshare , R.id.tvReshare-> viewModel.reshare(Constants.RESHARE_POST + m._id)
                 R.id.reportBtn -> {
 
                     BindingUtils.currentUserId = sharedPrefManager.getUserId().toString()
@@ -397,6 +397,8 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                             val myDataModel : SimpleApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 showToast(myDataModel.message.toString())
+                                selectedCategoryTitle?.let { getShareExchange(it) }
+
                             }
                         }
 

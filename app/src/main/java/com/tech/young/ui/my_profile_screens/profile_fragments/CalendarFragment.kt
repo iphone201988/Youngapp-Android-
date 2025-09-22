@@ -77,6 +77,8 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
     private var getList = listOf(
         "", "", "", "", ""
     )
+    private var visibilityMode  = true
+
 
     private lateinit var currentCalendar: Calendar
     override fun onCreateView(view: View) {
@@ -93,6 +95,15 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
         initAdapter()
         // observer
         initObserver()
+
+
+        binding.setPublic.setOnCheckedChangeListener { _, isChecked ->
+            val visibilityMode = isChecked  // true if checked, false if not
+            Log.d("SwitchValue", "Visibility mode: $visibilityMode")
+
+            // Optionally store it somewhere
+            // myViewModel.visibilityMode.value = visibilityMode
+        }
 
 
 
@@ -330,8 +341,13 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                         data["description"] = binding.etDescription.text.toString().trim().toRequestBody()
                         data["type"] = "own_events".toRequestBody()
                         data["scheduledDate"] = userSelectedDate.toString().toRequestBody()
+                        data["public"] = visibilityMode.toString().toRequestBody()
                         viewModel.addEvent(data,Constants.CREATE_EVENT,multipartImage)
                     }
+                }
+                R.id.tvCancel ->{
+                    binding.calendarCons.visibility = View.VISIBLE
+                    binding.consAddEvent.visibility = View.GONE
                 }
                 R.id.etTopic ->{
                     binding.rvTopics.visibility = View.VISIBLE
