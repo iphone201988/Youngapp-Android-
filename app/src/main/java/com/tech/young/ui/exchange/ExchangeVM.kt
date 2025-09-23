@@ -352,4 +352,29 @@ class ExchangeVM @Inject constructor(val apiHelper: ApiHelper): BaseViewModel() 
             }
         }
     }
+
+
+    fun scheduleSteam(url : String){
+        CoroutineScope(Dispatchers.IO).launch {
+            observeCommon.postValue(Resource.loading(null))
+            try {
+                val response = apiHelper.apiPutWithoutRawBody(url)
+                if (response.isSuccessful && response.body() != null){
+                    observeCommon.postValue(Resource.success("scheduleSteam", response.body()))
+                }
+                else{
+                    observeCommon.postValue(
+                        Resource.error(
+                            handleErrorResponse(
+                                response.errorBody(),
+                                response.code()
+                            ), null
+                        )
+                    )
+                }
+            }catch (e : Exception){
+                observeCommon.postValue(Resource.error(e.message.toString(), null))
+            }
+        }
+    }
 }

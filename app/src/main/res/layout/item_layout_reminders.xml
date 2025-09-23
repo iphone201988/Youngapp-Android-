@@ -70,7 +70,7 @@
             android:text="@{bean.title}"
             app:setEventTypeTextColor="@{bean.type}"
             android:textSize="@dimen/_14ssp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/status"
             app:layout_constraintStart_toEndOf="@id/cons"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,11 +81,23 @@
             android:layout_height="wrap_content"
             android:text="@{bean.description}"
             android:textSize="@dimen/_10ssp"
+            android:layout_marginEnd="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"
-            app:layout_constraintEnd_toEndOf="@id/heading"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/heading"
             app:layout_constraintStart_toStartOf="@id/heading"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/status"
+            style="@style/TextView_400_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:bindVisibilityStatus="@{bean.public}"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/heading"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

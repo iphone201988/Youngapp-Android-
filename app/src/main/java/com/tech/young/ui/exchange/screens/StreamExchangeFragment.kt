@@ -181,22 +181,32 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
 
         streamAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_stream_exchange, BR.bean){v,m,pos ->
             val consReport = v.rootView.findViewById<ConstraintLayout>(R.id.consReport)
-            val title = v.rootView.findViewById<TextView>(R.id.tvReport)
+            val consFeature  = v.rootView.findViewById<ConstraintLayout>(R.id.consFeatures)
+//            val title = v.rootView.findViewById<TextView>(R.id.tvReport)
+//
+//
+//            // Initial visibility
+//            consReport.visibility = if (m.isReportVisible) View.VISIBLE else View.GONE
 
 
-            // Initial visibility
-            consReport.visibility = if (m.isReportVisible) View.VISIBLE else View.GONE
-
-
-            if (sharedPrefManager.getUserId() == m.userId?._id){
-                title.text = "Delete stream"
-            }
-            else{
-                title.text = "Report"
-
-            }
+//            if (sharedPrefManager.getUserId() == m.userId?._id){
+//                title.text = "Delete stream"
+//            }
+//            else{
+//                title.text = "Report"
+//
+//            }
 
             when(v.id){
+
+                R.id.reportBtn -> {
+                    BindingUtils.currentUserId = sharedPrefManager.getUserId().toString()
+                    streamAdapter.list.forEach { it.isReportVisible = false }
+                    m.isReportVisible = !m.isReportVisible
+                    streamAdapter.notifyDataSetChanged()
+
+                }
+
                 R.id.consMain ->{
 
 //                    val intent= Intent(requireContext(), CommonActivity::class.java)
@@ -232,29 +242,42 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                     data["type"] = "stream"
                     viewModel.likeDislike(data, Constants.LIKE_DISLIKE_POST + m._id)
                 }
-                R.id.reportBtn -> {
-                    streamAdapter.list.forEach { it.isReportVisible = false }
-                    m.isReportVisible = !m.isReportVisible
-                    streamAdapter.notifyDataSetChanged()
-                }
 
                 R.id.consReport ->{
-                    if (title.text == "Report"){
+                    val isOwner = sharedPrefManager.getUserId() == m.userId?._id
+
+                    if (isOwner) {
+                        // Post belongs to current user → Delete
+                        viewModel.deletePost( Constants.DELETE_POST+m._id)
+                    } else {
+                        // Post belongs to someone else → Report
                         val intent = Intent(requireContext(), CommonActivity::class.java)
                         intent.putExtra("from", "report_user")
                         intent.putExtra("userId", m._id)
                         intent.putExtra("reportType","stream")
                         startActivity(intent)
-//                        consReport.visibility = View.GONE
                     }
-                    else{
-                        viewModel.deletePost( Constants.DELETE_POST+m._id)
-//                        consReport.visibility = View.GONE
-
-                    }
+//                    if (title.text == "Report"){
+//                        val intent = Intent(requireContext(), CommonActivity::class.java)
+//                        intent.putExtra("from", "report_user")
+//                        intent.putExtra("userId", m._id)
+//                        intent.putExtra("reportType","stream")
+//                        startActivity(intent)
+////                        consReport.visibility = View.GONE
+//                    }
+//                    else{
+//                        viewModel.deletePost( Constants.DELETE_POST+m._id)
+////                        consReport.visibility = View.GONE
+//
+//                    }
                     m.isReportVisible = false
                     streamAdapter.notifyItemChanged(pos)
 
+                }
+                R.id.consFeatures ->{
+                     viewModel.scheduleSteam(Constants.SCHEDULE_STREAM+m._id)
+                    consReport.visibility = View.GONE
+                    consFeature.visibility = View.GONE
                 }
             }
 
@@ -371,6 +394,12 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                                 showToast(myDataModel.message.toString())
                                 selectedCategoryTitle?.let { getStreamExchange(it) }
 
+                            }
+                        }
+                        "scheduleSteam" ->{
+                            val myDataModel : SimpleApiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                showToast(myDataModel.message.toString())
                             }
                         }
 

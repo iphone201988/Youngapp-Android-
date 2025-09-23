@@ -367,6 +367,7 @@ data class GetEventsApiResponse(
             var topic: String?,
             var type: String?,
             var userId: String?,
+            var public : Boolean?
         )
 
         data class Pagination(
@@ -1385,6 +1386,8 @@ data class GetStreamApiResponse(
             var type: String?,
             var ratings: Double?,
             var userId: UserId?,
+
+            var isAlreadyAddedToCalendar : Boolean?
         ) {
             data class UserId(
                 var _id: String?,

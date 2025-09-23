@@ -71,6 +71,7 @@ import java.util.TimeZone
 object BindingUtils {
 
     var currentUserId =""
+    var isAlreadyAddedToCalendar = false
     var lastLogin : String ? = null
 
     @BindingAdapter(value = ["bindPostUserId", "bindIsReportVisible"], requireAll = true)
@@ -96,6 +97,48 @@ object BindingUtils {
         } else {
             consReport.visibility = View.GONE
             consFeature?.visibility = View.GONE
+        }
+    }
+
+
+    @BindingAdapter(
+        value = ["bindPostUserIdStream", "bindIsReportVisibleStream", "bindIsAlreadyAddedToCalendar"],
+        requireAll = true
+    )
+    @JvmStatic
+    fun bindReportStreamLayout(
+        consReport: ConstraintLayout,
+        postUserId: String?,
+        isReportVisible: Boolean,
+        isAlreadyAddedToCalendar: Boolean
+    ) {
+        val title: TextView? = consReport.findViewById(R.id.tvReport)
+        val consFeature: ConstraintLayout? = consReport.rootView.findViewById(R.id.consFeatures)
+
+        if (isReportVisible) {
+            consReport.visibility = View.VISIBLE
+
+            if (currentUserId == postUserId) {
+                title?.text = "Delete stream"
+                consFeature?.visibility = View.GONE
+            } else {
+                title?.text = "Report"
+                consFeature?.visibility = if (isAlreadyAddedToCalendar) View.GONE else View.VISIBLE
+            }
+        } else {
+            consReport.visibility = View.GONE
+            consFeature?.visibility = View.GONE
+        }
+    }
+
+
+    @BindingAdapter("bindVisibilityStatus")
+    @JvmStatic
+    fun bindVisibilityStatus(textView: TextView, isPublic: Boolean?) {
+        textView.text = when (isPublic) {
+            true -> "Public"
+            false -> "Private"
+            else -> "" // or "Private" if you want null to be treated same as false
         }
     }
 

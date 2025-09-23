@@ -59,6 +59,9 @@ object Constants {
     const val DELETE_VAULT = "vault/"
     const val DOWNLOAD_HISTORY = "post/downloadHistory"
     const val DELETE_ACCOUNT = "deleteAccount"
+
+     const val SCHEDULE_STREAM = "event/scheduleStreamEvent/"
+
     const val media = "user/getUploadedMedia"
     /*************** Temp value store****************/
        var chooseAccountType = ""

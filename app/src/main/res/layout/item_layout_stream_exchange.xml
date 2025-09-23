@@ -70,15 +70,17 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/consReport"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_130sdp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_3sdp"
             android:background="@color/white"
             android:elevation="@dimen/_5sdp"
+            app:bindPostUserIdStream="@{bean.userId._id}"
+            app:bindIsReportVisibleStream="@{bean.isReportVisible}"
+            app:bindIsAlreadyAddedToCalendar="@{bean.isAlreadyAddedToCalendar}"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:padding="@dimen/_5sdp"
-            android:visibility="@{bean.isReportVisible ? View.VISIBLE : View.GONE}"
             app:layout_constraintStart_toStartOf="@id/reportBtn"
             app:layout_constraintTop_toBottomOf="@id/reportBtn">
 
@@ -99,7 +101,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/consFeatures"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_130sdp"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:padding="@dimen/_5sdp"
@@ -115,7 +117,7 @@
                 style="@style/TextView_400_Regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Feature"
+                android:text="Add to calendar"
                 android:textSize="@dimen/_12ssp"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
