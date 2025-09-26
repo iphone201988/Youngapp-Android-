@@ -59,10 +59,12 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
         android:layout_marginBottom="@dimen/_10sdp"
+        android:fitsSystemWindows="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/clTopBar"
         app:layout_constraintStart_toStartOf="@id/clTopBar"
@@ -130,6 +132,7 @@
             android:layout_marginTop="@dimen/_3sdp"
             android:background="@drawable/radius_border_gray"
             android:gravity="start|center"
+            android:inputType="textCapSentences"
             android:hint="Company"
             android:paddingHorizontal="@dimen/_10sdp"
             android:singleLine="true"
@@ -180,6 +183,7 @@
             android:layout_marginTop="@dimen/_3sdp"
             android:background="@drawable/radius_border_gray"
             android:gravity="start|center"
+            android:inputType="textCapSentences"
             android:hint="Website"
             android:paddingHorizontal="@dimen/_10sdp"
             android:singleLine="true"
@@ -205,6 +209,7 @@
             android:layout_marginTop="@dimen/_3sdp"
             android:background="@drawable/radius_border_gray"
             android:gravity="start|center"
+            android:inputType="textCapSentences"
             android:hint="$250 for 1 month"
             android:paddingHorizontal="@dimen/_10sdp"
             android:singleLine="true"

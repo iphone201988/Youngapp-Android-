@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.createBitmap
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.tech.young.BR
@@ -51,6 +53,7 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
         initOnClick()
         initAdapter()
         initObserver()
+
         binding.ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
             if (fromUser) {
                 binding.ratings.text = "($rating)"
@@ -75,6 +78,16 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
                 .addToBackStack(null)
                 .commit()
         }
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.nestedScrollView) { view, insets ->
+            val imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+            // Only adjust padding if keyboard is visible
+            view.setPadding(0, 0, 0, imeHeight)
+            insets
+        }
+
+
+
     }
 
     private fun setRating(rating: Float) {

@@ -6,6 +6,8 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.google.gson.Gson
@@ -93,6 +95,14 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
                 Log.i("RatingBar", "User selected rating: $rating")
                 // Handle the rating value
             }
+        }
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.nestedScrollView) { view, insets ->
+            val imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+            // Only adjust padding if keyboard is visible
+            view.setPadding(0, 0, 0, imeHeight)
+            insets
         }
     }
 

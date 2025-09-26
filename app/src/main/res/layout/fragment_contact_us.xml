@@ -60,9 +60,11 @@
 
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:fillViewport="true"
+            android:fitsSystemWindows="true"
             android:layout_marginBottom="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/clTopBar"
@@ -119,6 +121,7 @@
                     android:layout_marginTop="@dimen/_3sdp"
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
+                    android:inputType="textCapSentences"
                     android:hint="Subject"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
@@ -156,6 +159,8 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="Name"
+                    android:inputType="textCapSentences"
+
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"
@@ -192,6 +197,7 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="Company"
+                    android:inputType="textCapSentences"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"

@@ -12,18 +12,20 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.my_profile_screens.profile_fragments.CalendarFragment">
 
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginHorizontal="@dimen/_15sdp"
             android:fillViewport="true"
+            android:clipToPadding="false"
             android:layout_marginBottom="@dimen/_10sdp"
-            android:fitsSystemWindows="true"
             app:layout_constraintBottom_toTopOf="@+id/shareLinear"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -261,6 +263,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         android:background="@drawable/radius_border_gray"
                         android:gravity="start|center"
+                        android:inputType="textCapSentences"
                         android:hint="Title"
                         android:paddingHorizontal="@dimen/_10sdp"
                         android:singleLine="true"
@@ -351,6 +354,7 @@
                         android:background="@drawable/radius_border_gray"
                         android:gravity="start|top"
                         android:hint="Write here..."
+                        android:inputType="textCapSentences"
                         android:paddingVertical="@dimen/_10sdp"
                         android:paddingHorizontal="@dimen/_10sdp"
                         android:textColorHint="@color/text_gray"

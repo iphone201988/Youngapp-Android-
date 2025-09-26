@@ -156,7 +156,6 @@
                         android:layout_marginTop="@dimen/_10sdp"
                         android:background="@drawable/radius_border_gray"
                         android:gravity="start|center"
-                        android:inputType="textCapSentences"
                         android:hint="@string/email_address"
                         app:hideKeyboardOnDone="@{true}"
                         android:onClick="@{v ->vm.onClick(v)}"

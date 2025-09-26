@@ -14,6 +14,8 @@ import android.graphics.PorterDuff
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
+import kotlin.math.max
+
 import android.os.Environment
 import android.text.InputType
 import android.util.Log
@@ -29,6 +31,8 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -1090,6 +1094,27 @@ object BindingUtils {
                     false
                 }
             }
+        }
+    }
+
+
+    @BindingAdapter("applyKeyboardInsets")
+    @JvmStatic
+    fun applyKeyboardInsets(view: View, enabled: Boolean) {
+        if (!enabled) return
+
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+            val bottomInset = max(systemBars.bottom, ime.bottom)
+
+            v.setPadding(
+                systemBars.left,
+                systemBars.top,
+                systemBars.right,
+                bottomInset
+            )
+            insets
         }
     }
 

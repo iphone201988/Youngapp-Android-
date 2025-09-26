@@ -275,9 +275,13 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
 
                 }
                 R.id.consFeatures ->{
-                     viewModel.scheduleSteam(Constants.SCHEDULE_STREAM+m._id)
+                    v.visibility = View.GONE
                     consReport.visibility = View.GONE
-                    consFeature.visibility = View.GONE
+                //    consFeature.visibility = View.GONE
+                    viewModel.scheduleSteam(Constants.SCHEDULE_STREAM+m._id)
+                    m.isReportVisible = false
+                    m.isAlreadyAddedToCalendar = true
+                    streamAdapter.notifyDataSetChanged()
                 }
             }
 

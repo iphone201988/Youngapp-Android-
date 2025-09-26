@@ -509,6 +509,7 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
 
     private fun getTopicsList() {
         topicList.add(DropDownData("Stocks"))
+        topicList.add(DropDownData("Crypto"))
         topicList.add(DropDownData("Insurance"))
         topicList.add(DropDownData("Retirement"))
         topicList.add(DropDownData("Savings"))

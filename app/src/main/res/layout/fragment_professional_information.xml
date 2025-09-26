@@ -170,6 +170,7 @@
                     android:gravity="start|center"
                     android:text="@{bean.user.occupation}"
                     android:hint="Occupation"
+                    android:inputType="textCapSentences"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"

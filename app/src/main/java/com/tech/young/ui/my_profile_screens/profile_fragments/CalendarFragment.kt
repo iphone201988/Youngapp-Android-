@@ -13,9 +13,14 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -95,6 +100,20 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
         initAdapter()
         // observer
         initObserver()
+
+
+// Keyboard insets listener to avoid send button getting hidden
+        ViewCompat.setOnApplyWindowInsetsListener(binding.nestedScrollView) { view, insets ->
+            val imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+            // Only adjust padding if keyboard is visible
+            view.setPadding(0, 0, 0, imeHeight)
+            insets
+        }
+//       requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
+
+
+
 
 
         binding.setPublic.setOnCheckedChangeListener { _, isChecked ->

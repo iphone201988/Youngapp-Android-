@@ -273,8 +273,10 @@
                         style="@style/TextView_400_Regular"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:text='@{bean.user.lastName != null &amp; !bean.user.lastName.isEmpty() ? bean.user.firstName + " " + bean.user.lastName : bean.user.firstName}'
+                        android:gravity="start"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:paddingStart="@dimen/_5sdp"
+                        android:text='@{bean.user != null ? (bean.user.firstName != null ? bean.user.firstName : "") + " " + (bean.user.lastName != null ? bean.user.lastName : "") : ""}'
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -309,7 +311,9 @@
                             style="@style/TextView_400_Regular"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:gravity="start"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:paddingStart="@dimen/_5sdp"
                             android:text="@{bean.user.username}"
                             android:textColor="@color/gray"
                             android:visibility='@{bean.user.role.equals("general_member") ? View.VISIBLE : View.GONE}'
@@ -351,7 +355,9 @@
                             style="@style/TextView_400_Regular"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:gravity="start"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:paddingStart="@dimen/_5sdp"
                             android:text="@{bean.user.maritalStatus}"
                             android:textColor="@color/gray"
                             android:visibility='@{bean.user.role.equals("general_member") ? View.VISIBLE : View.GONE}'
@@ -362,6 +368,42 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/consFairness"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility='@{bean.user.fairnessForward == null ? View.GONE : View.VISIBLE}'
+                        android:layout_marginTop="@dimen/_10sdp"
+                        app:layout_constraintTop_toBottomOf="@id/consMartialStatus"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvFairness"
+                            style="@style/TextView_500_Medium"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Fair Forward"
+                            android:textColor="@color/colorPrimary"
+                            app:layout_constraintEnd_toStartOf="@id/etFairness"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/consFairness" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/etFairness"
+                            style="@style/TextView_400_Regular"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:paddingStart="@dimen/_5sdp"
+                            android:text='@{bean.user.fairnessForward == null ? "" : (bean.user.fairnessForward ? "Yes" : "No")}'
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/tvFairness"
+                            app:layout_constraintTop_toTopOf="@id/tvFairness" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/consCompanyName"
@@ -369,7 +411,7 @@
                         android:layout_height="wrap_content"
                         android:visibility='@{bean.user.role.equals("general_member") ? View.GONE : View.VISIBLE}'
                         android:layout_marginTop="@dimen/_10sdp"
-                        app:layout_constraintTop_toBottomOf="@id/consMartialStatus"
+                        app:layout_constraintTop_toBottomOf="@id/consFairness"
                         app:layout_constraintStart_toStartOf="parent">
 
                         <androidx.appcompat.widget.AppCompatTextView
@@ -389,7 +431,9 @@
                             style="@style/TextView_400_Regular"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:gravity="start"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:paddingStart="@dimen/_5sdp"
                             android:text="@{bean.user.company}"
                             android:visibility='@{bean.user.role.equals("general_member") ? View.GONE : View.VISIBLE}'
                             android:textColor="@color/gray"
@@ -419,7 +463,9 @@
                         style="@style/TextView_400_Regular"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
+                        android:gravity="start"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:paddingStart="@dimen/_5sdp"
                         android:text="@{bean.user.city}"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
@@ -444,7 +490,9 @@
                         style="@style/TextView_400_Regular"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
+                        android:gravity="start"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:paddingStart="@dimen/_5sdp"
                         android:text="@{bean.user.state}"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
@@ -482,7 +530,9 @@
                             style="@style/TextView_400_Regular"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:gravity="start"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:paddingStart="@dimen/_5sdp"
                             android:visibility='@{bean.user.role.equals("general_member") || bean.user.role.equals("financial_advisor") ? View.VISIBLE : View.GONE}'
                             android:text="@{bean.user.financialExperience}"
                             android:textColor="@color/gray"
@@ -525,7 +575,9 @@
                             setFormattedDate="@{bean.user.createdAt}"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:gravity="start"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:paddingStart="@dimen/_5sdp"
                             android:textColor="@color/gray"
                             android:visibility='@{bean.user.role.equals("general_member") || bean.user.role.equals("financial_advisor") ? View.GONE : View.VISIBLE}'
                             android:textSize="@dimen/_12ssp"
@@ -563,7 +615,9 @@
                             setFormattedDate="@{bean.user.createdAt}"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:gravity="start"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:paddingStart="@dimen/_5sdp"
                             android:textColor="@color/gray"
                             android:textSize="@dimen/_12ssp"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -653,7 +707,9 @@
                             style="@style/TextView_400_Regular"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:gravity="start"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:paddingStart="@dimen/_5sdp"
                             android:text="@{bean.user.productsOffered}"
                             android:textColor="@color/gray"
                             android:textSize="@dimen/_12ssp"
@@ -683,7 +739,9 @@
                         style="@style/TextView_400_Regular"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
+                        android:gravity="start"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:paddingStart="@dimen/_5sdp"
                         setDataOnRole="@{bean.user}"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/_12ssp"
@@ -791,7 +849,6 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/_13sdp"
                         android:onClick="@{v -> vm.onClick(v)}"
-
                         android:background="@drawable/bg_standard"
                         android:layout_marginTop="@dimen/_8sdp"
                         app:layout_constraintTop_toBottomOf="@id/tvAccount"

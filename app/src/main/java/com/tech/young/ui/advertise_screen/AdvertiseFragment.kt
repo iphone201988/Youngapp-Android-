@@ -21,6 +21,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.tech.young.BR
@@ -74,6 +76,14 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
         // click
         initOnClick()
         setObserver()
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.nestedScrollView) { view, insets ->
+            val imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+            // Only adjust padding if keyboard is visible
+            view.setPadding(0, 0, 0, imeHeight)
+            insets
+        }
     }
 
     private fun setObserver() {

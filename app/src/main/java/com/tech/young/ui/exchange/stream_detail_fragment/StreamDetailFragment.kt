@@ -11,6 +11,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.tech.young.BR
@@ -88,6 +90,14 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                 // Handle the rating value
             }
         }
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.nestedScrollView) { view, insets ->
+            val imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+            // Only adjust padding if keyboard is visible
+            view.setPadding(0, 0, 0, imeHeight)
+            insets
+        }
+
     }
 
     private fun setRating(rating: Float) {

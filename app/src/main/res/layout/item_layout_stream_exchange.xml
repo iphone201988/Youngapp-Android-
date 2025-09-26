@@ -76,6 +76,7 @@
             android:layout_marginTop="@dimen/_3sdp"
             android:background="@color/white"
             android:elevation="@dimen/_5sdp"
+            android:visibility="gone"
             app:bindPostUserIdStream="@{bean.userId._id}"
             app:bindIsReportVisibleStream="@{bean.isReportVisible}"
             app:bindIsAlreadyAddedToCalendar="@{bean.isAlreadyAddedToCalendar}"
