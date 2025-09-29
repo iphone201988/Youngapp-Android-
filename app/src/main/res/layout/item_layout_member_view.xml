@@ -6,11 +6,19 @@
         <variable
             name="bean"
             type="com.tech.young.data.model.VaultDetailApiResponse.Data.Vault.Member" />
+        <variable
+            name="callback"
+            type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
+        <variable
+            name="pos"
+            type="Integer" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consMain"
         android:layout_width="wrap_content"
         android:padding="@dimen/_5sdp"
+        android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
         android:layout_height="wrap_content">
 
         <com.google.android.material.imageview.ShapeableImageView

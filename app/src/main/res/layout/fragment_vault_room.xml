@@ -289,6 +289,7 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="comment..."
+                    android:inputType="textCapSentences"
                     android:visibility="visible"
                     app:layout_constraintEnd_toStartOf="@id/ivSendChat"
                     android:paddingHorizontal="@dimen/_10sdp"

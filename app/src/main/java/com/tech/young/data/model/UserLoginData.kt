@@ -245,6 +245,8 @@ data class GetProfileApiResponse(
             var investors: Boolean?,
             var packageName: String?,
             var productsOffered: String?,
+
+            var servicesInterested: String?,
             var profileImage: String?,
             var race: String?,
             var state: String?,

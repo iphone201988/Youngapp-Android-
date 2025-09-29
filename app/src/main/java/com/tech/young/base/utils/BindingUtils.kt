@@ -901,6 +901,25 @@ object BindingUtils {
     }
 
 
+
+    @BindingAdapter(value = ["role", "productsOffered", "servicesInterested"])
+    @JvmStatic
+    fun setServiceText(
+        textView: TextView,
+        role: String?,
+        productsOffered: String?,
+        servicesInterested: String?
+    ) {
+        val safeRole = role?.lowercase().orEmpty()
+
+        val text = when (safeRole) {
+            "investor", "general_member" -> servicesInterested?.takeIf { it.isNotBlank() } ?: ""
+            else -> productsOffered?.takeIf { it.isNotBlank() } ?: ""
+        }
+
+        textView.text = text
+    }
+
     @BindingAdapter("goalLabel")
     @JvmStatic
     fun goalLabel(textView: TextView, role: String?) {

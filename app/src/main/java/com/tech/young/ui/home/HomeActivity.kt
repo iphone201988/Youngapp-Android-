@@ -42,6 +42,7 @@ import com.tech.young.ui.exchange.exchange_share_detail.ExchangeShareDetailFragm
 import com.tech.young.ui.exchange.screens.ShareExchangeFragment.Companion.selectedCategoryForExchange
 import com.tech.young.ui.exchange.stream_detail_fragment.StreamDetailFragment
 import com.tech.young.ui.inbox.InboxFragment
+import com.tech.young.ui.inbox.view_message.ViewMessageFragment
 import com.tech.young.ui.media.MediaFragment
 import com.tech.young.ui.my_profile_screens.YourProfileFragment
 import com.tech.young.ui.my_profile_screens.common_ui.BusinessInfoFragment
@@ -329,6 +330,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                     }
                     is  MyShareFragment ->{
                         updateOtherUI("My Shares")
+                    }
+                    is ViewMessageFragment->{
+                        updateOtherUI("View Message")
                     }
 
 

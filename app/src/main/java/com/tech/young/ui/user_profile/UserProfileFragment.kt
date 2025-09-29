@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -38,6 +39,7 @@ import com.tech.young.databinding.ShareProfileItemViewBinding
 import com.tech.young.databinding.YourPhotosItemViewBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.home.HomeActivity
+import com.tech.young.ui.inbox.view_message.ViewMessageFragment
 import com.tech.young.ui.share_screen.CommonShareFragment
 import com.tech.young.ui.stream_screen.CommonStreamFragment
 import com.tech.young.ui.vault_screen.CommonVaultFragment
@@ -170,11 +172,28 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
 
 
 
-                    val intent = Intent(requireContext(), CommonActivity::class.java)
-                    intent.putExtra("from", "view_message")
-                    intent.putExtra("threadId",chatId)
-                    intent.putExtra("userData", chatUser)
-                    startActivity(intent)
+//                    val intent = Intent(requireContext(), CommonActivity::class.java)
+//                    intent.putExtra("from", "view_message")
+//                    intent.putExtra("threadId",chatId)
+//                    intent.putExtra("userData", chatUser)
+//                    startActivity(intent)
+
+
+
+                    val bundle = Bundle().apply {
+                        putString("from", "view_message")
+                        putString("threadId", chatId)
+                        putParcelable("userData", chatUser)
+                    }
+
+                    val viewMessageFragment = ViewMessageFragment().apply {
+                        arguments = bundle
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, viewMessageFragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
 
                 R.id.ivReport , R.id.tvReportUser-> {

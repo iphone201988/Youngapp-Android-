@@ -181,7 +181,6 @@
             setUserImageFromBaseUrl="@{bean.image}"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_250sdp"
-            android:src="@drawable/iv_ads_image"
             android:scaleType="centerCrop"
             android:visibility='@{TextUtils.isEmpty(bean.image) ? View.GONE : View.VISIBLE}'
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
@@ -304,6 +303,7 @@
             android:background="@drawable/radius_border_gray"
             android:gravity="start|center"
             android:hint="comment..."
+            android:inputType="textCapSentences"
             android:visibility="visible"
             app:layout_constraintEnd_toStartOf="@id/ivSendChat"
             android:paddingHorizontal="@dimen/_10sdp"

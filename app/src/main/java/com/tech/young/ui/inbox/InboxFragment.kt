@@ -23,6 +23,7 @@ import com.tech.young.databinding.FragmentInboxBinding
 import com.tech.young.databinding.ItemLayoutInboxBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.home.HomeActivity
+import com.tech.young.ui.inbox.view_message.ViewMessageFragment
 import com.tech.young.ui.payment.PaymentDetailsFragment
 import com.tech.young.ui.user_profile.UserProfileFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,11 +79,27 @@ class InboxFragment : BaseFragment<FragmentInboxBinding>() {
                         role = m.chatUsers?.get(0)?.role,
                         username = m.chatUsers?.get(0)?.username
                     )
-                    val intent=Intent(requireContext(),CommonActivity::class.java)
-                    intent.putExtra("from","view_message")
-                    intent.putExtra("threadId",m._id)
-                    intent.putExtra("userData", chatUser)// Pass entire object
-                    startActivity(intent)
+//                    val intent=Intent(requireContext(),CommonActivity::class.java)
+//                    intent.putExtra("from","view_message")
+//                    intent.putExtra("threadId",m._id)
+//                    intent.putExtra("userData", chatUser)// Pass entire object
+//                    startActivity(intent)
+
+
+                    val bundle = Bundle().apply {
+                        putString("from", "view_message")
+                        putString("threadId", m._id)
+                        putParcelable("userData", chatUser)
+                    }
+
+                    val viewMessageFragment = ViewMessageFragment().apply {
+                        arguments = bundle
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, viewMessageFragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
                 R.id.ivAboutIcon->{
 //                    val intent=Intent(requireContext(),CommonActivity::class.java)

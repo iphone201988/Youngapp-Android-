@@ -1,5 +1,6 @@
 package com.tech.young.ui.inbox.view_message
 
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -23,6 +24,8 @@ import com.tech.young.data.model.GetChatMessageApiResponse.Data.Messages
 import com.tech.young.data.model.ReceivedMessageApiResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentViewMessageBinding
+import com.tech.young.ui.home.HomeActivity
+import com.tech.young.ui.user_profile.UserProfileFragment
 import dagger.hilt.android.AndroidEntryPoint
 import io.socket.client.IO
 import io.socket.client.Socket
@@ -170,6 +173,23 @@ class ViewMessageFragment : BaseFragment<FragmentViewMessageBinding>() {
                         return@observe
                     }
                     sendMessageSocket()
+                }
+                R.id.profileImage ->{
+                    val bundle = Bundle().apply {
+                        putString("from", "user_profile")
+                        putString("userId", userData?._id) // assuming m._id is a String
+                    }
+//                    val name = m.firstName + " " + m.lastName  // ← add space here
+                    val name  = userData?.username
+                    HomeActivity.userName  = name
+                    val userProfileFragment = UserProfileFragment().apply {
+                        arguments = bundle
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, userProfileFragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.tech.young.ui.vault_screen.vault_room
 
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
@@ -35,6 +36,8 @@ import com.tech.young.databinding.ItemLayoutCommentViewBinding
 import com.tech.young.databinding.ItemLayoutMemberViewBinding
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
+import com.tech.young.ui.home.HomeActivity
+import com.tech.young.ui.user_profile.UserProfileFragment
 import dagger.hilt.android.AndroidEntryPoint
 import io.socket.client.Socket
 import org.json.JSONObject
@@ -458,6 +461,23 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
         membersAdapter =
             SimpleRecyclerViewAdapter(R.layout.item_layout_member_view, BR.bean) { v, m, pos ->
                 when (v.id) {
+                    R.id.consMain ->{
+                        val bundle = Bundle().apply {
+                            putString("from", "user_profile")
+                            putString("userId", m._id) // assuming m._id is a String
+                        }
+//                    val name = m.firstName + " " + m.lastName  // ← add space here
+                        val name  = m.username
+                        HomeActivity.userName  = name
+                        val userProfileFragment = UserProfileFragment().apply {
+                            arguments = bundle
+                        }
+
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.frameLayout, userProfileFragment)
+                            .addToBackStack(null)
+                            .commit()
+                    }
 
 
                 }
