@@ -4,6 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
+
+
         <variable
             name="callback"
             type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
@@ -31,6 +36,7 @@
             android:layout_height="@dimen/_150sdp"
             android:src="@drawable/ic_dummy_2"
             android:scaleType="centerCrop"
+            android:visibility='@{TextUtils.isEmpty(bean.image) ? View.GONE : View.VISIBLE}'
             android:layout_marginTop="@dimen/_8sdp"
             android:layout_marginEnd="@dimen/_8sdp"
             android:layout_marginStart="@dimen/_8sdp"

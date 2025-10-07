@@ -1,6 +1,7 @@
 package com.tech.young.ui.my_share
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -44,13 +45,14 @@ class MyShareFragment : BaseFragment<FragmentMyShareBinding>() {
 
     private fun getSavedData() {
         role= arguments?.getString("role").toString()
-        id = arguments?.getString("id").toString()
+        id = arguments?.getString("userId").toString()
 
-
+        Log.i("dsdsd", "getSavedData: $id , $role ")
         if(role != null && id != null){
             val data = HashMap<String,Any>()
-            data["userType"] = role!!
-            data["type"] = "share"
+      //     data["userType"] = role!!
+        //    data["type"] = "share"
+            data["id"] = id!!
             data["page"] = 1
             viewModel.savedShare(data, Constants.GET_SAVED_POST)
         }

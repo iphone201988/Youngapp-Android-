@@ -40,9 +40,11 @@ import com.tech.young.databinding.YourPhotosItemViewBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.home.HomeActivity
 import com.tech.young.ui.inbox.view_message.ViewMessageFragment
+import com.tech.young.ui.my_share.MyShareFragment
 import com.tech.young.ui.share_screen.CommonShareFragment
 import com.tech.young.ui.stream_screen.CommonStreamFragment
 import com.tech.young.ui.vault_screen.CommonVaultFragment
+import com.tech.young.ui.vault_screen.people_screen.PeopleFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -54,6 +56,7 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
     private lateinit var shareAdapter: SimpleRecyclerViewAdapter<String, ShareProfileItemViewBinding>
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private var userId:String?=null
+    private var  role : String ? = null
     private var chatId : String ? = null
     private var userData : GetOtherUserProfileData? = null
     private var select = 0
@@ -207,11 +210,76 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
                 R.id.icRatingArrow -> {
                     showRatingDialog()
                 }
+                R.id.llShare ->{
+                    val fragment = MyShareFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("userId", userId)
+                            putString("role", role)
+                        }
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+
 //                R.id.actionToggleBtn ->{
 //                    HomeActivity.navClick.postValue(Resource.success("clicked",true))
 //                }
 
 
+                R.id.llFollowing ->{
+
+                    val fragment = PeopleFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("type", "followers")
+                            putString("side","profile")
+                            putString("userId",userId)
+
+                        }
+                    }
+
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                R.id.llFollowedBy ->{
+                    val fragment = PeopleFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("type", "followedBy")
+                            putString("side","profile")
+                            putString("userId",userId)
+
+                        }
+                    }
+
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+
+                R.id.llCustomers ->{
+                    val fragment = PeopleFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("type", "customers")
+                            putString("side","profile")
+                            putString("userId",userId)
+
+
+                        }
+                    }
+
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
 
             }
         }
@@ -234,6 +302,7 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
                                         userData = myDataModel.data.user
                                         binding.bean = myDataModel.data.user
                                         chatId= myDataModel.data.user?.chatId
+                                        role  = myDataModel.data?.user?.role
                                         if (myDataModel.data.user?.isFollowed == true){
                                             binding.tvFollow.visibility = View.INVISIBLE
                                             binding.tvFollowingUser.visibility = View.VISIBLE

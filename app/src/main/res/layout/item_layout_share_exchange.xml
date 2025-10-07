@@ -43,7 +43,8 @@
             android:layout_marginEnd="@dimen/_8sdp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_dummy_2"
-            android:visibility='@{TextUtils.isEmpty(bean.image) ? View.GONE : View.VISIBLE}'            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility='@{TextUtils.isEmpty(bean.image) ? View.GONE : View.VISIBLE}'
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

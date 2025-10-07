@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.content.FileProvider
@@ -25,6 +26,7 @@ import com.tech.young.data.api.SimpleApiResponse
 import com.tech.young.data.model.DownloadHistoryApiResponse
 import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.GetProfileApiResponse
+import com.tech.young.data.model.GetProfileApiResponse.GetProfileApiResponseData
 import com.tech.young.data.model.UpdateUserProfileResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentPaymentDetailsBinding
@@ -33,6 +35,7 @@ import com.tech.young.databinding.ItemLayoutDeleteAccountPopupBinding
 import com.tech.young.databinding.ItemLayoutLogoutPopupBinding
 import com.tech.young.ui.MySplashActivity
 import com.tech.young.ui.common.CommonActivity
+import com.tech.young.ui.my_profile_screens.common_ui.EditProfileDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
@@ -47,6 +50,9 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
     private val viewModel: PaymentVM by viewModels()
 
     private var userId : String ? = null
+
+    private var profileData: GetProfileApiResponseData?=null
+
 
     private lateinit var deactivateAccount : BaseCustomDialog<ItemLayoutDeactivateAccountBinding>
     private lateinit var deleteAccount : BaseCustomDialog<ItemLayoutDeleteAccountPopupBinding>
@@ -99,9 +105,16 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
                 }
 
                 R.id.ivAccount, R.id.ivPay, R.id.ivPlan -> {
-                    val intent = Intent(requireContext(), CommonActivity::class.java)
-                    intent.putExtra("from", "payment_setup")
-                    startActivity(intent)
+                    val fragment = EditProfileDetailFragment().apply {
+                        arguments = Bundle().apply {
+                            putParcelable("profileData", profileData)
+                        }
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
                 R.id.tvDownload ->{
                     viewModel.downloadHistory(Constants.DOWNLOAD_HISTORY)
@@ -130,7 +143,8 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
                             val myDataModel : GetProfileApiResponse? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
-                                   binding.bean = myDataModel.data
+                                    profileData = myDataModel.data
+                                    binding.bean = myDataModel.data
                                 }
                             }
 

@@ -157,6 +157,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:onClick="@{v -> vm.onClick(v)}"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -184,6 +185,8 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/llFollowing"
+                        android:onClick="@{v -> vm.onClick(v)}"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -214,6 +217,8 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/llFollowedBy"
+                        android:onClick="@{v -> vm.onClick(v)}"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -249,6 +254,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:onClick="@{v -> vm.onClick(v)}"
                         android:gravity="center"
                         android:orientation="vertical">
 

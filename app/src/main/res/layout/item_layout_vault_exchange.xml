@@ -6,6 +6,7 @@
     <data>
 
         <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
         <variable
             name="callback"
             type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
@@ -35,6 +36,7 @@
             android:scaleType="centerCrop"
             android:layout_marginTop="@dimen/_8sdp"
             android:layout_marginStart="@dimen/_8sdp"
+            android:visibility='@{TextUtils.isEmpty(bean.image) ? View.GONE : View.VISIBLE}'
             android:layout_marginEnd="@dimen/_8sdp"
             app:shapeAppearance="@style/Shape10"
             app:layout_constraintTop_toTopOf="parent"
@@ -46,12 +48,12 @@
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
             android:src="@drawable/ic_dots_bg"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             android:visibility="@{bean.isReported() ? View.GONE : View.VISIBLE}"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
-            android:translationY="-1dp"
-            android:translationX="-1dp"
-            app:layout_constraintTop_toTopOf="@id/ivImage"
-            app:layout_constraintStart_toStartOf="@id/ivImage"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -80,6 +82,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivStar"
             android:layout_width="@dimen/_15sdp"
@@ -101,6 +106,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/ivStar"
             app:layout_constraintBottom_toBottomOf="@id/ivStar"/>
+
+
+
+        <!-- Barrier that sits at the bottom-most edge of ivImage and reportBtn (ignores GONE) -->
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/bottomBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:barrierAllowsGoneWidgets="false"
+            app:constraint_referenced_ids="ivImage,reportBtn" />
+
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivUserImage"
             setUserImageFromBaseUrl="@{bean.Admin.profileImage}"
@@ -111,7 +129,8 @@
             app:shapeAppearance="@style/Shape50"
             android:layout_marginStart="@dimen/_8sdp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivImage"/>
+            app:layout_constraintTop_toBottomOf="@id/bottomBarrier"/>
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvUserName"
             android:layout_width="0dp"
