@@ -82,6 +82,9 @@ class PersonalPreferencesFragment : BaseFragment<FragmentPersonalPreferencesBind
         initOnClick()
         // observer
         initObserver()
+
+
+
     }
 
     override fun getLayoutResource(): Int {

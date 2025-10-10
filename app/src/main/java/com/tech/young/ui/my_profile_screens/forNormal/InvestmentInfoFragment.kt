@@ -2,6 +2,8 @@ package com.tech.young.ui.my_profile_screens.forNormal
 
 import android.util.Log
 import android.view.View
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -24,6 +26,13 @@ class InvestmentInfoFragment : BaseFragment<FragmentInvestmentInfoBinding>() {
     // data
     private var profileData: GetProfileApiResponseData? = null
     override fun onCreateView(view: View) {
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.clInvestment) { view, insets ->
+            val imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+            // Only adjust padding if keyboard is visible
+            view.setPadding(0, 0, 0, imeHeight)
+            insets
+        }
         // view
         initView()
         // click

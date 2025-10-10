@@ -170,9 +170,9 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
                             val myDataModel : GetPostDetailsApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
-                                    if (myDataModel.data?.post != null)
-                                    binding.bean  = myDataModel.data?.post
-
+                                    if (myDataModel.data?.post != null){
+                                        binding.bean  = myDataModel.data?.post
+                                    }
 
                                 }
                             }

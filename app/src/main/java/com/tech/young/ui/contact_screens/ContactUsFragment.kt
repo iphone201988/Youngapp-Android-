@@ -61,7 +61,7 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
 
     private val viewModel: ContactUsFragmentVm by viewModels()
     private var select = 0
-
+    var isChecked = false
 
     // adapter
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
@@ -352,6 +352,11 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
 
                     }
                 }
+                R.id.ivCheck ->{
+                    isChecked = !isChecked
+                    // update UI if using data binding
+                    binding.check = isChecked
+                }
             }
         }
     }
@@ -443,6 +448,10 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
             showToast("Please enter email")
             return false
         }
+    if (!isChecked) {
+        showToast("Please agree to the terms and conditions")
+        return false
+    }
         return true
     }
 

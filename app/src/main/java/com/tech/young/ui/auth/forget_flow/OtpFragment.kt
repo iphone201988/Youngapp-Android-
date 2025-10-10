@@ -27,6 +27,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OtpFragment : BaseFragment<FragmentOtpBinding>() {
+
+    private var email : String ?= null
     private val viewModel: AuthCommonVM by viewModels()
     override fun onCreateView(view: View) {
         initView()
@@ -140,6 +142,8 @@ class OtpFragment : BaseFragment<FragmentOtpBinding>() {
 
     private fun initView() {
         val type = arguments?.getString("from")
+        email = arguments?.getString("email")
+
         if (type == "SignUpProcess") {
             binding.tvVerify.setText(getString(R.string.next))
         } else {
@@ -247,6 +251,12 @@ class OtpFragment : BaseFragment<FragmentOtpBinding>() {
 
                 // Set click listener only when timer finishes
                 binding.tvSeconds.setOnClickListener {
+
+                    val data = HashMap<String,Any>()
+                    data["email"] = email.toString()
+                    data["type"] =  1
+                    viewModel.sendOtp(data,com.tech.young.data.api.Constants.SENT_OTP)
+
                     // Restart the countdown when clicked
                     binding.tvSeconds.isClickable = false
                     binding.tvSeconds.setTextColor(

@@ -68,6 +68,7 @@ class SetupPasswordFragment : BaseFragment<FragmentSetupPasswordBinding>() {
                     showSuccessToast(result?.message.toString())
                     val bundle = Bundle().apply {
                         putString("from", "SignUpProcess")
+                        putString("email",email)
                         putString("userId", result?.data?._id.toString())
                     }
                     findNavController().navigate(R.id.navigateToOtpFragment, bundle)

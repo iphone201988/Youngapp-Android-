@@ -45,6 +45,7 @@ class ForgetPasswordFragment : BaseFragment<FragmentForgetPasswordBinding>() {
                                 if (myDataModel.data != null){
                                     val bundle = Bundle().apply {
                                         putString("userId", myDataModel.data?._id)
+                                        putString("email",email)
                                         putString("screen","forgot")
 
                                     }

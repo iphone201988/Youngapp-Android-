@@ -63,6 +63,8 @@ object Constants {
      const val SCHEDULE_STREAM = "event/scheduleStreamEvent/"
 
     const val media = "user/getUploadedMedia"
+
+
     /*************** Temp value store****************/
        var chooseAccountType = ""
 
