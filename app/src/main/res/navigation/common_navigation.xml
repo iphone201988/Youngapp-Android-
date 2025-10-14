@@ -169,4 +169,10 @@
         android:id="@+id/fragmentMedia"
         android:name="com.tech.young.ui.media.MediaFragment"
         tools:layout="@layout/fragment_media"/>
+
+
+    <fragment
+        android:id="@+id/fragmentDigitVerification"
+        android:name="com.tech.young.ui.didit_verification.DiditVerificationFragment"
+        tools:layout="@layout/fragment_didit_verification"/>
 </navigation>

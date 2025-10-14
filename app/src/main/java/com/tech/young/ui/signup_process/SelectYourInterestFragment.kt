@@ -30,6 +30,7 @@ class SelectYourInterestFragment : BaseFragment<FragmentSelectYourInterestBindin
     private val selectedItems = mutableSetOf<String>()
 
 
+
     override fun onCreateView(view: View) {
         initView()
         initOnClick()

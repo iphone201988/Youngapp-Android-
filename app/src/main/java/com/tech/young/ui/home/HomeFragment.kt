@@ -77,9 +77,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         initObserver()
     }
 
-    private suspend fun getQuotes() {
-        val quotes = StockQuoteService.fetchQuotes(listOf("AAPL", "TSLA", "BTC"))
-    }
+
 
     private fun loadRSS() {
         lifecycleScope.launch {
@@ -452,8 +450,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         rvTicker.adapter = adapter
         rvTicker.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
-        val symbols = listOf("AAPL","SPY", "QQQ", "DIA" , "IWM")
-
+//        val symbols = listOf("AAPL","SPY", "QQQ", "DIA" , "IWM")
+        val symbols = listOf(
+            "SPX", "DJIA", "IXIC", "RUT", "VIX", "XAU",
+            "NVDA", "MSFT", "AAPL", "GOOG", "AMZN", "META", "TSLA"
+        )
 
         viewLifecycleOwner.lifecycleScope.launch {
             // Fetch data from API

@@ -312,7 +312,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_2sdp"
-            android:text="Saves"
+            android:text='@{bean.totalSavedCount.toString()+" Saves"}'
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:textColor="@color/gray"
             android:textSize="@dimen/_10ssp"

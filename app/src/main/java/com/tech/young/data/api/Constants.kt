@@ -65,6 +65,10 @@ object Constants {
     const val media = "user/getUploadedMedia"
 
 
+  const val DELETE_EVENT = "event/"
+  const val EDIT_EVENTS = "event/editEvent/"
+
+
     /*************** Temp value store****************/
        var chooseAccountType = ""
 

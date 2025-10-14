@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.SocketManager
@@ -38,7 +40,11 @@ import com.tech.young.ui.my_profile_screens.forFinance.ProfessionalInformationFr
 import com.tech.young.ui.my_profile_screens.forNormal.FamilyDetailsFragment
 import com.tech.young.ui.my_profile_screens.forNormal.FinanceInfoFragment
 import com.tech.young.ui.my_profile_screens.forNormal.InvestmentInfoFragment
+import com.tech.young.utils.DiditService
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCustomDialog.Listener {
@@ -51,6 +57,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
     // menu list
     private var editMenuList=ArrayList<EditProfileListModel>()
 
+    private  var notClickable  = false
     private lateinit var logoutPopup : BaseCustomDialog<ItemLayoutLogoutPopupBinding>
     private lateinit var deleteAccountPopup : BaseCustomDialog<ItemLayoutDeleteAccountPopupBinding>
     override fun onCreateView(view: View) {
@@ -89,7 +96,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
     private fun initView() {
         // handle list
         val role = sharedPrefManager.getLoginData()?.role
-    //    viewModel.getProfile(Constants.GET_USER_PROFILE)
+        viewModel.getProfile(Constants.GET_USER_PROFILE)
         Log.i("dsadasdas", "initView: $role")
         if (role != null) {
             when (role) {
@@ -171,8 +178,23 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                                 if (myDataModel.data != null) {
                                     profileData = myDataModel.data
                                     lastLogin = myDataModel.data?.user?.lastLogin
+                                    val document = myDataModel.data?.user?.isDocumentVerified
+
                                     BindingUtils.lastLogin = lastLogin.toString()
-                                    initAdapter()
+                                    BindingUtils.documentStatus = document
+
+                                 val verify = document?.contains("approved") == true
+
+                                    for (i in editProfileAdapter.list){
+                                        if (verify){
+                                            if (i.subTitle.contains("Account Verification")){
+                                               i.verificationClickable = true
+                                                break
+                                            }
+                                        }
+                                    }
+                                    editProfileAdapter.notifyDataSetChanged()
+                               //     initAdapter()
                                 }
                             }
 
@@ -318,10 +340,11 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                                     }
 
                                     getString(R.string.account_verification) -> {
-                                        val intent =
-                                            Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("from", "account_verify")
-                                        startActivity(intent)
+                                        userVerification()
+//                                        val intent =
+//                                            Intent(requireContext(), CommonActivity::class.java)
+//                                        intent.putExtra("from", "account_verify")
+//                                        startActivity(intent)
                                     }
                                     "Logout"->{
                                         logoutPopup.show()
@@ -396,10 +419,11 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                                     }
 
                                     getString(R.string.account_verification) -> {
-                                        val intent =
-                                            Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("from", "account_verify")
-                                        startActivity(intent)
+                                        userVerification()
+//                                        val intent =
+//                                            Intent(requireContext(), CommonActivity::class.java)
+//                                        intent.putExtra("from", "account_verify")
+//                                        startActivity(intent)
                                     }
                                     getString(R.string.form_upload)->{
 //                                        val intent=Intent(requireContext(), CommonActivity::class.java)
@@ -502,10 +526,12 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                                             .commit()
                                     }
                                     getString(R.string.account_verification) -> {
-                                        val intent =
-                                            Intent(requireContext(), CommonActivity::class.java)
-                                        intent.putExtra("from", "account_verify")
-                                        startActivity(intent)
+
+                                        userVerification()
+//                                        val intent =
+//                                            Intent(requireContext(), CommonActivity::class.java)
+//                                        intent.putExtra("from", "account_verify")
+//                                        startActivity(intent)
                                     }
                                     "Logout"->{
                                         logoutPopup.show()
@@ -530,25 +556,25 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
         val list = ArrayList<EditProfileListModel>()
         list.add(
             EditProfileListModel(
-                "Account", getString(R.string.profile_details), R.drawable.iv_forword,0, true
+                "Account", getString(R.string.profile_details), R.drawable.iv_forword,0, false,true
             )
         )
         list.add(
             EditProfileListModel("Account",
-                getString(R.string.family_education), R.drawable.iv_forword,0))
+                getString(R.string.family_education), R.drawable.iv_forword,0,false))
         list.add(
             EditProfileListModel("Account",
-                getString(R.string.financial_information), R.drawable.iv_forword,0)
+                getString(R.string.financial_information), R.drawable.iv_forword,0,false)
         )
         list.add(
             EditProfileListModel(
-                "Account", "Investment Summary (Optional)", R.drawable.iv_forword,0
+                "Account", "Investment Summary (Optional)", R.drawable.iv_forword,0,false
             )
         )
 
         list.add(
             EditProfileListModel(
-                "Account", getString(R.string.additional_information), R.drawable.iv_forword,0
+                "Account", getString(R.string.additional_information), R.drawable.iv_forword,0,false
             )
         )
 //        list.add(
@@ -565,17 +591,19 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                 getString(R.string.account_verification),
                 R.drawable.iv_forword,
                 0,
-                true
+                false,
+                true,
+                1
             )
         )
         list.add(
-            EditProfileListModel("Account Management", "Last Login", 0,0)
+            EditProfileListModel("Account Management", "Last Login", 0,0,false)
         )
         list.add(
-            EditProfileListModel("Account Management", "Delete Account", R.drawable.ic_delete,0)
+            EditProfileListModel("Account Management", "Delete Account", R.drawable.ic_delete,0,false)
         )
         list.add(
-            EditProfileListModel("Account Management", "Logout", R.drawable.ic_logout,0)
+            EditProfileListModel("Account Management", "Logout", R.drawable.ic_logout,0,false)
         )
         return list
     }
@@ -585,20 +613,20 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
         val list = ArrayList<EditProfileListModel>()
         list.add(
             EditProfileListModel(
-                "Account", getString(R.string.profile_details), R.drawable.iv_forword,1, true
+                "Account", getString(R.string.profile_details), R.drawable.iv_forword,1, false,true
             )
         )
         list.add(
             EditProfileListModel("Account",
-                getString(R.string.professional_information), R.drawable.iv_forword,1)
+                getString(R.string.professional_information), R.drawable.iv_forword,1,false)
         )
         list.add(
             EditProfileListModel("Account",
-                getString(R.string.personal_preferences), R.drawable.iv_forword,1)
+                getString(R.string.personal_preferences), R.drawable.iv_forword,1,false)
         )
         list.add(
             EditProfileListModel(
-                "Account", getString(R.string.form_upload), R.drawable.iv_forword,1
+                "Account", getString(R.string.form_upload), R.drawable.iv_forword,1,false
             )
         )
 //        list.add(
@@ -614,17 +642,20 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                 "Account Management",
                 getString(R.string.account_verification),
                 R.drawable.iv_forword,1,
-                true
+                false,
+                true,
+                1
+
             )
         )
         list.add(
-            EditProfileListModel("Account Management", "Last Login", 0,1)
+            EditProfileListModel("Account Management", "Last Login", 0,1,false)
         )
         list.add(
-            EditProfileListModel("Account Management", "Delete Account", R.drawable.ic_delete,1)
+            EditProfileListModel("Account Management", "Delete Account", R.drawable.ic_delete,1,false)
         )
         list.add(
-            EditProfileListModel("Account Management", "Logout", R.drawable.ic_logout,1)
+            EditProfileListModel("Account Management", "Logout", R.drawable.ic_logout,1,false,)
         )
         return list
     }
@@ -634,38 +665,40 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
         val list = ArrayList<EditProfileListModel>()
         list.add(
             EditProfileListModel(
-                "Account", getString(R.string.profile_details), R.drawable.iv_forword, 2,true
+                "Account", getString(R.string.profile_details), R.drawable.iv_forword, 2,false,true
             )
         )
         list.add(
             EditProfileListModel("Account",
-                getString(R.string.business_financial_information), R.drawable.iv_forword,2)
+                getString(R.string.business_financial_information), R.drawable.iv_forword,2,false)
         )
         list.add(
             EditProfileListModel("Account",
-                getString(R.string.additional_information), R.drawable.iv_forword,2)
+                getString(R.string.additional_information), R.drawable.iv_forword,2,false)
         )
         list.add(
             EditProfileListModel(
-                "Account", getString(R.string.form_upload), R.drawable.iv_forword,2
+                "Account", getString(R.string.form_upload), R.drawable.iv_forword,2,false
             )
         )
         list.add(
             EditProfileListModel(
                 "Account Management",
                 getString(R.string.account_verification),
-                R.drawable.iv_forword,2,
-                true
+                R.drawable.iv_forword,2, false,
+                true,
+                1
+
             )
         )
         list.add(
-            EditProfileListModel("Account Management", "Last Login", 0,2)
+            EditProfileListModel("Account Management", "Last Login", 0,2,false)
         )
         list.add(
-            EditProfileListModel("Account Management", "Delete Account", R.drawable.ic_delete,2)
+            EditProfileListModel("Account Management", "Delete Account", R.drawable.ic_delete,2,false)
         )
         list.add(
-            EditProfileListModel("Account Management", "Logout", R.drawable.ic_logout,2)
+            EditProfileListModel("Account Management", "Logout", R.drawable.ic_logout,2,false)
         )
         return list
     }
@@ -691,5 +724,69 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
         super.onResume()
         viewModel.getProfile(Constants.GET_USER_PROFILE)
 
+    }
+
+
+    private fun userVerification() {
+        // Show loading (optional)
+        showLoading()
+        Log.d("Didit", "Verification process started")
+
+        // Grab vendor/user ID
+        val vendorId = getLoggedInUserIdOrFallback()
+        Log.d("Didit", "Using vendor ID: $vendorId")
+
+        // Launch coroutine
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                Log.d("Didit", "Calling createVerificationSession API")
+
+                val response: Map<String, Any> = withContext(Dispatchers.IO) {
+                    DiditService.createVerificationSession(vendorId)
+                }
+
+                Log.d("Didit", "API response: $response")
+
+                val url = (response["url"] as? String).orEmpty()
+                Log.d("Didit", "Extracted URL: $url")
+
+                if (url.isBlank()) {
+                    Log.d("Didit", "Verification URL missing!")
+                    showToast("Verification URL missing!")
+                    return@launch
+                }
+
+
+                // Log successful retrieval
+                Log.d("Didit", "Opening verification URL: $url")
+
+                if (url != null){
+                    val bundle = Bundle().apply {
+                        putString("url", url)
+                    }
+
+                    val intent =
+                        Intent(requireContext(), CommonActivity::class.java)
+                    intent.putExtra("from", "account_verify")
+                    intent.putExtra("url",url)
+                    startActivity(intent)
+                }
+                // openVerificationPage(url)
+
+            } catch (t: Throwable) {
+                Log.e("Didit", "Error during verification session creation: ${t.message}", t)
+                showToast("Verification failed: ${t.localizedMessage ?: "Unknown error"}")
+            } finally {
+                hideLoading()
+                Log.d("Didit", "Verification process finished")
+            }
+        }
+    }
+
+
+    private fun getLoggedInUserIdOrFallback(): String {
+        // Replace with your real user session / SharedPreferences / DataStore fetch.
+        // The Swift code used UserDefaults.standard[.loggedUserDetails]?._id ?? "123"
+        return sharedPrefManager.getUserId()?: "123"
     }
 }

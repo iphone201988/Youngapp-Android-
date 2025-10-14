@@ -3,15 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <variable
+            name="callback"
+            type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
+        <variable
+            name="pos"
+            type="Integer" />
         <variable
             name="bean"
             type="com.tech.young.data.model.GetEventsApiResponse.Data.Event" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/_70sdp"
+        consClickable="@{bean.userId}"
+        android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
         android:layout_marginBottom="@dimen/_10sdp"
         android:background="@drawable/bg_reminder">
 
@@ -70,9 +80,21 @@
             android:text="@{bean.title}"
             app:setEventTypeTextColor="@{bean.type}"
             android:textSize="@dimen/_14ssp"
-            app:layout_constraintEnd_toStartOf="@id/status"
+            app:layout_constraintEnd_toStartOf="@id/ivDelete"
             app:layout_constraintStart_toEndOf="@id/cons"
             app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profileImage"
+            setImageFromUrl="@{bean.file}"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:src="@drawable/iv_profile_icon"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            app:layout_constraintTop_toTopOf="@id/description"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
             android:id="@+id/description"
@@ -83,19 +105,21 @@
             android:textSize="@dimen/_10ssp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/profileImage"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/heading"
             app:layout_constraintStart_toStartOf="@id/heading"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/status"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivDelete"
             style="@style/TextView_400_Regular"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:bindVisibilityStatus="@{bean.public}"
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_14sdp"
             android:layout_marginEnd="@dimen/_10sdp"
+            setDeleteVisibility="@{bean.userId}"
+            android:src="@drawable/iv_delete_icon"
             android:textSize="@dimen/_12ssp"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/heading"/>
 

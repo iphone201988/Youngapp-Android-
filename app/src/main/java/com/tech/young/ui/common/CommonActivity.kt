@@ -87,7 +87,9 @@ class CommonActivity : BaseActivity<ActivityCommonBinding>()  {
                                     setStartDestination(R.id.fragmentPersonalPreference)
                                 }
                                 "account_verify" -> {
-                                    setStartDestination(R.id.fragmentVerifyProfile)
+                                    val url = intent.getStringExtra("url")
+                                    bundle.putString("url",url)
+                                    setStartDestination(R.id.fragmentDigitVerification)
                                 }
                                 "normal_family"-> {
                                     val profileData =

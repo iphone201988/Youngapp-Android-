@@ -75,8 +75,11 @@ import java.util.TimeZone
 object BindingUtils {
 
     var currentUserId =""
+    var  userId = ""
     var isAlreadyAddedToCalendar = false
     var lastLogin : String ? = null
+
+    var documentStatus : String ? = null
 
     @BindingAdapter(value = ["bindPostUserId", "bindIsReportVisible"], requireAll = true)
     @JvmStatic
@@ -1043,6 +1046,51 @@ object BindingUtils {
         }
     }
 
+    @BindingAdapter("setDocumentStatus")
+    @JvmStatic
+    fun setDocumentStatus(textView: AppCompatTextView, trigger: Boolean) {
+        if (trigger && !BindingUtils.documentStatus.isNullOrEmpty()) {
+            val status = BindingUtils.documentStatus?.lowercase()
+
+            val displayText = when (status) {
+                "approved" -> "Verified"
+                "declined", "reject" -> "Verify yourself"
+                "in_review" -> "In review"
+                else -> null
+            }
+
+            if (displayText != null) {
+                textView.text = displayText
+                textView.visibility = View.VISIBLE
+            } else {
+                textView.visibility = View.GONE
+            }
+        } else {
+            // Important: clear reused text when view gets recycled
+            textView.text = ""
+            textView.visibility = View.GONE
+        }
+    }
+
+
+    @BindingAdapter("setItemClickable")
+    @JvmStatic
+    fun setItemClickable(view: View, verificationClickable: Boolean) {
+        Log.i("fdfdsf", "setItemClickable: $verificationClickable")
+        if (verificationClickable){
+            view.isClickable = false
+            view.isFocusable = false
+            view.isEnabled = false
+        }
+        else{
+            view.isClickable = true
+            view.isFocusable = true
+            view.isEnabled = true
+
+        }
+
+    }
+
     @BindingAdapter("gridManager")
     @JvmStatic
     fun gridManager(image : ImageView, pos : Int){
@@ -1137,5 +1185,31 @@ object BindingUtils {
         }
     }
 
+
+    @BindingAdapter("setDeleteVisibility")
+    @JvmStatic
+    fun setDeleteVisibility(view: View, eventUserId: String) {
+        view.visibility = if (!eventUserId.isNullOrEmpty() && eventUserId == userId) {
+            Log.i("dsadsad", "setDeleteVisibility: $userId")
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+    }
+
+    @BindingAdapter("consClickable")
+    @JvmStatic
+    fun consClickable(view: View, eventUserId: String) {
+        if (!eventUserId.isNullOrEmpty() && eventUserId == userId) {
+           view.isClickable = true
+            view.isEnabled = true
+            view.isFocusable = true
+
+        } else {
+            view.isClickable = false
+            view.isEnabled = false
+            view.isFocusable = false
+        }
+    }
 
 }

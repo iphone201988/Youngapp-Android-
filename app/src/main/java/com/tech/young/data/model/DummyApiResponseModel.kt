@@ -15,7 +15,7 @@ data class SideMenuBar(
 )
 
 data class EditProfileListModel(
-    var title:String,var subTitle:String,var image:Int,var listType:Int,var isTop:Boolean=false
+    var title:String,var subTitle:String,var image:Int, var listType:Int, var verificationClickable : Boolean = false, var isTop:Boolean=false,  var verify : Int = 0
 )
 
 data class CategoryModel(

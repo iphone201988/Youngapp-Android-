@@ -23,6 +23,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.applandeo.materialcalendarview.EventDay
@@ -199,7 +200,15 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
 
     private fun initAdapter() {
         reminderAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_reminders,BR.bean){v,m,pos  ->
-
+            when(v.id){
+                R.id.ivDelete ->{
+                    viewModel.deleteEvent(Constants.DELETE_EVENT+m._id)
+                }
+                R.id.consMain ->{
+                    binding.calendarCons.visibility = View.GONE
+                    binding.consAddEvent.visibility = View.VISIBLE
+                }
+            }
         }
         binding.rvReminder.adapter = reminderAdapter
 
@@ -229,6 +238,11 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
 
     /** handle view **/
     private fun initView() {
+
+
+        BindingUtils.userId = sharedPrefManager.getUserId().toString()
+
+
         // Step 1: Initialize with current date
         currentCalendar = Calendar.getInstance()
 
@@ -257,7 +271,18 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                 userSelectedDate = sdf.format(selectedDate)
 
                 Log.i("SelectedDate", "onDayClick: $userSelectedDate")
+
+
+
+                // show events by date
+                val sdfApi = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                sdfApi.timeZone = TimeZone.getTimeZone("UTC")
+                val apiDate = sdfApi.format(selectedDate)
+
+                callDateEventApi(apiDate)
             }
+
+
         })
 
 
@@ -324,6 +349,21 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
 
 
     }
+
+
+
+    private fun callDateEventApi(apiDate: String) {
+        if (apiDate != null){
+            val data = HashMap<String, Any>()
+            data["calenderDate"] = apiDate
+            data["page"] = 1
+            viewModel.getEvents(data, Constants.GET_EVENTS)
+
+        }
+
+    }
+
+
 
     /** handle click **/
     private fun initOnClick() {
@@ -394,9 +434,12 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                 fileUri?.let { uri ->
                     val fileName = getFileNameFromUri(requireContext(), uri)
                     binding.etUploadFile.setText(fileName)
+                    binding.previewImage.visibility = View.VISIBLE
+                    binding.previewImage.setImageURI(imageUri)
                 }
 
             } else if (resultCode == ImagePicker.RESULT_ERROR) {
+                binding.previewImage.visibility = View.GONE
                 // Handle error if needed
             }
         } catch (e: Exception) {
@@ -486,6 +529,12 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                                 binding.etUploadFile.setText("")
                                 binding.calendarCons.visibility = View.VISIBLE
                                 binding.consAddEvent.visibility = View.GONE
+                            }
+                        }
+                        "deleteEvent" ->{
+                            val myDataModel:  SimpleApiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                getEventsData()
                             }
                         }
                     }

@@ -245,7 +245,6 @@ data class GetProfileApiResponse(
             var investors: Boolean?,
             var packageName: String?,
             var productsOffered: String?,
-
             var servicesInterested: String?,
             var profileImage: String?,
             var race: String?,
@@ -264,6 +263,7 @@ data class GetProfileApiResponse(
             val otherSecurityInvestments: String?,
             val realEstate: String?,
             val retirementAccount: String?,
+            var isDocumentVerified: String?,
             val savings: String?,
             val specificCryptoSymbols: String?,
             val specificStockSymbols: String?,
@@ -294,60 +294,60 @@ data class GetProfileApiResponse(
     }
 }
 
-data class dsaas(
-    var `data`: Data?,
-    var message: String?,
-    var success: Boolean?
-) {
-    data class Data(
-        var user: User?
-    ) {
-        data class User(
-            var _id: String?,
-            var additionalPhotos: List<Any?>?,
-            var age: String?,
-            var areaOfExpertise: String?,
-            var city: String?,
-            var company: String?,
-            var countryCode: String?,
-            var createdAt: String?,
-            var customers: Int?,
-            var email: String?,
-            var firstName: String?,
-            var followers: Int?,
-            var following: Int?,
-            var formUpload: List<Any?>?,
-            var gender: String?,
-            var is2FAEnabled: Boolean?,
-            var isConnectedWithProfile: Boolean?,
-            var isDeactivatedByUser: Boolean?,
-            var isDocumentVerified: String?,
-            var isFollowed: Boolean?,
-            var isRegistrationCompleted: Boolean?,
-            var isReported: Boolean?,
-            var isVerified: Boolean?,
-            var lastLogin: String?,
-            var lastName: String?,
-            var location: Location?,
-            var packageName: String?,
-            var phone: String?,
-            var profileImage: String?,
-            var race: String?,
-            var ratings: List<Any?>?,
-            var role: String?,
-            var sharesCount: Int?,
-            var state: String?,
-            var topicsOfInterest: List<Any?>?,
-            var username: String?,
-            var yearFounded: String?
-        ) {
-            data class Location(
-                var coordinates: List<Double?>?,
-                var type: String?
-            )
-        }
-    }
-}
+//data class dsaas(
+//    var `data`: Data?,
+//    var message: String?,
+//    var success: Boolean?
+//) {
+//    data class Data(
+//        var user: User?
+//    ) {
+//        data class User(
+//            var _id: String?,
+//            var additionalPhotos: List<Any?>?,
+//            var age: String?,
+//            var areaOfExpertise: String?,
+//            var city: String?,
+//            var company: String?,
+//            var countryCode: String?,
+//            var createdAt: String?,
+//            var customers: Int?,
+//            var email: String?,
+//            var firstName: String?,
+//            var followers: Int?,
+//            var following: Int?,
+//            var formUpload: List<Any?>?,
+//            var gender: String?,
+//            var is2FAEnabled: Boolean?,
+//            var isConnectedWithProfile: Boolean?,
+//            var isDeactivatedByUser: Boolean?,
+//            var isDocumentVerified: String?,
+//            var isFollowed: Boolean?,
+//            var isRegistrationCompleted: Boolean?,
+//            var isReported: Boolean?,
+//            var isVerified: Boolean?,
+//            var lastLogin: String?,
+//            var lastName: String?,
+//            var location: Location?,
+//            var packageName: String?,
+//            var phone: String?,
+//            var profileImage: String?,
+//            var race: String?,
+//            var ratings: List<Any?>?,
+//            var role: String?,
+//            var sharesCount: Int?,
+//            var state: String?,
+//            var topicsOfInterest: List<Any?>?,
+//            var username: String?,
+//            var yearFounded: String?
+//        ) {
+//            data class Location(
+//                var coordinates: List<Double?>?,
+//                var type: String?
+//            )
+//        }
+//    }
+//}
 
 /******************* get events  api response ********************/
 data class GetEventsApiResponse(
@@ -751,6 +751,8 @@ data class ExchangeShareApiResponse(
             var ratings: Double?,
             var reSharedBy: String?,
             var reSharedPostId: String?,
+            var reShareCount: Int?,
+            var totalSavedCount : Int?,
             var scheduleDate: String?,
             var symbol: String?,
             var title: String?,
@@ -1381,6 +1383,7 @@ data class GetStreamApiResponse(
             var isSaved: Boolean?,
             var likesCount: Int?,
             var scheduleDate: String?,
+            var totalSavedCount: Int?,
             var streamUrl: String?,
             var symbol: String?,
             var title: String?,

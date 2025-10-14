@@ -300,7 +300,7 @@
             android:layout_height="wrap_content"
             style="@style/TextView_400_Regular"
             android:textColor="@color/gray"
-            android:text= "Saves"
+            android:text='@{bean.totalSavedCount.toString()+" Saves"}'
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:textSize="@dimen/_9ssp"
             app:layout_constraintStart_toEndOf="@id/ivSaves"
@@ -326,7 +326,7 @@
             android:layout_height="wrap_content"
             style="@style/TextView_400_Regular"
             android:textColor="@color/gray"
-            android:text= "Reshare"
+            android:text='@{bean.reShareCount.toString()+" Reshare"}'
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:textSize="@dimen/_9ssp"
             app:layout_constraintStart_toEndOf="@id/iv_reshare"

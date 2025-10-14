@@ -197,6 +197,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
                             RegistrationDataHolder.role = role
                             RegistrationDataHolder.userId = user._id
 
+
                             val accountRegistrationFor =registrationFor(role)
                             Constants.chooseAccountType =  accountRegistrationFor
 
