@@ -58,6 +58,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -336,17 +337,59 @@
                     app:layout_constraintTop_toTopOf="@id/tvPaymentHistory"
                     app:layout_constraintBottom_toBottomOf="@id/tvPaymentHistory"
                     app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvChangePassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextView_500_Medium"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:text="@string/change_password"
+                    android:onClick="@{v -> vm.onClick(v)}"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvPaymentHistory"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvUpgradePlan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextView_500_Medium"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="@string/upgrade_plan"
+                    android:onClick="@{v -> vm.onClick(v)}"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvChangePassword"/>
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvDownload"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/TextView_500_Medium"
-                    android:layout_marginTop="@dimen/_12sdp"
-                    android:text="Download History"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="@string/download_history"
                     android:onClick="@{v -> vm.onClick(v)}"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvPaymentHistory"/>
+                    app:layout_constraintTop_toBottomOf="@id/tvUpgradePlan"/>
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvRestorePlan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextView_500_Medium"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="@string/restore_plan"
+                    android:onClick="@{v -> vm.onClick(v)}"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvDownload"/>
+
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvDeactivate"
                     android:layout_width="wrap_content"
@@ -357,7 +400,7 @@
                     android:onClick="@{ v -> vm.onClick(v)}"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvDownload"/>
+                    app:layout_constraintTop_toBottomOf="@id/tvRestorePlan"/>
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvDeleteAccount"
                     android:layout_width="wrap_content"

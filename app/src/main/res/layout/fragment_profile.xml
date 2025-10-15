@@ -637,6 +637,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:text="@string/your_photos"
+                        android:visibility="@{bean.user.additionalPhotos.size() > 0 ? View.VISIBLE : View.GONE}"
+
                         android:textColor="@color/colorPrimary"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/consMemberSince" />

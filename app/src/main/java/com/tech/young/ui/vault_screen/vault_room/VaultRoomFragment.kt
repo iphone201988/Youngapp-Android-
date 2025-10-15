@@ -403,6 +403,17 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
         viewModel.onClick.observe(requireActivity()) {
             when (it?.id) {
                 R.id.tvJoin -> {
+                    if (binding.tvJoin.text.equals("Leave")){
+                        if (vaultId != null){
+                            val params = JSONObject().apply {
+                                put("vaultId", vaultId)
+                            }
+                            // Emit the joinVault event
+                            mSocket.emit("leaveVault", params)
+                            Log.i("SocketHandler", "Emitted joinRoom event: $params")
+
+                        }
+                    }
                     viewModel.joinLeaveRoom(Constants.JOIN_LEAVE_VAULT + vaultId)
 
                 }

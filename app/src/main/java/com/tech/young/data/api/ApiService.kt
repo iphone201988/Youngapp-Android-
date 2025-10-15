@@ -60,6 +60,13 @@ interface ApiService {
     ): Response<JsonObject>
 
     @PUT
+    suspend fun apiPutForRawBodyAuth(
+        @Url url: String,
+        @Body data: HashMap<String, Any>,
+        @Header("Authorization") token: String
+    ): Response<JsonObject>
+
+    @PUT
     suspend fun apiPutWithoutRawBody(
         @Url url: String,
         @Header("Authorization") token: String,
@@ -134,7 +141,10 @@ interface ApiService {
     ): Response<JsonObject>
 
 
-    @Headers(Constants.HEADER_API)
+
+
+
+
     @Multipart
     @JvmSuppressWildcards
     @PUT

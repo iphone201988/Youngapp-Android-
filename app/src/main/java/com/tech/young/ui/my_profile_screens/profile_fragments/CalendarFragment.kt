@@ -15,6 +15,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,6 +31,7 @@ import com.applandeo.materialcalendarview.EventDay
 import com.applandeo.materialcalendarview.listeners.OnCalendarPageChangeListener
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener
 import com.applandeo.materialcalendarview.utils.calendar
+import com.bumptech.glide.Glide
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -48,6 +50,7 @@ import com.tech.young.ui.my_profile_screens.YourProfileVM
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.util.FileUtil
 import com.tech.young.data.api.SimpleApiResponse
+import com.tech.young.data.model.EventUpdateApiResponse
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.share_screen.CommonShareFragment
@@ -76,6 +79,9 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
     private var pagination: VerticalPagination? = null
     var eventsList = listOf<GetEventsApiResponse.Data.Event?>()
 
+    private  var from : String ? = null
+
+    private var eventId : String ? = null
     private var page  = 1
     private var isLoading = false
     private var isLastPage = false
@@ -205,8 +211,36 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                     viewModel.deleteEvent(Constants.DELETE_EVENT+m._id)
                 }
                 R.id.consMain ->{
+                    from = "Edit"
+                    binding.etTitle.setText(m.title)
+                    binding.etTopic.setText(m.topic)
+                    binding.etDescription.setText(m.description)
+                    binding.etUploadFile.setText(m.file)
+                    if (m.file != null){
+                            // Image from API
+                            Glide.with(binding.previewImage.context)
+                                .load(Constants.BASE_URL_IMAGE + m.file)
+                                .centerCrop()
+                                .placeholder(R.drawable.dummy_profile)
+                                .error(R.drawable.dummy_profile)
+                                .into(binding.previewImage)
+
+                            binding.previewImage.scaleType = ImageView.ScaleType.CENTER_CROP
+
+
+                        binding.previewImage.visibility = View.VISIBLE
+                        binding.deleteImage.visibility = View.VISIBLE
+
+                    }
+                    else{
+                        binding.previewImage.visibility = View.GONE
+                        binding.deleteImage.visibility = View.GONE
+
+                    }
                     binding.calendarCons.visibility = View.GONE
                     binding.consAddEvent.visibility = View.VISIBLE
+                    userSelectedDate  = m.scheduledDate
+                    eventId = m._id
                 }
             }
         }
@@ -393,18 +427,35 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                 }
                 R.id.tvSubmit ->{
                     if (isEmptyField()){
-                        val multipartImage = imageUri?.let { convertImageToMultipart(it) }
-                        val data = HashMap<String, RequestBody>()
-                        data["title"] = binding.etTitle.text.toString().trim().toRequestBody()
-                        data["topic"] = binding.etTopic.text.toString().trim().toRequestBody()
-                        data["description"] = binding.etDescription.text.toString().trim().toRequestBody()
-                        data["type"] = "own_events".toRequestBody()
-                        data["scheduledDate"] = userSelectedDate.toString().toRequestBody()
-                        data["public"] = visibilityMode.toString().toRequestBody()
-                        viewModel.addEvent(data,Constants.CREATE_EVENT,multipartImage)
+                        if (from == "Edit"){
+                            val multipartImage = imageUri?.let { convertImageToMultipart(it) }
+                            val data = HashMap<String, RequestBody>()
+                            data["eventId"] = eventId.toString().toRequestBody()
+                            data["title"] = binding.etTitle.text.toString().trim().toRequestBody()
+                            data["topic"] = binding.etTopic.text.toString().trim().toRequestBody()
+                            data["description"] = binding.etDescription.text.toString().trim().toRequestBody()
+                            data["type"] = "own_events".toRequestBody()
+                            data["scheduledDate"] = userSelectedDate.toString().toRequestBody()
+                            viewModel.editEvent(data,Constants.EDIT_EVENTS,multipartImage)
+                        }else{
+                            val multipartImage = imageUri?.let { convertImageToMultipart(it) }
+                            val data = HashMap<String, RequestBody>()
+                            data["title"] = binding.etTitle.text.toString().trim().toRequestBody()
+                            data["topic"] = binding.etTopic.text.toString().trim().toRequestBody()
+                            data["description"] = binding.etDescription.text.toString().trim().toRequestBody()
+                            data["type"] = "own_events".toRequestBody()
+                            data["scheduledDate"] = userSelectedDate.toString().toRequestBody()
+                            viewModel.addEvent(data,Constants.CREATE_EVENT,multipartImage)
+                        }
+
                     }
                 }
                 R.id.tvCancel ->{
+                    from = ""
+                    binding.etDescription.setText("")
+                    binding.etTitle.setText("")
+                    binding.etTopic.setText("")
+                    binding.etUploadFile.setText("")
                     binding.calendarCons.visibility = View.VISIBLE
                     binding.consAddEvent.visibility = View.GONE
                 }
@@ -435,11 +486,13 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                     val fileName = getFileNameFromUri(requireContext(), uri)
                     binding.etUploadFile.setText(fileName)
                     binding.previewImage.visibility = View.VISIBLE
+                    binding.deleteImage.visibility = View.VISIBLE
                     binding.previewImage.setImageURI(imageUri)
                 }
 
             } else if (resultCode == ImagePicker.RESULT_ERROR) {
                 binding.previewImage.visibility = View.GONE
+                binding.deleteImage.visibility = View.GONE
                 // Handle error if needed
             }
         } catch (e: Exception) {
@@ -513,6 +566,22 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                                 e.printStackTrace()
                             }
 
+                        }
+
+                        "editEvent"  ->{
+                            val myDataModel : EventUpdateApiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    getEventsData()
+                                    binding.etDescription.setText("")
+                                    binding.etTitle.setText("")
+                                    binding.etTopic.setText("")
+                                    binding.etUploadFile.setText("")
+                                    binding.calendarCons.visibility = View.VISIBLE
+                                    binding.consAddEvent.visibility = View.GONE
+
+                                }
+                            }
                         }
 
                         //  if (myDataModel.data?.events != null){

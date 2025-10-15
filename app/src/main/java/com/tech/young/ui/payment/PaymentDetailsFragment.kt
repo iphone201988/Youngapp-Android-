@@ -34,6 +34,7 @@ import com.tech.young.databinding.ItemLayoutDeactivateAccountBinding
 import com.tech.young.databinding.ItemLayoutDeleteAccountPopupBinding
 import com.tech.young.databinding.ItemLayoutLogoutPopupBinding
 import com.tech.young.ui.MySplashActivity
+import com.tech.young.ui.change_password.ChangePasswordFragment
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.my_profile_screens.common_ui.EditProfileDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -124,6 +125,16 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
                 }
                 R.id.tvDeleteAccount ->{
                     deleteAccount.show()
+                }
+                R.id.tvChangePassword ->{
+                    val fragment = ChangePasswordFragment().apply {
+
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
             }
         }

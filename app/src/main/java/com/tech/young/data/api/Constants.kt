@@ -68,6 +68,8 @@ object Constants {
   const val DELETE_EVENT = "event/"
   const val EDIT_EVENTS = "event/editEvent/"
 
+  const val RESET_PASSWORD = "user/resetPassword"
+
 
     /*************** Temp value store****************/
        var chooseAccountType = ""

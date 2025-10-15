@@ -728,52 +728,119 @@ data class JoinVaultRoomApiResponse(
 }
 
 /******************* get all post api response  response ********************/
+//data class ExchangeShareApiResponse(
+//    var `data`: Data?,
+//    var message: String?,
+//    var pagination: Pagination?,
+//    var success: Boolean?,
+//) {
+//    data class Data(
+//        var posts: List<Post?>?,
+//    ) {
+//        data class Post(
+//            var isReportVisible: Boolean = false,
+//            var _id: String?,
+//            var commentsCount: Int?,
+//            var createdAt: String?,
+//            var description: String?,
+//            var image: String?,
+//            var isLiked: Boolean?,
+//            var isReported: Boolean?,
+//            var isSaved: Boolean?,
+//            var likesCount: Int?,
+//            var ratings: Double?,
+//            var reSharedBy: ReSharedBy?,
+//            var reSharedPostId: String?,
+//            var reShareCount: Int?,
+//            var totalSavedCount : Int?,
+//            var scheduleDate: String?,
+//            var symbol: String?,
+//            var title: String?,
+//            var topic: String?,
+//            var type: String?,
+//            var userId: UserId?,
+//            var symbolValue : String?
+//        ) {
+//            data class UserId(
+//                var _id: String?,
+//                var firstName: String?,
+//                var lastName: String?,
+//                var profileImage: String?,
+//            )
+//        }
+//    }
+//
+//    data class Pagination(
+//        var limit: Int?,
+//        var page: Int?,
+//        var total: Int?,
+//    )
+//}
+
+
+
+
+
 data class ExchangeShareApiResponse(
     var `data`: Data?,
     var message: String?,
     var pagination: Pagination?,
-    var success: Boolean?,
+    var success: Boolean?
 ) {
     data class Data(
-        var posts: List<Post?>?,
+        var posts: List<Post?>?
     ) {
         data class Post(
-            var isReportVisible: Boolean = false,
             var _id: String?,
+            var isReportVisible: Boolean = false,
             var commentsCount: Int?,
             var createdAt: String?,
             var description: String?,
             var image: String?,
+            var isAlreadyAddedToCalendar: Boolean?,
             var isLiked: Boolean?,
             var isReported: Boolean?,
             var isSaved: Boolean?,
             var likesCount: Int?,
             var ratings: Double?,
-            var reSharedBy: String?,
-            var reSharedPostId: String?,
             var reShareCount: Int?,
-            var totalSavedCount : Int?,
-            var scheduleDate: String?,
+            var reSharedBy: ReSharedBy?,
+            var reSharedPostId: String?,
             var symbol: String?,
+            var symbolValue: String?,
             var title: String?,
             var topic: String?,
+            var totalSavedCount: Int?,
             var type: String?,
-            var userId: UserId?,
-            var symbolValue : String?
+            var userId: UserId?
         ) {
-            data class UserId(
+            data class ReSharedBy(
                 var _id: String?,
                 var firstName: String?,
                 var lastName: String?,
                 var profileImage: String?,
+                var role: String?
             )
+
+            data class UserId(
+                var _id: String?,
+                var firstName: String?,
+                var lastName: String?,
+                var location: Location?,
+                var profileImage: String?
+            ) {
+                data class Location(
+                    var coordinates: List<Double?>?,
+                    var type: String?
+                )
+            }
         }
     }
 
     data class Pagination(
         var limit: Int?,
         var page: Int?,
-        var total: Int?,
+        var total: Int?
     )
 }
 
@@ -1608,6 +1675,33 @@ data class MediaApiResponse(
 }
 
 
+/***************  even update api response *********************/
+
+data class EventUpdateApiResponse(
+    var `data`: Data?,
+    var message: String?,
+    var success: Boolean?
+) {
+    data class Data(
+        var event: Event?
+    ) {
+        data class Event(
+            var __v: Int?,
+            var _id: String?,
+            var createdAt: String?,
+            var description: String?,
+            var `file`: String?,
+            var isDeleted: Boolean?,
+            var `public`: Boolean?,
+            var scheduledDate: String?,
+            var title: String?,
+            var topic: String?,
+            var type: String?,
+            var updatedAt: String?,
+            var userId: String?
+        )
+    }
+}
 
 /***************  push notification model  api response *********************/
 

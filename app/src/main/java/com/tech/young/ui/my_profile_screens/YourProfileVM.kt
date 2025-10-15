@@ -68,6 +68,30 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
         }
     }
 
+    fun editEvent(request: HashMap<String, RequestBody>, url: String, profileImage: MultipartBody.Part?){
+        CoroutineScope(Dispatchers.IO).launch {
+            observeCommon.postValue(Resource.loading(null))
+            try {
+                val response = apiHelper.apiForMultipartPut(url, request, profileImage)
+                if (response.isSuccessful && response.body() != null){
+                    observeCommon.postValue(Resource.success("editEvent", response.body()))
+                }
+                else{
+                    observeCommon.postValue(
+                        Resource.error(
+                            handleErrorResponse(
+                                response.errorBody(),
+                                response.code()
+                            ), null
+                        )
+                    )
+                }
+            }catch (e : Exception){
+                observeCommon.postValue(Resource.error(e.message.toString(), null))
+            }
+        }
+    }
+
     fun addEvent(request: HashMap<String, RequestBody>, url: String, profileImage: MultipartBody.Part?){
         CoroutineScope(Dispatchers.IO).launch {
             observeCommon.postValue(Resource.loading(null))
@@ -211,5 +235,7 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
                 observeCommon.postValue(Resource.error(e.message.toString(), null))
             }
         }
+
+
     }
 }

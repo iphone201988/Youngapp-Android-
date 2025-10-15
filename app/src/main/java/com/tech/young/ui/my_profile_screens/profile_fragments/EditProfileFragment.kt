@@ -28,6 +28,7 @@ import com.tech.young.databinding.FragmentEditProfileBinding
 import com.tech.young.databinding.ItemLayoutDeleteAccountPopupBinding
 import com.tech.young.databinding.ItemLayoutLogoutPopupBinding
 import com.tech.young.ui.MySplashActivity
+import com.tech.young.ui.change_password.ChangePasswordFragment
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
@@ -40,6 +41,7 @@ import com.tech.young.ui.my_profile_screens.forFinance.ProfessionalInformationFr
 import com.tech.young.ui.my_profile_screens.forNormal.FamilyDetailsFragment
 import com.tech.young.ui.my_profile_screens.forNormal.FinanceInfoFragment
 import com.tech.young.ui.my_profile_screens.forNormal.InvestmentInfoFragment
+import com.tech.young.ui.payment.PaymentDetailsFragment
 import com.tech.young.utils.DiditService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -51,6 +53,8 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
     private val viewModel: YourProfileVM by viewModels()
 
     private var lastLogin : String ? = null
+
+    private var userId : String ? = null
     // adapter
     private lateinit var editProfileAdapter: SimpleRecyclerViewAdapter<EditProfileListModel, EditProfileItemViewBinding>
     private var profileData: GetProfileApiResponseData?=null
@@ -176,6 +180,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                                 BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null) {
                                 if (myDataModel.data != null) {
+                                    userId = myDataModel.data?.user?._id
                                     profileData = myDataModel.data
                                     lastLogin = myDataModel.data?.user?.lastLogin
                                     val document = myDataModel.data?.user?.isDocumentVerified
@@ -346,6 +351,31 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
 //                                        intent.putExtra("from", "account_verify")
 //                                        startActivity(intent)
                                     }
+
+                                    getString(R.string.account_details) ->{
+                                        if (userId != null){
+                                            val fragment = PaymentDetailsFragment().apply {
+                                                arguments = Bundle().apply {
+                                                    putString("userId", userId)
+                                                }
+                                            }
+
+                                            requireActivity().supportFragmentManager.beginTransaction()
+                                                .replace(R.id.frameLayout, fragment)
+                                                .addToBackStack(null)
+                                                .commit()
+                                        }
+                                    }
+                                    getString(R.string.change_password) ->{
+                                            val fragment = ChangePasswordFragment().apply {
+                                            }
+
+                                            requireActivity().supportFragmentManager.beginTransaction()
+                                                .replace(R.id.frameLayout, fragment)
+                                                .addToBackStack(null)
+                                                .commit()
+
+                                    }
                                     "Logout"->{
                                         logoutPopup.show()
                                     }
@@ -442,6 +472,29 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                                             .addToBackStack(null)
                                             .commit()
                                     }
+                                    getString(R.string.account_details) ->{
+                                        if (userId != null){
+                                            val fragment = PaymentDetailsFragment().apply {
+                                                arguments = Bundle().apply {
+                                                    putString("userId", userId)
+                                                }
+                                            }
+
+                                            requireActivity().supportFragmentManager.beginTransaction()
+                                                .replace(R.id.frameLayout, fragment)
+                                                .addToBackStack(null)
+                                                .commit()
+                                        }
+                                    }
+                                    getString(R.string.change_password) ->{
+                                            val fragment = ChangePasswordFragment().apply {
+                                            }
+                                            requireActivity().supportFragmentManager.beginTransaction()
+                                                .replace(R.id.frameLayout, fragment)
+                                                .addToBackStack(null)
+                                                .commit()
+
+                                    }
                                     "Logout"->{
                                         logoutPopup.show()
                                     }
@@ -505,6 +558,31 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                                             .replace(R.id.frameLayout, fragment)
                                             .addToBackStack(null)
                                             .commit()
+
+                                    }
+                                    getString(R.string.account_details) ->{
+                                        if (userId != null){
+                                            val fragment = PaymentDetailsFragment().apply {
+                                                arguments = Bundle().apply {
+                                                    putString("userId", userId)
+                                                }
+                                            }
+
+                                            requireActivity().supportFragmentManager.beginTransaction()
+                                                .replace(R.id.frameLayout, fragment)
+                                                .addToBackStack(null)
+                                                .commit()
+                                        }
+                                    }
+                                    getString(R.string.change_password) ->{
+                                            val fragment = ChangePasswordFragment().apply {
+
+                                            }
+
+                                            requireActivity().supportFragmentManager.beginTransaction()
+                                                .replace(R.id.frameLayout, fragment)
+                                                .addToBackStack(null)
+                                                .commit()
 
                                     }
                                     getString(R.string.form_upload)->{
@@ -577,6 +655,16 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                 "Account", getString(R.string.additional_information), R.drawable.iv_forword,0,false
             )
         )
+        list.add(
+            EditProfileListModel(
+                "Account", getString(R.string.account_details), R.drawable.iv_forword,0,false
+            )
+        )
+        list.add(
+            EditProfileListModel(
+                "Account", getString(R.string.change_password), R.drawable.iv_forword,0,false
+            )
+        )
 //        list.add(
 //            EditProfileListModel(
 //                "Account Management",
@@ -629,6 +717,16 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                 "Account", getString(R.string.form_upload), R.drawable.iv_forword,1,false
             )
         )
+        list.add(
+            EditProfileListModel(
+                "Account", getString(R.string.account_details), R.drawable.iv_forword,1,false
+            )
+        )
+        list.add(
+            EditProfileListModel(
+                "Account", getString(R.string.change_password), R.drawable.iv_forword,1,false
+            )
+        )
 //        list.add(
 //            EditProfileListModel(
 //                "Account Management",
@@ -679,6 +777,16 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
         list.add(
             EditProfileListModel(
                 "Account", getString(R.string.form_upload), R.drawable.iv_forword,2,false
+            )
+        )
+        list.add(
+            EditProfileListModel(
+                "Account", getString(R.string.account_details), R.drawable.iv_forword,2,false
+            )
+        )
+        list.add(
+            EditProfileListModel(
+                "Account", getString(R.string.change_password), R.drawable.iv_forword,2,false
             )
         )
         list.add(

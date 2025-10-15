@@ -132,6 +132,7 @@
     <string name="member_agree_txt">By checking this box, I agree to the Terms of Service and Privacy Policy of this platform. I understand that my data may be used for personalized content and advertisements. I also acknowledge that any violations of the community guidelines may result in account suspension or termination.</string>
     <string name="accept">Accept</string>
     <string name="additional_information">Additional Information</string>
+    <string name="change_password">Change Password</string>
     <string name="about_1">About*</string>
     <string name="your_photos">Your Photos</string>
     <string name="save_changes">Save Changes</string>
@@ -280,4 +281,7 @@
     <string name="_3_if_using_the_same_device_take_a_screenshot_of_the_qr_code_then_open_your_mfa_app_and_add_the_account_using_the_saved_image">3. If using the same device: \n-Take a screenshot of the QR code, then open your MFA app and add the account using the saved image.  \n-Alternatively, simply tap the secret key shown below to copy it to your clipboard.  \n-In your MFA app, choose “Enter a setup key” (sometimes called manual entry), then paste the copied key to complete setup.</string>
     <string name="_4_after_setup_your_mfa_app_will_display_a_6_digit_code_enter_this_code_below_to_complete_setup">4. After setup, your MFA app will display a 6-digit code. Enter this code below to complete setup.</string>
     <string name="building_the_future_of_finance_together">Building the Future of Finance Together</string>
+    <string name="upgrade_plan">Upgrade Plan</string>
+    <string name="restore_plan">Restore Plan</string>
+    <string name="download_history">Download History</string>
 </resources>

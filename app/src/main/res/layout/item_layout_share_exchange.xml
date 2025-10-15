@@ -232,6 +232,75 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/consReshareBy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:paddingBottom="@dimen/_5sdp"
+            android:visibility='@{bean.reSharedBy != null ? View.VISIBLE : View.GONE}'
+            app:layout_constraintTop_toBottomOf="@id/tvDescription"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvReshareBy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/TextView_600_SemiBold"
+                android:textColor="@color/colorPrimary"
+                android:text="Reshare by"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:textSize="@dimen/_14ssp"
+                android:paddingHorizontal="@dimen/_8sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivReshareUser"
+                android:layout_width="@dimen/_32sdp"
+                android:layout_height="@dimen/_32sdp"
+                setUserImageFromBaseUrl="@{bean.reSharedBy.profileImage}"
+                android:src="@drawable/dummy_person"
+                app:shapeAppearance="@style/Shape50"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvReshareBy"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvReshareName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/TextView_500_Medium"
+                android:text="@{bean.reSharedBy.firstName}"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:textSize="@dimen/_14ssp"
+                android:paddingHorizontal="@dimen/_8sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ivReshareUser"
+                app:layout_constraintTop_toTopOf="@id/ivReshareUser"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvRole"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/TextView_400_Regular"
+                android:text="@{bean.reSharedBy.role}"
+                android:textColor="@color/black"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintTop_toBottomOf="@id/tvReshareName"
+                android:paddingHorizontal="@dimen/_8sdp"
+                app:layout_constraintEnd_toEndOf="@id/tvReshareName"
+                app:layout_constraintStart_toStartOf="@id/tvReshareName"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivHeart"
             setLikeIcon ="@{bean.isLiked()}"
@@ -241,7 +310,7 @@
             android:layout_marginVertical="@dimen/_8sdp"
             android:layout_marginStart="@dimen/_8sdp"
             app:layout_constraintStart_toStartOf="@id/tvTitle"
-            app:layout_constraintTop_toBottomOf="@id/tvDescription" />
+            app:layout_constraintTop_toBottomOf="@id/consReshareBy" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvSaves"

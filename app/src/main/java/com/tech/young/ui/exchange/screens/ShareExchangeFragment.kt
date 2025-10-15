@@ -192,7 +192,6 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                 }
                 R.id.iv_reshare , R.id.tvReshare-> viewModel.reshare(Constants.RESHARE_POST + m._id)
                 R.id.reportBtn -> {
-
                     BindingUtils.currentUserId = sharedPrefManager.getUserId().toString()
                     shareAdapter.list.forEach { it.isReportVisible = false }
                     m.isReportVisible = !m.isReportVisible

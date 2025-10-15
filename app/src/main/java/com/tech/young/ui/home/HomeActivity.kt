@@ -34,6 +34,7 @@ import com.tech.young.databinding.ItemLayoutLogoutPopupBinding
 import com.tech.young.databinding.ItemLayoutSideNavBinding
 import com.tech.young.ui.MySplashActivity
 import com.tech.young.ui.advertise_screen.AdvertiseFragment
+import com.tech.young.ui.change_password.ChangePasswordFragment
 import com.tech.young.ui.contact_screens.ContactUsFragment
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.ecosystem.EcosystemFragment.Companion.selectedCategoryForEcosystem
@@ -333,6 +334,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                     }
                     is ViewMessageFragment->{
                         updateOtherUI("View Message")
+                    }
+                    is ChangePasswordFragment ->{
+                        updateOtherUI("Change Password")
                     }
 
 

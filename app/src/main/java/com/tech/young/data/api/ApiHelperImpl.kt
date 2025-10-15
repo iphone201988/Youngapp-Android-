@@ -126,6 +126,13 @@ class ApiHelperImpl @Inject constructor(private val apiService: ApiService, priv
         return apiService.deletePost(url,getTokenFromSPref())
     }
 
+    override suspend fun apiPutForRawBodyAuth(
+        url: String,
+        data: HashMap<String, Any>
+    ) : Response<JsonObject>{
+        return apiService.apiPutForRawBodyAuth(url, data,getTokenFromSPref())
+    }
+
     private fun getTokenFromSPref(): String {
         return "Bearer ${sharedPrefManager.getLoginData()?.token}"
     }

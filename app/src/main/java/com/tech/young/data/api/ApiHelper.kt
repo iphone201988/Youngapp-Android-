@@ -32,5 +32,8 @@ interface ApiHelper {
     suspend fun apiPutWithQuery(url: String , data: HashMap<String, String>) : Response<JsonObject>
 
     suspend fun deletePost(url: String) : Response<JsonObject>
+
+
+    suspend fun apiPutForRawBodyAuth(url: String, data: HashMap<String, Any>) : Response<JsonObject>
 }
 
