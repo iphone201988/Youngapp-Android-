@@ -251,7 +251,7 @@
             style="@style/TextView_400_Regular"
             android:textColor="@color/gray"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
-            android:text= "Saves"
+            android:text='@{bean.totalSavedCount+" Saves"}'
             android:textSize="@dimen/_12ssp"
             app:layout_constraintStart_toEndOf="@id/ivSaves"
             app:layout_constraintBottom_toBottomOf="@id/ivSaves"

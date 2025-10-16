@@ -79,6 +79,8 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
     private var pagination: VerticalPagination? = null
     var eventsList = listOf<GetEventsApiResponse.Data.Event?>()
 
+    var isImageDeleted = false
+
     private  var from : String ? = null
 
     private var eventId : String ? = null
@@ -216,27 +218,24 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                     binding.etTopic.setText(m.topic)
                     binding.etDescription.setText(m.description)
                     binding.etUploadFile.setText(m.file)
-                    if (m.file != null){
-                            // Image from API
-                            Glide.with(binding.previewImage.context)
-                                .load(Constants.BASE_URL_IMAGE + m.file)
-                                .centerCrop()
-                                .placeholder(R.drawable.dummy_profile)
-                                .error(R.drawable.dummy_profile)
-                                .into(binding.previewImage)
+                    if (!m.file.isNullOrEmpty()) {
+                        // ✅ Image from API
+                        Glide.with(binding.previewImage.context)
+                            .load(Constants.BASE_URL_IMAGE + m.file)
+                            .centerCrop()
+                            .placeholder(R.drawable.dummy_profile)
+                            .error(R.drawable.dummy_profile)
+                            .into(binding.previewImage)
 
-                            binding.previewImage.scaleType = ImageView.ScaleType.CENTER_CROP
-
-
+                        binding.previewImage.scaleType = ImageView.ScaleType.CENTER_CROP
                         binding.previewImage.visibility = View.VISIBLE
                         binding.deleteImage.visibility = View.VISIBLE
-
-                    }
-                    else{
+                    } else {
+                        // ✅ No image — hide views
                         binding.previewImage.visibility = View.GONE
                         binding.deleteImage.visibility = View.GONE
-
                     }
+
                     binding.calendarCons.visibility = View.GONE
                     binding.consAddEvent.visibility = View.VISIBLE
                     userSelectedDate  = m.scheduledDate
@@ -425,29 +424,57 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                     binding.calendarCons.visibility = View.GONE
                     binding.consAddEvent.visibility = View.VISIBLE
                 }
-                R.id.tvSubmit ->{
-                    if (isEmptyField()){
-                        if (from == "Edit"){
-                            val multipartImage = imageUri?.let { convertImageToMultipart(it) }
-                            val data = HashMap<String, RequestBody>()
-                            data["eventId"] = eventId.toString().toRequestBody()
-                            data["title"] = binding.etTitle.text.toString().trim().toRequestBody()
-                            data["topic"] = binding.etTopic.text.toString().trim().toRequestBody()
-                            data["description"] = binding.etDescription.text.toString().trim().toRequestBody()
-                            data["type"] = "own_events".toRequestBody()
-                            data["scheduledDate"] = userSelectedDate.toString().toRequestBody()
-                            viewModel.editEvent(data,Constants.EDIT_EVENTS,multipartImage)
-                        }else{
-                            val multipartImage = imageUri?.let { convertImageToMultipart(it) }
-                            val data = HashMap<String, RequestBody>()
-                            data["title"] = binding.etTitle.text.toString().trim().toRequestBody()
-                            data["topic"] = binding.etTopic.text.toString().trim().toRequestBody()
-                            data["description"] = binding.etDescription.text.toString().trim().toRequestBody()
-                            data["type"] = "own_events".toRequestBody()
-                            data["scheduledDate"] = userSelectedDate.toString().toRequestBody()
-                            viewModel.addEvent(data,Constants.CREATE_EVENT,multipartImage)
+//                R.id.tvSubmit ->{
+//                    if (isEmptyField()){
+//                        if (from == "Edit"){
+//                            val multipartImage = imageUri?.let { convertImageToMultipart(it) }
+//                            val data = HashMap<String, RequestBody>()
+//                            data["eventId"] = eventId.toString().toRequestBody()
+//                            data["title"] = binding.etTitle.text.toString().trim().toRequestBody()
+//                            data["topic"] = binding.etTopic.text.toString().trim().toRequestBody()
+//                            data["description"] = binding.etDescription.text.toString().trim().toRequestBody()
+//                            data["type"] = "own_events".toRequestBody()
+//                            data["scheduledDate"] = userSelectedDate.toString().toRequestBody()
+//                            viewModel.editEvent(data,Constants.EDIT_EVENTS,multipartImage)
+//                        }else{
+//                            val multipartImage = imageUri?.let { convertImageToMultipart(it) }
+//                            val data = HashMap<String, RequestBody>()
+//                            data["title"] = binding.etTitle.text.toString().trim().toRequestBody()
+//                            data["topic"] = binding.etTopic.text.toString().trim().toRequestBody()
+//                            data["description"] = binding.etDescription.text.toString().trim().toRequestBody()
+//                            data["type"] = "own_events".toRequestBody()
+//                            data["scheduledDate"] = userSelectedDate.toString().toRequestBody()
+//                            viewModel.addEvent(data,Constants.CREATE_EVENT,multipartImage)
+//                        }
+//
+//                    }
+//                }
+
+                R.id.tvSubmit -> {
+                    if (isEmptyField()) {
+                        val data = HashMap<String, RequestBody>().apply {
+                            if (from == "Edit") {
+                                put("eventId", eventId.toString().toRequestBody())
+                            }
+                            put("title", binding.etTitle.text.toString().trim().toRequestBody())
+                            put("topic", binding.etTopic.text.toString().trim().toRequestBody())
+                            put("description", binding.etDescription.text.toString().trim().toRequestBody())
+                            put("type", "own_events".toRequestBody())
+                            put("scheduledDate", userSelectedDate.toString().toRequestBody())
                         }
 
+                        // ✅ If deleted, send empty "file" part
+                        val multipartImage = if (isImageDeleted) {
+                            MultipartBody.Part.createFormData("file", "", "".toRequestBody("text/plain".toMediaTypeOrNull()))
+                        } else {
+                            imageUri?.let { convertImageToMultipart(it) }
+                        }
+
+                        if (from == "Edit") {
+                            viewModel.editEvent(data, Constants.EDIT_EVENTS, multipartImage)
+                        } else {
+                            viewModel.addEvent(data, Constants.CREATE_EVENT, multipartImage)
+                        }
                     }
                 }
                 R.id.tvCancel ->{
@@ -469,6 +496,13 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                         .createIntent { intent ->
                             startForImageResult.launch(intent)
                         }
+                }
+                R.id.deleteImage -> {
+                    binding.previewImage.visibility = View.GONE
+                    binding.deleteImage.visibility = View.GONE
+                    binding.etUploadFile.setText("")
+                    imageUri = null  // remove image reference
+                    isImageDeleted = true  // mark as deleted
                 }
             }
         })

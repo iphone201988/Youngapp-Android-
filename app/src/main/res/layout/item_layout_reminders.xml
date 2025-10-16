@@ -87,7 +87,7 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profileImage"
-            setImageFromUrl="@{bean.file}"
+            setUserImageFromBaseUrl="@{bean.file}"
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
             android:src="@drawable/iv_profile_icon"

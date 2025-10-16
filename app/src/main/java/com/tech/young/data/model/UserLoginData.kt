@@ -861,6 +861,7 @@ data class VaultExchangeApiResponse(
             var commentsCount: Int?,
             var createdAt: String?,
             var description: String?,
+            var totalSavedCount: Int?,
             var image: String?,
             var isReported: Boolean?,
             var members: List<Member?>?,
@@ -1195,30 +1196,73 @@ data class GetLatestUserApiResponse(
 /*************** get post by id  api response *********************/
 
 
+//data class GetPostDetailsApiResponse(
+//    var `data`: Data?,
+//    var message: String?,
+//    var success: Boolean?,
+//) {
+//    data class Data(
+//        var post: Post?,
+//    ) {
+//        data class Post(
+//            var _id: String?,
+//            var createdAt: String?,
+//            var description: String?,
+//            var image: String?,
+//            var isDeleted: Boolean?,
+//            var isPublished: Boolean?,
+//            var reSharedBy: String?,
+//            var reSharedPostId: String?,
+//            var symbol: String?,
+//            var title: String?,
+//            var topic: String?,
+//            var type: String?,
+//            var userId: UserId?,
+//            var rating : Double?,
+//        ) {
+//            data class UserId(
+//                var _id: String?,
+//                var firstName: String?,
+//                var lastName: String?,
+//                var profileImage: String?,
+//            )
+//        }
+//    }
+//}
+
+
+
 data class GetPostDetailsApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?,
+    var success: Boolean?
 ) {
     data class Data(
-        var post: Post?,
+        var post: Post?
     ) {
         data class Post(
             var _id: String?,
             var createdAt: String?,
             var description: String?,
-            var image: String?,
             var isDeleted: Boolean?,
             var isPublished: Boolean?,
-            var reSharedBy: String?,
+            var reSharedBy: ReSharedBy?,
             var reSharedPostId: String?,
             var symbol: String?,
+            var symbolValue: String?,
             var title: String?,
             var topic: String?,
             var type: String?,
             var userId: UserId?,
             var rating : Double?,
+            var image: String?
         ) {
+            data class ReSharedBy(
+                var _id: String?,
+                var firstName: String?,
+                var lastName: String?
+            )
+
             data class UserId(
                 var _id: String?,
                 var firstName: String?,
@@ -1228,7 +1272,6 @@ data class GetPostDetailsApiResponse(
         }
     }
 }
-
 
 /*************** received socket  api response *********************/
 

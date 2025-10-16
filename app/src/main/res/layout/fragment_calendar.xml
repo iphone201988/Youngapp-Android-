@@ -360,13 +360,14 @@
                         android:textColorHint="@color/text_gray"
                         app:layout_constraintTop_toBottomOf="@id/tvDescription"/>
 
-                    <androidx.appcompat.widget.AppCompatImageView
+                    <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/previewImage"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_150sdp"
                         android:visibility="gone"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:scaleType="fitXY"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
                         android:background="@drawable/radius_border_gray"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -379,6 +380,7 @@
                         android:layout_height="@dimen/_16sdp"
                         android:src="@drawable/iv_delete_icon"
                         android:visibility="gone"
+                        android:onClick="@{v -> vm.onClick(v)}"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:layout_marginEnd="@dimen/_10sdp"
                         app:layout_constraintEnd_toEndOf="@id/previewImage"

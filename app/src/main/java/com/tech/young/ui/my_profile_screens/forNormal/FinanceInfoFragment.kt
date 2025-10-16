@@ -2,6 +2,8 @@ package com.tech.young.ui.my_profile_screens.forNormal
 
 import android.util.Log
 import android.view.View
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.tech.young.BR
@@ -82,6 +84,13 @@ class FinanceInfoFragment : BaseFragment<FragmentFinanceInfoBinding>(),
             )
             selectedCategoryAdapter.list = selectedCategory
             selectedCategoryAdapter.notifyDataSetChanged()
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.clFinance) { view, insets ->
+            val imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+            // Only adjust padding if keyboard is visible
+            view.setPadding(0, 0, 0, imeHeight)
+            insets
         }
     }
 

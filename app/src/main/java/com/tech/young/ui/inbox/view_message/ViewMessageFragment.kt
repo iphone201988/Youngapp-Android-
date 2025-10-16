@@ -5,6 +5,8 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.tech.young.BR
@@ -77,6 +79,13 @@ class ViewMessageFragment : BaseFragment<FragmentViewMessageBinding>() {
         initOnClick()
         // observer
         initObserver()
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+            view.setPadding(0, 0, 0, imeHeight)
+            insets
+        }
     }
 
     private fun receivedMessage() {
@@ -152,9 +161,12 @@ class ViewMessageFragment : BaseFragment<FragmentViewMessageBinding>() {
         if (userData != null){
             recId = userData?._id
             binding.tvUserName.text = userData?.username
-            binding.tvRole.text = userData?.role
+//            binding.tvRole.text = userData?.role
+            BindingUtils.setRoleText(binding.tvRole,userData?.role)
             BindingUtils.setUserImageFromBaseUrl(binding.profileImage,userData?.profileImage)
         }
+
+
 
         initAdapter()
     }

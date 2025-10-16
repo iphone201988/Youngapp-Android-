@@ -58,6 +58,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -93,7 +94,7 @@
             android:gravity="start|center"
             android:hint="Title"
             app:hideKeyboardOnDone="@{true}"
-
+            android:inputType="textCapSentences"
             android:paddingHorizontal="@dimen/_10sdp"
             android:singleLine="true"
             android:textColorHint="@color/text_gray"

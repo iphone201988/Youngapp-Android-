@@ -79,6 +79,7 @@
             android:src="@drawable/ic_heart"
             setLikeIcon ="@{bean.isLiked()}"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            app:layout_constraintBottom_toBottomOf="@id/likesData"
             app:layout_constraintEnd_toStartOf="@id/likesData"
             app:layout_constraintTop_toTopOf="@id/likesData"/>
 

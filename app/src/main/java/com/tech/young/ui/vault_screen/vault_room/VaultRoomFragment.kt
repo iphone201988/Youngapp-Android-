@@ -144,9 +144,13 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
 
                     Handler(Looper.getMainLooper()).post {
                         val newList = commentAdapter.list?.toMutableList() ?: mutableListOf()
-                        newList.add(0, apiComment)
+                    //    newList.add(0, apiComment)
+                        newList.add(apiComment)
                         commentAdapter.list = newList
                         commentAdapter.notifyItemInserted(0)
+
+
+                        binding.rvComments.scrollToPosition(newList.size - 1)
                     }
                 } catch (e: Exception) {
                     Log.e("SocketHandler", "❌ Failed to parse vaultMessage: ${e.message}", e)
