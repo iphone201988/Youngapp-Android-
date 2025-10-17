@@ -42,6 +42,7 @@
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
                 android:padding="@dimen/_5sdp"
+                android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
                 android:src="@drawable/dummy_profile"
                 android:layout_marginStart="@dimen/_10sdp"
                 app:layout_constraintTop_toTopOf="parent"

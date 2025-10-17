@@ -167,6 +167,7 @@
             android:layout_height="@dimen/_32sdp"
             android:layout_marginStart="@dimen/_8sdp"
             android:layout_marginTop="@dimen/_5sdp"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:src="@drawable/dummy_person"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/bottomBarrier"
@@ -177,6 +178,7 @@
             style="@style/TextView_500_Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:layout_marginEnd="@dimen/_8sdp"
             android:paddingHorizontal="@dimen/_8sdp"
             android:text='@{bean.userId.firstName+ " "+ bean.userId.lastName}'

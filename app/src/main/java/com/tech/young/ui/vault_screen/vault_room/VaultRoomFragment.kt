@@ -55,7 +55,8 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
     private var getList = listOf(
         "", "", "", "", ""
     )
-
+    private var id : String ? = null
+    private var name : String ? = null
 
     private val viewModel: VaultRoomVM by viewModels()
     override fun onCreateView(view: View) {
@@ -144,13 +145,13 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
 
                     Handler(Looper.getMainLooper()).post {
                         val newList = commentAdapter.list?.toMutableList() ?: mutableListOf()
-                    //    newList.add(0, apiComment)
-                        newList.add(apiComment)
+                        newList.add(0, apiComment)
+                      //  newList.add(apiComment)
                         commentAdapter.list = newList
                         commentAdapter.notifyItemInserted(0)
 
 
-                        binding.rvComments.scrollToPosition(newList.size - 1)
+                    //    binding.rvComments.scrollToPosition(newList.size - 1)
                     }
                 } catch (e: Exception) {
                     Log.e("SocketHandler", "❌ Failed to parse vaultMessage: ${e.message}", e)
@@ -273,6 +274,12 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
                                 var userId = sharedPrefManager.getUserId()
                                 binding.bean = myDataModel.data
                                 chatId = myDataModel.data?.vault?.chatId
+
+                                if (myDataModel.data!!.vault?.admin != null){
+                                    id = myDataModel.data!!.vault?.admin!!._id
+                                    name = myDataModel.data!!.vault?.admin?.firstName + " " + myDataModel.data!!.vault?.admin?.lastName
+
+                                }
                                 if (myDataModel.data?.vault?.admin?._id.equals(userId)){
                                     binding.tvJoin.visibility = View.GONE
                                     binding.etChat.visibility = View.VISIBLE
@@ -326,6 +333,7 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
 
 
                         }
+
 
                         "getComment" ->{
                             val myDataModel : GetCommentApiResponse ? = BindingUtils.parseJson(it.data.toString())
@@ -450,7 +458,27 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
                     }
 
                 }
+
+                R.id.profileImage, R.id.tvUserName ->{
+                    val bundle = Bundle().apply {
+                        putString("from", "user_profile")
+                        putString("userId", id) // assuming m._id is a String
+                    }
+//                    val name = m.firstName + " " + m.lastName  // ← add space here
+//                    val name  = m?.userId?.firstName + " " + m?.userId?.lastName
+                    HomeActivity.userName  = name
+                    val userProfileFragment = UserProfileFragment().apply {
+                        arguments = bundle
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, userProfileFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
+
+
         }
     }
 
@@ -467,6 +495,24 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
                 when (v.id) {
                     R.id.ivHearts -> {
                         viewModel.likeDislikeComment(Constants.LIKE_DISLIKE_COMMENT+m._id)
+                    }
+
+                    R.id.profileImage , R.id.tvUserName ->{
+                        val bundle = Bundle().apply {
+                            putString("from", "user_profile")
+                            putString("userId", m?.userId?._id) // assuming m._id is a String
+                        }
+//                    val name = m.firstName + " " + m.lastName  // ← add space here
+                        val name  = m?.userId?.firstName + " " + m?.userId?.lastName
+                        HomeActivity.userName  = name
+                        val userProfileFragment = UserProfileFragment().apply {
+                            arguments = bundle
+                        }
+
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.frameLayout, userProfileFragment)
+                            .addToBackStack(null)
+                            .commit()
                     }
                 }
             }

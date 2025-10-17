@@ -28,6 +28,7 @@
             setUserImageFromBaseUrl="@{bean.userId.profileImage}"
             android:layout_width="@dimen/_45sdp"
             android:layout_height="@dimen/_45sdp"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             android:scaleType="centerCrop"
             android:src="@drawable/dummy_person"
@@ -40,6 +41,7 @@
             style="@style/TextView_500_Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:text='@{bean.UserId.firstName +" " + bean.UserId.lastName}'
             android:textColor="@color/black"
             android:textSize="@dimen/_14ssp"

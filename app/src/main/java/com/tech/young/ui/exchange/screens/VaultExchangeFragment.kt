@@ -35,6 +35,8 @@ import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.exchange.ExchangeVM
 import com.tech.young.ui.exchange.Filterable
 import com.tech.young.ui.exchange.stream_detail_fragment.StreamDetailFragment
+import com.tech.young.ui.home.HomeActivity
+import com.tech.young.ui.user_profile.UserProfileFragment
 import com.tech.young.ui.vault_screen.CommonVaultFragment
 import com.tech.young.ui.vault_screen.vault_room.VaultRoomFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -226,6 +228,23 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
 
                     requireActivity().supportFragmentManager.beginTransaction()
                         .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                R.id.tvUserName,R.id.ivUserImage ->{
+                    val bundle = Bundle().apply {
+                        putString("from", "user_profile")
+                        putString("userId", m?.admin?._id) // assuming m._id is a String
+                    }
+//                    val name = m.firstName + " " + m.lastName  // ← add space here
+                    val name  = m?.admin?.firstName + " " + m?.admin?.lastName
+                    HomeActivity.userName  = name
+                    val userProfileFragment = UserProfileFragment().apply {
+                        arguments = bundle
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, userProfileFragment)
                         .addToBackStack(null)
                         .commit()
                 }

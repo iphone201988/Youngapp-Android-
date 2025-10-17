@@ -35,6 +35,8 @@ import com.tech.young.databinding.ItemLayoutPostCommentBinding
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.exchange.ExchangeVM
+import com.tech.young.ui.home.HomeActivity
+import com.tech.young.ui.user_profile.UserProfileFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -47,6 +49,9 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
         "", "", "", "", ""
     )
 
+
+    private var id : String ? = null
+    private var name : String ? = null
     private var userId : String ? = null
     override fun onCreateView(view: View) {
         getData()
@@ -129,6 +134,23 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
                         binding.etChat.setText("")
                     }
                 }
+                R.id.profileImage , R.id.tvUserName ->{
+                    val bundle = Bundle().apply {
+                        putString("from", "user_profile")
+                        putString("userId", id) // assuming m._id is a String
+                    }
+//                    val name = m.firstName + " " + m.lastName  // ← add space here
+//                    val name  = m?.userId?.firstName + " " + m?.userId?.lastName
+                   HomeActivity.userName  = name
+                    val userProfileFragment = UserProfileFragment().apply {
+                        arguments = bundle
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, userProfileFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
         })
     }
@@ -147,6 +169,23 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
             when(v.id){
                 R.id.likeBtn ->{
                     viewModel.likeDislikeComment(Constants.LIKE_DISLIKE_COMMENT+m._id)
+                }
+                R.id.profileImage , R.id.name ->{
+                    val bundle = Bundle().apply {
+                        putString("from", "user_profile")
+                        putString("userId", m?.userId?._id) // assuming m._id is a String
+                    }
+//                    val name = m.firstName + " " + m.lastName  // ← add space here
+                    val name  = m?.userId?.firstName + " " + m?.userId?.lastName
+                    HomeActivity.userName  = name
+                    val userProfileFragment = UserProfileFragment().apply {
+                        arguments = bundle
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, userProfileFragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
             }
 
@@ -172,6 +211,8 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
                                 if (myDataModel.data != null){
                                     if (myDataModel.data?.post != null){
                                         binding.bean  = myDataModel.data?.post
+                                        id = myDataModel.data!!.post?.userId?._id
+                                        name =  myDataModel.data!!.post?.userId?.firstName + " " + myDataModel.data!!.post?.userId?.lastName
                                     }
 
                                 }

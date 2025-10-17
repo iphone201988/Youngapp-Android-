@@ -35,7 +35,9 @@ import com.tech.young.ui.exchange.ExchangeVM
 import com.tech.young.ui.exchange.Filterable
 import com.tech.young.ui.exchange.exchange_share_detail.ExchangeShareDetailFragment
 import com.tech.young.ui.exchange.stream_detail_fragment.StreamDetailFragment
+import com.tech.young.ui.home.HomeActivity
 import com.tech.young.ui.stream_screen.CommonStreamFragment
+import com.tech.young.ui.user_profile.UserProfileFragment
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.internal.ignoreIoExceptions
 
@@ -173,6 +175,7 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
 
                 }
 
+
             }
         }
         categoryAdapter.list=categoryList()
@@ -283,6 +286,25 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                     m.isAlreadyAddedToCalendar = true
                     streamAdapter.notifyDataSetChanged()
                 }
+
+                R.id.ivUserImage, R.id.tvUserName ->{
+                    val bundle = Bundle().apply {
+                        putString("from", "user_profile")
+                        putString("userId", m?.userId?._id) // assuming m._id is a String
+                    }
+//                    val name = m.firstName + " " + m.lastName  // ← add space here
+                    val name  = m?.userId?.firstName + " " + m?.userId?.lastName
+                    HomeActivity.userName  = name
+                    val userProfileFragment = UserProfileFragment().apply {
+                        arguments = bundle
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, userProfileFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+
             }
 
         }

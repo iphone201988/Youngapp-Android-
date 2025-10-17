@@ -162,16 +162,24 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_20sdp"
             android:background="@drawable/radius_border_gray"
-            android:gravity="start|center"
-            android:hint="text here"
-            android:inputType="textCapSentences"
+            android:gravity="start|top"
+            android:hint="Text here"
+            android:inputType="textMultiLine|textCapSentences"
+            android:minLines="1"
             android:maxLines="4"
-            app:layout_constraintEnd_toStartOf="@id/ivSendChat"
+            android:overScrollMode="ifContentScrolls"
+            android:scrollbars="vertical"
             android:padding="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_5sdp"
             android:textColorHint="@color/text_gray"
+            android:scrollHorizontally="false"
+            android:singleLine="false"
+            android:imeOptions="actionSend"
+            app:layout_constraintEnd_toStartOf="@id/ivSendChat"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/rvMessage"/>
+
+
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvAds"

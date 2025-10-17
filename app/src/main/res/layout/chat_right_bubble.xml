@@ -43,7 +43,7 @@
                 android:paddingTop="@dimen/_7sdp"
                 android:paddingBottom="@dimen/_3sdp"
                 android:paddingHorizontal="@dimen/_7sdp"
-                android:gravity="end"
+                android:gravity="start"
                 android:textColor="@color/text_black"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintTop_toTopOf="parent"
