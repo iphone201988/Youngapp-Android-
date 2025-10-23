@@ -62,9 +62,10 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
     override fun onCreateView(view: View) {
         getVaultData()
         socketHandler()
-        joinVault()
+
 
         receivedMessage()
+    //    joinVault()
         viewModel.getAds(Constants.GET_ADS)
         getCommentData()
         // click
@@ -180,6 +181,9 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
             }
 
         }
+
+
+
 
 
     private fun socketHandler() {
@@ -414,19 +418,32 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
     private fun initOnClick() {
         viewModel.onClick.observe(requireActivity()) {
             when (it?.id) {
-                R.id.tvJoin -> {
-                    if (binding.tvJoin.text.equals("Leave")){
-                        if (vaultId != null){
-                            val params = JSONObject().apply {
-                                put("vaultId", vaultId)
+                    R.id.tvJoin -> {
+                        if (binding.tvJoin.text.equals("Leave")){
+                            if (vaultId != null){
+                                val params = JSONObject().apply {
+                                    put("vaultId", vaultId)
+                                }
+                                // Emit the joinVault event
+                                mSocket.emit("leaveVault", params)
+                                mSocket.off(Socket.EVENT_CONNECT)
+                                mSocket.off(Socket.EVENT_DISCONNECT)
+                                mSocket.off("vaultMessage")
+
+                                Log.i("SocketHandler", "Emitted leave room event: $params")
+                                viewModel.joinLeaveRoom(Constants.JOIN_LEAVE_VAULT + vaultId)
                             }
-                            // Emit the joinVault event
-                            mSocket.emit("leaveVault", params)
-                            Log.i("SocketHandler", "Emitted joinRoom event: $params")
+                        }
+                        else{
+                            receivedMessage()
+                            socketHandler()
+//                            joinVault()
+                            viewModel.joinLeaveRoom(Constants.JOIN_LEAVE_VAULT + vaultId)
+
+
 
                         }
-                    }
-                    viewModel.joinLeaveRoom(Constants.JOIN_LEAVE_VAULT + vaultId)
+
 
                 }
 
@@ -545,6 +562,7 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
             }
         binding.rvMembers.adapter = membersAdapter
     }
+
 
 
         override fun onDestroyView() {

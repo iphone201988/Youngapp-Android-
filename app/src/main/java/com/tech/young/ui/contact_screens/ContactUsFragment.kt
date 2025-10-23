@@ -449,7 +449,7 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
             return false
         }
     if (!isChecked) {
-        showToast("Please agree to the terms and conditions")
+        showToast("Please review and agree to our policies and agreements to submit the form.")
         return false
     }
         return true

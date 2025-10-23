@@ -172,9 +172,10 @@
             android:layout_height="wrap_content"
             style="@style/TextView_500_Medium"
             android:textColor="@color/colorPrimary"
-            android:text='@{bean.userId.firstName + " " + bean.userId.lastName}'
+            android:text='@{(bean.userId.firstName != null ? bean.userId.firstName : "") + " " + (bean.userId.lastName != null ? bean.userId.lastName : "") + (bean.userId.username != null ? " (" + bean.userId.username + ")" : "")}'
             android:layout_marginEnd="@dimen/_8sdp"
             android:textSize="@dimen/_14ssp"
+            android:singleLine="true"
             android:onClick="@{v ->callback.onItemClick(v,bean,pos)}"
             android:paddingHorizontal="@dimen/_8sdp"
             app:layout_constraintStart_toEndOf="@id/ivUserImage"
@@ -191,6 +192,7 @@
             android:paddingHorizontal="@dimen/_8sdp"
             app:layout_constraintStart_toEndOf="@id/ivUserImage"
             app:layout_constraintTop_toBottomOf="@id/tvUserName"/>
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvSymbol"
             style="@style/TextView_500_Medium"
@@ -198,7 +200,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_8sdp"
             android:paddingHorizontal="@dimen/_8sdp"
-            android:text='@{bean.symbol+": "+ bean.symbolValue}'
+            android:text='@{bean.symbol != null ? (bean.symbolValue != null ? bean.symbol + ": " + bean.symbolValue : "") : ""}'
+            android:visibility='@{bean.symbol != null ? (bean.symbolValue != null ? View.VISIBLE : View.GONE) : View.GONE}'
             android:singleLine="true"
             android:textSize="@dimen/_12ssp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -279,8 +282,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 style="@style/TextView_500_Medium"
-                android:text='@{bean.reSharedBy != null ? (bean.reSharedBy.firstName != null ? bean.reSharedBy.firstName : "") + " " + (bean.reSharedBy.lastName != null ? bean.reSharedBy.lastName : "") : ""}'
+                android:text='@{bean.reSharedBy != null ? (bean.reSharedBy.firstName != null ? bean.reSharedBy.firstName : "") + " " + (bean.reSharedBy.lastName != null ? bean.reSharedBy.lastName : "") + (bean.reSharedBy.username != null ? " (" + bean.reSharedBy.username + ")" : "") : ""}'
                 android:textColor="@color/colorPrimary"
+                android:singleLine="true"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:textSize="@dimen/_14ssp"
                 android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"

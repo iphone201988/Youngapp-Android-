@@ -21,6 +21,8 @@ import com.tech.young.databinding.FragmentStreamBinding
 import com.tech.young.databinding.StreamItemViewBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.exchange.stream_detail_fragment.StreamDetailFragment
+import com.tech.young.ui.home.HomeActivity
+import com.tech.young.ui.user_profile.UserProfileFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -160,6 +162,23 @@ class StreamFragment : BaseFragment<FragmentStreamBinding>() {
                         .addToBackStack(null)
                         .commit()
 
+                }
+                R.id.ivUserImage , R.id.tvUserName ->{
+                    val bundle = Bundle().apply {
+                        putString("from", "user_profile")
+                        putString("userId", m?.userId?._id) // assuming m._id is a String
+                    }
+//                    val name = m.firstName + " " + m.lastName  // ← add space here
+                    val name  = m?.userId?.firstName + " " + m?.userId?.lastName
+                    HomeActivity.userName  = name
+                    val userProfileFragment = UserProfileFragment().apply {
+                        arguments = bundle
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, userProfileFragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
             }
         }

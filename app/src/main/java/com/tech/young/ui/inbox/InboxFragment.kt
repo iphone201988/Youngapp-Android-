@@ -73,11 +73,18 @@ class InboxFragment : BaseFragment<FragmentInboxBinding>() {
                 v,m,pos->
             when(v.id){
                 R.id.clInbox ,R.id.ivChatIcon->{
+                    val user = m.chatUsers?.getOrNull(0) // safer than get(0)
+                    val fullName = buildString {
+                        user?.firstName?.takeIf { it.isNotEmpty() }?.let { append(it) }
+                        user?.lastName?.takeIf { it.isNotEmpty() }?.let { append(" $it") }
+                        user?.username?.takeIf { it.isNotEmpty() }?.let { append(" ($it)") }
+                    }.trim()
+
                     val chatUser = UserData(
                         _id = m.chatUsers?.get(0)?._id,
                         profileImage = m.chatUsers?.get(0)?.profileImage,
                         role = m.chatUsers?.get(0)?.role,
-                        username = m.chatUsers?.get(0)?.username
+                       username = fullName
                     )
 //                    val intent=Intent(requireContext(),CommonActivity::class.java)
 //                    intent.putExtra("from","view_message")

@@ -41,7 +41,7 @@
             style="@style/TextView_400_Regular"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{bean.username}"
+            android:text='@{bean.firstName + " " + bean.lastName + " (" + bean.username + ")"}'
             android:layout_marginStart="@dimen/_3sdp"
             android:textSize="@dimen/_12ssp"
             android:layout_marginEnd="@dimen/_5sdp"

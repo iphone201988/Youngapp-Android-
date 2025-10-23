@@ -40,10 +40,10 @@
             style="@style/TextView_500_Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{bean.chatUsers.size() > 0 ? bean.chatUsers.get(0).username : ``}"
+            android:text='@{bean.chatUsers.size() > 0 ? ((bean.chatUsers.get(0).firstName != null ? bean.chatUsers.get(0).firstName : "") + " " + (bean.chatUsers.get(0).lastName != null ? bean.chatUsers.get(0).lastName : "") + (bean.chatUsers.get(0).username != null ? " (" + bean.chatUsers.get(0).username + ")" : "")) : ""}'
             android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginStart="@dimen/_5sdp"
-            android:textSize="@dimen/_14ssp"
+            android:textSize="@dimen/_12ssp"
             android:layout_marginEnd="@dimen/_5sdp"
             android:singleLine="true"
             android:textColor="@color/colorPrimary"

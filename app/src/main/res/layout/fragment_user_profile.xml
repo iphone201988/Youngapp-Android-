@@ -126,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_18sdp"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:text='@{(bean.firstName != null ? bean.firstName : "") + " " + (bean.lastName != null ? bean.lastName : "")}'
+                    android:text='@{(bean.firstName != null ? bean.firstName : "") + " " + (bean.lastName != null ? bean.lastName : "") + (bean.username != null ? " (" + bean.username + ")" : "")}'
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ivImage" />

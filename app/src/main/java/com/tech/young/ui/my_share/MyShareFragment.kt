@@ -22,6 +22,8 @@ import com.tech.young.databinding.FragmentMyShareBinding
 import com.tech.young.databinding.ItemLayoutMyShareBinding
 import com.tech.young.databinding.ShareItemViewBinding
 import com.tech.young.ui.exchange.exchange_share_detail.ExchangeShareDetailFragment
+import com.tech.young.ui.home.HomeActivity
+import com.tech.young.ui.user_profile.UserProfileFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -86,6 +88,25 @@ class MyShareFragment : BaseFragment<FragmentMyShareBinding>() {
                         .addToBackStack(null)
                         .commit()
                 }
+                R.id.ivUserImage , R.id.tvUserName->{
+                    val bundle = Bundle().apply {
+                        putString("from", "user_profile")
+                        putString("userId", m?.userId?._id) // assuming m._id is a String
+                    }
+//                    val name = m.firstName + " " + m.lastName  // ← add space here
+                    val name  = m?.userId?.firstName + " " + m?.userId?.lastName
+                    HomeActivity.userName  = name
+                    val userProfileFragment = UserProfileFragment().apply {
+                        arguments = bundle
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, userProfileFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+
+
             }
         }
         binding.rvShare.adapter=shareAdapter

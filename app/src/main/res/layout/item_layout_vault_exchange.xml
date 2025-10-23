@@ -136,9 +136,10 @@
             android:id="@+id/tvUserName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{bean.Admin.username}"
+            android:text='@{bean.Admin != null ? (bean.Admin.firstName != null ? bean.Admin.firstName : "") + " " + (bean.Admin.lastName != null ? bean.Admin.lastName : "") + (bean.Admin.username != null ? " (" + bean.Admin.username + ")" : "") : ""}'
             style="@style/TextView_500_Medium"
             android:textColor="@color/colorPrimary"
+            android:singleLine="true"
             android:onClick="@{v -> callback.onItemClick(v, bean,pos)}"
             android:layout_marginEnd="@dimen/_8sdp"
             android:textSize="@dimen/_14ssp"

@@ -20,6 +20,8 @@ import com.tech.young.databinding.CategoryItemViewBinding
 import com.tech.young.databinding.FragmentVaultBinding
 import com.tech.young.databinding.VaultItemViewBinding
 import com.tech.young.ui.common.CommonActivity
+import com.tech.young.ui.home.HomeActivity
+import com.tech.young.ui.user_profile.UserProfileFragment
 import com.tech.young.ui.vault_screen.vault_room.VaultRoomFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -153,6 +155,24 @@ class VaultFragment : BaseFragment<FragmentVaultBinding>(){
                             .addToBackStack(null)
                             .commit()
                     }
+
+                R.id.ivUserImage , R.id.tvUserName ->{
+                    val bundle = Bundle().apply {
+                        putString("from", "user_profile")
+                        putString("userId", m?.admin?._id) // assuming m._id is a String
+                    }
+//                    val name = m.firstName + " " + m.lastName  // ← add space here
+                    val name  = m?.admin?.firstName + " " + m?.admin?.lastName
+                    HomeActivity.userName  = name
+                    val userProfileFragment = UserProfileFragment().apply {
+                        arguments = bundle
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, userProfileFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
 
             }
         }

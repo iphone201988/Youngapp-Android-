@@ -38,6 +38,7 @@ import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.DropDownData
 import com.tech.young.data.api.Constants
+import com.tech.young.data.api.SimpleApiResponse
 import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.StreamData
 import com.tech.young.databinding.AdsItemViewBinding
@@ -287,6 +288,12 @@ class CommonStreamFragment : BaseFragment<FragmentCommonStreamBinding>() ,BaseCu
                                 if (myDataModel.data != null){
                                     adsAdapter.list = myDataModel.data?.ads
                                 }
+                            }
+                        }
+                        "scheduleSteam" ->{
+                            val myDataModel : SimpleApiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                             //   showToast(myDataModel.message.toString())
                             }
                         }
                     }

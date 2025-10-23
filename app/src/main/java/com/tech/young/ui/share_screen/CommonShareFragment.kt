@@ -59,6 +59,8 @@ import java.io.File
 class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCustomBottomSheet.Listener{
     private val viewModel: ShareVM by viewModels()
 
+
+    private var isSymbolRequired = false
     // adapter
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private lateinit var topicBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
@@ -66,7 +68,8 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
     private var topicList = ArrayList<DropDownData>()
     private lateinit var cameraGalleryBottomSheet: BaseCustomBottomSheet<BottomSheetCameraGalleryBinding>
 
-    private var selectedOption: String = "stock"  // default
+//    private var selectedOption: String  = "stock"  // default
+      private var selectedOption: String ? = null  // default
 
 
 
@@ -410,22 +413,49 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
         "", "", "", "", ""
     )
 
+//    private fun setupToggle() {
+//        binding.yesOption.label.text = "Stock"
+//        binding.noOption.label.text = "Crypto"
+//
+//        // Default selection
+//        selectedOption = "stock"
+//        binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_selected)
+//        binding.noOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
+//
+//        binding.yesOption.box.setOnClickListener {
+//            selectedOption = "stock"
+//            binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_selected)
+//            binding.noOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
+//        }
+//
+//        binding.noOption.box.setOnClickListener {
+//            selectedOption = "crypto"
+//            binding.noOption.box.setBackgroundResource(R.drawable.ic_check_selected)
+//            binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
+//        }
+//    }
+
+
+
     private fun setupToggle() {
         binding.yesOption.label.text = "Stock"
         binding.noOption.label.text = "Crypto"
 
-        // Default selection
-        selectedOption = "stock"
-        binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_selected)
+        // 🚫 No default selection
+        selectedOption = null
+        binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
         binding.noOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
 
         binding.yesOption.box.setOnClickListener {
+            isSymbolRequired = true
+
             selectedOption = "stock"
             binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_selected)
             binding.noOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
         }
 
         binding.noOption.box.setOnClickListener {
+            isSymbolRequired = true
             selectedOption = "crypto"
             binding.noOption.box.setBackgroundResource(R.drawable.ic_check_selected)
             binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
@@ -446,7 +476,8 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
             showToast("Please enter description")
             return false
         }
-        if (TextUtils.isEmpty(binding.etSymbol.text.toString().trim())){
+        // ✅ Validate symbol only if required
+        if (isSymbolRequired && TextUtils.isEmpty(binding.etSymbol.text.toString().trim())) {
             showToast("Please enter symbol")
             return false
         }

@@ -24,6 +24,7 @@ import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
+import com.tech.young.data.api.SimpleApiResponse
 import com.tech.young.data.model.AddCommentApiResponse
 import com.tech.young.data.model.AddRatingApiResponse
 import com.tech.young.data.model.CommentLikeDislikeApiResponse
@@ -166,6 +167,8 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                     when {
                         scheduleDate != null -> {
                             // Stream is scheduled in future
+
+                            viewModel.scheduleSteam(Constants.SCHEDULE_STREAM+streamId)
                             Toast.makeText(requireContext(), "This stream is scheduled", Toast.LENGTH_SHORT).show()
                         }
 
@@ -244,6 +247,7 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                     showLoading()
                 }
                 Status.SUCCESS ->{
+                    hideLoading()
                     when(it.message){
                         "getShareDetail" -> {
                             viewModel.getAds(Constants.GET_ADS)
@@ -338,6 +342,12 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                                 if (myDataModel.data != null){
 
                                 }
+                            }
+                        }
+                        "scheduleSteam" ->{
+                            val myDataModel : SimpleApiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                //   showToast(myDataModel.message.toString())
                             }
                         }
 

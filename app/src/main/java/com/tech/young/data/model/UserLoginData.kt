@@ -384,14 +384,15 @@ data class GetEventsApiResponse(
 /******************* get saved post  api response ********************/
 
 
+
 //data class GetSavedPostApiResponse(
 //    var `data`: Data?,
 //    var message: String?,
 //    var pagination: Pagination?,
-//    var success: Boolean?,
+//    var success: Boolean?
 //) {
 //    data class Data(
-//        var posts: List<Post?>?,
+//        var posts: List<Post?>?
 //    ) {
 //        data class Post(
 //            var _id: String?,
@@ -402,18 +403,22 @@ data class GetEventsApiResponse(
 //            var isLiked: Boolean?,
 //            var isReported: Boolean?,
 //            var likesCount: Int?,
+//            var scheduleDate: String?,
+//            var status: String?,
 //            var ratings: Double?,
+//            var streamUrl: String?,
 //            var symbol: String?,
 //            var title: String?,
 //            var topic: String?,
 //            var type: String?,
 //            var userId: UserId?,
+//            var symbolValue: String?
 //        ) {
 //            data class UserId(
 //                var _id: String?,
 //                var firstName: String?,
 //                var lastName: String?,
-//                var profileImage: String?,
+//                var profileImage: String?
 //            )
 //        }
 //    }
@@ -421,86 +426,136 @@ data class GetEventsApiResponse(
 //    data class Pagination(
 //        var limit: Int?,
 //        var page: Int?,
-//        var total: Int?,
+//        var total: Int?
 //    )
-//
-//}
-data class GetSavedPostApiResponse(
-    var `data`: Data?,
-    var message: String?,
-    var pagination: Pagination?,
-    var success: Boolean?
-) {
-    data class Data(
-        var posts: List<Post?>?
+
+
+    data class GetSavedPostApiResponse(
+        var `data`: Data?,
+        var message: String?,
+        var pagination: Pagination?,
+        var success: Boolean?
     ) {
-        data class Post(
-            var _id: String?,
-            var commentsCount: Int?,
-            var createdAt: String?,
-            var description: String?,
-            var image: String?,
-            var isLiked: Boolean?,
-            var isReported: Boolean?,
-            var likesCount: Int?,
-            var scheduleDate: String?,
-            var status: String?,
-            var ratings: Double?,
-            var streamUrl: String?,
-            var symbol: String?,
-            var title: String?,
-            var topic: String?,
-            var type: String?,
-            var userId: UserId?,
-            var symbolValue: String?
+        data class Data(
+            var posts: List<Post?>?
         ) {
-            data class UserId(
+            data class Post(
                 var _id: String?,
-                var firstName: String?,
-                var lastName: String?,
-                var profileImage: String?
-            )
+                var commentsCount: Int?,
+                var createdAt: String?,
+                var description: String?,
+                var image: String?,
+                var isAlreadyAddedToCalendar: Boolean?,
+                var isLiked: Boolean?,
+                var isReported: Boolean?,
+                var likesCount: Int?,
+                var reShareCount: Int?,
+                var ratings: Double?,
+                var scheduleDate: String?,
+                var reSharedBy: ReSharedBy?,
+                var reSharedPostId: String?,
+                var symbol: String?,
+                var symbolValue: String?,
+                var title: String?,
+                var topic: String?,
+                var totalSavedCount: Int?,
+                var type: String?,
+                var userId: UserId?,
+                var status: String?,
+                var streamUrl: String?
+            ) {
+                data class ReSharedBy(
+                    var _id: String?,
+                    var firstName: String?,
+                    var lastName: String?,
+                    var profileImage: String?,
+                    var role: String?,
+                    var username: String?
+                )
+
+                data class UserId(
+                    var _id: String?,
+                    var firstName: String?,
+                    var lastName: String?,
+                    var profileImage: String?,
+                    var username: String?
+                )
+            }
         }
+
+        data class Pagination(
+            var limit: Int?,
+            var page: Int?,
+            var total: Int?
+        )
     }
 
-    data class Pagination(
-        var limit: Int?,
-        var page: Int?,
-        var total: Int?
-    )
-}
 
-/******************* get chat api response ********************/
+    /******************* get chat api response ********************/
+//data class GetChatApiResponse(
+//    var `data`: Data?,
+//    var message: String?,
+//    var success: Boolean?,
+//) {
+//    data class Data(
+//        var chats: List<Chat?>?,
+//    ) {
+//        data class Chat(
+//            var _id: String?,
+//            var chatUsers: List<ChatUser?>?,
+//            var createdAt: String?,
+//            var hasUnreadMessages: Boolean?,
+//            var lastMessage: LastMessage?,
+//        ) {
+//            data class ChatUser(
+//                var _id: String?,
+//                var profileImage: String?,
+//                var role: String?,
+//                var username: String?,
+//            )
+//
+//            data class LastMessage(
+//                var _id: String?,
+//                var message: String?,
+//            )
+//        }
+//    }
+//}
+
+
 data class GetChatApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?,
+    var success: Boolean?
 ) {
     data class Data(
-        var chats: List<Chat?>?,
+        var chats: List<Chat?>?
     ) {
         data class Chat(
             var _id: String?,
             var chatUsers: List<ChatUser?>?,
             var createdAt: String?,
             var hasUnreadMessages: Boolean?,
+            var isVaultChat: Boolean?,
             var lastMessage: LastMessage?,
+            var vaultId: String?
         ) {
             data class ChatUser(
                 var _id: String?,
+                var firstName: String?,
+                var lastName: String?,
                 var profileImage: String?,
                 var role: String?,
-                var username: String?,
+                var username: String?
             )
 
             data class LastMessage(
                 var _id: String?,
-                var message: String?,
+                var message: String?
             )
         }
     }
 }
-
 
 /******************* get user  api response ********************/
 //data class GetUserApiResponse(
@@ -819,6 +874,7 @@ data class ExchangeShareApiResponse(
                 var firstName: String?,
                 var lastName: String?,
                 var profileImage: String?,
+                var username: String?,
                 var role: String?
             )
 
@@ -827,6 +883,7 @@ data class ExchangeShareApiResponse(
                 var firstName: String?,
                 var lastName: String?,
                 var location: Location?,
+                var username: String?,
                 var profileImage: String?
             ) {
                 data class Location(
@@ -1508,6 +1565,7 @@ data class GetStreamApiResponse(
                 var _id: String?,
                 var firstName: String?,
                 var lastName: String?,
+                var username: String?,
                 var location: Location?,
                 var profileImage: String?,
             ) {

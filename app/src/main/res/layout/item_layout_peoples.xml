@@ -53,7 +53,7 @@
                 android:id="@+id/personName"
                 style="@style/TextView_400_Regular"
                 android:layout_width="0dp"
-                android:text='@{bean.firstName + " " + bean.lastName}'
+                android:text='@{(bean.firstName != null ? bean.firstName : "") + (bean.lastName != null ? " " + bean.lastName : "") + (bean.username != null ? " (" + bean.username + ")" : "")}'
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/_12ssp"
                 android:layout_marginHorizontal="@dimen/_5sdp"

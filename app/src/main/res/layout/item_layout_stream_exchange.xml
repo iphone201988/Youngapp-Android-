@@ -181,7 +181,8 @@
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:layout_marginEnd="@dimen/_8sdp"
             android:paddingHorizontal="@dimen/_8sdp"
-            android:text='@{bean.userId.firstName+ " "+ bean.userId.lastName}'
+            android:singleLine="true"
+            android:text='@{(bean.userId.firstName != null ? bean.userId.firstName : "") + " " + (bean.userId.lastName != null ? bean.userId.lastName : "") + (bean.userId.username != null ? " (" + bean.userId.username + ")" : "")}'
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintEnd_toStartOf="@+id/ivStar"

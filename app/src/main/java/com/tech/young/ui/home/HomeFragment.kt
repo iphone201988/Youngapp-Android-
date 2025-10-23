@@ -450,39 +450,47 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         rvTicker.adapter = adapter
         rvTicker.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
-//        val symbols = listOf("AAPL","SPY", "QQQ", "DIA" , "IWM")
+        // ✅ Updated symbols (replaced SPX, RUT, VIX, ISIC, XAU)
         val symbols = listOf(
-            "SPX", "DJIA", "IXIC", "RUT", "VIX", "XAU",
+            "INX",  // replaces SPX (S&P 500)
+            "DJI",  // replaces DJIA / Dow
+            "COMP", // replaces IXIC / NASDAQ
+            "GOLD", // replaces XAU
+            "BTC",  // Bitcoin
+            "ETH",  // Ethereum
+            "BNB",  // Binance Coin
             "NVDA", "MSFT", "AAPL", "GOOG", "AMZN", "META", "TSLA"
         )
 
         viewLifecycleOwner.lifecycleScope.launch {
             // Fetch data from API
             val quotes = StockQuoteService.fetchQuotes(symbols)
-
-            Log.i("hgfhghg", "setupTickerRecycler: $quotes")
+            Log.i("TickerSetup", "Raw quotes: $quotes")
 
             // Convert to StockItem list
-            val stockItems = quotes.map { (symbol, quote) ->
+            val stockItems = quotes.mapNotNull { (symbol, quote) ->
+                val percentChange = quote.dp ?: 0.0
+                // ❌ Skip if percent change is 0 or null
+                if (percentChange == 0.0) return@mapNotNull null
+
                 val isUp = (quote.d ?: 0.0) >= 0
-                val percentChange = String.format("%.2f%%", quote.dp ?: 0.0)
-                StockItem(symbol, percentChange, isUp)
+                StockItem(symbol, String.format("%.2f%%", percentChange), isUp)
             }
-            Log.i("hgfhghg", "setupTickerRecycler: $stockItems")
 
+            Log.i("TickerSetup", "Filtered stock items: $stockItems")
 
-
-            // Tripled list for infinite effect
+            // Tripled list for infinite scroll effect
             val loopedList = stockItems + stockItems + stockItems
             adapter.setItems(loopedList)
 
-            // Scroll to middle
+            // Scroll to the middle
             rvTicker.scrollToPosition(loopedList.size / 2)
 
             // Start auto-scroll
             startTickerAutoScroll(rvTicker)
         }
     }
+
 
 
     private fun startTickerAutoScroll(recyclerView: RecyclerView) {
