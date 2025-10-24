@@ -1,11 +1,13 @@
 package com.tech.young.ui.payment
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.View
 import androidx.core.content.FileProvider
@@ -45,6 +47,9 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @AndroidEntryPoint
 class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , BaseCustomDialog.Listener {
@@ -173,7 +178,7 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
                                     val jsonString = it.data.toString()
-                                    generatePdfFromRawJson(requireContext(), jsonString)
+                                    generatePdfFromRawJson(requireContext(), jsonString, profileData)
                                 }
                             }
                         }
@@ -226,20 +231,21 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
 
     // convert json data to pdf
 
-    fun generatePdfFromRawJson(context: Context, jsonString: String) {
+    @SuppressLint("SimpleDateFormat")
+    fun generatePdfFromRawJson(context: Context, jsonString: String, userData: GetProfileApiResponseData?) {
         try {
-            // 1️⃣ Pretty-print the JSON
+            // 1️⃣ Pretty-print JSON
             val prettyJson = try {
                 if (jsonString.trim().startsWith("[")) {
-                    JSONArray(jsonString).toString(4) // 4 spaces indentation
+                    JSONArray(jsonString).toString(4)
                 } else {
                     JSONObject(jsonString).toString(4)
                 }
             } catch (e: Exception) {
-                jsonString // fallback to original if parsing fails
+                jsonString
             }
 
-            // 2️⃣ Create PDF
+            // 2️⃣ Create PDF setup
             val pdfDocument = PdfDocument()
             val paint = Paint().apply { textSize = 12f }
 
@@ -253,7 +259,7 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
             var page = pdfDocument.startPage(pageInfo)
             var canvas = page.canvas
 
-            // 3️⃣ Wrap text properly
+            // 3️⃣ Wrap text to fit width
             val wrappedLines = mutableListOf<String>()
             var start = 0
             while (start < prettyJson.length) {
@@ -262,7 +268,7 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
                 start += count
             }
 
-            // 4️⃣ Draw lines to PDF pages
+            // 4️⃣ Write lines across multiple pages
             for (line in wrappedLines) {
                 if (yPosition > pageHeight - 40) {
                     pdfDocument.finishPage(page)
@@ -275,31 +281,48 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
                 canvas.drawText(line, 20f, yPosition, paint)
                 yPosition += lineSpacing
             }
-
             pdfDocument.finishPage(page)
 
-            // 5️⃣ Save PDF file
-            val file = File(context.cacheDir, "myFile.pdf")
+            // 5️⃣ Generate dynamic file name
+            val firstName = userData?.user?.firstName?.takeIf { it.isNotBlank() } ?: ""
+            val lastName = userData?.user?.lastName?.takeIf { it.isNotBlank() } ?: ""
+            val displayName = listOf(firstName, lastName)
+                .filter { it.isNotBlank() }
+                .joinToString(" ")
+                .ifEmpty { "User" }
+
+            val formattedDate = SimpleDateFormat("EEEE, MMM dd, yyyy", Locale.getDefault()).format(Date())
+            val safeFileName = "$displayName - $formattedDate.pdf".replace(",", "")
+
+            // 6️⃣ Save PDF to Downloads
+            val downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            if (!downloadsFolder.exists()) downloadsFolder.mkdirs()
+
+            val file = File(downloadsFolder, safeFileName)
             file.outputStream().use { pdfDocument.writeTo(it) }
             pdfDocument.close()
-            Log.i("fdsfdsfdsfs", "generatePdfFromRawJson: $file ")
 
+            Log.i("PDF_FILE", "Saved PDF: $file")
             Log.d("PDF_SIZE", "PDF size = ${file.length()} bytes")
-            // 6️⃣ Share PDF
+
+            // 7️⃣ Share PDF
             val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
-            Log.i("sdadsad", "generatePdfFromRawJson: $uri")
             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                 type = "application/pdf"
                 putExtra(Intent.EXTRA_STREAM, uri)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 if (context !is Activity) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
+
             context.startActivity(Intent.createChooser(shareIntent, "Share JSON PDF"))
 
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
+
+
+
 
 
 

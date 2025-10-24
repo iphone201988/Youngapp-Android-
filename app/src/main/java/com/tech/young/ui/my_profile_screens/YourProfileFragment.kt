@@ -87,4 +87,15 @@ class YourProfileFragment : BaseFragment<FragmentYourProfileBinding>() {
         }
     }
 
+    fun handleBackPress(): Boolean {
+        val currentFragment = childFragmentManager.findFragmentByTag("f${binding.viewPager.currentItem}")
+
+        if (currentFragment is CalendarFragment && currentFragment.handleBackPress()) {
+            return true // CalendarFragment handled the back press
+        }
+
+        // Add other child fragment handling if needed here
+
+        return false // No child fragment handled it
+    }
 }

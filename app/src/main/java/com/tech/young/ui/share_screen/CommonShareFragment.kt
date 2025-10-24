@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.MediaStore
 import android.text.TextUtils
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.activity.result.ActivityResult
@@ -303,6 +304,8 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
 
                         )
 
+                        Log.i("dssaa", "initOnClick: $shareData")
+
                         val intent = Intent(requireContext(), CommonActivity::class.java).apply {
                             putExtra("from", "share_confirmation")
                             putExtra("share_data", shareData)
@@ -443,12 +446,16 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
 
         // 🚫 No default selection
         selectedOption = null
+        binding.etSymbol.isEnabled = false
+        binding.etSymbol.alpha = 0.5f
+
         binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
         binding.noOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
 
         binding.yesOption.box.setOnClickListener {
             isSymbolRequired = true
-
+            binding.etSymbol.isEnabled = true
+            binding.etSymbol.alpha = 1f
             selectedOption = "stock"
             binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_selected)
             binding.noOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
@@ -456,6 +463,8 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
 
         binding.noOption.box.setOnClickListener {
             isSymbolRequired = true
+            binding.etSymbol.isEnabled = true
+            binding.etSymbol.alpha = 1f
             selectedOption = "crypto"
             binding.noOption.box.setBackgroundResource(R.drawable.ic_check_selected)
             binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_unselected)

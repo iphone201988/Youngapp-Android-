@@ -1397,11 +1397,13 @@ data class GetCommentApiResponsePost(
             var postId: String?,
             var type: String?,
             var userId: UserId?,
+
         ) {
             data class UserId(
                 var _id: String?,
                 var firstName: String?,
                 var lastName: String?,
+                var username: String?,
                 var profileImage: String?,
                 var role: String?,
             )
@@ -1608,6 +1610,8 @@ data class StreamDetailApiResponse(
             var title: String?,
             var topic: String?,
             var type: String?,
+
+            var isAlreadyAddedToCalendar : Boolean?,
             var userId: UserId?,
         ) {
             data class UserId(
@@ -1807,6 +1811,18 @@ data class EventUpdateApiResponse(
 /***************  push notification model  api response *********************/
 
 
+//@Parcelize
+//data class FcmPayload(
+//    val type: String? = null,
+//    val postId: String? = null,
+//    val userId: String? = null,
+//    val username: String? = null,
+//    val profileImage: String? = null,
+//    val role: String? = null,
+//    val chatId: String? = null
+//) : Parcelable
+
+
 @Parcelize
 data class FcmPayload(
     val type: String? = null,
@@ -1815,5 +1831,15 @@ data class FcmPayload(
     val username: String? = null,
     val profileImage: String? = null,
     val role: String? = null,
-    val chatId: String? = null
+    val chatId: String? = null,
+
+    val firstName: String?,
+    val lastName: String?,
+    // 🆕 Common FCM pending data fields
+    val title: String? = null,
+    val body: String? = null,
+    val message: String? = null,
+    val imageUrl: String? = null,
+    val timestamp: String? = null
+
 ) : Parcelable

@@ -70,19 +70,34 @@
        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+
+        <TextView
+            android:id="@+id/tvExpired"
+            checkIfExpired="@{bean.scheduledDate}"
+            style="@style/TextView_400_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Expired"
+            android:textSize="@dimen/_10ssp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:textColor="@color/red"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cons"/>
+
         <TextView
             android:id="@+id/heading"
             style="@style/TextView_600_SemiBold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:text="@{bean.title}"
             app:setEventTypeTextColor="@{bean.type}"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintEnd_toStartOf="@id/ivDelete"
             app:layout_constraintStart_toEndOf="@id/cons"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/tvExpired" />
 
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -92,8 +107,10 @@
             android:layout_height="@dimen/_24sdp"
             android:src="@drawable/iv_profile_icon"
             android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-            app:layout_constraintTop_toTopOf="@id/description"
+            app:layout_constraintTop_toBottomOf="@id/heading"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
@@ -118,10 +135,11 @@
             android:layout_marginEnd="@dimen/_10sdp"
             setDeleteVisibility="@{bean.userId}"
             android:src="@drawable/iv_delete_icon"
+            android:layout_marginTop="@dimen/_10sdp"
             android:textSize="@dimen/_12ssp"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/heading"/>
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

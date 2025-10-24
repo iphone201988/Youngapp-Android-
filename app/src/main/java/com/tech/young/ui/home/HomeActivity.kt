@@ -23,6 +23,7 @@ import com.tech.young.base.utils.Resource
 import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.event.SingleRequestEvent
 import com.tech.young.data.SubViewClickBean
+import com.tech.young.data.UserData
 import com.tech.young.data.api.Constants
 import com.tech.young.data.api.SimpleApiResponse
 import com.tech.young.data.model.FcmPayload
@@ -54,6 +55,7 @@ import com.tech.young.ui.my_profile_screens.forFinance.ProfessionalInformationFr
 import com.tech.young.ui.my_profile_screens.forNormal.FamilyDetailsFragment
 import com.tech.young.ui.my_profile_screens.forNormal.FinanceInfoFragment
 import com.tech.young.ui.my_profile_screens.forNormal.InvestmentInfoFragment
+import com.tech.young.ui.my_profile_screens.profile_fragments.CalendarFragment
 import com.tech.young.ui.my_share.MyShareFragment
 import com.tech.young.ui.payment.PaymentDetailsFragment
 import com.tech.young.ui.policies_about.AboutFragment
@@ -113,7 +115,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
         if (payload != null) {
             when(payload.type){
                 "share" ->{
-
                     Log.i("dsadasdas", "onCreateView: shareload")
                     val fragment = ExchangeShareDetailFragment().apply {
                         arguments = Bundle().apply {
@@ -128,9 +129,32 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                 }
 
 
-                "message" ->{
+                "message" -> {
+                    val chatUser = UserData(
+                        _id = payload?.userId, // ✅ should map from FcmPayload.userId, not payload?._id
+                        profileImage = payload?.profileImage,
+                        role = payload?.role,
+                        username = payload?.username,
+                        firstName =  payload?.firstName,
+                        lastName = payload?.lastName
+                    )
 
+                    val bundle = Bundle().apply {
+                        putString("from", "view_message")
+                        putString("threadId", payload?.chatId)
+                        putParcelable("userData", chatUser)
+                    }
+
+                    val viewMessageFragment = ViewMessageFragment().apply {
+                        arguments = bundle
+                    }
+
+                   supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, viewMessageFragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
+
                 "live_stream" ->{
 
                 }
@@ -357,6 +381,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
 
                 R.id.ivBack -> {
                     currentFragment = supportFragmentManager.findFragmentById(R.id.frameLayout)
+
+                    // 1️⃣ Check nested YourProfileFragment (handles CalendarFragment inside)
+                    if (currentFragment is YourProfileFragment && (currentFragment as YourProfileFragment).handleBackPress()) return@Observer
+
                     if (currentFragment is PeopleFragment) {
                         CommonVaultFragment.reload = true
                         PeopleFragment.sendData.value = Resource.success("dasdas", true)

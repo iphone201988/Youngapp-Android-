@@ -48,7 +48,9 @@ data class UserData(
     val _id: String?,
     val profileImage: String?,
     val role: String?,
-    val username: String?
+    val username: String?,
+    val firstName : String?,
+    val lastName : String?
 ) : Parcelable
 
 

@@ -170,7 +170,9 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
                             _id = userData?._id,
                             profileImage = userData?.profileImage ,
                             role = userData?.role,
-                            username = userData?.username
+                            username = userData?.username,
+                            firstName =  userData?.firstName,
+                            lastName =  userData?.lastName
                         )
 
 

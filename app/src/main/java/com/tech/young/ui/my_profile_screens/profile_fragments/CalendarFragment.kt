@@ -203,6 +203,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
     private fun getEventsData() {
         val data =  HashMap<String,Any>()
         data["page"] = 1
+        data["limit"] = 50
         viewModel.getEvents(data, Constants.GET_EVENTS)
     }
 
@@ -212,35 +213,48 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                 R.id.ivDelete ->{
                     viewModel.deleteEvent(Constants.DELETE_EVENT+m._id)
                 }
-                R.id.consMain ->{
-                    from = "Edit"
-                    binding.etTitle.setText(m.title)
-                    binding.etTopic.setText(m.topic)
-                    binding.etDescription.setText(m.description)
-                    binding.etUploadFile.setText(m.file)
-                    if (!m.file.isNullOrEmpty()) {
-                        // ✅ Image from API
-                        Glide.with(binding.previewImage.context)
-                            .load(Constants.BASE_URL_IMAGE + m.file)
-                            .centerCrop()
-                            .placeholder(R.drawable.dummy_profile)
-                            .error(R.drawable.dummy_profile)
-                            .into(binding.previewImage)
+                R.id.consMain -> {
+                    val userId = sharedPrefManager.getUserId()
+                    Log.i("dsadsad", "initAdapter: $userId ")
 
-                        binding.previewImage.scaleType = ImageView.ScaleType.CENTER_CROP
-                        binding.previewImage.visibility = View.VISIBLE
-                        binding.deleteImage.visibility = View.VISIBLE
-                    } else {
-                        // ✅ No image — hide views
-                        binding.previewImage.visibility = View.GONE
-                        binding.deleteImage.visibility = View.GONE
+                    if (userId == m.userId && m.type != "other_user_scheduled_lives") {
+                        from = "Edit"
+
+                        // Set text fields
+                        binding.etTitle.setText(m.title)
+                        binding.etTopic.setText(m.topic)
+                        binding.etDescription.setText(m.description)
+                        binding.etUploadFile.setText(m.file)
+
+                        // Handle image preview
+                        if (!m.file.isNullOrEmpty()) {
+                            Glide.with(binding.previewImage.context)
+                                .load(Constants.BASE_URL_IMAGE + m.file)
+                                .centerCrop()
+                                .placeholder(R.drawable.dummy_profile)
+                                .error(R.drawable.dummy_profile)
+                                .into(binding.previewImage)
+
+                            binding.previewImage.scaleType = ImageView.ScaleType.CENTER_CROP
+                            binding.previewImage.visibility = View.VISIBLE
+                            binding.deleteImage.visibility = View.VISIBLE
+                        } else {
+                            binding.previewImage.visibility = View.GONE
+                            binding.deleteImage.visibility = View.GONE
+                        }
+
+                        // Switch to Add/Edit Event view
+                        binding.calendarCons.visibility = View.GONE
+                        binding.consAddEvent.visibility = View.VISIBLE
+
+                        // Save selected date and event ID
+                        userSelectedDate = m.scheduledDate
+                        eventId = m._id
+                    }else{
+                        showToast("This is another user event")
                     }
-
-                    binding.calendarCons.visibility = View.GONE
-                    binding.consAddEvent.visibility = View.VISIBLE
-                    userSelectedDate  = m.scheduledDate
-                    eventId = m._id
                 }
+
             }
         }
         binding.rvReminder.adapter = reminderAdapter
@@ -754,6 +768,21 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
             file.asRequestBody("image/png".toMediaTypeOrNull())
         )
     }
+
+
+    fun handleBackPress(): Boolean {
+        return if (binding.consAddEvent.visibility == View.VISIBLE) {
+            // 🔙 Switch back to calendar view
+            binding.consAddEvent.visibility = View.GONE
+            binding.calendarCons.visibility = View.VISIBLE
+            true // means handled here — don't exit fragment
+        } else {
+            false // not handled — activity should continue normal back
+        }
+    }
+
+
+
     override fun onResume() {
         super.onResume()
         getEventsData()

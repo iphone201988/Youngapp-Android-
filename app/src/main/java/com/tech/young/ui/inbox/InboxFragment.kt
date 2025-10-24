@@ -84,7 +84,9 @@ class InboxFragment : BaseFragment<FragmentInboxBinding>() {
                         _id = m.chatUsers?.get(0)?._id,
                         profileImage = m.chatUsers?.get(0)?.profileImage,
                         role = m.chatUsers?.get(0)?.role,
-                       username = fullName
+                       username =  m.chatUsers?.get(0)?.username,
+                        firstName =  m.chatUsers?.get(0)?.firstName,
+                        lastName =  m.chatUsers?.get(0)?.lastName
                     )
 //                    val intent=Intent(requireContext(),CommonActivity::class.java)
 //                    intent.putExtra("from","view_message")

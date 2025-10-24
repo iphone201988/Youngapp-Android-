@@ -158,13 +158,28 @@ class ViewMessageFragment : BaseFragment<FragmentViewMessageBinding>() {
          if (threadId != null){
              viewModel.getChatMessage(Constants.GET_CHAT_MESSAGE+threadId)
          }
-        if (userData != null){
-            recId = userData?._id
-            binding.tvUserName.text = userData?.username
-//            binding.tvRole.text = userData?.role
-            BindingUtils.setRoleText(binding.tvRole,userData?.role)
-            BindingUtils.setUserImageFromBaseUrl(binding.profileImage,userData?.profileImage)
+        if (userData != null) {
+            recId = userData!!._id
+
+            val firstName = userData!!.firstName?.takeIf { it.isNotBlank() }
+            val lastName = userData!!.lastName?.takeIf { it.isNotBlank() }
+            val username = userData!!.username?.takeIf { it.isNotBlank() }
+
+            val fullName = when {
+                !firstName.isNullOrEmpty() && !lastName.isNullOrEmpty() ->
+                    "$firstName $lastName${if (!username.isNullOrEmpty()) " ($username)" else ""}"
+                !firstName.isNullOrEmpty() ->
+                    "$firstName${if (!username.isNullOrEmpty()) " ($username)" else ""}"
+                !lastName.isNullOrEmpty() ->
+                    "$lastName${if (!username.isNullOrEmpty()) " ($username)" else ""}"
+                else -> username ?: ""
+            }
+
+            binding.tvUserName.text = fullName
+            BindingUtils.setRoleText(binding.tvRole, userData!!.role)
+            BindingUtils.setUserImageFromBaseUrl(binding.profileImage, userData!!.profileImage)
         }
+
 
 
 

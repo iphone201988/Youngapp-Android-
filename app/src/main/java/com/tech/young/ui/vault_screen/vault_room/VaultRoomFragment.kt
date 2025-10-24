@@ -64,7 +64,7 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
         socketHandler()
 
 
-        receivedMessage()
+
     //    joinVault()
         viewModel.getAds(Constants.GET_ADS)
         getCommentData()
@@ -205,6 +205,7 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
                         Log.i("VaultFragment", "✅ Socket connected/reconnected")
 
                         vaultId?.let {
+                            receivedMessage()
                             joinVault()
                         }
                     }
@@ -437,7 +438,7 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
                         else{
                             receivedMessage()
                             socketHandler()
-//                            joinVault()
+//
                             viewModel.joinLeaveRoom(Constants.JOIN_LEAVE_VAULT + vaultId)
 
 

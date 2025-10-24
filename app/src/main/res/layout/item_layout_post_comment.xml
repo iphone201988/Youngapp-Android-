@@ -39,12 +39,14 @@
         <TextView
             android:id="@+id/name"
             style="@style/TextView_500_Medium"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
-            android:text='@{bean.UserId.firstName +" " + bean.UserId.lastName}'
+            android:text='@{(bean.UserId.firstName != null ? bean.UserId.firstName : "") + " " + (bean.UserId.lastName != null ? bean.UserId.lastName : "") + (bean.UserId.username != null ? " (" + bean.UserId.username + ")" : "")}'
             android:textColor="@color/black"
-            android:textSize="@dimen/_14ssp"
+            android:singleLine="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="@dimen/_12ssp"
             android:layout_marginStart="@dimen/_5sdp"
             app:layout_constraintTop_toTopOf="@id/profileImage"
             app:layout_constraintStart_toEndOf="@id/profileImage"/>
@@ -84,16 +86,18 @@
             android:layout_height="wrap_content"
             android:text='@{bean.likesCount.toString() + " Booms"}'
             android:textSize="@dimen/_12ssp"
+            android:layout_marginTop="@dimen/_5sdp"
+
             android:textColor="@color/colorPrimary"
-            app:layout_constraintTop_toTopOf="@id/name"
-            app:layout_constraintBottom_toBottomOf="@id/date"
+            app:layout_constraintTop_toTopOf="@id/role"
+            app:layout_constraintBottom_toBottomOf="@id/role"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/likeBtn"
             setLikeIcon ="@{bean.isLiked()}"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
             android:src="@drawable/ic_heart"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:layout_marginEnd="@dimen/_5sdp"

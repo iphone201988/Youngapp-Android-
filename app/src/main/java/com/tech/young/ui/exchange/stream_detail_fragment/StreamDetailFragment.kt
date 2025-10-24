@@ -55,6 +55,8 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
     private var currentUserId : String? = null
     private var ownerUserId : String? = null
 
+    private var alreadyAdded : Boolean ?= null
+
     private var id : String ? = null
     private var name : String ? = null
     private lateinit var commentAdapter: SimpleRecyclerViewAdapter<GetCommentApiResponsePost.Data.Comment, ItemLayoutPostCommentBinding>
@@ -67,11 +69,11 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
     )
     override fun onCreateView(view: View) {
         initView()
-        initOnClick()
+
         initAdapter()
         initObserver()
 
-
+        initOnClick()
         binding.tabLayoutBottom.tabExchange.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.frameLayout, ExchangeFragment())
@@ -166,10 +168,30 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                 R.id.playBtn -> {
                     when {
                         scheduleDate != null -> {
+                            val utcDate = BindingUtils.utcStringToDate(scheduleDate)
                             // Stream is scheduled in future
+                            if (currentUserId.equals(ownerUserId)){
+                                if (utcDate != null && utcDate <= Date()){
+                                    val intent= Intent(requireContext(), CommonActivity::class.java)
+                                    intent.putExtra("from","live_stream")
+                                    intent.putExtra("room_id",streamId)
+                                    startActivity(intent)
+                                }
+                                else{
+                                    showToast("Stream is scheduled for a future date")
+                                }
+                            }else{
+                                if (alreadyAdded == true){
+                                    showToast("This stream is already scheduled")
+                                }else{
+                                    viewModel.scheduleSteam(Constants.SCHEDULE_STREAM+streamId)
+                                    showToast("This stream is schedule")
+                                }
+                            }
 
-                            viewModel.scheduleSteam(Constants.SCHEDULE_STREAM+streamId)
-                            Toast.makeText(requireContext(), "This stream is scheduled", Toast.LENGTH_SHORT).show()
+
+
+
                         }
 
                         !streamUrl.isNullOrEmpty() -> {
@@ -255,7 +277,7 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                             if (myDataModel != null) {
                                 myDataModel.data?.let { streamDetail ->
                                     binding.bean = streamDetail.post
-
+                                    alreadyAdded  = streamDetail.post?.isAlreadyAddedToCalendar
                                      scheduleDate = streamDetail.post?.scheduleDate
                                      streamUrl = streamDetail.post?.streamUrl
                                      currentUserId = sharedPrefManager.getUserId()
@@ -272,10 +294,15 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                                                 if (utcDate != null && utcDate <= Date()) {
                                                     binding.playBtn.text = "Start Live Streaming"
                                                 } else {
-                                                    binding.playBtn.text = "Schedule: $dateTime"
+                                                    binding.playBtn.text = "Schedule on : $dateTime"
                                                 }
                                             } else {
-                                                binding.playBtn.text = "Schedule: $dateTime"
+                                                if (alreadyAdded== true){
+                                                    binding.playBtn.text = "Scheduled: $dateTime"
+                                                }else{
+                                                    binding.playBtn.text = "Schedule: $dateTime"
+                                                }
+
                                             }
 
 
@@ -347,6 +374,10 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                         "scheduleSteam" ->{
                             val myDataModel : SimpleApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
+
+                                if (streamId != null){
+                                    viewModel.getShareDetail(Constants.GET_POST_BY_ID+streamId)
+                                }
                                 //   showToast(myDataModel.message.toString())
                             }
                         }

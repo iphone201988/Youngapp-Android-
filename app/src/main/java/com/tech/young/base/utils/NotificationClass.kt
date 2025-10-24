@@ -78,7 +78,9 @@ class NotificationClass : FirebaseMessagingService() {
             username = data["username"],
             profileImage = data["profileImage"],
             role = data["role"],
-            chatId = data["chatId"]
+            chatId = data["chatId"],
+            firstName = data["firstName"],
+            lastName = data["lastName"]
         )
     }
 }

@@ -146,9 +146,13 @@ class ShareConfirmationFragment : BaseFragment<FragmentShareConfirmationBinding>
                     data["title"] = shareData?.title.toString().toRequestBody()
                     data["description"] = shareData?.description.toString().toRequestBody()
                     data["topic"] = shareData?.topic.toString().toRequestBody()
-                    data["symbol"] = shareData?.symbol.toString().toRequestBody()
+                    shareData?.symbol?.takeIf { it.isNotEmpty() }?.let {
+                        data["symbol"] = it.toRequestBody()
+                    }
+                    shareData?.symbolValue?.takeIf { it.isNotEmpty() }?.let {
+                        data["symbolValue"] = it.toRequestBody()
+                    }
                     data["type"] = "share".toRequestBody()
-                    data["symbolValue"] = shareData?.symbolValue.toString().toRequestBody()
                     viewModel.sharePost(data, Constants.CREATE_SHARE,multipartImage)
                 }
 

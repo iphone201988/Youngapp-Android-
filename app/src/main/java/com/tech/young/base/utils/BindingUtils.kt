@@ -1212,4 +1212,32 @@ object BindingUtils {
         }
     }
 
+
+    @BindingAdapter("checkIfExpired")
+    @JvmStatic
+    fun checkIfExpired(textView: TextView, scheduledDate: String?) {
+        if (scheduledDate.isNullOrEmpty()) {
+            textView.visibility = View.GONE
+            return
+        }
+
+        try {
+            // Parse the ISO 8601 date string
+            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            sdf.timeZone = TimeZone.getTimeZone("UTC")
+            val eventDate = sdf.parse(scheduledDate)
+
+            val currentDate = Calendar.getInstance().time
+
+            textView.visibility = if (eventDate != null && eventDate.before(currentDate)) {
+                View.VISIBLE // Event is in the past
+            } else {
+                View.GONE // Event is upcoming
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            textView.visibility = View.GONE
+        }
+    }
+
 }

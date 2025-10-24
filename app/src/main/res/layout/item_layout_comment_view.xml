@@ -38,10 +38,10 @@
             style="@style/TextView_500_Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text='@{bean.UserId.firstName + " " + bean.UserId.lastName}'
+            android:text='@{(bean.UserId.firstName != null ? bean.UserId.firstName : "") + " " + (bean.UserId.lastName != null ? bean.UserId.lastName : "") + (bean.UserId.username != null ? " (" + bean.UserId.username + ")" : "")}'
             android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginStart="@dimen/_5sdp"
-            android:textSize="@dimen/_14ssp"
+            android:textSize="@dimen/_12ssp"
             android:layout_marginEnd="@dimen/_5sdp"
             android:singleLine="true"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
@@ -49,6 +49,19 @@
             app:layout_constraintEnd_toStartOf="@id/ivHearts"
             app:layout_constraintTop_toTopOf="@id/profileImage"
             app:layout_constraintStart_toEndOf="@id/profileImage"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/role"
+            style="@style/TextView_400_Regular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:text="@{bean.UserId.role}"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintTop_toBottomOf="@id/tvUserName"
+            app:layout_constraintStart_toStartOf="@id/tvUserName"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDate"
@@ -61,8 +74,9 @@
             android:singleLine="true"
             android:textColor="@color/grey"
             app:layout_constraintEnd_toEndOf="@id/tvUserName"
-            app:layout_constraintTop_toBottomOf="@id/tvUserName"
+            app:layout_constraintTop_toBottomOf="@id/role"
             app:layout_constraintStart_toStartOf="@id/tvUserName"/>
+
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/likesData"
