@@ -456,7 +456,7 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
             isSymbolRequired = true
             binding.etSymbol.isEnabled = true
             binding.etSymbol.alpha = 1f
-            selectedOption = "stock"
+            selectedOption = "Stock"
             binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_selected)
             binding.noOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
         }
@@ -465,7 +465,7 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
             isSymbolRequired = true
             binding.etSymbol.isEnabled = true
             binding.etSymbol.alpha = 1f
-            selectedOption = "crypto"
+            selectedOption = "Crypto"
             binding.noOption.box.setBackgroundResource(R.drawable.ic_check_selected)
             binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
         }

@@ -97,7 +97,7 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start"
                     android:hint="Write here..."
-                    android:inputType="textCapSentences"
+                    android:inputType="textMultiLine|textCapSentences"
                     android:text="@{bean.user.about}"
                     android:onClick="@{v ->vm.onClick(v)}"
                     android:padding="@dimen/_10sdp"

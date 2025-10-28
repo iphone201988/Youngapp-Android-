@@ -147,7 +147,7 @@ class ShareConfirmationFragment : BaseFragment<FragmentShareConfirmationBinding>
                     data["description"] = shareData?.description.toString().toRequestBody()
                     data["topic"] = shareData?.topic.toString().toRequestBody()
                     shareData?.symbol?.takeIf { it.isNotEmpty() }?.let {
-                        data["symbol"] = it.toRequestBody()
+                        data["symbol"] = it.lowercase().toRequestBody()
                     }
                     shareData?.symbolValue?.takeIf { it.isNotEmpty() }?.let {
                         data["symbolValue"] = it.toRequestBody()

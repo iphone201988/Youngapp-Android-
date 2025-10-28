@@ -354,7 +354,7 @@
                         android:background="@drawable/radius_border_gray"
                         android:gravity="start|top"
                         android:hint="Write here..."
-                        android:inputType="textCapSentences"
+                        android:inputType="textMultiLine|textCapSentences"
                         android:paddingVertical="@dimen/_10sdp"
                         android:paddingHorizontal="@dimen/_10sdp"
                         android:textColorHint="@color/text_gray"

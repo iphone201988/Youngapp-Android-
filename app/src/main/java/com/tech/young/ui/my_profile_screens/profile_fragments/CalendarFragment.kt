@@ -82,6 +82,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
     var isImageDeleted = false
 
     private  var from : String ? = null
+    private var editable : String ? = null
 
     private var eventId : String ? = null
     private var page  = 1
@@ -216,42 +217,52 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                 R.id.consMain -> {
                     val userId = sharedPrefManager.getUserId()
                     Log.i("dsadsad", "initAdapter: $userId ")
+                    from = "Edit"
+
+                    // Set text fields
+                    binding.etTitle.setText(m.title)
+                    binding.etTopic.setText(m.topic)
+                    binding.etDescription.setText(m.description)
+                    binding.etUploadFile.setText(m.file)
+
+                    // Handle image preview
+                    if (!m.file.isNullOrEmpty()) {
+                        Glide.with(binding.previewImage.context)
+                            .load(Constants.BASE_URL_IMAGE + m.file)
+                            .centerCrop()
+                            .placeholder(R.drawable.dummy_profile)
+                            .error(R.drawable.dummy_profile)
+                            .into(binding.previewImage)
+
+                        binding.previewImage.scaleType = ImageView.ScaleType.CENTER_CROP
+                        binding.previewImage.visibility = View.VISIBLE
+                        binding.deleteImage.visibility = View.VISIBLE
+                    } else {
+                        binding.previewImage.visibility = View.GONE
+                        binding.deleteImage.visibility = View.GONE
+                    }
+
+                    // Switch to Add/Edit Event view
+                    binding.calendarCons.visibility = View.GONE
+                    binding.consAddEvent.visibility = View.VISIBLE
+
+                    // Save selected date and event ID
+                    userSelectedDate = m.scheduledDate
+                    eventId = m._id
 
                     if (userId == m.userId && m.type != "other_user_scheduled_lives") {
-                        from = "Edit"
+                        editable = "Yes"
+                        binding.etTitle.isFocusable = true
+                        binding.etDescription.isFocusable = true
+                        binding.etUploadFile.isFocusable = true
 
-                        // Set text fields
-                        binding.etTitle.setText(m.title)
-                        binding.etTopic.setText(m.topic)
-                        binding.etDescription.setText(m.description)
-                        binding.etUploadFile.setText(m.file)
-
-                        // Handle image preview
-                        if (!m.file.isNullOrEmpty()) {
-                            Glide.with(binding.previewImage.context)
-                                .load(Constants.BASE_URL_IMAGE + m.file)
-                                .centerCrop()
-                                .placeholder(R.drawable.dummy_profile)
-                                .error(R.drawable.dummy_profile)
-                                .into(binding.previewImage)
-
-                            binding.previewImage.scaleType = ImageView.ScaleType.CENTER_CROP
-                            binding.previewImage.visibility = View.VISIBLE
-                            binding.deleteImage.visibility = View.VISIBLE
-                        } else {
-                            binding.previewImage.visibility = View.GONE
-                            binding.deleteImage.visibility = View.GONE
-                        }
-
-                        // Switch to Add/Edit Event view
-                        binding.calendarCons.visibility = View.GONE
-                        binding.consAddEvent.visibility = View.VISIBLE
-
-                        // Save selected date and event ID
-                        userSelectedDate = m.scheduledDate
-                        eventId = m._id
                     }else{
-                        showToast("This is another user event")
+                        editable = "No"
+                        binding.etTitle.isFocusable  = false
+                        binding.etDescription.isFocusable = false
+                        binding.etUploadFile.isFocusable = false
+
+
                     }
                 }
 
@@ -501,15 +512,27 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                     binding.consAddEvent.visibility = View.GONE
                 }
                 R.id.etTopic ->{
-                    binding.rvTopics.visibility = View.VISIBLE
+                    if (from ==  "Edit" && editable == "No"){
+                        binding.rvTopics.visibility = View.GONE
+                    }else{
+                        binding.rvTopics.visibility = View.VISIBLE
+
+                    }
                 }
                 R.id.etUploadFile ->{
-                    ImagePicker.with(this)
-                        .compress(1024)
-                        .maxResultSize(1080, 1080)
-                        .createIntent { intent ->
-                            startForImageResult.launch(intent)
-                        }
+                    if (from ==  "Edit" && editable == "No"){
+
+                    }else{
+                        ImagePicker.with(this)
+                            .compress(1024)
+                            .maxResultSize(1080, 1080)
+                            .createIntent { intent ->
+                                startForImageResult.launch(intent)
+                            }
+                    }
+
+
+
                 }
                 R.id.deleteImage -> {
                     binding.previewImage.visibility = View.GONE
