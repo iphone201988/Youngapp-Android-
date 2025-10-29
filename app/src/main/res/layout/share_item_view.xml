@@ -150,7 +150,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_8sdp"
             android:paddingHorizontal="@dimen/_8sdp"
-            android:text='@{bean.symbol != null ? (bean.symbolValue != null ? bean.symbol + ": " + bean.symbolValue : "") : ""}'
+            app:bindSavedSymbolText="@{bean}"
             android:visibility='@{bean.symbol != null ? (bean.symbolValue != null ? View.VISIBLE : View.GONE) : View.GONE}'
             android:singleLine="true"
             android:textSize="@dimen/_12ssp"

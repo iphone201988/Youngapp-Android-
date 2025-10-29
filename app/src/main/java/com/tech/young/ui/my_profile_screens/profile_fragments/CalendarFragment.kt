@@ -22,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
@@ -146,26 +147,44 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
         }
 
 
-        binding.rvReminder.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                // 👇 Only continue if scrolling down
-                if (dy <= 0) return
 
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val visibleItemCount = layoutManager.childCount
-                val totalItemCount = layoutManager.itemCount
-                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+        binding.nestedScrollView.setOnScrollChangeListener { v: NestedScrollView, _, scrollY, _, oldScrollY ->
+            val view = v.getChildAt(v.childCount - 1)
+            if (view != null) {
+                val diff = view.bottom - (v.height + v.scrollY)
+                if (diff <= 0 && scrollY > oldScrollY) {
 
-                if (!isLoading && page < totalPages!!) {
-                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
-                        firstVisibleItemPosition >= 0
-                    ) {
-                        isLoading = true // ✅ Lock before load
+                    Log.d("Pagination", "Reached bottom, loading next page…")
+                    // ✅ User reached bottom
+                    if (!isLoading && page < totalPages!!) {
+                        isLoading = true
                         loadMoreData()
                     }
                 }
             }
-        })
+        }
+
+
+//        binding.rvReminder.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                // 👇 Only continue if scrolling down
+//                if (dy <= 0) return
+//
+//                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+//                val visibleItemCount = layoutManager.childCount
+//                val totalItemCount = layoutManager.itemCount
+//                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+//
+//                if (!isLoading && page < totalPages!!) {
+//                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
+//                        firstVisibleItemPosition >= 0
+//                    ) {
+//                        isLoading = true // ✅ Lock before load
+//                        loadMoreData()
+//                    }
+//                }
+//            }
+//        })
 
     }
 
@@ -175,6 +194,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
         Log.i("dsadasd", "onLoadMore: $page")
         val data =  HashMap<String,Any>()
         data["page"] = page
+
         viewModel.getEvents(data, Constants.GET_EVENTS)
     }
 
@@ -202,6 +222,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
     }
 
     private fun getEventsData() {
+        page = 1
         val data =  HashMap<String,Any>()
         data["page"] = 1
         data["limit"] = 50
@@ -256,11 +277,21 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                         binding.etDescription.isFocusable = true
                         binding.etUploadFile.isFocusable = true
 
+                        binding.tvSubmit.visibility = View.VISIBLE
+                        binding.tvUploadFile.visibility = View.VISIBLE
+                        binding.etUploadFile.visibility = View.VISIBLE
+                        binding.tvMinimumSize.visibility  = View.VISIBLE
+
                     }else{
                         editable = "No"
                         binding.etTitle.isFocusable  = false
                         binding.etDescription.isFocusable = false
                         binding.etUploadFile.isFocusable = false
+
+                        binding.tvSubmit.visibility = View.GONE
+                        binding.tvUploadFile.visibility = View.GONE
+                        binding.etUploadFile.visibility = View.GONE
+                        binding.tvMinimumSize.visibility  = View.GONE
 
 
                     }

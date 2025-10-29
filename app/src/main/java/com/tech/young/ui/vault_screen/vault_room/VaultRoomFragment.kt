@@ -9,8 +9,11 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.tech.young.BR
 import com.tech.young.R
@@ -58,6 +61,11 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
     private var id : String ? = null
     private var name : String ? = null
 
+    private var page  = 1
+    private var isLoading = false
+    private var isLastPage = false
+    private var totalPages : Int ? = null
+
     private val viewModel: VaultRoomVM by viewModels()
     override fun onCreateView(view: View) {
         getVaultData()
@@ -74,6 +82,28 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
         initAdapter()
 
         setObserver()
+
+
+
+        binding.nestedScrollView.setOnScrollChangeListener { v: NestedScrollView, _, scrollY, _, oldScrollY ->
+            val view = v.getChildAt(v.childCount - 1)
+            if (view != null) {
+                val diff = view.bottom - (v.height + v.scrollY)
+                if (diff <= 0 && scrollY > oldScrollY) {
+
+                    Log.d("Pagination", "Reached bottom, loading next page…")
+                    // ✅ User reached bottom
+                    if (!isLoading && page < totalPages!!) {
+                        isLoading = true
+                        loadNextPage()
+                    }
+                }
+            }
+        }
+
+
+
+
 
 
         binding.tabLayoutBottom.tabExchange.setOnClickListener {
@@ -108,6 +138,19 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
             // Only adjust padding if keyboard is visible
             view.setPadding(0, 0, 0, imeHeight)
             insets
+        }
+    }
+
+    private fun loadNextPage() {
+        isLoading = true
+        page++
+
+        val data = HashMap<String,Any>()
+        if (vaultId != null){
+            data["id"] = vaultId.toString()
+            data ["type"] =  "vault"
+            data["page"] =  page
+            viewModel.getComment(data,Constants.GET_COMMENT)
         }
     }
 
@@ -245,10 +288,12 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
     }
 
     private fun getCommentData() {
+        page = 1
         val data = HashMap<String,Any>()
         if (vaultId != null){
             data["id"] = vaultId.toString()
             data ["type"] =  "vault"
+            data["page"] = 1
             viewModel.getComment(data,Constants.GET_COMMENT)
         }
 
@@ -343,9 +388,22 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
                         "getComment" ->{
                             val myDataModel : GetCommentApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
-                                if (myDataModel.data?.comments != null){
-                                    commentAdapter.list = myDataModel.data?.comments
+                                totalPages = myDataModel.data?.pagination?.total ?: 1
+
+                                if (page <= totalPages!!) {
+                                    isLoading = false
                                 }
+                                if (page == 1){
+                                    commentAdapter.list = myDataModel.data?.comments
+                                    commentAdapter.notifyDataSetChanged()
+                                } else{
+                                    commentAdapter.addToList(myDataModel.data?.comments)
+                                    commentAdapter.notifyDataSetChanged()
+
+                                }
+//                                if (myDataModel.data?.comments != null){
+//                                    commentAdapter.list = myDataModel.data?.comments
+//                                }
                             }
                         }
                         "addComment" ->{

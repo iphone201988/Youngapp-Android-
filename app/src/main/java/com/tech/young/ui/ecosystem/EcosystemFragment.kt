@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -83,26 +84,43 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
         searchView()
         initObserver()
 
-        binding.rvUsers.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                // 👇 Only continue if scrolling down
-                if (dy <= 0) return
+//        binding.rvUsers.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                // 👇 Only continue if scrolling down
+//                if (dy <= 0) return
+//
+//                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+//                val visibleItemCount = layoutManager.childCount
+//                val totalItemCount = layoutManager.itemCount
+//                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+//
+//                if (!isLoading && page < totalPages!!) {
+//                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
+//                        firstVisibleItemPosition >= 0
+//                    ) {
+//                        isLoading = true // ✅ Lock before load
+//                        selectedCategoryTitle?.let { loadNextPage(it) }
+//                    }
+//                }
+//            }
+//        })
 
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val visibleItemCount = layoutManager.childCount
-                val totalItemCount = layoutManager.itemCount
-                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
-                if (!isLoading && page < totalPages!!) {
-                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
-                        firstVisibleItemPosition >= 0
-                    ) {
-                        isLoading = true // ✅ Lock before load
+        binding.nestedScrollView.setOnScrollChangeListener { v: NestedScrollView, _, scrollY, _, oldScrollY ->
+            val view = v.getChildAt(v.childCount - 1)
+            if (view != null) {
+                val diff = view.bottom - (v.height + v.scrollY)
+                if (diff <= 0 && scrollY > oldScrollY) {
+
+                    Log.d("Pagination", "Reached bottom, loading next page…")
+                    // ✅ User reached bottom
+                    if (!isLoading && page < totalPages!!) {
+                        isLoading = true
                         selectedCategoryTitle?.let { loadNextPage(it) }
                     }
                 }
             }
-        })
+        }
 
 
         binding.tabLayoutBottom.tabEcosystem.setOnClickListener {
@@ -146,6 +164,8 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
         if (searchData != null){
             data["search"] = searchData!!
         }
+        data["page"] = page
+        data["limit"] = 20
 
         viewModel.getLatestUser(data,Constants.GET_USERS)
     }
@@ -259,6 +279,7 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
 //    }
 
     private fun getLatestUser(title: String) {
+        page = 1
         val apiTitle = mapTitleToApiValue(title)  // ← safe mapping for userType
         Log.i("Dasdasd", "getShareExchange:$apiTitle ")
 
@@ -281,6 +302,8 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
             data["search"] = searchData!!
         }
 
+        data["page"] = 1
+        data["limit"] = 20
         viewModel.getLatestUser(data,Constants.GET_USERS)
 
     }
@@ -317,7 +340,20 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
                              if (myDataModel != null){
                                  if (myDataModel.data != null){
                                      if (myDataModel.data?.users != null){
-                                         usersAdapter.list = myDataModel.data?.users
+                                         totalPages = myDataModel?.pagination?.totalPages ?: 1
+
+                                         if (page <= totalPages!!) {
+                                             isLoading = false
+                                         }
+                                         if (page == 1){
+                                             usersAdapter.list = myDataModel.data?.users
+                                             usersAdapter.notifyDataSetChanged()
+                                         } else{
+                                             usersAdapter.addToList(myDataModel.data?.users)
+                                             usersAdapter.notifyDataSetChanged()
+
+                                         }
+                                     //    usersAdapter.list = myDataModel.data?.users
                                      }
                                  }
                              }

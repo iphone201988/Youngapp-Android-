@@ -204,6 +204,7 @@
                         android:layout_width="@dimen/_12sdp"
                         android:layout_height="@dimen/_12sdp"
                         android:src="@drawable/iv_right_arrow"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="@id/tvReminder"
                          app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/tvReminder"
@@ -218,6 +219,7 @@
                         android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/_14ssp"
+                        android:visibility="gone"
                         android:layout_marginEnd="@dimen/_3sdp"
                         app:layout_constraintBottom_toBottomOf="@id/tvReminder"
                         app:layout_constraintEnd_toStartOf="@id/showAll"
@@ -229,6 +231,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:orientation="vertical"
+                        android:nestedScrollingEnabled="false"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         app:layout_constraintEnd_toEndOf="@id/showAll"
                         app:layout_constraintStart_toStartOf="@id/tvReminder"
@@ -414,6 +417,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/tvUploadFile" />
 
                     <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivDoc"
                         android:layout_width="@dimen/_16sdp"
                         android:layout_height="@dimen/_16sdp"
                         android:src="@drawable/iv_upload_doc"
@@ -517,10 +521,10 @@
                         android:text="Cancel"
                         android:textColor="@color/colorPrimary"
                         android:visibility="visible"
+                        android:layout_marginTop="@dimen/_30sdp"
                         app:layout_constraintStart_toEndOf="@id/tvSubmit"
-                        app:layout_constraintBottom_toBottomOf="@id/tvSubmit"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/tvSubmit"/>
+                        app:layout_constraintTop_toBottomOf="@id/consVisibility"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

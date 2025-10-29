@@ -57,6 +57,7 @@ import com.tech.young.data.SubViewClickBean
 import com.tech.young.data.model.ExchangeShareApiResponse
 import com.tech.young.data.model.GetOtherUserProfileData
 import com.tech.young.data.model.GetProfileApiResponse
+import com.tech.young.data.model.GetSavedPostApiResponse
 import com.tech.young.databinding.ItemLayoutSubNewsBinding
 import com.tech.young.databinding.VaultItemViewBinding
 import com.tech.young.ui.common.CommonActivity
@@ -1245,6 +1246,25 @@ object BindingUtils {
     @BindingAdapter("bindSymbolText")
     @JvmStatic
     fun bindSymbolText(textView: TextView, post: ExchangeShareApiResponse.Data.Post?) {
+        val symbol = post?.symbol?.trim()
+        val symbolValue = post?.symbolValue?.trim()
+
+        if (!symbol.isNullOrEmpty() && !symbolValue.isNullOrEmpty()) {
+            // Capitalize first letter of symbol safely
+            val formattedSymbol = symbol.replaceFirstChar { it.uppercaseChar() }
+            textView.text = "$formattedSymbol: $symbolValue"
+            textView.visibility = View.VISIBLE
+        } else {
+            textView.text = ""
+            textView.visibility = View.GONE
+        }
+    }
+
+
+
+    @BindingAdapter("bindSavedSymbolText")
+    @JvmStatic
+    fun bindSavedSymbolText(textView: TextView, post: GetSavedPostApiResponse.Data.Post?) {
         val symbol = post?.symbol?.trim()
         val symbolValue = post?.symbolValue?.trim()
 
