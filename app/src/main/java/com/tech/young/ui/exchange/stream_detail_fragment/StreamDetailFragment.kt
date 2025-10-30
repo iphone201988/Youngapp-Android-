@@ -184,8 +184,16 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                                 if (alreadyAdded == true){
                                     showToast("This stream is already scheduled")
                                 }else{
-                                    viewModel.scheduleSteam(Constants.SCHEDULE_STREAM+streamId)
-                                    showToast("This stream is schedule")
+                                    if (utcDate != null && utcDate.before(Date())) {
+                                        // ✅ If scheduled date is in the past
+                                        showToast("This stream schedule date has already passed")
+                                    } else {
+                                        // ✅ Schedule the stream
+                                        viewModel.scheduleSteam(Constants.SCHEDULE_STREAM + streamId)
+                                        showToast("This stream is scheduled")
+                                    }
+//                                    viewModel.scheduleSteam(Constants.SCHEDULE_STREAM+streamId)
+//                                    showToast("This stream is schedule")
                                 }
                             }
 

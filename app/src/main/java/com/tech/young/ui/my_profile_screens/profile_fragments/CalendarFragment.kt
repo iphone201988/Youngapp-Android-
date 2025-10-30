@@ -281,6 +281,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                         binding.tvUploadFile.visibility = View.VISIBLE
                         binding.etUploadFile.visibility = View.VISIBLE
                         binding.tvMinimumSize.visibility  = View.VISIBLE
+                        binding.ivDoc.visibility = View.VISIBLE
 
                     }else{
                         editable = "No"
@@ -292,7 +293,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                         binding.tvUploadFile.visibility = View.GONE
                         binding.etUploadFile.visibility = View.GONE
                         binding.tvMinimumSize.visibility  = View.GONE
-
+                        binding.ivDoc.visibility = View.GONE
 
                     }
                 }
@@ -477,8 +478,33 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                     updateCalendar()
                 }
                 R.id.addEvent ->{
+                    from = ""
+                    editable = ""
+                    binding.etDescription.setText("")
+                    binding.etTitle.setText("")
+                    binding.etTopic.setText("")
+                    binding.etUploadFile.setText("")
+
+
+                    // ✅ Re-enable editing
+                    binding.etTitle.isEnabled = true
+                    binding.etTitle.isFocusable = true
+                    binding.etTitle.isFocusableInTouchMode = true
+
+                    binding.etDescription.isEnabled = true
+                    binding.etDescription.isFocusable = true
+                    binding.etDescription.isFocusableInTouchMode = true
+
+                    binding.tvSubmit.visibility = View.VISIBLE
+                    binding.tvUploadFile.visibility = View.VISIBLE
+                    binding.etUploadFile.visibility = View.VISIBLE
+                    binding.tvMinimumSize.visibility  = View.VISIBLE
+                    binding.ivDoc.visibility = View.VISIBLE
+
                     binding.calendarCons.visibility = View.GONE
                     binding.consAddEvent.visibility = View.VISIBLE
+
+
                 }
 //                R.id.tvSubmit ->{
 //                    if (isEmptyField()){
