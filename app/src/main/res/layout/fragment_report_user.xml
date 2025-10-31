@@ -144,6 +144,7 @@
             android:layout_marginTop="@dimen/_3sdp"
             android:background="@drawable/radius_border_gray"
             android:gravity="start|top"
+            android:inputType="textMultiLine|textCapSentences"
             android:hint="Write here..."
             android:paddingVertical="@dimen/_10sdp"
             android:paddingHorizontal="@dimen/_10sdp"

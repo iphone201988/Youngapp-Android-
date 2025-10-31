@@ -289,6 +289,8 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                         binding.etDescription.isFocusable = false
                         binding.etUploadFile.isFocusable = false
 
+
+                        binding.deleteImage.visibility = View.GONE
                         binding.tvSubmit.visibility = View.GONE
                         binding.tvUploadFile.visibility = View.GONE
                         binding.etUploadFile.visibility = View.GONE

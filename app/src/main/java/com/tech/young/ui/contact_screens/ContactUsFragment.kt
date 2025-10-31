@@ -13,6 +13,7 @@ import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.text.TextUtils
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
@@ -89,6 +90,15 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
         initAdapter()
 
         initObserver()
+
+        binding.etMessage.setOnTouchListener { v, event ->
+            val parent = v.parent ?: return@setOnTouchListener false  // Safely accessing the parent
+            parent.requestDisallowInterceptTouchEvent(true)
+            when (event.action and MotionEvent.ACTION_MASK) {
+                MotionEvent.ACTION_UP -> parent.requestDisallowInterceptTouchEvent(false)
+            }
+            false
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.nestedScrollView) { view, insets ->
             val imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom

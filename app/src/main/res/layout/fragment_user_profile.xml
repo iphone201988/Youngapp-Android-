@@ -243,7 +243,6 @@
                             android:gravity="center"
                             android:text="Followed by"
                             android:singleLine="true"
-
                             android:textColor="@color/gray"
                             android:textSize="@dimen/_12ssp"
                             android:textStyle="normal" />
@@ -548,7 +547,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:layout_marginTop="@dimen/_2sdp"
-
                         android:paddingStart="@dimen/_5sdp"
                         android:text="@{bean.city}"
                         android:textColor="@color/gray"
@@ -908,6 +906,7 @@
                         android:id="@+id/tvAsk"
                         style="@style/TextView_500_Medium"
                         android:layout_width="0dp"
+                        android:visibility='@{bean.role.equals("general_member") ? View.GONE : View.VISIBLE}'
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:text="Are you connected to this profile?"
@@ -921,6 +920,7 @@
                         android:layout_height="@dimen/_20sdp"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:onClick="@{v->vm.onClick(v)}"
+                        android:visibility='@{bean.role.equals("general_member") ? View.GONE : View.VISIBLE}'
                         android:scaleType="centerCrop"
                         android:src="@{bean.isConnectedWithProfile ? @drawable/ic_check_selected : @drawable/ic_check_unselected}"
                         app:layout_constraintStart_toStartOf="parent"
@@ -933,6 +933,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:text="Yes,I'm a customer."
+                        android:visibility='@{bean.role.equals("general_member") ? View.GONE : View.VISIBLE}'
                         android:textColor="@color/text_gray"
                         android:textSize="@dimen/_14ssp"
                         app:layout_constraintEnd_toEndOf="parent"

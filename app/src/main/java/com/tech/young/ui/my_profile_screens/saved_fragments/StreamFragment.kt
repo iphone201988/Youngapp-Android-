@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -33,6 +35,15 @@ class StreamFragment : BaseFragment<FragmentStreamBinding>() {
     private lateinit var streamAdapter: SimpleRecyclerViewAdapter<GetSavedPostApiResponse.Data.Post, StreamItemViewBinding>
     private var apiTitle : String ? = null
 
+    private var page  = 1
+    private var isLoading = false
+    private var isLastPage = false
+    private var totalPages : Int ? = null
+
+
+    private var selectedCategoryTitle: String = "Members"
+
+
     override fun onCreateView(view: View) {
        // view
         initView()
@@ -41,7 +52,56 @@ class StreamFragment : BaseFragment<FragmentStreamBinding>() {
         initOnClick()
         // observer
         initObserver()
+
+
+        binding.rvShare.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                // 👇 Only continue if scrolling down
+                if (dy <= 0) return
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (!isLoading && page < totalPages!!) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
+                        firstVisibleItemPosition >= 0
+                    ) {
+                        isLoading = true // ✅ Lock before load
+
+                        loadMoreData()
+
+                    }
+                }
+            }
+
+
+        })
+
+
     }
+
+
+    private fun loadMoreData() {
+        page ++
+        isLoading = true
+
+
+        val data = HashMap<String,Any>()
+        if (apiTitle != null){
+            data["userType"] =  apiTitle.toString()
+        }
+        else{
+            data["userType"] = "general_member"
+        }
+        data["type"] = "stream"
+        data["page"] = page
+        data["limit"] = 20
+        viewModel.savedShare(data, Constants.GET_SAVED_POST)
+    }
+
+
 
     override fun getLayoutResource(): Int {
         return R.layout.fragment_stream
@@ -53,20 +113,18 @@ class StreamFragment : BaseFragment<FragmentStreamBinding>() {
 
 
     private fun getSavedData() {
-        if (apiTitle != null){
+           page = 1
             val data = HashMap<String,Any>()
-            data["userType"] =  apiTitle.toString()
+            if (apiTitle != null){
+                data["userType"] =  apiTitle.toString()
+            }
+            else{
+                data["userType"] = "general_member"
+            }
             data["type"] = "stream"
             data["page"] = 1
+            data["limit"] = 20
             viewModel.savedShare(data, Constants.GET_SAVED_POST)
-        }
-        else{
-            val data = HashMap<String,Any>()
-            data["userType"] = "general_member"
-            data["type"] = "stream"
-            data["page"] = 1
-            viewModel.savedShare(data, Constants.GET_SAVED_POST)
-        }
 
     }
 
@@ -96,7 +154,21 @@ class StreamFragment : BaseFragment<FragmentStreamBinding>() {
                             var myDataModel : GetSavedPostApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data!= null){
-                                    streamAdapter.list = myDataModel.data!!.posts
+
+                                    totalPages = myDataModel.pagination?.total ?: 1
+                                    if (page <= totalPages!!) {
+                                        isLoading = false
+                                    }
+                                    if (page == 1){
+                                        streamAdapter.list = myDataModel.data?.posts
+                                        streamAdapter.notifyDataSetChanged()
+                                    } else{
+                                        streamAdapter.addToList(myDataModel.data?.posts)
+                                        streamAdapter.notifyDataSetChanged()
+
+                                    }
+
+                                 //   streamAdapter.list = myDataModel.data!!.posts
                                 }
                             }
                         }
@@ -118,7 +190,9 @@ class StreamFragment : BaseFragment<FragmentStreamBinding>() {
         categoryAdapter=SimpleRecyclerViewAdapter(R.layout.category_item_view, BR.bean){ v, m, pos->
             when(v.id){
                 R.id.clMain->{
+                    page = 1
                     apiTitle = mapTitleToApiValue(m.title)
+                    selectedCategoryTitle = m.title
                     val data = HashMap<String,Any>()
                     data["userType"] = apiTitle!!
                     data["type"] = "stream"
@@ -213,5 +287,13 @@ class StreamFragment : BaseFragment<FragmentStreamBinding>() {
     override fun onResume() {
         super.onResume()
         getSavedData()
+        restoreSelectedCategory()
+    }
+
+    private fun restoreSelectedCategory() {
+        categoryAdapter.list.forEach {
+            it.isSelected = it.title == selectedCategoryTitle
+        }
+        categoryAdapter.notifyDataSetChanged()
     }
 }

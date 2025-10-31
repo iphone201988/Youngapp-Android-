@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -32,6 +34,14 @@ class ShareFragment : BaseFragment<FragmentShareBinding>() {
     private lateinit var categoryAdapter:SimpleRecyclerViewAdapter<CategoryModel,CategoryItemViewBinding>
     private lateinit var shareAdapter:SimpleRecyclerViewAdapter<GetSavedPostApiResponse.Data.Post, ShareItemViewBinding>
 
+    private var page  = 1
+    private var isLoading = false
+    private var isLastPage = false
+    private var totalPages : Int ? = null
+
+    private var apiTitle : String ? = null
+
+    private var selectedCategoryTitle: String = "Members"
 
 
 
@@ -39,19 +49,70 @@ class ShareFragment : BaseFragment<FragmentShareBinding>() {
         // view
         initView()
 
-        getSavedData()
+    //    getSavedData()
         // click
         initOnClick()
         // observer
         initObserver()
-    }
 
-    private fun getSavedData() {
+
+
+        binding.rvShare.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                // 👇 Only continue if scrolling down
+                if (dy <= 0) return
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (!isLoading && page < totalPages!!) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
+                        firstVisibleItemPosition >= 0
+                    ) {
+                        isLoading = true // ✅ Lock before load
+
+                        loadMoreData()
+
+                    }
+                }
+            }
+
+
+        })
+    }
+    private fun loadMoreData() {
+        page ++
+        isLoading = true
+
 
         val data = HashMap<String,Any>()
-        data["userType"] = "general_member"
+        if (apiTitle != null){
+            data["userType"] = apiTitle.toString()
+        }
+        else{
+            data["userType"] = "general_member"
+        }
+
+        data["type"] = "share"
+        data["page"] = page
+        data["limit"] = 20
+        viewModel.savedShare(data,Constants.GET_SAVED_POST)
+    }
+    private fun getSavedData() {
+        page = 1
+        val data = HashMap<String,Any>()
+        if (apiTitle != null){
+            data["userType"] = apiTitle.toString()
+        }
+        else{
+            data["userType"] = "general_member"
+        }
+
         data["type"] = "share"
         data["page"] = 1
+        data["limit"] = 20
         viewModel.savedShare(data,Constants.GET_SAVED_POST)
 
 
@@ -90,9 +151,23 @@ class ShareFragment : BaseFragment<FragmentShareBinding>() {
                         "savedShare" ->{
                             var myDataModel : GetSavedPostApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
-                                if (myDataModel.data!= null){
-                                    shareAdapter.list = myDataModel.data!!.posts
+                                totalPages = myDataModel.pagination?.total ?: 1
+                                if (page <= totalPages!!) {
+                                    isLoading = false
                                 }
+                                if (page == 1){
+                                    shareAdapter.list = myDataModel.data!!.posts
+                                    shareAdapter.notifyDataSetChanged()
+                                } else{
+                                    shareAdapter.addToList(myDataModel.data?.posts)
+                                    shareAdapter.notifyDataSetChanged()
+
+                                }
+
+
+//                                if (myDataModel.data!= null){
+//                                    shareAdapter.list = myDataModel.data!!.posts
+//                                }
                             }
                         }
                     }
@@ -113,11 +188,15 @@ class ShareFragment : BaseFragment<FragmentShareBinding>() {
         categoryAdapter=SimpleRecyclerViewAdapter(R.layout.category_item_view,BR.bean){v,m,pos->
             when(v.id){
                 R.id.clMain->{
-                    val apiTitle = mapTitleToApiValue(m.title)
+                    apiTitle = mapTitleToApiValue(m.title)
+                    selectedCategoryTitle = m.title
+
+                    page = 1
                     val data = HashMap<String,Any>()
-                    data["userType"] = apiTitle
+                    data["userType"] = apiTitle.toString()
                     data["type"] = "share"
                     data["page"] = 1
+                    data["limit"] = 5
                     viewModel.savedShare(data,Constants.GET_SAVED_POST)
 
 
@@ -204,7 +283,15 @@ class ShareFragment : BaseFragment<FragmentShareBinding>() {
     override fun onResume() {
         super.onResume()
         getSavedData()
+        restoreSelectedCategory()
     }
 
+
+    private fun restoreSelectedCategory() {
+        categoryAdapter.list.forEach {
+            it.isSelected = it.title == selectedCategoryTitle
+        }
+        categoryAdapter.notifyDataSetChanged()
+    }
 
 }

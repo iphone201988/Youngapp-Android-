@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -32,8 +34,16 @@ class VaultFragment : BaseFragment<FragmentVaultBinding>(){
     private lateinit var categoryAdapter:SimpleRecyclerViewAdapter<CategoryModel, CategoryItemViewBinding>
     private lateinit var vaultAdapter:SimpleRecyclerViewAdapter<GetVaultApiResponse.Data.Vault, VaultItemViewBinding>
 
+    private var apiTitle : String ? = null
 
 
+    private var page  = 1
+    private var isLoading = false
+    private var isLastPage = false
+    private var totalPages : Int ? = null
+
+
+    private var selectedCategoryTitle: String = "Members"
 
     override fun onCreateView(view: View) {
         // view
@@ -45,6 +55,48 @@ class VaultFragment : BaseFragment<FragmentVaultBinding>(){
         initOnClick()
         // observer
         initObserver()
+
+
+        binding.rvShare.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                // 👇 Only continue if scrolling down
+                if (dy <= 0) return
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (!isLoading && page < totalPages!!) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
+                        firstVisibleItemPosition >= 0
+                    ) {
+                        isLoading = true // ✅ Lock before load
+
+                        loadMoreData()
+
+                    }
+                }
+            }
+
+            private fun loadMoreData() {
+                page++
+                isLoading = true
+                val data = HashMap<String,Any>()
+                if (apiTitle != null){
+                    data["userType"] = apiTitle.toString()
+
+                }else{
+                    data["userType"] = "general_member"
+
+                }
+                data["page"] = page
+                data ["limit"] = 20
+                viewModel.savedShare(data, Constants.GET_SAVED_VAULT)
+            }
+
+
+        })
     }
 
 
@@ -59,9 +111,17 @@ class VaultFragment : BaseFragment<FragmentVaultBinding>(){
 
     private fun getSavedData() {
 
+        page =1
             val data = HashMap<String,Any>()
-            data["userType"] = "general_member"
+            if (apiTitle != null){
+                data["userType"] = apiTitle.toString()
+
+            }else{
+                data["userType"] = "general_member"
+
+            }
             data["page"] = 1
+            data ["limit"] = 20
             viewModel.savedShare(data, Constants.GET_SAVED_VAULT)
 
 
@@ -94,7 +154,20 @@ class VaultFragment : BaseFragment<FragmentVaultBinding>(){
                             var myDataModel : GetVaultApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data!= null){
-                                    vaultAdapter.list = myDataModel.data!!.vaults
+
+                                    totalPages = myDataModel.pagination?.total ?: 1
+                                    if (page <= totalPages!!) {
+                                        isLoading = false
+                                    }
+                                    if (page == 1){
+                                        vaultAdapter.list = myDataModel.data?.vaults
+                                        vaultAdapter.notifyDataSetChanged()
+                                    } else{
+                                        vaultAdapter.addToList(myDataModel.data?.vaults)
+                                        vaultAdapter.notifyDataSetChanged()
+
+                                    }
+                                  //  vaultAdapter.list = myDataModel.data!!.vaults
                                 }
                             }
                         }
@@ -116,10 +189,10 @@ class VaultFragment : BaseFragment<FragmentVaultBinding>(){
         categoryAdapter= SimpleRecyclerViewAdapter(R.layout.category_item_view, BR.bean){ v, m, pos->
             when(v.id){
                 R.id.clMain->{
-                    val apiTitle = mapTitleToApiValue(m.title)
-
+                     apiTitle = mapTitleToApiValue(m.title)
+                    selectedCategoryTitle = m.title
                         val data = HashMap<String,Any>()
-                        data["userType"] = apiTitle
+                        data["userType"] = apiTitle.toString()
                         data["page"] = 1
                         viewModel.savedShare(data, Constants.GET_SAVED_VAULT)
 
@@ -207,8 +280,14 @@ class VaultFragment : BaseFragment<FragmentVaultBinding>(){
     override fun onResume() {
         super.onResume()
         getSavedData()
+        restoreSelectedCategory()
     }
 
 
-
+    private fun restoreSelectedCategory() {
+        categoryAdapter.list.forEach {
+            it.isSelected = it.title == selectedCategoryTitle
+        }
+        categoryAdapter.notifyDataSetChanged()
+    }
 }
