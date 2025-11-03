@@ -294,6 +294,8 @@ data class GetProfileApiResponse(
     }
 }
 
+
+
 //data class dsaas(
 //    var `data`: Data?,
 //    var message: String?,
@@ -369,7 +371,8 @@ data class GetEventsApiResponse(
             var topic: String?,
             var type: String?,
             var userId: String?,
-            var public : Boolean?
+            var public : Boolean?,
+            var isExpired : Boolean?
         )
 
         data class Pagination(

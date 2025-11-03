@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -34,6 +36,14 @@ class MyShareFragment : BaseFragment<FragmentMyShareBinding>() {
     private var role : String ? = null
     private var id : String ? = null
 
+
+
+    private var page  = 1
+    private var isLoading = false
+    private var isLastPage = false
+    private var totalPages : Int ? = null
+
+
     private lateinit var shareAdapter: SimpleRecyclerViewAdapter<GetSavedPostApiResponse.Data.Post, ItemLayoutMyShareBinding>
 
 
@@ -41,7 +51,45 @@ class MyShareFragment : BaseFragment<FragmentMyShareBinding>() {
         getSavedData()
         initObserver()
            initAdapter()
+
+
+        binding.rvShare.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                // 👇 Only continue if scrolling down
+                if (dy <= 0) return
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (!isLoading && page < totalPages!!) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
+                        firstVisibleItemPosition >= 0
+                    ) {
+                        isLoading = true // ✅ Lock before load
+                        loadNextPage()
+                    }
+                }
+            }
+
+            private fun loadNextPage() {
+                isLoading = true
+                page++
+
+                if(role != null && id != null){
+                    val data = HashMap<String,Any>()
+                    data["id"] = id!!
+                    data["page"] = page
+
+                    viewModel.savedShare(data, Constants.GET_SAVED_POST)
+                }
+
+            }
+        })
+
     }
+
 
 
 
@@ -127,7 +175,20 @@ class MyShareFragment : BaseFragment<FragmentMyShareBinding>() {
                             var myDataModel : GetSavedPostApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data!= null){
-                                    shareAdapter.list = myDataModel.data!!.posts
+
+                                    totalPages = myDataModel.pagination?.total ?: 1
+                                    if (page <= totalPages!!) {
+                                        isLoading = false
+                                    }
+                                    if (page == 1){
+                                        shareAdapter.list = myDataModel.data?.posts
+                                        shareAdapter.notifyDataSetChanged()
+                                    } else{
+                                        shareAdapter.addToList(myDataModel.data?.posts)
+                                        shareAdapter.notifyDataSetChanged()
+
+                                    }
+                                 //   shareAdapter.list = myDataModel.data!!.posts
                                 }
                             }
                         }

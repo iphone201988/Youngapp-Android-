@@ -907,23 +907,36 @@ object BindingUtils {
 
 
 
-    @BindingAdapter(value = ["role", "productsOffered", "servicesInterested"])
+    @BindingAdapter(value = ["role", "productsOffered", "topicsOfInterest"], requireAll = false)
     @JvmStatic
     fun setServiceText(
         textView: TextView,
         role: String?,
         productsOffered: String?,
-        servicesInterested: String?
+        topicsOfInterest: Any?
     ) {
         val safeRole = role?.lowercase().orEmpty()
 
+        val topicsText = when (topicsOfInterest) {
+            is List<*> -> topicsOfInterest.filterIsInstance<String>().joinToString(", ")
+            is String -> topicsOfInterest
+                .replace("[", "")
+                .replace("]", "")
+                .replace("\"", "")
+                .split(",")
+                .joinToString(", ") { it.trim() }
+            else -> ""
+        }
+
         val text = when (safeRole) {
-            "investor", "general_member" -> servicesInterested?.takeIf { it.isNotBlank() } ?: ""
+            "investor", "general_member" -> topicsText
             else -> productsOffered?.takeIf { it.isNotBlank() } ?: ""
         }
 
         textView.text = text
     }
+
+
 
     @BindingAdapter("goalLabel")
     @JvmStatic
@@ -1215,6 +1228,60 @@ object BindingUtils {
     }
 
 
+    @BindingAdapter("setMonthYear")
+    @JvmStatic
+    fun setMonthYear(textView: TextView, dateString: String?) {
+        if (dateString.isNullOrBlank()) {
+            textView.text = ""
+            return
+        }
+
+        try {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+            val date = inputFormat.parse(dateString)
+
+            val outputFormat = SimpleDateFormat("MMM, yyyy", Locale.getDefault())
+            textView.text = date?.let { outputFormat.format(it) } ?: ""
+        } catch (e: Exception) {
+            e.printStackTrace()
+            textView.text = ""
+        }
+    }
+
+
+
+
+
+    @BindingAdapter(value = ["checkEventVisible", "eventType"], requireAll = true)
+    @JvmStatic
+    fun checkEventVisible(imageView: ImageView, scheduledDate: String?, eventType: String?) {
+        if (scheduledDate.isNullOrEmpty() || eventType.isNullOrEmpty()) {
+            imageView.visibility = View.GONE
+            return
+        }
+
+        try {
+            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            sdf.timeZone = TimeZone.getTimeZone("UTC")
+            val eventDate = sdf.parse(scheduledDate)
+            val currentDate = Calendar.getInstance().time
+
+            val isExpired = eventDate != null && eventDate.before(currentDate)
+
+            imageView.visibility = if (!isExpired && eventType == "own_events") {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            imageView.visibility = View.GONE
+        }
+    }
+
+
+
     @BindingAdapter("checkIfExpired")
     @JvmStatic
     fun checkIfExpired(textView: TextView, scheduledDate: String?) {
@@ -1234,11 +1301,11 @@ object BindingUtils {
             textView.visibility = if (eventDate != null && eventDate.before(currentDate)) {
                 View.VISIBLE // Event is in the past
             } else {
-                View.GONE // Event is upcoming
+                View.INVISIBLE // Event is upcoming
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            textView.visibility = View.GONE
+            textView.visibility = View.INVISIBLE
         }
     }
 

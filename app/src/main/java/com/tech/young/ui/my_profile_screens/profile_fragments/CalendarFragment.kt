@@ -50,8 +50,11 @@ import com.tech.young.databinding.ItemLayoutRemindersBinding
 import com.tech.young.ui.my_profile_screens.YourProfileVM
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.util.FileUtil
+import com.tech.young.base.utils.BaseCustomBottomSheet
 import com.tech.young.data.api.SimpleApiResponse
 import com.tech.young.data.model.EventUpdateApiResponse
+import com.tech.young.databinding.BottomsheetEventDetailsBinding
+import com.tech.young.databinding.BotttomSheetTopicsBinding
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.share_screen.CommonShareFragment
@@ -70,10 +73,14 @@ import java.util.Locale
 import java.util.TimeZone
 
 @AndroidEntryPoint
-class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
+class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBottomSheet.Listener{
     private val viewModel:YourProfileVM by viewModels()
     private lateinit var reminderAdapter : SimpleRecyclerViewAdapter<GetEventsApiResponse.Data.Event,ItemLayoutRemindersBinding>
     private lateinit var topicAdapter : SimpleRecyclerViewAdapter<DropDownData,ItemLayoutDropDownBinding>
+
+
+    private lateinit var eventDetailsBottomSheet : BaseCustomBottomSheet<BottomsheetEventDetailsBinding>
+
     private var topicList = ArrayList<DropDownData>()
     private var imageUri : Uri ?= null
     private var userSelectedDate: String? = null
@@ -104,6 +111,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
         //getEventsData()
         // click
 
+        initBottomSheet()
         getTopicsList()
 
         initOnClick()
@@ -188,6 +196,13 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
 
     }
 
+    private fun initBottomSheet() {
+        eventDetailsBottomSheet = BaseCustomBottomSheet(requireContext(), R.layout.bottomsheet_event_details,this)
+
+        eventDetailsBottomSheet.behavior.isDraggable = true
+        eventDetailsBottomSheet.setCancelable(true)
+    }
+
     private fun loadMoreData() {
         isLoading = true
         page++
@@ -240,64 +255,90 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                     Log.i("dsadsad", "initAdapter: $userId ")
                     from = "Edit"
 
-                    // Set text fields
-                    binding.etTitle.setText(m.title)
-                    binding.etTopic.setText(m.topic)
-                    binding.etDescription.setText(m.description)
-                    binding.etUploadFile.setText(m.file)
+                    if (userId == m.userId && m.type == "own_events" && m.isExpired == false) {
+                        // Set text fields
+                        binding.etTitle.setText(m.title)
+                        binding.etTopic.setText(m.topic)
+                        binding.etDescription.setText(m.description)
+                        binding.etUploadFile.setText(m.file)
 
-                    // Handle image preview
-                    if (!m.file.isNullOrEmpty()) {
-                        Glide.with(binding.previewImage.context)
-                            .load(Constants.BASE_URL_IMAGE + m.file)
-                            .centerCrop()
-                            .placeholder(R.drawable.dummy_profile)
-                            .error(R.drawable.dummy_profile)
-                            .into(binding.previewImage)
+                        // Handle image preview
+                        if (!m.file.isNullOrEmpty()) {
+                            Glide.with(binding.previewImage.context)
+                                .load(Constants.BASE_URL_IMAGE + m.file)
+                                .centerCrop()
+                                .placeholder(R.drawable.dummy_profile)
+                                .error(R.drawable.dummy_profile)
+                                .into(binding.previewImage)
 
-                        binding.previewImage.scaleType = ImageView.ScaleType.CENTER_CROP
-                        binding.previewImage.visibility = View.VISIBLE
-                        binding.deleteImage.visibility = View.VISIBLE
-                    } else {
-                        binding.previewImage.visibility = View.GONE
-                        binding.deleteImage.visibility = View.GONE
+                            binding.previewImage.scaleType = ImageView.ScaleType.CENTER_CROP
+                            binding.previewImage.visibility = View.VISIBLE
+                            binding.deleteImage.visibility = View.VISIBLE
+                        } else {
+                            binding.previewImage.visibility = View.GONE
+                            binding.deleteImage.visibility = View.GONE
+                        }
+
+                        // Switch to Add/Edit Event view
+                        binding.calendarCons.visibility = View.GONE
+                        binding.consAddEvent.visibility = View.VISIBLE
+
+                        // Save selected date and event ID
+                        userSelectedDate = m.scheduledDate
+                        eventId = m._id
+                    }
+                    else{
+                        eventDetailsBottomSheet.binding.etTitle.text = m.title
+                        eventDetailsBottomSheet.binding.etDescription.text = m.description
+                        eventDetailsBottomSheet.binding.etTopic.text =m.topic
+                        // Handle image preview
+                        if (!m.file.isNullOrEmpty()) {
+                            Glide.with(binding.previewImage.context)
+                                .load(Constants.BASE_URL_IMAGE + m.file)
+                                .centerCrop()
+                                .placeholder(R.drawable.dummy_profile)
+                                .error(R.drawable.dummy_profile)
+                                .into(eventDetailsBottomSheet.binding.previewImage)
+
+                            eventDetailsBottomSheet.binding.previewImage.scaleType = ImageView.ScaleType.CENTER_CROP
+                            eventDetailsBottomSheet.binding.previewImage.visibility = View.VISIBLE
+
+
+                        } else {
+                            eventDetailsBottomSheet.binding.previewImage.visibility = View.GONE
+                        }
+                        eventDetailsBottomSheet.show()
                     }
 
-                    // Switch to Add/Edit Event view
-                    binding.calendarCons.visibility = View.GONE
-                    binding.consAddEvent.visibility = View.VISIBLE
 
-                    // Save selected date and event ID
-                    userSelectedDate = m.scheduledDate
-                    eventId = m._id
-
-                    if (userId == m.userId && m.type != "other_user_scheduled_lives") {
-                        editable = "Yes"
-                        binding.etTitle.isFocusable = true
-                        binding.etDescription.isFocusable = true
-                        binding.etUploadFile.isFocusable = true
-
-                        binding.tvSubmit.visibility = View.VISIBLE
-                        binding.tvUploadFile.visibility = View.VISIBLE
-                        binding.etUploadFile.visibility = View.VISIBLE
-                        binding.tvMinimumSize.visibility  = View.VISIBLE
-                        binding.ivDoc.visibility = View.VISIBLE
-
-                    }else{
-                        editable = "No"
-                        binding.etTitle.isFocusable  = false
-                        binding.etDescription.isFocusable = false
-                        binding.etUploadFile.isFocusable = false
-
-
-                        binding.deleteImage.visibility = View.GONE
-                        binding.tvSubmit.visibility = View.GONE
-                        binding.tvUploadFile.visibility = View.GONE
-                        binding.etUploadFile.visibility = View.GONE
-                        binding.tvMinimumSize.visibility  = View.GONE
-                        binding.ivDoc.visibility = View.GONE
-
-                    }
+//                    if (userId == m.userId && m.type != "other_user_scheduled_lives") {
+//                        editable = "Yes"
+//                        binding.etTitle.isFocusable = true
+//                        binding.etDescription.isFocusable = true
+//                        binding.etUploadFile.isFocusable = true
+//
+//                        binding.tvSubmit.visibility = View.VISIBLE
+//                        binding.tvUploadFile.visibility = View.VISIBLE
+//                        binding.etUploadFile.visibility = View.VISIBLE
+//                        binding.tvMinimumSize.visibility  = View.VISIBLE
+//                        binding.ivDoc.visibility = View.VISIBLE
+//
+//                    }else{
+////                        editable = "No"
+//                        eventDetailsBottomSheet.show()
+////                        binding.etTitle.isFocusable  = false
+////                        binding.etDescription.isFocusable = false
+////                        binding.etUploadFile.isFocusable = false
+////
+////
+////                        binding.deleteImage.visibility = View.GONE
+////                        binding.tvSubmit.visibility = View.GONE
+////                        binding.tvUploadFile.visibility = View.GONE
+////                        binding.etUploadFile.visibility = View.GONE
+////                        binding.tvMinimumSize.visibility  = View.GONE
+////                        binding.ivDoc.visibility = View.GONE
+//
+//                    }
                 }
 
             }
@@ -508,31 +549,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
 
 
                 }
-//                R.id.tvSubmit ->{
-//                    if (isEmptyField()){
-//                        if (from == "Edit"){
-//                            val multipartImage = imageUri?.let { convertImageToMultipart(it) }
-//                            val data = HashMap<String, RequestBody>()
-//                            data["eventId"] = eventId.toString().toRequestBody()
-//                            data["title"] = binding.etTitle.text.toString().trim().toRequestBody()
-//                            data["topic"] = binding.etTopic.text.toString().trim().toRequestBody()
-//                            data["description"] = binding.etDescription.text.toString().trim().toRequestBody()
-//                            data["type"] = "own_events".toRequestBody()
-//                            data["scheduledDate"] = userSelectedDate.toString().toRequestBody()
-//                            viewModel.editEvent(data,Constants.EDIT_EVENTS,multipartImage)
-//                        }else{
-//                            val multipartImage = imageUri?.let { convertImageToMultipart(it) }
-//                            val data = HashMap<String, RequestBody>()
-//                            data["title"] = binding.etTitle.text.toString().trim().toRequestBody()
-//                            data["topic"] = binding.etTopic.text.toString().trim().toRequestBody()
-//                            data["description"] = binding.etDescription.text.toString().trim().toRequestBody()
-//                            data["type"] = "own_events".toRequestBody()
-//                            data["scheduledDate"] = userSelectedDate.toString().toRequestBody()
-//                            viewModel.addEvent(data,Constants.CREATE_EVENT,multipartImage)
-//                        }
-//
-//                    }
-//                }
 
                 R.id.tvSubmit -> {
                     if (isEmptyField()) {
@@ -669,12 +685,41 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                         "getEvents" -> {
                             val myDataModel: GetEventsApiResponse? = BindingUtils.parseJson(it.data.toString())
                             try {
+//                                myDataModel?.data?.let { eventData ->
+//                                    totalPages = myDataModel.data!!.pagination?.total?: 1
+//
+//                                    eventsList = myDataModel.data!!.events!!
+//
+//                                    Log.i("dasdasdasdasd", "initObserver: $eventsList")
+//                                    eventData.pagination?.total?.let { total ->
+//                                        if (page <= totalPages!!) {
+//                                            isLoading = false
+//                                        }
+//                                    }
+//
+//                                    val events = eventData.events
+//                                    if (page == 1) {
+//                                        reminderAdapter.list = events
+//                                    } else {
+//                                        reminderAdapter.addToList(events)
+//                                    }
+//                                    if (events != null) {
+//                                        markUnderlineEvents(events)
+//
+//                                    }
+ //                               }
+
                                 myDataModel?.data?.let { eventData ->
-                                    totalPages = myDataModel.data!!.pagination?.total?: 1
+                                    totalPages = eventData.pagination?.total ?: 1
+                                    eventsList = eventData.events ?: emptyList()
 
-                                    eventsList = myDataModel.data!!.events!!
+                                    // 🔥 Update each event's isExpired flag
+                                    eventData.events?.forEach { event ->
+                                        event?.isExpired = isEventExpired(event?.scheduledDate)
+                                    }
 
-                                    Log.i("dasdasdasdasd", "initObserver: $eventsList")
+                                    Log.i("Events", "Updated events list: $eventsList")
+
                                     eventData.pagination?.total?.let { total ->
                                         if (page <= totalPages!!) {
                                             isLoading = false
@@ -687,11 +732,12 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
                                     } else {
                                         reminderAdapter.addToList(events)
                                     }
+
                                     if (events != null) {
                                         markUnderlineEvents(events)
-
                                     }
                                 }
+
                             } catch (e : Exception){
                                 e.printStackTrace()
                             }
@@ -863,10 +909,29 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>() {
         }
     }
 
+    private fun isEventExpired(scheduledDate: String?): Boolean {
+        if (scheduledDate.isNullOrEmpty()) return false
+        return try {
+            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            sdf.timeZone = TimeZone.getTimeZone("UTC")
+
+            val eventDate = sdf.parse(scheduledDate)
+            val currentDate = Calendar.getInstance().time
+
+            eventDate != null && eventDate.before(currentDate)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
 
 
     override fun onResume() {
         super.onResume()
         getEventsData()
+    }
+
+    override fun onViewClick(view: View?) {
+
     }
 }

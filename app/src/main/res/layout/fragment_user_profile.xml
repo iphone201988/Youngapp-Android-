@@ -796,7 +796,7 @@
                             android:paddingStart="@dimen/_5sdp"
                             app:role="@{bean.role}"
                             app:productsOffered="@{bean.productsOffered}"
-                            app:servicesInterested="@{bean.servicesInterested}"
+                            app:topicsOfInterest="@{bean.topicsOfInterest}"
                             android:textColor="@color/gray"
                             android:textSize="@dimen/_12ssp"
                             app:layout_constraintEnd_toEndOf="parent"

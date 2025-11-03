@@ -449,27 +449,42 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
         binding.etSymbol.isEnabled = false
         binding.etSymbol.alpha = 0.5f
 
-        binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
-        binding.noOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
+        fun resetSelection() {
+            binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
+            binding.noOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
+            binding.etSymbol.isEnabled = false
+            binding.etSymbol.alpha = 0.5f
+            binding.etSymbol.clearFocus()
+            selectedOption = null
+        }
 
         binding.yesOption.box.setOnClickListener {
-            isSymbolRequired = true
-            binding.etSymbol.isEnabled = true
-            binding.etSymbol.alpha = 1f
-            selectedOption = "Stock"
-            binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_selected)
-            binding.noOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
+            if (selectedOption == "Stock") {
+                // Deselect if same selected
+                resetSelection()
+            } else {
+                selectedOption = "Stock"
+                binding.etSymbol.isEnabled = true
+                binding.etSymbol.alpha = 1f
+                binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_selected)
+                binding.noOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
+            }
         }
 
         binding.noOption.box.setOnClickListener {
-            isSymbolRequired = true
-            binding.etSymbol.isEnabled = true
-            binding.etSymbol.alpha = 1f
-            selectedOption = "Crypto"
-            binding.noOption.box.setBackgroundResource(R.drawable.ic_check_selected)
-            binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
+            if (selectedOption == "Crypto") {
+                // Deselect if same selected
+                resetSelection()
+            } else {
+                selectedOption = "Crypto"
+                binding.etSymbol.isEnabled = true
+                binding.etSymbol.alpha = 1f
+                binding.noOption.box.setBackgroundResource(R.drawable.ic_check_selected)
+                binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
+            }
         }
     }
+
 
 
     private fun isEmptyField() : Boolean {

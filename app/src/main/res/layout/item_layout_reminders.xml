@@ -19,7 +19,7 @@
         android:id="@+id/consMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/_70sdp"
+        android:minHeight="@dimen/_90sdp"
         consClickable="@{bean.userId}"
         android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
         android:layout_marginBottom="@dimen/_10sdp"
@@ -28,9 +28,8 @@
 
        <androidx.constraintlayout.widget.ConstraintLayout
            android:id="@+id/cons"
-           android:layout_width="@dimen/_50sdp"
+           android:layout_width="@dimen/_80sdp"
            android:layout_height="0dp"
-           android:paddingBottom="@dimen/_12sdp"
            android:background="@drawable/bg_reminder_cons"
            eventTypeColor="@{bean.type}"
            android:backgroundTint="@color/orange"
@@ -38,34 +37,61 @@
            app:layout_constraintBottom_toBottomOf="parent"
            app:layout_constraintStart_toStartOf="parent">
 
-           <TextView
-               android:id="@+id/date"
-               style="@style/TextView_600_SemiBold"
-               dayFromDate="@{bean.scheduledDate}"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:textSize="@dimen/_20ssp"
-               android:textColor="@color/white"
+           <androidx.constraintlayout.widget.ConstraintLayout
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
                app:layout_constraintTop_toTopOf="parent"
                app:layout_constraintBottom_toBottomOf="parent"
                app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintEnd_toEndOf="parent"/>
+               app:layout_constraintEnd_toEndOf="parent">
 
 
-           <TextView
-               android:id="@+id/day"
-               style="@style/TextView_500_Medium"
-               setDayOfWeek="@{bean.scheduledDate}"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:visibility="visible"
-               android:maxLength="3"
-               android:translationY="-4dp"
-               android:textSize="@dimen/_14ssp"
-               android:textColor="@color/white"
-               app:layout_constraintTop_toBottomOf="@id/date"
-               app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintEnd_toEndOf="parent"/>
+               <TextView
+                   android:id="@+id/date"
+                   style="@style/TextView_600_SemiBold"
+                   dayFromDate="@{bean.scheduledDate}"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textSize="@dimen/_20ssp"
+                   android:textColor="@color/white"
+                   android:layout_marginTop="@dimen/_15sdp"
+                   app:layout_constraintTop_toTopOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintEnd_toEndOf="parent"/>
+
+
+               <TextView
+                   android:id="@+id/day"
+                   style="@style/TextView_500_Medium"
+                   setDayOfWeek="@{bean.scheduledDate}"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:visibility="visible"
+                   android:maxLength="3"
+                   android:textSize="@dimen/_14ssp"
+                   android:textColor="@color/white"
+                   app:layout_constraintBottom_toTopOf="@id/year"
+                   app:layout_constraintTop_toBottomOf="@id/date"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintEnd_toEndOf="parent"/>
+
+               <androidx.appcompat.widget.AppCompatTextView
+                   android:id="@+id/year"
+                   style="@style/TextView_400_Regular"
+                   setMonthYear="@{bean.scheduledDate}"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:visibility="visible"
+                   android:textSize="@dimen/_14ssp"
+                   android:textColor="@color/white"
+                   android:layout_marginBottom="@dimen/_15sdp"
+                   app:layout_constraintBottom_toBottomOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintEnd_toEndOf="parent"/>
+           </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
        </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -113,6 +139,20 @@
             app:layout_constraintTop_toBottomOf="@id/heading"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+
+        <TextView
+            android:id="@+id/topic"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{bean.topic}"
+            android:textSize="@dimen/_10ssp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:layout_constraintEnd_toStartOf="@id/profileImage"
+           app:layout_constraintTop_toBottomOf="@id/heading"
+            app:layout_constraintStart_toStartOf="@id/heading"/>
+
         <TextView
             android:id="@+id/description"
             style="@style/TextView_500_Medium"
@@ -120,12 +160,26 @@
             android:layout_height="wrap_content"
             android:text="@{bean.description}"
             android:textSize="@dimen/_10ssp"
+            android:maxLines="2"
             android:layout_marginEnd="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             app:layout_constraintEnd_toStartOf="@id/profileImage"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/heading"
+            app:layout_constraintTop_toBottomOf="@id/topic"
             app:layout_constraintStart_toStartOf="@id/heading"/>
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivEdit"
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_14sdp"
+            android:src="@drawable/iv_edit_icon"
+            app:checkEventVisible="@{bean.scheduledDate}"
+            app:eventType="@{bean.type}"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:layout_constraintTop_toTopOf="@id/ivDelete"
+            app:layout_constraintBottom_toBottomOf="@id/ivDelete"
+            app:layout_constraintEnd_toStartOf="@id/ivDelete"/>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivDelete"
