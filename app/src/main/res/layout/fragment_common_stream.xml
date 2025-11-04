@@ -187,7 +187,7 @@
             android:layout_height="@dimen/_42sdp"
             android:layout_marginTop="@dimen/_3sdp"
             android:background="@drawable/radius_border_gray"
-            android:hint="date"
+            android:hint="Date"
             android:onClick="@{v -> vm.onClick(v)}"
             android:focusable="false"
             android:paddingVertical="@dimen/_10sdp"

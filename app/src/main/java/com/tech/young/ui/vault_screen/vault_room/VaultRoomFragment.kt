@@ -93,10 +93,11 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
 
                     Log.d("Pagination", "Reached bottom, loading next page…")
                     // ✅ User reached bottom
-                    if (!isLoading && page < totalPages!!) {
+                    if (!isLoading && totalPages != null && page < totalPages!!) {
                         isLoading = true
                         loadNextPage()
                     }
+
                 }
             }
         }
@@ -390,7 +391,7 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
                             if (myDataModel != null){
                                 totalPages = myDataModel.data?.pagination?.total ?: 1
 
-                                if (page <= totalPages!!) {
+                                if (totalPages != null && page <= totalPages!!) {
                                     isLoading = false
                                 }
                                 if (page == 1){

@@ -733,34 +733,80 @@ data class GetVaultApiResponse(
 //    }
 //}
 
+//data class VaultDetailApiResponse(
+//    var `data`: Data?,
+//    var message: String?,
+//    var success: Boolean?,
+//) {
+//    data class Data(
+//        var vault: Vault?,
+//    ) {
+//        data class Vault(
+//            var _id: String?,
+//            var access: String?,
+//            var admin: Admin?,
+//            var category: List<String?>?,
+//            var createdAt: String?,
+//            var description: String?,
+//            var image: String?,
+//            var isMember: Boolean?,
+//            var members: List<Member?>?,
+//            var chatId : String?,
+//            var title: String?,
+//            var topic: String?,
+//
+//
+//
+//        ) {
+//            data class Admin(
+//                var _id: String?,
+//                var firstName: String?,
+//                var lastName: String?,
+//                var profileImage: String?,
+//                var username: String?,
+//            )
+//
+//            data class Member(
+//                var _id: String?,
+//                var firstName: String?,
+//                var lastName: String?,
+//                var profileImage: String?,
+//                var username: String?,
+//            )
+//        }
+//    }
+//}
+
+
+
 data class VaultDetailApiResponse(
     var `data`: Data?,
     var message: String?,
-    var success: Boolean?,
+    var success: Boolean?
 ) {
     data class Data(
-        var vault: Vault?,
+        var vault: Vault?
     ) {
         data class Vault(
             var _id: String?,
             var access: String?,
             var admin: Admin?,
             var category: List<String?>?,
+            var chatId: String?,
             var createdAt: String?,
             var description: String?,
-            var image: String?,
             var isMember: Boolean?,
+            var image: String?,
             var members: List<Member?>?,
-            var chatId : String?,
             var title: String?,
-            var topic: String?,
+            var topic: String?
         ) {
             data class Admin(
                 var _id: String?,
                 var firstName: String?,
                 var lastName: String?,
                 var profileImage: String?,
-                var username: String?,
+                var username: String?
             )
 
             data class Member(
@@ -768,11 +814,12 @@ data class VaultDetailApiResponse(
                 var firstName: String?,
                 var lastName: String?,
                 var profileImage: String?,
-                var username: String?,
+                var username: String?
             )
         }
     }
 }
+
 
 /******************* get vault detail api  response ********************/
 data class JoinVaultRoomApiResponse(
@@ -1835,6 +1882,8 @@ data class FcmPayload(
     val profileImage: String? = null,
     val role: String? = null,
     val chatId: String? = null,
+    val streamId : String ?= null,
+    val vaultId :  String ?= null,
 
     val firstName: String?,
     val lastName: String?,

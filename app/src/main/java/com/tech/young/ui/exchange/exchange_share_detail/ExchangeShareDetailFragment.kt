@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.core.graphics.createBitmap
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.tech.young.BR
@@ -49,6 +50,11 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
         "", "", "", "", ""
     )
 
+
+    private var page  = 1
+    private var isLoading = false
+    private var isLastPage = false
+    private var totalPages : Int ? = null
 
     private var id : String ? = null
     private var name : String ? = null
@@ -92,6 +98,37 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
         }
 
 
+        binding.nestedScrollView.setOnScrollChangeListener { v: NestedScrollView, _, scrollY, _, oldScrollY ->
+            val view = v.getChildAt(v.childCount - 1)
+            if (view != null) {
+                val diff = view.bottom - (v.height + v.scrollY)
+                if (diff <= 0 && scrollY > oldScrollY) {
+
+                    Log.d("Pagination", "Reached bottom, loading next page…")
+                    // ✅ User reached bottom
+                    if (!isLoading && totalPages != null && page < totalPages!!) {
+                        isLoading = true
+                        loadNextPage()
+                    }
+
+                }
+            }
+        }
+
+
+    }
+
+    private fun loadNextPage() {
+        isLoading = true
+        page++
+
+        val data = HashMap<String,Any>()
+        if (userId != null){
+            data["id"] = userId.toString()
+            data["type"] = "share"
+            data["page"] = page
+            viewModel.getComments(Constants.GET_COMMENT,data)
+        }
 
     }
 
@@ -108,9 +145,11 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
     }
 
     private fun getComments() {
+        page  = 1
         val data = HashMap<String,Any>()
         data["id"] = userId.toString()
         data["type"] = "share"
+        data["page"] = 1
         viewModel.getComments(Constants.GET_COMMENT,data)
     }
 
@@ -234,7 +273,18 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
                                 if (myDataModel.data  != null){
                                     binding.rvComments.visibility  = View.VISIBLE
                                     if (myDataModel.data?.comments != null){
-                                        commentAdapter.list = myDataModel.data?.comments
+                                        totalPages = myDataModel.data?.pagination?.total ?: 1
+                                        if (totalPages != null && page <= totalPages!!) {
+                                            isLoading = false
+                                        }
+                                        if (page == 1){
+                                            commentAdapter.list = myDataModel.data?.comments
+                                            commentAdapter.notifyDataSetChanged()
+                                        } else{
+                                            commentAdapter.addToList(myDataModel.data?.comments)
+                                            commentAdapter.notifyDataSetChanged()
+//                                        commentAdapter.list = myDataModel.data?.comments
+                                        }
                                     }
                                 }
                             }

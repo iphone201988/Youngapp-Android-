@@ -194,6 +194,30 @@ object BindingUtils {
     }
 
 
+    @BindingAdapter("setEventImage")
+    @JvmStatic
+    fun setEventImage(image: ShapeableImageView, url: String?) {
+        val padding = image.context.resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._5sdp)
+
+        if (!url.isNullOrEmpty()) {
+            // Image from API
+            Glide.with(image.context)
+                .load(Constants.BASE_URL_IMAGE + url)
+                .centerCrop()
+                .placeholder(R.drawable.dummy_profile)
+                .error(R.drawable.dummy_profile)
+                .into(image)
+
+            image.visibility = View.VISIBLE
+            image.scaleType = ImageView.ScaleType.CENTER_CROP
+
+        } else {
+            // Fallback image
+            image.visibility = View.GONE
+
+        }
+    }
+
     @BindingAdapter("setUserImageFromBaseUrlWithoutPadding")
     @JvmStatic
     fun setUserImageFromBaseUrlWithoutPadding(image: ShapeableImageView, url: String?) {

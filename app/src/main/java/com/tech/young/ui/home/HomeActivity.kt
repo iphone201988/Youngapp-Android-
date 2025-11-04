@@ -57,6 +57,7 @@ import com.tech.young.ui.my_profile_screens.forNormal.FinanceInfoFragment
 import com.tech.young.ui.my_profile_screens.forNormal.InvestmentInfoFragment
 import com.tech.young.ui.my_profile_screens.profile_fragments.CalendarFragment
 import com.tech.young.ui.my_share.MyShareFragment
+import com.tech.young.ui.notification_fragment.NotificationFragment
 import com.tech.young.ui.payment.PaymentDetailsFragment
 import com.tech.young.ui.policies_about.AboutFragment
 import com.tech.young.ui.policies_about.PoliciesFragment
@@ -176,6 +177,42 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                         .commit()
 
 
+                }
+                "share_comment" ->{
+                    val fragment = ExchangeShareDetailFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("userId", payload.postId)
+                        }
+                    }
+
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                "stream_comment" ->{
+                    val fragment = StreamDetailFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("streamId", payload.streamId)
+                        }
+                    }
+
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                "vault_comment" ->{
+                    val fragment = VaultRoomFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("vaultId", payload.vaultId)
+                        }
+                    }
+
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
             }
             Log.i("HomeActivity", "Payload received: $payload")
@@ -486,6 +523,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
         list.add(SideMenuBar(false, name.toString(), null))
         list.add(SideMenuBar(false, "Profile"))
         list.add(SideMenuBar(false, "Inbox"))
+        list.add(SideMenuBar(false,"Notification"))
 //        list.add(SideMenuBar(false, "Dashboard"))
 //        list.add(SideMenuBar(false, "Analytics"))
         list.add(SideMenuBar(false, "Member", "Exchange", true))
@@ -592,6 +630,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                     "Inbox" -> {
                         displayFragment(InboxFragment())
                         updateOtherUI(getString(R.string.inbox))
+                    }
+                    "Notification" ->{
+                        displayFragment(NotificationFragment())
+                        updateOtherUI("Notification")
                     }
                 }
             }

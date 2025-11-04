@@ -50,6 +50,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 @AndroidEntryPoint
 class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , BaseCustomDialog.Listener {
@@ -234,67 +235,82 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
     @SuppressLint("SimpleDateFormat")
     fun generatePdfFromRawJson(context: Context, jsonString: String, userData: GetProfileApiResponseData?) {
         try {
-            // 1️⃣ Pretty-print JSON
-            val prettyJson = try {
-                if (jsonString.trim().startsWith("[")) {
-                    JSONArray(jsonString).toString(4)
-                } else {
-                    JSONObject(jsonString).toString(4)
-                }
-            } catch (e: Exception) {
-                jsonString
+            // Parse JSON and find the "posts" array inside "data"
+            val rootObject = JSONObject(jsonString)
+            val dataObject = rootObject.optJSONObject("data")
+            val postsArray = dataObject?.optJSONArray("posts") ?: JSONArray()
+
+            if (postsArray.length() == 0) {
+                Log.e("PDF_GEN", "No posts found in JSON.")
+                return
             }
 
-            // 2️⃣ Create PDF setup
             val pdfDocument = PdfDocument()
             val paint = Paint().apply { textSize = 12f }
+            val boldPaint = Paint(paint).apply { isFakeBoldText = true }
 
             val pageWidth = 595
             val pageHeight = 842
             var pageNumber = 1
-            var yPosition = 40f
+            var yPosition = 60f
             val lineSpacing = 20f
 
             var pageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber).create()
             var page = pdfDocument.startPage(pageInfo)
             var canvas = page.canvas
 
-            // 3️⃣ Wrap text to fit width
-            val wrappedLines = mutableListOf<String>()
-            var start = 0
-            while (start < prettyJson.length) {
-                val count = paint.breakText(prettyJson, start, prettyJson.length, true, (pageWidth - 40).toFloat(), null)
-                wrappedLines.add(prettyJson.substring(start, start + count))
-                start += count
+            // Loop through posts
+            for (i in 0 until postsArray.length()) {
+                val post = postsArray.getJSONObject(i)
+                val id = post.optString("_id", "-")
+                val title = post.optString("title", "-")
+                val description = post.optString("description", "-")
+                val createdAt = post.optString("createdAt", "-")
+
+                // Format timestamp nicely
+                val formattedDate = try {
+                    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+                    inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+                    val date = inputFormat.parse(createdAt)
+                    SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault()).format(date!!)
+                } catch (e: Exception) {
+                    createdAt
+                }
+
+                val recordLines = listOf(
+                    "ID: $id",
+                    "Title: $title",
+                    "Description: $description",
+                    "Timestamp: $formattedDate",
+                    "-------------------------------"
+                )
+
+                for (line in recordLines) {
+                    // Move to new page if needed
+                    if (yPosition > pageHeight - 40) {
+                        pdfDocument.finishPage(page)
+                        pageNumber++
+                        pageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber).create()
+                        page = pdfDocument.startPage(pageInfo)
+                        canvas = page.canvas
+                        yPosition = 60f
+                    }
+
+                    canvas.drawText(line, 40f, yPosition, paint)
+                    yPosition += lineSpacing
+                }
             }
 
-            // 4️⃣ Write lines across multiple pages
-            for (line in wrappedLines) {
-                if (yPosition > pageHeight - 40) {
-                    pdfDocument.finishPage(page)
-                    pageNumber++
-                    pageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber).create()
-                    page = pdfDocument.startPage(pageInfo)
-                    canvas = page.canvas
-                    yPosition = 40f
-                }
-                canvas.drawText(line, 20f, yPosition, paint)
-                yPosition += lineSpacing
-            }
             pdfDocument.finishPage(page)
 
-            // 5️⃣ Generate dynamic file name
+            // Generate filename
             val firstName = userData?.user?.firstName?.takeIf { it.isNotBlank() } ?: ""
             val lastName = userData?.user?.lastName?.takeIf { it.isNotBlank() } ?: ""
-            val displayName = listOf(firstName, lastName)
-                .filter { it.isNotBlank() }
-                .joinToString(" ")
-                .ifEmpty { "User" }
-
-            val formattedDate = SimpleDateFormat("EEEE, MMM dd, yyyy", Locale.getDefault()).format(Date())
+            val displayName = listOf(firstName, lastName).filter { it.isNotBlank() }.joinToString(" ").ifEmpty { "User" }
+            val formattedDate = SimpleDateFormat("EEE, MMM dd yyyy", Locale.getDefault()).format(Date())
             val safeFileName = "$displayName - $formattedDate.pdf".replace(",", "")
 
-            // 6️⃣ Save PDF to Downloads
+            // Save to Downloads
             val downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             if (!downloadsFolder.exists()) downloadsFolder.mkdirs()
 
@@ -303,9 +319,8 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
             pdfDocument.close()
 
             Log.i("PDF_FILE", "Saved PDF: $file")
-            Log.d("PDF_SIZE", "PDF size = ${file.length()} bytes")
 
-            // 7️⃣ Share PDF
+            // Share intent
             val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                 type = "application/pdf"
@@ -314,12 +329,13 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
                 if (context !is Activity) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
 
-            context.startActivity(Intent.createChooser(shareIntent, "Share JSON PDF"))
+            context.startActivity(Intent.createChooser(shareIntent, "Share Posts PDF"))
 
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
+
 
 
 

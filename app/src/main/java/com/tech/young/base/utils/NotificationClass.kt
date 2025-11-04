@@ -80,7 +80,9 @@ class NotificationClass : FirebaseMessagingService() {
             role = data["role"],
             chatId = data["chatId"],
             firstName = data["firstName"],
-            lastName = data["lastName"]
+            lastName = data["lastName"],
+            vaultId = data["vaultId"],
+            streamId = data["streamId"]
         )
     }
 }

@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.tech.young.BR
@@ -56,6 +57,14 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
     private var ownerUserId : String? = null
 
     private var alreadyAdded : Boolean ?= null
+
+
+    private var page  = 1
+    private var isLoading = false
+    private var isLastPage = false
+    private var totalPages : Int ? = null
+
+
 
     private var id : String ? = null
     private var name : String ? = null
@@ -106,8 +115,40 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
             insets
         }
 
+
+
+        binding.nestedScrollView.setOnScrollChangeListener { v: NestedScrollView, _, scrollY, _, oldScrollY ->
+            val view = v.getChildAt(v.childCount - 1)
+            if (view != null) {
+                val diff = view.bottom - (v.height + v.scrollY)
+                if (diff <= 0 && scrollY > oldScrollY) {
+
+                    Log.d("Pagination", "Reached bottom, loading next page…")
+                    // ✅ User reached bottom
+                    if (!isLoading && totalPages != null && page < totalPages!!) {
+                        isLoading = true
+                        loadNextPage()
+                    }
+
+                }
+            }
+        }
     }
 
+
+    private fun loadNextPage() {
+        isLoading = true
+        page++
+
+        val data = HashMap<String,Any>()
+        if (streamId != null){
+            data["id"] = streamId.toString()
+            data["type"] = "stream"
+            data["page"] = page
+            data["limit"] = 20
+            viewModel.getComments(Constants.GET_COMMENT,data)
+        }
+    }
     private fun setRating(rating: Float) {
         if (streamId != null){
             val data = HashMap<String,Any>()
@@ -347,8 +388,19 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                                 if (myDataModel.data  != null){
                                     binding.rvComments.visibility  = View.VISIBLE
                                     if (myDataModel.data?.comments != null){
-                                        commentAdapter.list = myDataModel.data?.comments
+                                        totalPages = myDataModel.data?.pagination?.total ?: 1
+                                        if (totalPages != null && page <= totalPages!!) {
+                                            isLoading = false
+                                        }
+                                        if (page == 1){
+                                            commentAdapter.list = myDataModel.data?.comments
+                                            commentAdapter.notifyDataSetChanged()
+                                        } else{
+                                            commentAdapter.addToList(myDataModel.data?.comments)
+                                            commentAdapter.notifyDataSetChanged()
+//                                        commentAdapter.list = myDataModel.data?.comments
                                     }
+                                  }
                                 }
                             }
                         }
@@ -420,9 +472,12 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
     }
 
     private fun getComments() {
+        page = 1
         val data = HashMap<String,Any>()
         data["id"] = streamId.toString()
         data["type"] = "stream"
+        data["page"] = 1
+        data["limit"] = 20
         viewModel.getComments(Constants.GET_COMMENT,data)
     }
 }

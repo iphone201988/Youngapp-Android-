@@ -184,6 +184,8 @@
     <string name="plan">Plan</string>
     <string name="the_minimum_size_should_be_30_mb_or_1000_x_1000_pixels">*The minimum size should be 30 MB or 1000 x 1000 pixels</string>
     <string name="inbox">Inbox</string>
+    <string name="notification">Notification</string>
+
     <string name="new_message">New message</string>
     <string name="view_message">View Message</string>
     <string name="your_request_was_received_and_will_be_processed_within_48_hours_you_will_receive_an_email_confirmation_when_it_has_completed">Your request was received and will be processed within 48 hours. You will receive an email confirmation when it has completed</string>

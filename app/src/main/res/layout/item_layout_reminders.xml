@@ -122,22 +122,23 @@
             app:setEventTypeTextColor="@{bean.type}"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintEnd_toStartOf="@id/ivDelete"
-            app:layout_constraintStart_toEndOf="@id/cons"
+            app:layout_constraintStart_toEndOf="@id/profileImage"
             app:layout_constraintTop_toBottomOf="@id/tvExpired" />
 
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profileImage"
-            setUserImageFromBaseUrl="@{bean.file}"
+            setEventImage="@{bean.file}"
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
             android:src="@drawable/iv_profile_icon"
             android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginBottom="@dimen/_10sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="@dimen/_10sdp"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-            app:layout_constraintTop_toBottomOf="@id/heading"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/tvExpired"
+            app:layout_constraintStart_toEndOf="@id/cons"/>
 
 
         <TextView
@@ -148,8 +149,7 @@
             android:text="@{bean.topic}"
             android:textSize="@dimen/_10ssp"
             android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            app:layout_constraintEnd_toStartOf="@id/profileImage"
+            app:layout_constraintEnd_toEndOf="@id/heading"
            app:layout_constraintTop_toBottomOf="@id/heading"
             app:layout_constraintStart_toStartOf="@id/heading"/>
 
@@ -161,9 +161,8 @@
             android:text="@{bean.description}"
             android:textSize="@dimen/_10ssp"
             android:maxLines="2"
-            android:layout_marginEnd="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_5sdp"
-            app:layout_constraintEnd_toStartOf="@id/profileImage"
+            app:layout_constraintEnd_toEndOf="@id/heading"
             app:layout_constraintTop_toBottomOf="@id/topic"
             app:layout_constraintStart_toStartOf="@id/heading"/>
 
@@ -188,12 +187,26 @@
             android:layout_height="@dimen/_14sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             setDeleteVisibility="@{bean.userId}"
-            android:src="@drawable/iv_delete_icon"
+            android:src="@drawable/iv_del_icon"
             android:layout_marginTop="@dimen/_10sdp"
             android:textSize="@dimen/_12ssp"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivEnter"
+            style="@style/TextView_400_Regular"
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_14sdp"
+            setDeleteVisibility="@{bean.userId}"
+            android:src="@drawable/iv_right_arrow"
+            android:textSize="@dimen/_12ssp"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            app:layout_constraintEnd_toEndOf="@id/ivDelete"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
