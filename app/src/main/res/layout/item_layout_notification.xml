@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="callback"
+            type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
+        <variable
+            name="pos"
+            type="Integer" />
+        <variable
+            name="bean"
+            type="com.tech.young.data.model.NotificationApiResponse.Data.Notification" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clInbox"
+        android:layout_width="match_parent"
+        android:padding="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@drawable/unselected_side_menu_bg"
+        android:onClick="@{v->callback.onItemClick(v,bean,pos)}"
+        android:layout_height="wrap_content">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivImage"
+        setUserImageFromBaseUrl="@{bean.senderId.profileImage}"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:src="@drawable/dummy_person"
+        android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvUserName"
+        style="@style/TextView_400_Regular"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text='@{bean.senderId.firstName + " " + bean.senderId.lastName + " (" + bean.senderId.username + ")"}'
+        android:layout_marginStart="@dimen/_3sdp"
+        android:textSize="@dimen/_12ssp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:singleLine="true"
+        android:textColor="@color/text_gray"
+        app:layout_constraintEnd_toStartOf="@id/ivStar"
+        app:layout_constraintTop_toTopOf="@id/ivImage"
+        app:layout_constraintStart_toEndOf="@id/ivImage"/>
+
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvRole"
+        setRoleText="@{bean.senderId.role}"
+        style="@style/TextView_400_Regular"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_12ssp"
+        android:textColor="@color/text_gray"
+        app:layout_constraintEnd_toEndOf="@id/tvUserName"
+        app:layout_constraintTop_toBottomOf="@id/tvUserName"
+        app:layout_constraintStart_toStartOf="@id/tvUserName"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTopics"
+        setTopicsList="@{bean.senderId.topicsOfInterest}"
+        style="@style/TextView_400_Regular"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="@dimen/_12ssp"
+        android:textColor="@color/text_gray"
+        app:layout_constraintEnd_toEndOf="@id/tvUserName"
+        app:layout_constraintTop_toBottomOf="@id/tvRole"
+        app:layout_constraintStart_toStartOf="@id/tvUserName"/>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextView_500_Medium"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintTop_toTopOf="@id/tvUserName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/tvUserName"/>
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivStar"
+        android:layout_width="@dimen/_15sdp"
+        android:layout_height="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/_3sdp"
+        android:src="@drawable/ic_star"
+        app:layout_constraintTop_toTopOf="@id/tvUserName"
+        app:layout_constraintEnd_toStartOf="@id/tvRating"
+        app:layout_constraintBottom_toBottomOf="@id/tvUserName"/>
+
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNotification"
+            style="@style/TextView_400_Regular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{bean.message}"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/tvTopics"
+            app:layout_constraintStart_toStartOf="@id/tvTopics"
+            app:layout_constraintEnd_toEndOf="@id/tvTopics"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

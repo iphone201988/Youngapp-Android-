@@ -71,6 +71,8 @@ object Constants {
   const val RESET_PASSWORD = "user/resetPassword"
 
 
+  const val NOTIFICATION = "user/getAllNotifications"
+
     /*************** Temp value store****************/
        var chooseAccountType = ""
 

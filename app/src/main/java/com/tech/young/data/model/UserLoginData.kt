@@ -1858,6 +1858,112 @@ data class EventUpdateApiResponse(
     }
 }
 
+/***************   notification model  api response *********************/
+//data class NotificationApiResponse(
+//    var `data`: Data?,
+//    var message: String?,
+//    var success: Boolean?
+//) {
+//    data class Data(
+//        var notifications: List<Notification?>?
+//    ) {
+//        data class Notification(
+//            var __v: Int?,
+//            var _id: String?,
+//            var createdAt: String?,
+//            var isDelete: Boolean?,
+//            var isRead: Boolean?,
+//            var message: String?,
+//            var receiverId: String?,
+//            var senderId: String?,
+//            var title: String?,
+//            var type: String?,
+//            var updatedAt: String?
+//        )
+//    }
+//}
+
+
+data class NotificationApiResponse(
+    var `data`: Data?,
+    var message: String?,
+    var pagination: Pagination?,
+    var success: Boolean?
+) {
+    data class Data(
+        var notifications: List<Notification?>?
+    ) {
+        data class Notification(
+            var __v: Int?,
+            var _id: String?,
+            var createdAt: String?,
+            var isDelete: Boolean?,
+            var isRead: Boolean?,
+            var message: String?,
+            var receiverId: String?,
+            var senderId: SenderId?,
+            var title: String?,
+            var type: String?,
+            var updatedAt: String?
+        ) {
+            data class SenderId(
+                var __v: Int?,
+                var _id: String?,
+                var additionalPhotos: List<String?>?,
+                var areaOfExpertise: String?,
+                var company: String?,
+                var countryCode: String?,
+                var crdNumber: String?,
+                var createdAt: String?,
+                var deviceToken: String?,
+                var deviceType: Int?,
+                var email: String?,
+                var fairnessForward: Boolean?,
+                var firstName: String?,
+                var formUpload: List<String?>?,
+                var gender: String?,
+                var industry: String?,
+                var interestedIn: String?,
+                var is2FAEnabled: Boolean?,
+                var isDeactivated: Boolean?,
+                var isDeactivatedByUser: Boolean?,
+                var isDeleted: Boolean?,
+                var isDocumentVerified: String?,
+                var isRegistrationCompleted: Boolean?,
+                var isVerified: Boolean?,
+                var jti: String?,
+                var lastLogin: String?,
+                var lastName: String?,
+                var location: Location?,
+                var otpVerified: Boolean?,
+                var packageName: String?,
+                var password: String?,
+                var phone: String?,
+                var productsOffered: String?,
+                var profileImage: String?,
+                var race: String?,
+                var role: String?,
+                var secret: String?,
+                var topicsOfInterest: List<String?>?,
+                var updatedAt: String?,
+                var username: String?
+            ) {
+                data class Location(
+                    var coordinates: List<Double?>?,
+                    var type: String?
+                )
+            }
+        }
+    }
+
+    data class Pagination(
+        var count: Int?,
+        var limit: Int?,
+        var page: Int?,
+        var totalPages: Int?
+    )
+}
+
 /***************  push notification model  api response *********************/
 
 
@@ -1895,3 +2001,6 @@ data class FcmPayload(
     val timestamp: String? = null
 
 ) : Parcelable
+
+
+

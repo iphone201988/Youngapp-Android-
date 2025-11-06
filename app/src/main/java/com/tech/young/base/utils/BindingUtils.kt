@@ -1008,6 +1008,21 @@ object BindingUtils {
         }
     }
 
+    @BindingAdapter("setNotificationTopicsList")
+    @JvmStatic
+    fun setNotificationTopicsList(textView: AppCompatTextView, topics: List<String>?) {
+        try {
+            if (!topics.isNullOrEmpty()) {
+                textView.text = topics.joinToString(", ") { it.trim() }
+            } else {
+                textView.text = "" // you can also put "N/A" if you want
+            }
+        } catch (e: Exception) {
+            textView.text = "" // fallback to avoid crash
+            e.printStackTrace()
+        }
+    }
+
 
 
     @BindingAdapter("setDataOnRole")
