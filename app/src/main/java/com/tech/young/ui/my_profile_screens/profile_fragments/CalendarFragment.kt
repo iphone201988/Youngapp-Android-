@@ -932,6 +932,11 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
     }
 
     override fun onViewClick(view: View?) {
+        when(view?.id){
+            R.id.ivCross ->{
+                eventDetailsBottomSheet.dismiss()
+            }
+        }
 
     }
 }

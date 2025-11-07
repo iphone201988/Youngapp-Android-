@@ -82,7 +82,8 @@ class NotificationClass : FirebaseMessagingService() {
             firstName = data["firstName"],
             lastName = data["lastName"],
             vaultId = data["vaultId"],
-            streamId = data["streamId"]
+            streamId = data["streamId"],
+            shareId = data["shareId"]
         )
     }
 }

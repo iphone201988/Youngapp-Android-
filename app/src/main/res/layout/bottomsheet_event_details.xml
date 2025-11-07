@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="callback"
+            type="com.tech.young.base.utils.BaseCustomBottomSheet.Listener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,6 +29,7 @@
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
             android:src="@drawable/ic_bg_cross"
+            android:onClick="@{ v -> callback.onViewClick(v)}"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             app:layout_constraintTop_toTopOf="parent"

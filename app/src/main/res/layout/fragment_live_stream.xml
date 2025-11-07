@@ -66,6 +66,56 @@
             app:layout_constraintTop_toBottomOf="@id/clTopBar" />
 
 
+        <ImageView
+            android:id="@+id/ivSendChat"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_37sdp"
+            android:src="@drawable/iv_send_btn"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:visibility="gone"
+            android:onClick="@{v->vm.onClick(v)}"
+            app:layout_constraintEnd_toEndOf="@id/publisher_container"
+            app:layout_constraintBottom_toBottomOf="@id/etChat"/>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etChat"
+            style="@style/TextView_400_Regular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:background="@drawable/radius_border_gray"
+            android:gravity="start|top"
+            android:hint="Text here"
+            android:visibility="gone"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:inputType="textMultiLine|textCapSentences"
+            android:minLines="1"
+            android:maxLines="4"
+            android:overScrollMode="ifContentScrolls"
+            android:scrollbars="vertical"
+            android:padding="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:textColorHint="@color/text_gray"
+            android:scrollHorizontally="false"
+            android:singleLine="false"
+            android:imeOptions="actionSend"
+            app:layout_constraintEnd_toStartOf="@id/ivSendChat"
+            app:layout_constraintBottom_toBottomOf="@+id/publisher_container"
+            app:layout_constraintStart_toStartOf="@id/publisher_container"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvChats"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_200sdp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginBottom="@dimen/_5sdp"
+            app:layout_constraintBottom_toTopOf="@id/etChat"
+            app:layout_constraintStart_toStartOf="@id/etChat"
+            app:layout_constraintEnd_toEndOf="@id/ivSendChat"/>
+
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvEndStream"
             style="@style/TextView_500_Medium"
@@ -80,7 +130,6 @@
             app:layout_constraintEnd_toEndOf="@id/clTopBar"
             android:textColor="@color/white"
             android:visibility="visible"
-
             app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

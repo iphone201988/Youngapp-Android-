@@ -779,6 +779,51 @@ data class GetVaultApiResponse(
 
 
 
+//data class VaultDetailApiResponse(
+//    var `data`: Data?,
+//    var message: String?,
+//    var success: Boolean?
+//) {
+//    data class Data(
+//        var vault: Vault?
+//    ) {
+//        data class Vault(
+//            var _id: String?,
+//            var access: String?,
+//            var admin: Admin?,
+//            var category: List<String?>?,
+//            var chatId: String?,
+//            var createdAt: String?,
+//            var description: String?,
+//            var isMember: Boolean?,
+//            var image: String?,
+//            var members: List<Member?>?,
+//            var title: String?,
+//
+
+
+
+//        ) {
+//            data class Admin(
+//                var _id: String?,
+//                var firstName: String?,
+//                var lastName: String?,
+//                var profileImage: String?,
+//                var username: String?
+//            )
+//
+//            data class Member(
+//                var _id: String?,
+//                var firstName: String?,
+//                var lastName: String?,
+//                var profileImage: String?,
+//                var username: String?
+//            )
+//        }
+//    }
+//}
+
+
 data class VaultDetailApiResponse(
     var `data`: Data?,
     var message: String?,
@@ -819,8 +864,6 @@ data class VaultDetailApiResponse(
         }
     }
 }
-
-
 /******************* get vault detail api  response ********************/
 data class JoinVaultRoomApiResponse(
     var `data`: Data?,
@@ -934,6 +977,7 @@ data class ExchangeShareApiResponse(
                 var lastName: String?,
                 var location: Location?,
                 var username: String?,
+                var lastLogin : String?,
                 var profileImage: String?
             ) {
                 data class Location(
@@ -982,6 +1026,7 @@ data class VaultExchangeApiResponse(
                 var firstName: String?,
                 var lastName: String?,
                 var profileImage: String?,
+                var lastLogin: String?,
                 var username: String?,
             )
 
@@ -1229,6 +1274,8 @@ data class GetCommentApiResponse(
         )
     }
 }
+
+
 
 
 data class ReceivedSocketComment(
@@ -1619,6 +1666,7 @@ data class GetStreamApiResponse(
                 var lastName: String?,
                 var username: String?,
                 var location: Location?,
+                var lastLogin: String?,
                 var profileImage: String?,
             ) {
                 data class Location(
@@ -1904,7 +1952,12 @@ data class NotificationApiResponse(
             var senderId: SenderId?,
             var title: String?,
             var type: String?,
-            var updatedAt: String?
+            var updatedAt: String?,
+            var chatId: String?,
+            var postId: String?,
+            var shareId: String?,
+            var streamId : String?,
+            var vaultId: String?
         ) {
             data class SenderId(
                 var __v: Int?,
@@ -1932,6 +1985,7 @@ data class NotificationApiResponse(
                 var isRegistrationCompleted: Boolean?,
                 var isVerified: Boolean?,
                 var jti: String?,
+                var isRated: Double?,
                 var lastLogin: String?,
                 var lastName: String?,
                 var location: Location?,
@@ -1990,6 +2044,7 @@ data class FcmPayload(
     val chatId: String? = null,
     val streamId : String ?= null,
     val vaultId :  String ?= null,
+    val shareId: String?= null,
 
     val firstName: String?,
     val lastName: String?,

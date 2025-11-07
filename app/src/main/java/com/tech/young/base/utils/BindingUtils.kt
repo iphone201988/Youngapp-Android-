@@ -564,6 +564,59 @@ object BindingUtils {
         }
     }
 
+
+    @BindingAdapter("setShareFormattedCreatedAt")
+    @JvmStatic
+    fun setShareFormattedCreatedAt(textView: TextView, createdAt: String?) {
+        if (createdAt.isNullOrEmpty()) return
+
+        try {
+            // Parse from backend UTC format
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+            val date = inputFormat.parse(createdAt)
+
+            // Output: "04 November at 03:07 PM"
+            val outputFormat = SimpleDateFormat("dd MMMM 'at' hh:mm a", Locale.getDefault())
+            outputFormat.timeZone = TimeZone.getDefault() // convert to local time
+
+            val formattedDate = outputFormat.format(date ?: Date())
+                .replace("am", "AM")
+                .replace("pm", "PM")
+
+            textView.text = formattedDate
+        } catch (e: Exception) {
+            e.printStackTrace()
+            textView.text = ""
+        }
+    }
+
+
+    @JvmStatic
+    @BindingAdapter("setLastActivityDate")
+    fun setLastActivityDate(textView: TextView, createdAt: String?) {
+        if (createdAt.isNullOrEmpty()) return
+
+        try {
+            // Input format (from server)
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+            // Output format (desired)
+            val outputFormat = SimpleDateFormat("dd MMMM 'at' hh:mm a", Locale.getDefault())
+            outputFormat.timeZone = TimeZone.getDefault()
+
+            val date = inputFormat.parse(createdAt)
+            date?.let {
+                val formattedDate = outputFormat.format(it)
+                textView.text = "Last Activity : $formattedDate"
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
     @BindingAdapter("setLikeIcon")
     @JvmStatic
     fun setLikeIcon(view: AppCompatImageView, isLiked: Boolean) {

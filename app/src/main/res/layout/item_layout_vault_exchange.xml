@@ -150,16 +150,33 @@
             app:layout_constraintTop_toTopOf="@id/ivUserImage"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            convertUtcToLocalTimeText="@{bean.createdAt}"
-            android:text="12 January at 09:28PM"
+            setShareFormattedCreatedAt = "@{bean.createdAt}"
+            android:text=""
             style="@style/TextView_400_Regular"
             android:textColor="@color/text_gray"
             android:textSize="@dimen/_10ssp"
             android:paddingHorizontal="@dimen/_8sdp"
+            app:layout_constraintEnd_toEndOf="@id/tvUserName"
             app:layout_constraintStart_toEndOf="@id/ivUserImage"
             app:layout_constraintTop_toBottomOf="@id/tvUserName"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLastActivity"
+            setLastActivityDate="@{bean.admin.lastLogin}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/TextView_400_Regular"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/_10ssp"
+            android:singleLine="true"
+            android:paddingHorizontal="@dimen/_8sdp"
+            app:layout_constraintEnd_toEndOf="@id/tvDate"
+            app:layout_constraintStart_toEndOf="@id/ivUserImage"
+            app:layout_constraintTop_toBottomOf="@id/tvDate"/>
+
+
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title"
@@ -173,7 +190,7 @@
             android:textSize="@dimen/_12ssp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivUserImage" />
+            app:layout_constraintTop_toBottomOf="@id/tvLastActivity" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDescription"
             android:layout_width="0dp"

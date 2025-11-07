@@ -331,6 +331,8 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
 
     private fun getData() {
         userId = arguments?.getString("userId")
+
+        Log.i("dadasdas", "getData: $userId")
         if (userId != null){
             viewModel.getShareDetail(Constants.GET_POST_BY_ID+userId)
 

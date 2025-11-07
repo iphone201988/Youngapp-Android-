@@ -181,7 +181,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                 "share_comment" ->{
                     val fragment = ExchangeShareDetailFragment().apply {
                         arguments = Bundle().apply {
-                            putString("userId", payload.postId)
+                            putString("userId", payload.shareId)
                         }
                     }
 
@@ -203,6 +203,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                         .commit()
                 }
                 "vault_comment" ->{
+
+                    Log.i("fdsfdsf", "onCreateView: ${payload.vaultId}")
                     val fragment = VaultRoomFragment().apply {
                         arguments = Bundle().apply {
                             putString("vaultId", payload.vaultId)
@@ -399,6 +401,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                     is ChangePasswordFragment ->{
                         updateOtherUI("Change Password")
                     }
+                    is NotificationFragment ->{
+                        updateOtherUI("Notification")
+                    }
+
 
 
                 }
@@ -647,7 +653,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
         binding.tvTitle.visibility = View.GONE
     }
 
-    private fun updateOtherUI(title: String) {
+    fun updateOtherUI(title: String) {
         Log.i("gfdggdfg", "updateOtherUI: $title ")
         binding.ivBack.visibility = View.VISIBLE
         binding.ivAppLogoTop.visibility = View.GONE

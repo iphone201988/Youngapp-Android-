@@ -192,15 +192,31 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDate"
             style="@style/TextView_400_Regular"
-            convertUtcToLocalTimeText="@{bean.createdAt}"
-            android:layout_width="wrap_content"
+            setShareFormattedCreatedAt = "@{bean.createdAt}"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/_8sdp"
             android:text="12 January at 09:28PM"
             android:textColor="@color/text_gray"
             android:textSize="@dimen/_10ssp"
+            app:layout_constraintEnd_toEndOf="@id/tvUserName"
             app:layout_constraintStart_toEndOf="@id/ivUserImage"
             app:layout_constraintTop_toBottomOf="@id/tvUserName" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLastActivity"
+            setLastActivityDate = "@{bean.userId.lastLogin}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/TextView_400_Regular"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/_10ssp"
+            android:singleLine="true"
+            android:paddingHorizontal="@dimen/_8sdp"
+            app:layout_constraintEnd_toEndOf="@id/tvDate"
+            app:layout_constraintStart_toEndOf="@id/ivUserImage"
+            app:layout_constraintTop_toBottomOf="@id/tvDate"/>
+
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvSymbol"
@@ -215,7 +231,7 @@
             android:textSize="@dimen/_12ssp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivUserImage" />
+            app:layout_constraintTop_toBottomOf="@id/tvLastActivity" />
 
 
         <androidx.appcompat.widget.AppCompatTextView

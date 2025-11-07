@@ -86,6 +86,7 @@
         android:layout_height="wrap_content"
         style="@style/TextView_500_Medium"
         android:textSize="@dimen/_12ssp"
+        android:text="@{bean.senderId.isRated() != null ? bean.senderId.isRated().toString() : `0.0`}"
         app:layout_constraintTop_toTopOf="@id/tvUserName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/tvUserName"/>
