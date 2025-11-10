@@ -593,6 +593,33 @@ object BindingUtils {
     }
 
 
+
+    @BindingAdapter("setNotificationDateFormat")
+    @JvmStatic
+    fun setNotificationDateFormat(textView: TextView, createdAt: String?) {
+        if (createdAt.isNullOrEmpty()) {
+            textView.text = ""
+            return
+        }
+
+        try {
+            // Input format (UTC)
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+            // Output format (local time)
+            val outputFormat = SimpleDateFormat("EEE, dd MMM yyyy, h:mm a", Locale.getDefault())
+            outputFormat.timeZone = TimeZone.getDefault()
+
+            val date = inputFormat.parse(createdAt)
+            textView.text = date?.let { outputFormat.format(it) } ?: ""
+        } catch (e: Exception) {
+            e.printStackTrace()
+            textView.text = ""
+        }
+    }
+
+
     @JvmStatic
     @BindingAdapter("setLastActivityDate")
     fun setLastActivityDate(textView: TextView, createdAt: String?) {

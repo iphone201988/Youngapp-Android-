@@ -72,7 +72,7 @@
             android:layout_height="@dimen/_37sdp"
             android:src="@drawable/iv_send_btn"
             android:layout_marginEnd="@dimen/_15sdp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:onClick="@{v->vm.onClick(v)}"
             app:layout_constraintEnd_toEndOf="@id/publisher_container"
             app:layout_constraintBottom_toBottomOf="@id/etChat"/>
@@ -83,19 +83,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_10sdp"
-            android:background="@drawable/radius_border_gray"
+            android:background="@drawable/bg_live_chat"
             android:gravity="start|top"
-            android:hint="Text here"
-            android:visibility="gone"
+            android:hint="Message..."
+            android:visibility="visible"
             android:layout_marginStart="@dimen/_10sdp"
             android:inputType="textMultiLine|textCapSentences"
             android:minLines="1"
+            android:textColor="@color/white"
             android:maxLines="4"
             android:overScrollMode="ifContentScrolls"
             android:scrollbars="vertical"
             android:padding="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_5sdp"
-            android:textColorHint="@color/text_gray"
+            android:textColorHint="@color/white"
             android:scrollHorizontally="false"
             android:singleLine="false"
             android:imeOptions="actionSend"
@@ -103,18 +104,33 @@
             app:layout_constraintBottom_toBottomOf="@+id/publisher_container"
             app:layout_constraintStart_toStartOf="@id/publisher_container"/>
 
+
+        <!-- Vertical Guideline at 30% (adjust as needed) -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4" />
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvChats"
             android:layout_width="0dp"
-            android:layout_height="@dimen/_200sdp"
+            android:layout_height="0dp"
+            android:maxHeight="@dimen/_200sdp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_10sdp"
+            android:layout_marginBottom="12dp"
+            app:stackFromEnd="true"
+            app:layout_constraintTop_toTopOf="@id/guidelineStart"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_marginBottom="@dimen/_5sdp"
             app:layout_constraintBottom_toTopOf="@id/etChat"
             app:layout_constraintStart_toStartOf="@id/etChat"
-            app:layout_constraintEnd_toEndOf="@id/ivSendChat"/>
-
+            app:layout_constraintEnd_toEndOf="@id/ivSendChat"
+            tools:listitem="@layout/item_layout_live_comments" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvEndStream"

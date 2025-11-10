@@ -16,16 +16,21 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.google.gson.Gson
 import com.tech.MediaCapturer
+import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.SocketManager
 import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
+import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BaseCustomDialog
 import com.tech.young.base.utils.BindingUtils
+import com.tech.young.base.utils.showToast
 import com.tech.young.data.model.CreateTransportModel
 import com.tech.young.data.model.JoinRoomModel
+import com.tech.young.data.model.ReceivedData
 import com.tech.young.data.model.transprtProduceModel
 import com.tech.young.databinding.FragmentLiveStreamBinding
+import com.tech.young.databinding.ItemLayoutLiveCommentsBinding
 import com.tech.young.databinding.ItemLayoutLogoutPopupBinding
 import com.tech.young.databinding.ItemLayoutStreamEndBinding
 import com.tech.young.databinding.ItemLayoutStreamPopupBinding
@@ -53,6 +58,8 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
     private lateinit var eglBaseContext: EglBase.Context
     private lateinit var videoTrack: VideoTrack
 
+    private lateinit var commentAdapter : SimpleRecyclerViewAdapter<ReceivedData, ItemLayoutLiveCommentsBinding>
+
     private var joinRoomModel: JoinRoomModel? = null
     private var createTransportModel: CreateTransportModel? = null
     private var producerAudio: Producer? = null
@@ -64,6 +71,7 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
     override fun onCreateView(view: View) {
         initView()
         initPopup()
+        initAdapter()
         Handler(Looper.getMainLooper()).post{
             socketHandler()
             Handler(Looper.getMainLooper()).postDelayed({
@@ -72,20 +80,57 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
                 initOnClick()
                 initializeTheLocalView()
                 socketJoin()
+
+
+                receiveMessage()
             },200)
         }
+    }
+
+    private fun initAdapter() {
+        commentAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_live_comments, BR.bean){v,m, pos ->
+
+        }
+        binding.rvChats.adapter = commentAdapter
+
     }
 
     private fun initPopup() {
         endStreamPopup = BaseCustomDialog(requireContext(),R.layout.item_layout_stream_end, this )
     }
 
+    private fun receiveMessage(){
+        mSocket.on("receiveMessageInLiveStreaming") { args ->
+            if (args.isNotEmpty()) {
+                try {
+                    val data = args[0] as JSONObject
+                    Log.d("SocketMessage", "Received data: $data")
+
+                    // ✅ Convert JSON to model using Gson
+                    val receivedData = Gson().fromJson(data.toString(), ReceivedData::class.java)
+
+                    requireActivity().runOnUiThread {
+                        // ✅ Add the new message to your RecyclerView adapter
+                        commentAdapter.addData(receivedData)
+                        binding.rvChats.scrollToPosition(commentAdapter.itemCount - 1)
+                    }
+
+                } catch (e: Exception) {
+                    Log.e("SocketMessage", "Error parsing message: ${e.localizedMessage}")
+                    e.printStackTrace()
+                }
+            }
+        }
+
+
+    }
     private fun initOnClick() {
-        viewModel.onClick.observe(viewLifecycleOwner, Observer {
+        viewModel.onClick.observe(viewLifecycleOwner, Observer observe@{
             when(it?.id){
                 R.id.tvEndStream ->{
                     endStreamPopup.show()
                 }
+
                 R.id.ivBack ->{
                     // Disconnect socket
                     SocketManager.mSocket?.disconnect()
@@ -93,10 +138,58 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
                     // Go back
                     requireActivity().onBackPressedDispatcher.onBackPressed()
                 }
+
+                R.id.ivSendChat->{
+                    if (binding.etChat.text.toString().trim().isNullOrEmpty()){
+                        showToast("Please enter message first")
+                        return@observe
+                    }
+                    sendMessageSocket()
+                }
             }
         })
     }
 
+
+
+
+    private fun sendMessageSocket(){
+        val message = binding.etChat.text?.trim().toString()
+        Log.d("SocketMessage", "Attempting to send message: $message")
+
+        if (message.isEmpty()) {
+            Log.w("SocketMessage", "Message is empty, not sending.")
+            return
+        }
+
+        try {
+            val jsonData = JSONObject()
+            var userId  = sharedPrefManager.getUserId()
+
+            if (roomId != null && userId != null) {
+                jsonData.put("message", message)
+                jsonData.put("userId", userId)
+                jsonData.put("roomName", roomId)
+
+
+
+            }
+
+            Log.d("SocketMessage", "Constructed JSON: $jsonData")
+
+            if (::mSocket.isInitialized && mSocket.connected()) {
+                mSocket.emit("messageInLiveStreaming", jsonData)
+                Log.i("SocketMessage", "Message emitted via socket: $jsonData")
+                binding.etChat.setText("")
+            } else {
+                Log.e("SocketMessage", "Socket not connected, message not sent.")
+            }
+
+        } catch (e: Exception) {
+            Log.e("SocketMessage", "Exception while sending message: ${e.localizedMessage}")
+            e.printStackTrace()
+        }
+    }
     private fun initView() {
         roomId = arguments?.getString("room_id")
         Log.i("dsdsa", "initView: $roomId")

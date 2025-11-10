@@ -260,22 +260,29 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
             var canvas = page.canvas
 
             // Loop through posts
-            for (i in 0 until postsArray.length()) {
+            for (i in postsArray.length() - 1 downTo 0)
+            {
                 val post = postsArray.getJSONObject(i)
                 val id = post.optString("_id", "-")
                 val title = post.optString("title", "-")
                 val description = post.optString("description", "-")
                 val createdAt = post.optString("createdAt", "-")
 
+
                 // Format timestamp nicely
                 val formattedDate = try {
                     val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
                     inputFormat.timeZone = TimeZone.getTimeZone("UTC")
                     val date = inputFormat.parse(createdAt)
-                    SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault()).format(date!!)
+
+                    // Desired output: Mon, 12 Sep 2025, 12:07 PM
+                    val outputFormat = SimpleDateFormat("EEE, dd MMM yyyy, hh:mm a", Locale.getDefault())
+                    outputFormat.timeZone = TimeZone.getDefault()
+                    outputFormat.format(date!!)
                 } catch (e: Exception) {
                     createdAt
                 }
+
 
                 val recordLines = listOf(
                     "ID: $id",

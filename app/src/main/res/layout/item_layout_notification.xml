@@ -117,5 +117,17 @@
             app:layout_constraintEnd_toEndOf="@id/tvTopics"/>
 
 
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDate"
+            setNotificationDateFormat="@{bean.createdAt}"
+            style="@style/TextView_400_Regular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/text_gray"
+            app:layout_constraintEnd_toEndOf="@id/tvNotification"
+            app:layout_constraintTop_toBottomOf="@id/tvNotification"
+            app:layout_constraintStart_toStartOf="@id/tvNotification"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -2045,6 +2045,14 @@ data class FcmPayload(
     val streamId : String ?= null,
     val vaultId :  String ?= null,
     val shareId: String?= null,
+    val shareLike : String ?= null,
+    val streamLike : String ?= null,
+    val reshare : String ? = null,
+    val ratingUser : String ?= null,
+    val ratingShare : String ?= null,
+    val ratingStream : String ?= null,
+    val ratingVault : String? = null,
+
 
     val firstName: String?,
     val lastName: String?,
@@ -2058,4 +2066,76 @@ data class FcmPayload(
 ) : Parcelable
 
 
+/***************  live streaming receive comment  model  response *********************/
+
+data class ReceivedData(
+    val message: String?,
+    val sender: Sender?
+)
+
+data class Sender(
+    val location: Location?,
+    val _id: String?,
+    val firstName: String?,
+    val lastName: String?,
+    val username: String?,
+    val email: String?,
+    val countryCode: String?,
+    val phone: String?,
+    val password: String?,
+    val role: String?,
+    val additionalPhotos: List<String>?,
+    val isRegistrationCompleted: Boolean?,
+    val isDeleted: Boolean?,
+    val isDeactivated: Boolean?,
+    val isDeactivatedByUser: Boolean?,
+    val is2FAEnabled: Boolean?,
+    val formUpload: List<String>?,
+    val topicsOfInterest: List<String>?,
+    val createdAt: String?,
+    val updatedAt: String?,
+    val company: String?,
+    val isVerified: Boolean?,
+    val otpVerified: Boolean?,
+    val isDocumentVerified: String?,
+    val age: String?,
+    val children: String?,
+    val financialExperience: String?,
+    val gender: String?,
+    val homeOwnerShip: String?,
+    val investments: String?,
+    val maritalStatus: String?,
+    val objective: String?,
+    val packageName: String?,
+    val profileImage: String?,
+    val servicesInterested: String?,
+    val secret: String?,
+    val lastLogin: String?,
+    val cryptoInvestments: String?,
+    val otherSecurityInvestments: String?,
+    val realEstate: String?,
+    val retirementAccount: String?,
+    val savings: String?,
+    val specificCryptoSymbols: String?,
+    val specificStockSymbols: String?,
+    val startups: String?,
+    val stockInvestments: String?,
+    val city: String?,
+    val state: String?,
+    val otp: Int?,
+    val otpExpiry: String?,
+    val deviceToken: String?,
+    val deviceType: Int?,
+    val jti: String?,
+    val investmentAccounts: Boolean?,
+    val investmentRealEstate: Boolean?,
+    val retirement: Boolean?,
+
+    val isRated: Double?
+)
+
+data class Location(
+    val type: String?,
+    val coordinates: List<Double>?
+)
 

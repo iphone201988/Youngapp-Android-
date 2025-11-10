@@ -2,6 +2,7 @@ package com.tech.young.ui.stream_screen
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.media.AudioManager
 import android.os.Bundle
 import android.os.Handler
@@ -17,18 +18,23 @@ import com.google.gson.Gson
 import com.tech.MediaCapturer
 import com.tech.buckChats.ui.media_soup_webtrc.consumerTransport
 import com.tech.buckChats.ui.media_soup_webtrc.consumerTransportAudio
+import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.SocketManager
 import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
+import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BaseCustomDialog
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.model.ConsumerJoinModel
 import com.tech.young.data.model.ConsumerModel
 import com.tech.young.data.model.CreateTransportModel
+import com.tech.young.data.model.ReceivedData
 import com.tech.young.databinding.FragmentConsumerStreamBinding
+import com.tech.young.databinding.ItemLayoutLiveCommentsBinding
 import com.tech.young.databinding.ItemLayoutStreamEndBinding
+import com.tech.young.ui.home.HomeActivity
 import dagger.hilt.android.AndroidEntryPoint
 import io.socket.client.Ack
 import io.socket.client.Socket
@@ -65,6 +71,9 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() , B
     private var audioProducerId: String? = null
 
     private lateinit var endStreamPopup : BaseCustomDialog<ItemLayoutStreamEndBinding>
+    private lateinit var commentAdapter : SimpleRecyclerViewAdapter<ReceivedData, ItemLayoutLiveCommentsBinding>
+
+
 
 
     var listData = ArrayList<String>()
@@ -76,6 +85,7 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() , B
 
     override fun onCreateView(view: View) {
         initView()
+        initAdapter()
         initPopup()
 
         Handler(Looper.getMainLooper()).post{
@@ -92,6 +102,7 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() , B
                 mediaCapture.initCamera(requireContext())
                 joinRoom()
 
+                receiveMessage()
                 setupSocketListeners(requireContext())
             },200)
 
@@ -101,15 +112,97 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() , B
     }
 
     private fun initOnClick() {
-        viewModel.onClick.observe(viewLifecycleOwner , Observer {
-            when(view?.id){
+        viewModel.onClick.observe(viewLifecycleOwner){
+            when(it?.id){
                 R.id.ivBack , R.id.tvEndStream ->{
-                      requireActivity().onBackPressedDispatcher.onBackPressed()
+                    requireActivity().onBackPressedDispatcher.onBackPressed()
                     SocketManager.mSocket?.disconnect()
                 }
+
+                R.id.ivSendChat->{
+                    if (binding.etChat.text.toString().trim().isNullOrEmpty()){
+                        showToast("Please enter message first")
+                        return@observe
+                    }
+                    sendMessageSocket()
+                }
+
             }
-        })
+        }
     }
+
+    private fun initAdapter() {
+        commentAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_live_comments, BR.bean){v,m, pos ->
+
+        }
+        binding.rvChats.adapter = commentAdapter
+
+    }
+
+    private fun sendMessageSocket(){
+        val message = binding.etChat.text?.trim().toString()
+        Log.d("SocketMessage", "Attempting to send message: $message")
+
+        if (message.isEmpty()) {
+            Log.w("SocketMessage", "Message is empty, not sending.")
+            return
+        }
+
+        try {
+            val jsonData = JSONObject()
+            var userId  = sharedPrefManager.getUserId()
+
+            if (roomId != null && userId != null) {
+                jsonData.put("message", message)
+                jsonData.put("userId", userId)
+                jsonData.put("roomName", roomId)
+
+
+
+            }
+
+            Log.d("SocketMessage", "Constructed JSON: $jsonData")
+
+            if (::mSocket.isInitialized && mSocket.connected()) {
+                mSocket.emit("messageInLiveStreaming", jsonData)
+                Log.i("SocketMessage", "Message emitted via socket: $jsonData")
+                binding.etChat.setText("")
+            } else {
+                Log.e("SocketMessage", "Socket not connected, message not sent.")
+            }
+
+        } catch (e: Exception) {
+            Log.e("SocketMessage", "Exception while sending message: ${e.localizedMessage}")
+            e.printStackTrace()
+        }
+    }
+    private fun receiveMessage(){
+        mSocket.on("receiveMessageInLiveStreaming") { args ->
+            if (args.isNotEmpty()) {
+                try {
+                    val data = args[0] as JSONObject
+                    Log.d("SocketMessage", "Received data: $data")
+
+                    // ✅ Convert JSON to model using Gson
+                    val receivedData = Gson().fromJson(data.toString(), ReceivedData::class.java)
+
+                    requireActivity().runOnUiThread {
+                        // ✅ Add the new message to your RecyclerView adapter
+                        commentAdapter.addData(receivedData)
+                        binding.rvChats.scrollToPosition(commentAdapter.itemCount - 1)
+                    }
+
+                } catch (e: Exception) {
+                    Log.e("SocketMessage", "Error parsing message: ${e.localizedMessage}")
+                    e.printStackTrace()
+                }
+            }
+        }
+
+
+    }
+
+
 
     private fun initPopup() {
         endStreamPopup = BaseCustomDialog(requireContext(),R.layout.item_layout_comsumer_popup, this )
@@ -596,7 +689,8 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() , B
                 SocketManager.mSocket?.disconnect()
 
                 // Go back
-                requireActivity().onBackPressedDispatcher.onBackPressed()
+                val intent = Intent(requireContext(), HomeActivity::class.java)
+                startActivity(intent)
 
             }
         }
