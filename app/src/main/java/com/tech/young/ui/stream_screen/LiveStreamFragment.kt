@@ -133,10 +133,11 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
 
                 R.id.ivBack ->{
                     // Disconnect socket
-                    SocketManager.mSocket?.disconnect()
+                    endStreamPopup.show()
+                //    SocketManager.mSocket?.disconnect()
 
                     // Go back
-                    requireActivity().onBackPressedDispatcher.onBackPressed()
+              //      requireActivity().onBackPressedDispatcher.onBackPressed()
                 }
 
                 R.id.ivSendChat->{

@@ -135,6 +135,8 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
 
 
 
+
+
         binding.setPublic.setOnCheckedChangeListener { _, isChecked ->
             val visibilityMode = isChecked  // true if checked, false if not
             Log.d("SwitchValue", "Visibility mode: $visibilityMode")
@@ -201,6 +203,9 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
 
         eventDetailsBottomSheet.behavior.isDraggable = true
         eventDetailsBottomSheet.setCancelable(true)
+
+
+
     }
 
     private fun loadMoreData() {

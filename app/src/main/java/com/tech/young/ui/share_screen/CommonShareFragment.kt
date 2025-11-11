@@ -460,9 +460,11 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
 
         binding.yesOption.box.setOnClickListener {
             if (selectedOption == "Stock") {
+                isSymbolRequired = false
                 // Deselect if same selected
                 resetSelection()
             } else {
+                isSymbolRequired = true
                 selectedOption = "Stock"
                 binding.etSymbol.isEnabled = true
                 binding.etSymbol.alpha = 1f
@@ -473,9 +475,11 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
 
         binding.noOption.box.setOnClickListener {
             if (selectedOption == "Crypto") {
+                isSymbolRequired = false
                 // Deselect if same selected
                 resetSelection()
             } else {
+                isSymbolRequired = true
                 selectedOption = "Crypto"
                 binding.etSymbol.isEnabled = true
                 binding.etSymbol.alpha = 1f

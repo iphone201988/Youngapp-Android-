@@ -28,6 +28,8 @@ class NotificationClass : FirebaseMessagingService() {
         Log.d("FCM", "From: ${remoteMessage.from}")
         Log.d("FCM", "Notification: ${remoteMessage.notification}")
         Log.d("FCM", "Data: ${remoteMessage.data}")
+        Log.d("FCM", "body: ${remoteMessage.notification?.body}")
+
 
         // Notification body text (if available)
         val message = remoteMessage.notification?.body
@@ -38,6 +40,8 @@ class NotificationClass : FirebaseMessagingService() {
         val payload = parsePayload(remoteMessage.data)
 
         sendNotification(message, payload)
+
+        Log.i("Dasdasdasd", "onMessageReceived: $message")
     }
 
     private fun sendNotification(msg: String, payload: FcmPayload) {

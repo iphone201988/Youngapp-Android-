@@ -106,12 +106,13 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvFilter"
-                    android:layout_width="@dimen/_150sdp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:orientation="vertical"
                     android:background="@drawable/bg_cons"
                     android:visibility="gone"
+                    android:paddingEnd="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:elevation="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_10sdp"

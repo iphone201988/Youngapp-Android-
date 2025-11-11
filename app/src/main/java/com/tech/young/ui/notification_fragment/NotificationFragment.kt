@@ -216,6 +216,96 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
                               .addToBackStack(null)
                               .commit()
                       }
+
+                      "share_like" ->{
+                          val fragment = ExchangeShareDetailFragment().apply {
+                              arguments = Bundle().apply {
+                                  putString("userId", m.shareId)
+                              }
+                          }
+
+                          requireActivity().supportFragmentManager.beginTransaction()
+                              .replace(R.id.frameLayout, fragment)
+                              .addToBackStack(null)
+                              .commit()
+                      }
+                      "reshare" ->{
+                          val fragment = ExchangeShareDetailFragment().apply {
+                              arguments = Bundle().apply {
+                                  putString("userId", m.shareId)
+                              }
+                          }
+
+                          requireActivity().supportFragmentManager.beginTransaction()
+                              .replace(R.id.frameLayout, fragment)
+                              .addToBackStack(null)
+                              .commit()
+                      }
+
+                      "stream_like" ->{
+                          val fragment = StreamDetailFragment().apply {
+                              arguments = Bundle().apply {
+                                  putString("streamId", m.streamId)
+                              }
+                          }
+
+                          requireActivity().supportFragmentManager.beginTransaction()
+                              .replace(R.id.frameLayout, fragment)
+                              .addToBackStack(null)
+                              .commit()
+                      }
+
+                      "ratings_share" ->{
+                          val fragment = ExchangeShareDetailFragment().apply {
+                              arguments = Bundle().apply {
+                                  putString("userId", m.shareId)
+                              }
+                          }
+
+                          requireActivity().supportFragmentManager.beginTransaction()
+                              .replace(R.id.frameLayout, fragment)
+                              .addToBackStack(null)
+                              .commit()
+                      }
+                      "ratings_stream" ->{
+                          val fragment = StreamDetailFragment().apply {
+                              arguments = Bundle().apply {
+                                  putString("streamId", m.streamId)
+                              }
+                          }
+
+                          requireActivity().supportFragmentManager.beginTransaction()
+                              .replace(R.id.frameLayout, fragment)
+                              .addToBackStack(null)
+                              .commit()
+                      }
+                      "ratings_vault" ->{
+                          val fragment = VaultRoomFragment().apply {
+                              arguments = Bundle().apply {
+                                  putString("vaultId", m.vaultId)
+                              }
+                          }
+
+                          requireActivity().supportFragmentManager.beginTransaction()
+                              .replace(R.id.frameLayout, fragment)
+                              .addToBackStack(null)
+                              .commit()
+                      }
+                      "ratings_user" ->{
+                          val name  = m?.senderId?.firstName + " " + m?.senderId?.lastName
+                          HomeActivity.userName  = name
+                          val userProfileFragment = UserProfileFragment().apply {
+                              arguments  = Bundle().apply {
+                                  putString("from", "user_profile")
+                                  putString("userId", m.senderId?._id) // assuming m._id is a String
+                              }
+                          }
+
+                          requireActivity().supportFragmentManager.beginTransaction()
+                              .replace(R.id.frameLayout, userProfileFragment)
+                              .addToBackStack(null)
+                              .commit()
+                      }
                   }
               }
           }

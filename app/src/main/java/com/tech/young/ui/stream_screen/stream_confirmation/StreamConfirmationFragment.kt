@@ -191,6 +191,8 @@ class StreamConfirmationFragment : BaseFragment<FragmentStreamConfirmationBindin
             // Show/hide "Ready to Launch" based on scheduleDate
             binding.tvReadyToLaunch.visibility =
                 if (data.scheduleDate != null) View.GONE else View.VISIBLE
+
+            binding.tvConfirm.visibility =   if (data.scheduleDate != null) View.VISIBLE else View.GONE
         } ?: run {
             Log.w("StreamData", "No stream data found in arguments")
         }
