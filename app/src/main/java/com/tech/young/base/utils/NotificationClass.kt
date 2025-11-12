@@ -27,30 +27,30 @@ class NotificationClass : FirebaseMessagingService() {
 
         Log.d("FCM", "From: ${remoteMessage.from}")
         Log.d("FCM", "Notification: ${remoteMessage.notification}")
-        Log.d("FCM", "Data: ${remoteMessage.data}")
+        Log.d("FCM", "Notification data: ${remoteMessage.data}")
         Log.d("FCM", "body: ${remoteMessage.notification?.body}")
 
 
         // Notification body text (if available)
-        val message = remoteMessage.notification?.body
-            ?: remoteMessage.data["body"]
-            ?: "New notification"
+//        val message = remoteMessage.notification?.body
+//            ?: remoteMessage.data["body"]
+//            ?: "New notification"
 
         // Convert data payload into model
         val payload = parsePayload(remoteMessage.data)
 
-        sendNotification(message, payload)
+        Log.i("fdsfsfs", "onMessageReceived: $payload")
+        sendNotification(payload)
 
-        Log.i("Dasdasdasd", "onMessageReceived: $message")
     }
 
-    private fun sendNotification(msg: String, payload: FcmPayload) {
-        val bundle = Bundle().apply {
-            putParcelable("notificationData", payload)
-        }
+    private fun sendNotification(payload: FcmPayload) {
+        val bundle = Bundle()
+        bundle.putParcelable("notificationData", payload)
+
         val intent = Intent(this, HomeActivity::class.java).apply {
-            putExtras(bundle) // 👈 attach bundle to intent
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtras(bundle)
+//            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         val channelId = "my_channel_id"
@@ -58,7 +58,8 @@ class NotificationClass : FirebaseMessagingService() {
         val notificationBuilder = NotificationCompat.Builder(applicationContext, channelId)
             .setAutoCancel(true)
             .setSmallIcon(R.drawable.app_logo)
-            .setContentTitle(msg)
+            .setContentTitle(payload.title)
+            .setContentText(payload.message)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
 
@@ -94,7 +95,9 @@ class NotificationClass : FirebaseMessagingService() {
             ratingUser = data["ratings_user"],
             ratingShare = data["ratings_share"],
             ratingStream = data["ratings_stream"],
-            ratingVault = data["ratings_vault"]
+            ratingVault = data["ratings_vault"],
+            title = data["title"],
+            message = data["message"]
         )
     }
 }

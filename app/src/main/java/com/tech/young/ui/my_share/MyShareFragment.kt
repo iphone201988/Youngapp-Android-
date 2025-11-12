@@ -20,6 +20,7 @@ import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
 import com.tech.young.data.model.GetSavedPostApiResponse
+import com.tech.young.data.model.SavedPostApiResponse
 import com.tech.young.databinding.FragmentMyShareBinding
 import com.tech.young.databinding.ItemLayoutMyShareBinding
 import com.tech.young.databinding.ShareItemViewBinding
@@ -154,6 +155,13 @@ class MyShareFragment : BaseFragment<FragmentMyShareBinding>() {
                         .commit()
                 }
 
+                R.id.ivHeart , R.id.tvSaves->{
+                    val data = HashMap<String,String>()
+                    data["type"] = "share"
+                    viewModel.likeDislike(data, Constants.LIKE_DISLIKE_POST + m._id)
+
+                }
+
 
             }
         }
@@ -192,6 +200,16 @@ class MyShareFragment : BaseFragment<FragmentMyShareBinding>() {
                                 }
                             }
                         }
+                        "likeDislike" ->{
+                            val myDataModel : SavedPostApiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if(myDataModel != null){
+                                if (myDataModel.data != null){
+                                    showToast(myDataModel.message.toString())
+                                     getSavedData()
+                                }
+                            }
+                        }
+
                     }
                 }
                 Status.ERROR ->{

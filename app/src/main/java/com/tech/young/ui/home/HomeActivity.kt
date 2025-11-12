@@ -111,6 +111,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
 
 
         val bundle = intent.extras
+        Log.i("dfddfd", "onCreateView: $bundle")
+
         val payload: FcmPayload? = bundle?.getParcelable("notificationData")
         Log.i("fdsfdsfsd", "onCreateView: $payload")
 
