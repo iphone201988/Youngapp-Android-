@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.tech.young.BR
@@ -37,6 +38,14 @@ class InboxFragment : BaseFragment<FragmentInboxBinding>() {
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private lateinit var inboxAdapter: SimpleRecyclerViewAdapter<GetChatApiResponse.Data.Chat,ItemLayoutInboxBinding>
 
+
+    private var page  = 1
+    private var isLoading = false
+    private var isLastPage = false
+    private var totalPages : Int ? = null
+
+
+
     override fun onCreateView(view: View){
         // adapter
         initAdapter()
@@ -46,10 +55,45 @@ class InboxFragment : BaseFragment<FragmentInboxBinding>() {
         initOnClick()
         // observer
         initObserver()
+
+
+        binding.nestedScrollView.setOnScrollChangeListener { v: NestedScrollView, _, scrollY, _, oldScrollY ->
+            val view = v.getChildAt(v.childCount - 1)
+            if (view != null) {
+                val diff = view.bottom - (v.height + v.scrollY)
+                if (diff <= 0 && scrollY > oldScrollY) {
+
+                    Log.d("Pagination", "Reached bottom, loading next page…")
+                    // ✅ User reached bottom
+                    if (!isLoading && page < totalPages!!) {
+                        isLoading = true
+                        loadNextPage()
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    private fun loadNextPage() {
+        isLoading = true
+        page++
+
+        val data = HashMap<String, Any>()
+        data["page"]  = page
+        data["limit"] = 10
+        viewModel.getChat(Constants.GET_CHAT, data)
+
     }
 
     private fun getChat() {
-        viewModel.getChat(Constants.GET_CHAT)
+        page = 1
+
+        val data = HashMap<String, Any>()
+        data["page"]  = 1
+        data["limit"] = 10
+        viewModel.getChat(Constants.GET_CHAT,data)
         viewModel.getAds(Constants.GET_ADS)
     }
 
@@ -162,27 +206,34 @@ class InboxFragment : BaseFragment<FragmentInboxBinding>() {
                 Status.SUCCESS ->{
                     hideLoading()
                     when(it.message){
-                        "getChat" ->{
-                            val myDataModel : GetChatApiResponse ? = BindingUtils.parseJson(it.data.toString())
-                            if (myDataModel != null){
-                                if (myDataModel.data != null){
-                                    val id = sharedPrefManager.getUserId()
-                                    Log.i("rerew", "initObserver: $id")
+                        "getChat" -> {
+                            val myDataModel: GetChatApiResponse? = BindingUtils.parseJson(it.data.toString())
 
-                                    val filteredChats = myDataModel.data?.chats?.map { chat ->
-                                        // Filter out your own user from chatUsers
-                                        val filteredUsers = chat?.chatUsers?.filter { it?._id != id }
-                                        chat?.copy(chatUsers = filteredUsers)
-                                    } ?: emptyList()
+                            if (myDataModel != null && myDataModel.data != null) {
+                                totalPages = myDataModel?.pagination?.total ?: 1
 
-                                    inboxAdapter.list = filteredChats
-                                    inboxAdapter.notifyDataSetChanged()
+                                if (page <= totalPages!!) {
+                                    isLoading = false
                                 }
 
+                                // --- FILTER CHAT USERS ---
+                                val id = sharedPrefManager.getUserId()
+                                val filteredChats = myDataModel.data?.chats?.map { chat ->
+                                    val filteredUsers = chat?.chatUsers?.filter { it?._id != id }
+                                    chat?.copy(chatUsers = filteredUsers)
+                                } ?: emptyList()
+
+                                // --- ASSIGN LIST BASED ON PAGE NUMBER ---
+                                if (page == 1) {
+                                    inboxAdapter.list = filteredChats
+                                    inboxAdapter.notifyDataSetChanged()
+                                } else {
+                                    inboxAdapter.addToList(filteredChats)
+                                    inboxAdapter.notifyDataSetChanged()
+                                }
                             }
-
-
                         }
+
                         "getAds" ->{
                             val myDataModel : GetAdsAPiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){

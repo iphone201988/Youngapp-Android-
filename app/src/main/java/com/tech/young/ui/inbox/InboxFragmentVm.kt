@@ -16,11 +16,11 @@ class InboxFragmentVm @Inject constructor(val apiHelper: ApiHelper) : BaseViewMo
 
     val observeCommon = SingleRequestEvent<JsonObject>()
 
-    fun getChat( url : String){
+    fun getChat( url : String , data : HashMap<String, Any>){
         CoroutineScope(Dispatchers.IO).launch {
             observeCommon.postValue(Resource.loading(null))
             try {
-                val response = apiHelper.apiGetOnlyAuthToken(url)
+                val response = apiHelper.apiGetWithQueryAuth(url,data)
                 if (response.isSuccessful && response.body() != null){
                     observeCommon.postValue(Resource.success("getChat", response.body()))
                 }

@@ -17,11 +17,11 @@ class ViewMessageVM @Inject constructor(val apiHelper: ApiHelper) : BaseViewMode
 
     val observeCommon = SingleRequestEvent<JsonObject>()
 
-    fun getChatMessage( url : String){
+    fun getChatMessage( url : String, data: HashMap<String, Any>){
         CoroutineScope(Dispatchers.IO).launch {
             observeCommon.postValue(Resource.loading(null))
             try {
-                val response = apiHelper.apiGetOnlyAuthToken(url)
+                val response = apiHelper.apiGetWithQueryAuth(url,data)
                 if (response.isSuccessful && response.body() != null){
                     observeCommon.postValue(Resource.success("getChatMessage", response.body()))
                 }

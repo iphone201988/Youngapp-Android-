@@ -8,6 +8,8 @@ import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.tech.young.BR
 import com.tech.young.R
@@ -50,6 +52,11 @@ class ViewMessageFragment : BaseFragment<FragmentViewMessageBinding>() {
     ////Socket
     private lateinit var handler: Handler
     private lateinit var mSocket: Socket
+
+    private var page  = 1
+    private var isLoading = false
+    private var isLastPage = false
+    private var totalPages : Int ? = 1
     override fun onCreateView(view: View) {
         handler = Handler(Looper.getMainLooper())
         socketHandler()
@@ -86,6 +93,39 @@ class ViewMessageFragment : BaseFragment<FragmentViewMessageBinding>() {
             view.setPadding(0, 0, 0, imeHeight)
             insets
         }
+
+
+        binding.rvMessage.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = binding.rvMessage.layoutManager as? LinearLayoutManager ?: return
+
+                if (!isLoading && layoutManager.findFirstVisibleItemPosition() == 0) {
+                    if (page < totalPages!!) {
+                        Log.i("Fdsfsdf", "onScrolled: dsfdsf ")
+                        fetchChatMessages()
+                    }
+                }
+            }
+        })
+
+
+
+    }
+
+    private fun fetchChatMessages() {
+        page++
+        isLoading = true
+
+
+        if (threadId != null){
+            val data = HashMap<String, Any>()
+            data["page"] = page
+            data["limit"] = 50
+            viewModel.getChatMessage(Constants.GET_CHAT_MESSAGE+threadId,data)
+        }
+
     }
 
     private fun receivedMessage() {
@@ -156,7 +196,11 @@ class ViewMessageFragment : BaseFragment<FragmentViewMessageBinding>() {
 
         Log.i("fdsfsadasd", "initView: $userData")
          if (threadId != null){
-             viewModel.getChatMessage(Constants.GET_CHAT_MESSAGE+threadId)
+             page = 1
+             val data = HashMap<String, Any>()
+             data["page"] = 1
+             data["limit"] = 50
+             viewModel.getChatMessage(Constants.GET_CHAT_MESSAGE+threadId,data)
          }
         if (userData != null) {
             recId = userData!!._id
@@ -230,22 +274,64 @@ class ViewMessageFragment : BaseFragment<FragmentViewMessageBinding>() {
                 Status.SUCCESS -> {
                     hideLoading()
                     when(it.message){
-                        "getChatMessage"->{
-                            val myDataModel=BindingUtils.parseJson<GetChatMessageApiResponse>(it.data.toString())
+//                        "getChatMessage"->{
+//                            val myDataModel=BindingUtils.parseJson<GetChatMessageApiResponse>(it.data.toString())
+//                            if (myDataModel != null) {
+//                                if (myDataModel.data!=null){
+//                                    if (!myDataModel.data!!.messages.isNullOrEmpty()){
+//                                        chatAdapter.list=groupChatByDate(myDataModel.data!!.messages) as ArrayList
+//                                        Log.i("dasdasd", "initObserver: ${chatAdapter.list}")
+//                                        if (chatAdapter.itemCount>0) {
+//                                            binding.rvMessage.scrollToPosition(chatAdapter.itemCount - 1)
+//                                        }
+//                                        chatAdapter.notifyDataSetChanged()
+//                                    }
+//                                }
+//
+//                            }
+//                        }
+
+                        "getChatMessage" -> {
+                            val myDataModel = BindingUtils.parseJson<GetChatMessageApiResponse>(it.data.toString())
+
                             if (myDataModel != null) {
-                                if (myDataModel.data!=null){
-                                    if (!myDataModel.data!!.messages.isNullOrEmpty()){
-                                        chatAdapter.list=groupChatByDate(myDataModel.data!!.messages) as ArrayList
-                                        Log.i("dasdasd", "initObserver: ${chatAdapter.list}")
-                                        if (chatAdapter.itemCount>0) {
-                                            binding.rvMessage.scrollToPosition(chatAdapter.itemCount - 1)
+                                // ------- PAGINATION DATA -------
+                                totalPages = myDataModel.pagination?.total ?: 1
+                                if (page <= totalPages!!) {
+                                    isLoading = false
+                                }
+
+                                if (myDataModel.data != null){
+                                    val newMessages = myDataModel.data!!.messages ?: emptyList()
+
+                                    if (newMessages.isNotEmpty()) {
+                                        val grouped = groupChatByDate(newMessages)
+
+                                        if (page == 1) {
+                                            // First page → replace list
+                                            chatAdapter.list = ArrayList(grouped)
+                                            chatAdapter.notifyDataSetChanged()
+
+                                            // Scroll to bottom (latest message)
+                                            if (chatAdapter.itemCount > 0) {
+                                                binding.rvMessage.scrollToPosition(chatAdapter.itemCount - 1)
+                                            }
+
+                                        } else {
+                                            // Next pages → append OLD messages at TOP
+                                            val oldSize = chatAdapter.list.size
+                                            chatAdapter.list.addAll(0, grouped)
+                                            chatAdapter.notifyItemRangeInserted(0, grouped.size)
+
+                                            // Maintain scroll position EXACTLY
+                                            binding.rvMessage.scrollToPosition(grouped.size)
                                         }
-                                        chatAdapter.notifyDataSetChanged()
                                     }
                                 }
 
                             }
                         }
+
                         "getAds" ->{
                             val myDataModel : GetAdsAPiResponse? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
