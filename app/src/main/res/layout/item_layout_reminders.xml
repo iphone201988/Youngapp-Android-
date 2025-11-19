@@ -19,7 +19,6 @@
         android:id="@+id/consMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/_90sdp"
         consClickable="@{bean.userId}"
         android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
         android:layout_marginBottom="@dimen/_10sdp"
@@ -29,9 +28,10 @@
        <androidx.constraintlayout.widget.ConstraintLayout
            android:id="@+id/cons"
            android:layout_width="@dimen/_80sdp"
-           android:layout_height="0dp"
+           android:layout_height="wrap_content"
            android:background="@drawable/bg_reminder_cons"
            eventTypeColor="@{bean.type}"
+           android:paddingBottom="@dimen/_10sdp"
            android:backgroundTint="@color/orange"
            app:layout_constraintTop_toTopOf="parent"
            app:layout_constraintBottom_toBottomOf="parent"
@@ -54,7 +54,7 @@
                    android:layout_height="wrap_content"
                    android:textSize="@dimen/_20ssp"
                    android:textColor="@color/white"
-                   android:layout_marginTop="@dimen/_15sdp"
+                   android:layout_marginTop="@dimen/_10sdp"
                    app:layout_constraintTop_toTopOf="parent"
                    app:layout_constraintStart_toStartOf="parent"
                    app:layout_constraintEnd_toEndOf="parent"/>
@@ -70,7 +70,6 @@
                    android:maxLength="3"
                    android:textSize="@dimen/_14ssp"
                    android:textColor="@color/white"
-                   app:layout_constraintBottom_toTopOf="@id/year"
                    app:layout_constraintTop_toBottomOf="@id/date"
                    app:layout_constraintStart_toStartOf="parent"
                    app:layout_constraintEnd_toEndOf="parent"/>
@@ -85,7 +84,21 @@
                    android:textSize="@dimen/_14ssp"
                    android:textColor="@color/white"
                    android:layout_marginBottom="@dimen/_15sdp"
-                   app:layout_constraintBottom_toBottomOf="parent"
+                   app:layout_constraintTop_toBottomOf="@id/day"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintEnd_toEndOf="parent"/>
+
+
+               <androidx.appcompat.widget.AppCompatTextView
+                   android:id="@+id/time"
+                   style="@style/TextView_400_Regular"
+                   setFormattedTime="@{bean.scheduledDate}"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:visibility="visible"
+                   android:textSize="@dimen/_14ssp"
+                   android:textColor="@color/white"
+                   app:layout_constraintTop_toBottomOf="@id/year"
                    app:layout_constraintStart_toStartOf="parent"
                    app:layout_constraintEnd_toEndOf="parent"/>
            </androidx.constraintlayout.widget.ConstraintLayout>

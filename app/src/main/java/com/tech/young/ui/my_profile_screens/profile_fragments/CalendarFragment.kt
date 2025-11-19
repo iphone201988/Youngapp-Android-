@@ -8,6 +8,7 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.InsetDrawable
 import android.graphics.drawable.LayerDrawable
 import android.net.Uri
+import android.os.Bundle
 import android.provider.OpenableColumns
 import android.text.TextUtils
 import android.util.Log
@@ -57,6 +58,7 @@ import com.tech.young.databinding.BottomsheetEventDetailsBinding
 import com.tech.young.databinding.BotttomSheetTopicsBinding
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
+import com.tech.young.ui.exchange.stream_detail_fragment.StreamDetailFragment
 import com.tech.young.ui.share_screen.CommonShareFragment
 import com.tech.young.ui.stream_screen.CommonStreamFragment
 import com.tech.young.ui.vault_screen.CommonVaultFragment
@@ -83,6 +85,8 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
 
     private var topicList = ArrayList<DropDownData>()
     private var imageUri : Uri ?= null
+
+    private var streamId : String ?= null
     private var userSelectedDate: String? = null
     private var pagination: VerticalPagination? = null
     var eventsList = listOf<GetEventsApiResponse.Data.Event?>()
@@ -133,10 +137,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
 
 
 
-
-
-
-
         binding.setPublic.setOnCheckedChangeListener { _, isChecked ->
             val visibilityMode = isChecked  // true if checked, false if not
             Log.d("SwitchValue", "Visibility mode: $visibilityMode")
@@ -155,6 +155,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
             }
             false
         }
+
 
 
 
@@ -296,6 +297,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
                         eventDetailsBottomSheet.binding.etTitle.text = m.title
                         eventDetailsBottomSheet.binding.etDescription.text = m.description
                         eventDetailsBottomSheet.binding.etTopic.text =m.topic
+                        BindingUtils.setNotificationDateFormat(eventDetailsBottomSheet.binding.etDate,m.scheduledDate)
                         // Handle image preview
                         if (!m.file.isNullOrEmpty()) {
                             Glide.with(binding.previewImage.context)
@@ -311,6 +313,14 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
 
                         } else {
                             eventDetailsBottomSheet.binding.previewImage.visibility = View.GONE
+                        }
+
+                        if(m.type !=  "own_events"){
+                            eventDetailsBottomSheet.binding.tvView.visibility = View.VISIBLE
+                            streamId = m.streamId
+                        }
+                        else{
+                            eventDetailsBottomSheet.binding.tvView.visibility = View.GONE
                         }
                         eventDetailsBottomSheet.show()
                     }
@@ -424,9 +434,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
         })
 
 
-
-
-
         binding.shareLayout.tabShare.setOnClickListener {
 
 
@@ -483,12 +490,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
             }
         })
 
-
-
-
     }
-
-
 
     private fun callDateEventApi(apiDate: String) {
         if (apiDate != null){
@@ -500,8 +502,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
         }
 
     }
-
-
 
     /** handle click **/
     private fun initOnClick() {
@@ -941,6 +941,22 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
             R.id.ivCross ->{
                 eventDetailsBottomSheet.dismiss()
             }
+            R.id.tvView ->{
+                eventDetailsBottomSheet.dismiss()
+                if (streamId != null){
+                    val fragment = StreamDetailFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("streamId", streamId)
+                        }
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+            }
+
         }
 
     }

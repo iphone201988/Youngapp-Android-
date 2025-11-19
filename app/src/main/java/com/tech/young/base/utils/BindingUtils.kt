@@ -508,6 +508,33 @@ object BindingUtils {
     }
 
 
+    @BindingAdapter("setFormattedTime")
+    @JvmStatic
+    fun setFormattedTime(textView: TextView, dateString: String?) {
+        if (dateString.isNullOrBlank()) {
+            textView.text = ""
+            return
+        }
+
+        try {
+            // Input format: 2025-11-19T09:25:10.123Z (UTC)
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+            val date = inputFormat.parse(dateString)
+
+            // Output format: 12:00 AM, 05:30 PM, etc.
+            val outputFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+
+            textView.text = date?.let { outputFormat.format(it) } ?: ""
+        } catch (e: Exception) {
+            textView.text = ""
+            e.printStackTrace()
+        }
+    }
+
+
+
     @BindingAdapter("memberView")
     @JvmStatic
     fun memberView(view : RecyclerView, memberList : List<GetVaultApiResponse.Data.Vault.Member?>?) {

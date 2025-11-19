@@ -360,6 +360,7 @@ data class GetEventsApiResponse(
             var title: String?,
             var topic: String?,
             var type: String?,
+            var streamId: String?,
             var userId: String?,
             var public: Boolean?,
             var isExpired: Boolean?

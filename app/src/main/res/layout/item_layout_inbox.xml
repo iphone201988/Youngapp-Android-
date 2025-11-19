@@ -47,7 +47,7 @@
             android:layout_marginEnd="@dimen/_5sdp"
             android:singleLine="true"
             android:textColor="@color/colorPrimary"
-            app:layout_constraintEnd_toStartOf="@id/time"
+            app:layout_constraintEnd_toStartOf="@id/ivAboutIcon"
             app:layout_constraintTop_toTopOf="@id/profileImage"
             app:layout_constraintStart_toEndOf="@id/profileImage"/>
 
@@ -65,18 +65,18 @@
             app:layout_constraintTop_toBottomOf="@id/tvUserName"
             app:layout_constraintStart_toStartOf="@id/tvUserName"/>
         
-        
+
         <TextView
             android:id="@+id/time"
             style="@style/TextView_500_Medium"
-            formatDateTimeForInbox="@{bean.createdAt}"
+            setNotificationDateFormat="@{bean.createdAt}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="09:10 AM"
             android:layout_marginTop="@dimen/_5sdp"
             android:textSize="@dimen/_10ssp"
             android:textColor="@color/dark_gray"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSubject"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <ImageView
@@ -85,8 +85,7 @@
             android:layout_height="@dimen/_16sdp"
             android:src="@drawable/iv_chat_icon"
             android:onClick="@{v->callback.onItemClick(v,bean,pos)}"
-            app:layout_constraintTop_toTopOf="@id/tvSubject"
-            app:layout_constraintBottom_toBottomOf="@id/tvSubject"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <ImageView
