@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.androidx.espresso.core)
+    implementation(libs.billing.ktx)
 //    implementation(libs.firebase.auth.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

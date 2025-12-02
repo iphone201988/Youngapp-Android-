@@ -70,6 +70,7 @@ object Constants {
 
   const val RESET_PASSWORD = "user/resetPassword"
 
+  const val LAST_24_HOURS = "post/subscription/last24hours"
 
   const val NOTIFICATION = "user/getAllNotifications"
 

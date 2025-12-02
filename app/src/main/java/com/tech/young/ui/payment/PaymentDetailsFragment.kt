@@ -13,6 +13,7 @@ import android.view.View
 import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import com.tech.young.BR
 import com.tech.young.R
@@ -141,6 +142,12 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
                         .replace(R.id.frameLayout, fragment)
                         .addToBackStack(null)
                         .commit()
+                }
+                R.id.tvUpgradePlan ->{
+                    val intent = Intent(requireContext(), CommonActivity::class.java)
+                    intent.putExtra("from", "package")
+                    startActivity(intent)
+
                 }
             }
         }

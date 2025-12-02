@@ -81,7 +81,7 @@ class AddYourPersonalInfoFragment : BaseFragment<FragmentAddYourPersonalInfoBind
 //                                    RegistrationDataHolder.areasOfExpertise = edtAreasOfExpertise
 //                                    RegistrationDataHolder.productsServicesOffered = edtProductsServicesOffered
 //
-//                                    findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
+//                                    findNavController().navigate(R.id.navigateToTermAndConditionsFragment)
 //
 //                                }
 //                            }
@@ -96,7 +96,7 @@ class AddYourPersonalInfoFragment : BaseFragment<FragmentAddYourPersonalInfoBind
 //                                    RegistrationDataHolder.interestedIn = edtIndustryInterestedIn
 //                                    RegistrationDataHolder.areasOfExpertise = edtAreasExpertise
 //
-//                                    findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
+//                                    findNavController().navigate(R.id.navigateToTermAndConditionsFragment)
 //
 //                                }
 //                            }
@@ -112,7 +112,7 @@ class AddYourPersonalInfoFragment : BaseFragment<FragmentAddYourPersonalInfoBind
 //                                    RegistrationDataHolder.industry = edtIndustry
 //                                    RegistrationDataHolder.interestedIn = edtInterestedIn
 //
-//                                    findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
+//                                    findNavController().navigate(R.id.navigateToTermAndConditionsFragment)
 //
 //                                }
 //                            }
@@ -198,7 +198,7 @@ class AddYourPersonalInfoFragment : BaseFragment<FragmentAddYourPersonalInfoBind
                         else -> {
                             RegistrationDataHolder.productsServicesOffered = productsServicesOffered
                             RegistrationDataHolder.areasOfExpertise = areasOfExpertise
-                            findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
+                            findNavController().navigate(R.id.navigateToTermAndConditionsFragment)
                             //  findNavController().navigate(R.id.navigateToSelectYourAccountPackageFragment)
                         }
                     }
@@ -219,7 +219,7 @@ class AddYourPersonalInfoFragment : BaseFragment<FragmentAddYourPersonalInfoBind
                         else -> {
                             RegistrationDataHolder.industry = industry
                             RegistrationDataHolder.interestedIn = interestedIn
-                            findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
+                            findNavController().navigate(R.id.navigateToTermAndConditionsFragment)
                         }
                     }
                 }
@@ -237,7 +237,7 @@ class AddYourPersonalInfoFragment : BaseFragment<FragmentAddYourPersonalInfoBind
                             RegistrationDataHolder.interestedIn = edtIndustryInterestedIn
                             RegistrationDataHolder.areasOfExpertise = edtAreasExpertise
 
-                            findNavController().navigate(R.id.fragmentSelectYourAccountPackage)
+                            findNavController().navigate(R.id.navigateToTermAndConditionsFragment)
                         }
                     }
                 }

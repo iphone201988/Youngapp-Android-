@@ -175,4 +175,9 @@
         android:id="@+id/fragmentDigitVerification"
         android:name="com.tech.young.ui.didit_verification.DiditVerificationFragment"
         tools:layout="@layout/fragment_didit_verification"/>
+
+    <fragment
+        android:id="@+id/fragmentSelectYourPackage"
+        android:name="com.tech.young.ui.signup_process.SelectYourAccountPackageFragment"
+        tools:layout="@layout/fragment_select_your_account_package"/>
 </navigation>

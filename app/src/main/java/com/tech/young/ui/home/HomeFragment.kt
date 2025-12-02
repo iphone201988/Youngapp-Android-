@@ -23,6 +23,7 @@ import com.tech.young.base.utils.showToast
 import com.tech.young.data.RSSItem
 import com.tech.young.data.api.Constants
 import com.tech.young.data.api.StockQuoteService
+import com.tech.young.data.model.ExchangeShareApiResponse
 import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.TrendingTopicApiResponse
 import com.tech.young.databinding.AdsItemViewBinding
@@ -30,6 +31,7 @@ import com.tech.young.databinding.FragmentHomeBinding
 import com.tech.young.databinding.HolderTrendingTopicBinding
 import com.tech.young.databinding.ItemLayoutHomeNewsBinding
 import com.tech.young.databinding.ItemLayoutNewsDataBinding
+import com.tech.young.databinding.ItemLayoutPostsBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.consumer_stream.ConsumerStreamActiivty
 import com.tech.young.ui.ecosystem.EcosystemFragment
@@ -61,13 +63,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private var tickerScrollRunnable: Runnable? = null
     private val rssItems = mutableListOf<RSSItem>()
     private lateinit var newsAdapter: SimpleRecyclerViewAdapter<RSSItem, ItemLayoutHomeNewsBinding>
+    private lateinit var businessAdapter: SimpleRecyclerViewAdapter<ExchangeShareApiResponse.Data.Post, ItemLayoutHomeNewsBinding>
+    private lateinit var advisorAdapter : SimpleRecyclerViewAdapter<ExchangeShareApiResponse.Data.Post, ItemLayoutPostsBinding>
+    private lateinit var startupAdapter: SimpleRecyclerViewAdapter<ExchangeShareApiResponse.Data.Post, ItemLayoutPostsBinding>
+    private lateinit var investorAdapter: SimpleRecyclerViewAdapter<ExchangeShareApiResponse.Data.Post, ItemLayoutPostsBinding>
+    private lateinit var firmAdapter: SimpleRecyclerViewAdapter<ExchangeShareApiResponse.Data.Post, ItemLayoutPostsBinding>
+    private lateinit var memberAdapter: SimpleRecyclerViewAdapter<ExchangeShareApiResponse.Data.Post, ItemLayoutPostsBinding>
+
+
 
 
     private lateinit var adapterTrending: SimpleRecyclerViewAdapter<TrendingTopicApiResponse.Data.Topic, HolderTrendingTopicBinding>
     override fun onCreateView(view: View) {
         // view
         initView()
+        getFeatureData()
         viewModel.getTrendingTopics(Constants.GET_TRENDING_TOPICS)
+
 
         // click
         initOnClick()
@@ -77,6 +89,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         initObserver()
     }
 
+    private fun getFeatureData() {
+        val data = HashMap<String, Any>()
+        viewModel.featureData(data , Constants.LAST_24_HOURS)
+    }
 
 
     private fun loadRSS() {
@@ -400,6 +416,35 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                                 }
                             }
                         }
+                        "featureData" -> {
+                            val model: ExchangeShareApiResponse? =
+                                BindingUtils.parseJson(it.data.toString())
+
+                            val posts = model?.data?.posts?.filterNotNull() ?: emptyList()
+
+                            // 🔥 Group by role
+                            val groupedPosts = posts.groupBy { post ->
+                                post.userId?.role ?: "members"
+                            }
+
+                            // 🔥 Extract lists for each RecyclerView
+                            val members = groupedPosts["members"] ?: emptyList()
+                            val financial = groupedPosts["financial"] ?: emptyList()
+                            val investor = groupedPosts["investor"] ?: emptyList()
+                            val startup = groupedPosts["startup"] ?: emptyList()
+                            val advisor = groupedPosts["advisor"] ?: emptyList()
+                            val smallBusiness = groupedPosts["smallBusiness"] ?: emptyList()
+
+                            // Now pass these to your adapters
+                            memberAdapter.list = members
+                            firmAdapter.list = financial
+                            investorAdapter.list = investor
+                            startupAdapter.list = startup
+                            advisorAdapter.list = advisor
+                            businessAdapter.list = smallBusiness
+
+                        }
+
                     }
                 }
                 Status.ERROR ->{
@@ -523,78 +568,120 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
 
     /**** news adapter ***/
+    /**** news adapter (main) ***/
     private fun initAdapterNews() {
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        val layoutManager2 = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        val layoutManager3 = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        val layoutManager4 = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        val layoutManager5 = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        val layoutManager6 = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        val layoutManager7 = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        val customOrder = listOf("1", "3", "2", "4", "", "5")
-        val sortedNews = reorderNewsList(newsList(), customOrder)
-        val adapter = NewsCustomAdapter(requireContext(), sortedNews)
-        adapter.setHasStableIds(true)
+        val businessLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        val advisorLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        val startupLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        val investorLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        val firmLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        val memberLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
 
-//        binding.rvNews.layoutManager = layoutManager
-//        binding.rvNews.setHasFixedSize(true)
-//        binding.rvNews.adapter = newsAdapter
-//        binding.rvNews.itemAnimator = null
-
-        newsAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_home_news, BR.bean) { v, m, pos ->
-                when (v.id) {
-                    R.id.consMain->{
-                        val intent= Intent(requireContext(),CommonActivity::class.java).apply {
-                            putExtra("from","single_news")
-                            putExtra("linkUrl",m.link)
-                        }
-                        startActivity(intent)
+        // 🔥 Main news adapter stays same — DO NOT CHANGE ANYTHING HERE
+        newsAdapter = SimpleRecyclerViewAdapter(
+            R.layout.item_layout_home_news,
+            BR.bean
+        ) { v, m, pos ->
+            when (v.id) {
+                R.id.consMain -> {
+                    val intent = Intent(requireContext(), CommonActivity::class.java).apply {
+                        putExtra("from", "single_news")
+                        putExtra("linkUrl", m.link)
                     }
+                    startActivity(intent)
                 }
             }
+        }
 
-
-        binding.rvNews.adapter = newsAdapter
         binding.rvNews.layoutManager = layoutManager
-//        binding.rvNews.setHasFixedSize(true)
+        binding.rvNews.adapter = newsAdapter
 
 
 
+// member adapter
+        memberAdapter = SimpleRecyclerViewAdapter(
+            R.layout.item_layout_posts,
+            BR.bean
+        ) { v, m, pos ->
+            when (v.id) {
+                R.id.consMain -> {
 
-        binding.rvMembers.layoutManager = layoutManager2
-        binding.rvMembers.setHasFixedSize(true)
-        binding.rvMembers.adapter = adapter
-        binding.rvMembers.itemAnimator = null
+                }
+            }
+        }
 
-        binding.rvFinancialView.layoutManager = layoutManager3
-        binding.rvFinancialView.setHasFixedSize(true)
-        binding.rvFinancialView.adapter = adapter
-        binding.rvFinancialView.itemAnimator = null
-
-        binding.rvInvestor.layoutManager = layoutManager4
-        binding.rvInvestor.setHasFixedSize(true)
-        binding.rvInvestor.adapter = adapter
-        binding.rvInvestor.itemAnimator = null
-
-
-        binding.rvStartUp.layoutManager = layoutManager5
-        binding.rvStartUp.setHasFixedSize(true)
-        binding.rvStartUp.adapter = adapter
-        binding.rvStartUp.itemAnimator = null
+        binding.rvMembers.layoutManager = memberLayoutManager
+        binding.rvMembers.adapter = memberAdapter
 
 
-        binding.rvFinancialAdvisor.layoutManager = layoutManager6
-        binding.rvFinancialAdvisor.setHasFixedSize(true)
-        binding.rvFinancialAdvisor.adapter = adapter
-        binding.rvFinancialAdvisor.itemAnimator = null
+// Business adapter
+        businessAdapter = SimpleRecyclerViewAdapter(
+            R.layout.item_layout_posts,
+            BR.bean
+        ) { v, m, pos ->
+
+        }
+
+        binding.rvSmallBusiness.layoutManager = businessLayoutManager
+        binding.rvSmallBusiness.adapter = businessAdapter
 
 
-        binding.rvSmallBusiness.layoutManager = layoutManager7
-        binding.rvSmallBusiness.setHasFixedSize(true)
-        binding.rvSmallBusiness.adapter = adapter
-        binding.rvSmallBusiness.itemAnimator = null
+// advisor adapter
+        advisorAdapter = SimpleRecyclerViewAdapter(
+            R.layout.item_layout_posts,
+            BR.bean
+        ) { v, m, pos ->
+            when (v.id) {
+
+            }
+        }
+
+        binding.rvFinancialAdvisor.layoutManager = advisorLayoutManager
+        binding.rvFinancialAdvisor.adapter = advisorAdapter
+
+
+// Startup
+        startupAdapter = SimpleRecyclerViewAdapter(
+            R.layout.item_layout_posts,
+            BR.bean
+        ) { v, m, pos ->
+            when (v.id) {
+
+            }
+        }
+
+        binding.rvStartUp.layoutManager = startupLayoutManager
+        binding.rvStartUp.adapter = startupAdapter
+
+// Investor
+        investorAdapter = SimpleRecyclerViewAdapter(
+            R.layout.item_layout_posts,
+            BR.bean
+        ) { v, m, pos ->
+            when (v.id) {
+
+            }
+        }
+
+        binding.rvInvestor.layoutManager = investorLayoutManager
+        binding.rvInvestor.adapter = investorAdapter
+
+// firm adapter
+        firmAdapter = SimpleRecyclerViewAdapter(
+            R.layout.item_layout_posts,
+            BR.bean
+        ) { v, m, pos ->
+            when (v.id) {
+
+            }
+        }
+
+        binding.rvFinancialView.layoutManager = firmLayoutManager
+        binding.rvFinancialView.adapter = firmAdapter
     }
+
 
     private fun newsList(): ArrayList<String> {
         return arrayListOf(
@@ -633,5 +720,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private var getList = listOf(
         "", "", "", "", ""
     )
+
+
+
+
+
 
 }

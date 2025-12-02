@@ -1026,7 +1026,9 @@ data class ExchangeShareApiResponse(
                 var location: Location?,
                 var username: String?,
                 var lastLogin: String?,
-                var profileImage: String?
+                var profileImage: String?,
+
+                var role: String?
             ) {
                 data class Location(
                     var coordinates: List<Double?>?, var type: String?

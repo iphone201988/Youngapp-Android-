@@ -30,6 +30,7 @@ navigationFragment = "2.9.0"
 firebaseMessagingKtx = "24.1.2"
 firebaseAuthKtx = "23.2.1"
 google-services = "4.4.0"
+billingKtx = "7.1.1"
 
 [libraries]
 android-spinkit = { module = "com.github.ybq:Android-SpinKit", version.ref = "androidSpinkit" }
@@ -63,6 +64,7 @@ sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid
 ssp-android = { module = "com.intuit.ssp:ssp-android", version.ref = "sspAndroid" }
 androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
 firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
+billing-ktx = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billingKtx" }
 #firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 
 

@@ -234,6 +234,9 @@ class CommonActivity : BaseActivity<ActivityCommonBinding>()  {
                                     bundle.putString("url", url)
                                     setStartDestination(R.id.fragmentImageZoom)
                                 }
+                                "package" ->{
+                                    setStartDestination(R.id.fragmentSelectYourPackage)
+                                }
                             }
                             navController.setGraph(this, bundle)
                         }
