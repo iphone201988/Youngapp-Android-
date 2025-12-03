@@ -487,7 +487,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                         updateOtherUI("Account Details")
                     }
                     is  MyShareFragment ->{
-                        updateOtherUI("My Shares")
+//                        updateOtherUI("My Shares")
                     }
                     is ViewMessageFragment->{
                         updateOtherUI("View Message")

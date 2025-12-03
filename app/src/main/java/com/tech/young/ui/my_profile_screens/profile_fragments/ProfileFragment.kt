@@ -159,6 +159,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                         arguments = Bundle().apply {
                             putString("userId", userId)
                             putString("role", role)
+                            putString("side","MyShare")
                         }
                     }
 

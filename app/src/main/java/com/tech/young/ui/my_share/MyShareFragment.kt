@@ -37,6 +37,8 @@ class MyShareFragment : BaseFragment<FragmentMyShareBinding>() {
     private var role : String ? = null
     private var id : String ? = null
 
+    private var side : String ?= null
+
 
 
     private var page  = 1
@@ -97,16 +99,39 @@ class MyShareFragment : BaseFragment<FragmentMyShareBinding>() {
     private fun getSavedData() {
         role= arguments?.getString("role").toString()
         id = arguments?.getString("userId").toString()
-
+        side = arguments?.getString("side").toString()
         Log.i("dsdsd", "getSavedData: $id , $role ")
-        if(role != null && id != null){
-            val data = HashMap<String,Any>()
-      //     data["userType"] = role!!
-        //    data["type"] = "share"
-            data["id"] = id!!
-            data["page"] = 1
-            viewModel.savedShare(data, Constants.GET_SAVED_POST)
+
+        val title = when (side) {
+            "feature" -> "Featured"
+            "MyShare" -> "My Shares"
+            else -> "My Shares"
         }
+
+        // Call activity method
+        (activity as? HomeActivity)?.updateOtherUI(title)
+
+
+        if (side == "feature"){
+            Log.i("fdsfsdf", "getSavedData: features")
+           val data = HashMap<String, Any>()
+           data["type"]= role.toString()
+            data["limit"] = 30
+            data["page"]  =  1
+            viewModel.savedShare(data, Constants.LAST_24_HOURS)
+        }
+        else{
+            if(role != null && id != null){
+                Log.i("fdsfsdf", "getSavedData: my share")
+                val data = HashMap<String,Any>()
+                //     data["userType"] = role!!
+                //    data["type"] = "share"
+                data["id"] = id!!
+                data["page"] = 1
+                viewModel.savedShare(data, Constants.GET_SAVED_POST)
+            }
+        }
+
 
 
 

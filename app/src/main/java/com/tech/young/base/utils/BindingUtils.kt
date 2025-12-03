@@ -160,6 +160,20 @@ object BindingUtils {
         }
     }
 
+    @BindingAdapter("setImageFeatures")
+    @JvmStatic
+    fun setImageFeatures(image: ShapeableImageView, url: String?) {
+
+        val finalUrl = if (url.isNullOrEmpty()) null else url
+
+        Glide.with(image.context)
+            .load(finalUrl)
+            .placeholder(R.drawable.dummy_profile)   // shown while loading
+            .error(R.drawable.dummy_profile)         // shown if url is null/empty/invalid
+            .into(image)
+    }
+
+
 //    @BindingAdapter("setUserImageFromBaseUrl")
 //    @JvmStatic
 //    fun setUserImageFromBaseUrl(image: ShapeableImageView, url: String?) {

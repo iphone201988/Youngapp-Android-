@@ -1,6 +1,7 @@
 package com.tech.young.ui.home
 
 import android.content.Intent
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -37,6 +38,7 @@ import com.tech.young.ui.consumer_stream.ConsumerStreamActiivty
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.exchange.screens.ShareExchangeFragment
+import com.tech.young.ui.my_share.MyShareFragment
 import com.tech.young.ui.share_screen.CommonShareFragment
 import com.tech.young.ui.stream_screen.CommonStreamFragment
 import com.tech.young.ui.streaming_activity.StreamActivity
@@ -76,8 +78,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private lateinit var adapterTrending: SimpleRecyclerViewAdapter<TrendingTopicApiResponse.Data.Topic, HolderTrendingTopicBinding>
     override fun onCreateView(view: View) {
         // view
-        initView()
+
+        // observer
+        initObserver()
         getFeatureData()
+        initView()
         viewModel.getTrendingTopics(Constants.GET_TRENDING_TOPICS)
 
 
@@ -85,8 +90,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         initOnClick()
 
 
-        // observer
-        initObserver()
+
     }
 
     private fun getFeatureData() {
@@ -362,25 +366,89 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                         .addToBackStack(null)
                         .commit()
                 }
-                R.id.tvMembersView -> {
-                    ShareExchangeFragment.selectedCategoryForExchange = "Members"
 
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.frameLayout, ExchangeFragment())
-                        .addToBackStack(null)
-                        .commit()
-                }
 
                 R.id.tvSmallView->{
-                    ShareExchangeFragment.selectedCategoryForExchange = "Small Businesses"
+                    val fragment = MyShareFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("role", "small_business")
+                            putString("side", "feature")
+                        }
+                    }
+
                     requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.frameLayout, ExchangeFragment())
+                        .replace(R.id.frameLayout, fragment)
                         .addToBackStack(null)
                         .commit()
-//                    val intent=Intent(requireContext(),CommonActivity::class.java)
-//                    intent.putExtra("from","view_more")
-//                    startActivity(intent)
+
                 }
+                R.id.tvMembersView ->{
+
+                    val fragment = MyShareFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("role", "general_member")
+                            putString("side", "feature")
+                        }
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                R.id.tvFinancialView ->{
+                    val fragment = MyShareFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("role", "financial_firm")
+                            putString("side", "feature")
+                        }
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                R.id.tvStartUpView ->{
+                    val fragment = MyShareFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("role", "startup")
+                            putString("side", "feature")
+                        }
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                R.id.tvAdvisorView ->{
+                    val fragment = MyShareFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("role", "financial_advisor")
+                            putString("side", "feature")
+                        }
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                R.id.tvInvestorView  ->{
+                    val fragment = MyShareFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("role", "investor")
+                            putString("side", "feature")
+                        }
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+
             }
         }
 
@@ -422,28 +490,52 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
                             val posts = model?.data?.posts?.filterNotNull() ?: emptyList()
 
-                            // 🔥 Group by role
+                            // 🔥 Group posts correctly according to REAL API roles
                             val groupedPosts = posts.groupBy { post ->
-                                post.userId?.role ?: "members"
+                                post.userId?.role ?: "general_member"
                             }
 
-                            // 🔥 Extract lists for each RecyclerView
-                            val members = groupedPosts["members"] ?: emptyList()
-                            val financial = groupedPosts["financial"] ?: emptyList()
+                            // 🔥 Extract lists based on correct roles
+                            val generalMembers = groupedPosts["general_member"] ?: emptyList()
+                            val smallBusiness = groupedPosts["small_business"] ?: emptyList()
                             val investor = groupedPosts["investor"] ?: emptyList()
+                            val financialFirm = groupedPosts["financial_firm"] ?: emptyList()
                             val startup = groupedPosts["startup"] ?: emptyList()
-                            val advisor = groupedPosts["advisor"] ?: emptyList()
-                            val smallBusiness = groupedPosts["smallBusiness"] ?: emptyList()
+                            val financialAdvisor = groupedPosts["financial_advisor"] ?: emptyList()
 
-                            // Now pass these to your adapters
-                            memberAdapter.list = members
-                            firmAdapter.list = financial
-                            investorAdapter.list = investor
-                            startupAdapter.list = startup
-                            advisorAdapter.list = advisor
+
+                            Log.i("sdasdas", "initObserver: $generalMembers")
+                            // 🔥 Assign lists to adapters
+                            memberAdapter.list = generalMembers
+                            memberAdapter.notifyDataSetChanged()
+
+
                             businessAdapter.list = smallBusiness
+                            businessAdapter.notifyDataSetChanged()
+
+
+                            investorAdapter.list = investor
+                            investorAdapter.notifyDataSetChanged()
+
+
+                            firmAdapter.list = financialFirm
+                            firmAdapter.notifyDataSetChanged()
+
+
+                            startupAdapter.list = startup
+                            startupAdapter.notifyDataSetChanged()
+
+                            advisorAdapter.list = financialAdvisor
+                            advisorAdapter.notifyDataSetChanged()
+                            // Notify adapters
+
+
+
+
+
 
                         }
+
 
                     }
                 }
