@@ -1,5 +1,6 @@
 package com.tech.young.ui.home
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -508,30 +509,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                             // 🔥 Assign lists to adapters
                             memberAdapter.list = generalMembers
                             memberAdapter.notifyDataSetChanged()
-
+                            setDynamicHeight(binding.rvMembers, generalMembers.isNotEmpty())
 
                             businessAdapter.list = smallBusiness
                             businessAdapter.notifyDataSetChanged()
+                            setDynamicHeight(binding.rvSmallBusiness, smallBusiness.isNotEmpty())
 
 
                             investorAdapter.list = investor
                             investorAdapter.notifyDataSetChanged()
+                            setDynamicHeight(binding.rvInvestor, investor.isNotEmpty())
 
 
                             firmAdapter.list = financialFirm
                             firmAdapter.notifyDataSetChanged()
+                            setDynamicHeight(binding.rvFinancialView, financialFirm.isNotEmpty())
 
 
                             startupAdapter.list = startup
                             startupAdapter.notifyDataSetChanged()
+                            setDynamicHeight(binding.rvStartUp, startup.isNotEmpty())
 
                             advisorAdapter.list = financialAdvisor
                             advisorAdapter.notifyDataSetChanged()
-                            // Notify adapters
-
-
-
-
+                            setDynamicHeight(binding.rvFinancialAdvisor, financialAdvisor.isNotEmpty())
 
 
                         }
@@ -774,6 +775,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         binding.rvFinancialView.adapter = firmAdapter
     }
 
+    private fun setDynamicHeight(rv: RecyclerView, hasData: Boolean) {
+        val params = rv.layoutParams
+        params.height = if (hasData) {
+            RecyclerView.LayoutParams.WRAP_CONTENT
+        } else {
+            requireContext().dpToPx(120)   // ✅ Correct
+        }
+        rv.layoutParams = params
+    }
+
+
+
+
 
     private fun newsList(): ArrayList<String> {
         return arrayListOf(
@@ -813,9 +827,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         "", "", "", "", ""
     )
 
-
-
-
-
-
 }
+fun Context.dpToPx(dp: Int): Int =
+    (dp * resources.displayMetrics.density).toInt()

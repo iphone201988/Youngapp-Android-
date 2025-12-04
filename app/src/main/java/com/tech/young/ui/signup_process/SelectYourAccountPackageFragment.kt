@@ -60,7 +60,7 @@ class SelectYourAccountPackageFragment : BaseFragment<FragmentSelectYourAccountP
         viewModel.onClick.observe(requireActivity(), Observer {
             when (it?.id) {
                 R.id.ivBack -> {
-                    findNavController().popBackStack()
+                    requireActivity().onBackPressedDispatcher.onBackPressed()
                 }
 
                 R.id.tvSkip ->{

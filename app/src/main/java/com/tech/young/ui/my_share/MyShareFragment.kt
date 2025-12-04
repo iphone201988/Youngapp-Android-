@@ -103,7 +103,7 @@ class MyShareFragment : BaseFragment<FragmentMyShareBinding>() {
         Log.i("dsdsd", "getSavedData: $id , $role ")
 
         val title = when (side) {
-            "feature" -> "Featured"
+            "feature" -> "Featured Shares"
             "MyShare" -> "My Shares"
             else -> "My Shares"
         }

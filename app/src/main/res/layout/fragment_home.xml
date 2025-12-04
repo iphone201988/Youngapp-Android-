@@ -174,12 +174,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_7sdp"
                     android:layout_marginTop="@dimen/_10sdp"
-                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
                     app:layout_constraintTop_toBottomOf="@id/tvSmallBusiness"
-                    app:spanCount="2"
-                    tools:itemCount="5"
-                    android:visibility="invisible"
-                    tools:listitem="@layout/news_item_view" />
+                    android:visibility="invisible" />
 
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -217,12 +213,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_7sdp"
                     android:layout_marginTop="@dimen/_10sdp"
-                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
                     app:layout_constraintTop_toBottomOf="@id/tvFinancialAdvisor"
-                    app:spanCount="2"
-                    tools:itemCount="5"
-                    android:visibility="invisible"
-                    tools:listitem="@layout/news_item_view" />
+                    android:visibility="invisible" />
 
 
 
@@ -263,12 +255,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_7sdp"
                     android:layout_marginTop="@dimen/_10sdp"
-                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
                     app:layout_constraintTop_toBottomOf="@id/tvStartUp"
-                    app:spanCount="2"
-                    tools:itemCount="5"
-                    android:visibility="invisible"
-                    tools:listitem="@layout/news_item_view" />
+                    android:visibility="invisible" />
 
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -308,12 +296,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_7sdp"
                     android:layout_marginTop="@dimen/_10sdp"
-                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
                     app:layout_constraintTop_toBottomOf="@id/tvInvestor"
-                    app:spanCount="2"
-                    tools:itemCount="5"
-                    android:visibility="invisible"
-                    tools:listitem="@layout/news_item_view" />
+                    android:visibility="invisible" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvFinancialFirm"

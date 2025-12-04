@@ -8,15 +8,10 @@ import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.tech.young.R
 import com.tech.young.base.BaseActivity
 import com.tech.young.base.BaseViewModel
@@ -37,34 +32,29 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainSplashActivity : BaseActivity<ActivityMainSplashBinding>(), LocationResultListener {
+
     private val viewModel: AuthCommonVM by viewModels()
     private var locationHandler: LocationHandler? = null
     private var mCurrentLocation: Location? = null
-    private val REQUEST_RECORD_AUDIO_PERMISSION = 200
+
     private val NOTIFICATION_PERMISSION_REQUEST_CODE = 1001
 
+    override fun getLayoutResource(): Int = R.layout.activity_main_splash
 
-
-    override fun getLayoutResource(): Int {
-        return R.layout.activity_main_splash
-    }
-
-    override fun getViewModel(): BaseViewModel {
-         return viewModel
-    }
+    override fun getViewModel(): BaseViewModel = viewModel
 
     override fun onCreateView() {
         BindingUtils.statusBarStyleWhite(this)
         BindingUtils.styleSystemBars(this, getColor(R.color.white))
-        checkLocation()
-       checkNotificationPermission()
-        checkPermissions()
-        checkAudioPermission()
 
+        // 👉 FIX: Request permissions sequentially
+        requestLocationPermission()
     }
 
-
-    private fun checkLocation() {
+    // -------------------------------------------------------
+    // 1️⃣ LOCATION PERMISSION
+    // -------------------------------------------------------
+    private fun requestLocationPermission() {
         Permissions.check(
             this,
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -72,31 +62,15 @@ class MainSplashActivity : BaseActivity<ActivityMainSplashBinding>(), LocationRe
             object : PermissionHandler() {
                 override fun onGranted() {
                     createLocationHandler()
-                    proceedToNextScreen()
+                    requestNotificationPermission() // NEXT
                 }
 
                 override fun onDenied(context: Context?, deniedPermissions: ArrayList<String>?) {
-                    // Proceed even if location is denied
-                    proceedToNextScreen()
+                    requestNotificationPermission() // STILL NEXT
                 }
             }
         )
     }
-
-    private fun proceedToNextScreen() {
-        android.os.Handler().postDelayed({
-            val loginData = sharedPrefManager.getLoginData()
-            if (loginData == null) {
-                // Not logged in
-                startActivity(Intent(this@MainSplashActivity, MySplashActivity::class.java))
-            } else {
-                startActivity(Intent(this@MainSplashActivity, HomeActivity::class.java))
-            }
-            finish() // optional: close splash screen
-        }, 1000)
-    }
-
-
 
     private fun createLocationHandler() {
         locationHandler = LocationHandler(this, this)
@@ -105,104 +79,39 @@ class MainSplashActivity : BaseActivity<ActivityMainSplashBinding>(), LocationRe
     }
 
     override fun getLocation(location: Location) {
-        this.mCurrentLocation = location
-        Log.i("fdsf", "getLocation: ${mCurrentLocation!!.latitude}  , ${mCurrentLocation!!.longitude}")
-        val latitude = location.latitude
-        val longitude = location.longitude
+        mCurrentLocation = location
+        Log.i("MainSplash", "Location: ${location.latitude}, ${location.longitude}")
 
+        LoginFragment.lat = location.latitude
+        LoginFragment.long = location.longitude
 
-        LoginFragment.lat = latitude
-        LoginFragment.long = longitude
-
-        SetupPasswordFragment.lat = latitude
-        SetupPasswordFragment.long = longitude
-
-
+        SetupPasswordFragment.lat = location.latitude
+        SetupPasswordFragment.long = location.longitude
     }
 
-    private fun checkPermissions() {
-        if (!hasPermissions(this, permissions)) {
-            permissionResultLauncher.launch(permissions)
-        } else {
-            // All permissions already granted
-        }
-    }
-
-
-    private val permissionResultLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-            if (result.all { it.value }) {
-                // All permissions granted
-                proceedToNextScreen()
-
-            } else {
-                // One or more permissions denied
-            }
-        }
-
-
-    /** check audio permission **/
-//    private fun checkAudioPermission(): Boolean {
-//        if (ContextCompat.checkSelfPermission(
-//                this@MainSplashActivity, Manifest.permission.RECORD_AUDIO
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            ActivityCompat.requestPermissions(
-//                this@MainSplashActivity,
-//                arrayOf(Manifest.permission.RECORD_AUDIO),
-//                REQUEST_RECORD_AUDIO_PERMISSION
-//            )
-//            return false
-//        } else {
-//            return true
-//        }
-//    }
-
-
-//    private fun checkAudioPermission(): Boolean {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            // From Android 6.0+, need to request runtime permission
-//            if (ContextCompat.checkSelfPermission(
-//                    this,
-//                    Manifest.permission.RECORD_AUDIO
-//                ) != PackageManager.PERMISSION_GRANTED
-//            ) {
-//
-//                // For Android 10+, you might want to show rationale if denied before
-//                if (ActivityCompat.shouldShowRequestPermissionRationale(
-//                        this,
-//                        Manifest.permission.RECORD_AUDIO
-//                    )
-//                ) {
-//                    // Optional: Show custom rationale dialog explaining why the permission is needed
-//                }
-//
-//                ActivityCompat.requestPermissions(
-//                    this,
-//                    arrayOf(Manifest.permission.RECORD_AUDIO),
-//                    REQUEST_RECORD_AUDIO_PERMISSION
-//                )
-//                return false
-//            }
-//        }
-//        return true
-//    }
-
-    private fun checkNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13+
+    // -------------------------------------------------------
+    // 2️⃣ NOTIFICATION PERMISSION
+    // -------------------------------------------------------
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(
                     this,
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // Request notification permission
+
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.POST_NOTIFICATIONS),
                     NOTIFICATION_PERMISSION_REQUEST_CODE
                 )
+
+                return
             }
         }
+
+        // Continue to next
+        requestAudioPermission()
     }
 
     override fun onRequestPermissionsResult(
@@ -211,52 +120,63 @@ class MainSplashActivity : BaseActivity<ActivityMainSplashBinding>(), LocationRe
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
         if (requestCode == NOTIFICATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d("WelcomeActivity", "Notification permission granted")
-            } else {
-                Log.d("WelcomeActivity", "Notification permission denied")
-            }
+            requestAudioPermission() // continue chain
         }
     }
-    private fun checkAudioPermission() {
-        val micPermission = arrayOf(Manifest.permission.RECORD_AUDIO)
 
+    // -------------------------------------------------------
+    // 3️⃣ AUDIO PERMISSION
+    // -------------------------------------------------------
+    private fun requestAudioPermission() {
         Permissions.check(
-           this,
-            micPermission,
-            "Microphone permission is required to record audio.",
+            this,
+            arrayOf(Manifest.permission.RECORD_AUDIO),
+            "Microphone permission is required.",
             null,
             object : PermissionHandler() {
                 override fun onGranted() {
-                    // ✅ Permission granted – safe to record audio
-                    proceedToNextScreen()
-
+                    requestOtherPermissions() // NEXT
                 }
 
                 override fun onDenied(context: Context?, deniedPermissions: ArrayList<String>?) {
-                    // 🚫 Permission denied – optionally re-request or show warning
-                    deniedPermissions?.let {
-                        Permissions.check(
-                            this@MainSplashActivity,
-                            it.toTypedArray(),
-                            "Microphone access is required for this feature.",
-                            null,
-                            object : PermissionHandler() {
-                                override fun onGranted() {
-                                    // ✅ Permission granted after re-request
-                                    proceedToNextScreen()
-
-                                }
-                            }
-                        )
-                    }
+                    requestOtherPermissions() // STILL NEXT
                 }
             }
         )
     }
 
+    // -------------------------------------------------------
+    // 4️⃣ OTHER PERMISSIONS FROM BindingUtils.permissions
+    // -------------------------------------------------------
+    private fun requestOtherPermissions() {
+        if (!hasPermissions(this, permissions)) {
+            permissionResultLauncher.launch(permissions)
+        } else {
+            proceedToNextScreen()
+        }
+    }
 
+    private val permissionResultLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            proceedToNextScreen()
+        }
 
+    // -------------------------------------------------------
+    // 5️⃣ MOVE TO NEXT SCREEN
+    // -------------------------------------------------------
+    private fun proceedToNextScreen() {
+        android.os.Handler().postDelayed({
+            val loginData = sharedPrefManager.getLoginData()
 
+            if (loginData == null) {
+                startActivity(Intent(this, MySplashActivity::class.java))
+            } else {
+                startActivity(Intent(this, HomeActivity::class.java))
+            }
+
+            finish()
+        }, 1000)
+    }
 }

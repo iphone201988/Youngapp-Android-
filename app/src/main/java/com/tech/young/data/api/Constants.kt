@@ -72,6 +72,7 @@ object Constants {
 
   const val LAST_24_HOURS = "post/subscription/last24hours"
 
+  const val  UPGRADE_PLAN = "user/upgradePlan"
   const val NOTIFICATION = "user/getAllNotifications"
 
     /*************** Temp value store****************/

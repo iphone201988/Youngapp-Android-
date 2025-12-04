@@ -3,7 +3,10 @@ package com.tech.young.ui
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import com.tech.young.R
 import com.tech.young.base.BaseActivity
@@ -29,7 +32,12 @@ class MySplashActivity : BaseActivity<ActivityMySplashBinding>() {
     override fun onCreateView() {
         initView()
         initOnClick()
-
+        enableEdgeToEdge()
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(bars.left, 0, bars.right, bars.bottom)
+            insets
+        }
     }
 
     private fun initOnClick() {

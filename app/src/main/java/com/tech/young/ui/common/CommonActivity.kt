@@ -2,7 +2,10 @@ package com.tech.young.ui.common
 
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -38,6 +41,13 @@ class CommonActivity : BaseActivity<ActivityCommonBinding>()  {
     override fun onCreateView() {
         BindingUtils.statusBarStyleBlack(this)
         BindingUtils.styleSystemBars(this, getColor(R.color.white))
+//        enableEdgeToEdge()
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
+//            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+//            view.setPadding(bars.left, 10, bars.right, bars.bottom)
+//            insets
+//        }
+
         // view
         initView()
         // click

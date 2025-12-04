@@ -94,15 +94,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
     override fun onCreateView() {
 
 
-//        enableEdgeToEdge()
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//
-//            // Apply only top + left + right, skip bottom (keyboard safe area is managed by adjustResize)
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
-//
-//            insets
-//        }
+        enableEdgeToEdge()
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(bars.left, 0, bars.right, bars.bottom)
+            insets
+        }
+
+     
         initView()
         initPopup()
         viewModel.getProfile(Constants.GET_USER_PROFILE)

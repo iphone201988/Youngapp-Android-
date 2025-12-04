@@ -2,7 +2,10 @@ package com.tech.young.ui.welcome
 
 import android.content.Context
 import android.content.Intent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -42,6 +45,15 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>() {
         val type = intent.getStringExtra("type")
         BindingUtils.statusBarStyleBlack(this)
         BindingUtils.styleSystemBars(this, getColor(R.color.white))
+
+        enableEdgeToEdge()
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(bars.left, 0, bars.right, bars.bottom)
+            insets
+        }
+
+
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 navController.graph =
