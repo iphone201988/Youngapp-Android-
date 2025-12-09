@@ -13,6 +13,7 @@ import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
 import com.tech.young.data.model.GetAdsAPiResponse
+import com.tech.young.data.model.PaymentHistoryApiResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentPaymentHistoryBinding
 import com.tech.young.databinding.ItemLayoutPaymentHistoryBinding
@@ -27,7 +28,7 @@ class PaymentHistoryFragment : BaseFragment<FragmentPaymentHistoryBinding>() {
     // adapter
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
 
-    private lateinit var historyAdapter: SimpleRecyclerViewAdapter<String, ItemLayoutPaymentHistoryBinding>
+    private lateinit var historyAdapter: SimpleRecyclerViewAdapter<PaymentHistoryApiResponse.Data.Payment, ItemLayoutPaymentHistoryBinding>
 
 
     private var getList = listOf(
@@ -44,6 +45,7 @@ class PaymentHistoryFragment : BaseFragment<FragmentPaymentHistoryBinding>() {
         initView()
 
         viewModel.getAds(Constants.GET_ADS)
+        viewModel.getPaymentHistory(Constants.PAYMENT_HISTORY)
         // click
         initOnClick()
         initObserver()
@@ -63,6 +65,17 @@ class PaymentHistoryFragment : BaseFragment<FragmentPaymentHistoryBinding>() {
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
                                     adsAdapter.list = myDataModel.data?.ads
+                                }
+                            }
+                        }
+                        "getPaymentHistory" ->{
+                            val myDataModel : PaymentHistoryApiResponse? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    if (myDataModel.data.payments != null){
+                                        historyAdapter.list = myDataModel.data.payments
+                                    }
+
                                 }
                             }
                         }
@@ -120,7 +133,6 @@ class PaymentHistoryFragment : BaseFragment<FragmentPaymentHistoryBinding>() {
 
                 }
             }
-        historyAdapter.list = historyList
         binding.rvPaymentHistory.adapter = historyAdapter
     }
 

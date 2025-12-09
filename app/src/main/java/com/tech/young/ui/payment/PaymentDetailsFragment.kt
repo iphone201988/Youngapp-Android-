@@ -40,6 +40,7 @@ import com.tech.young.ui.MySplashActivity
 import com.tech.young.ui.change_password.ChangePasswordFragment
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.my_profile_screens.common_ui.EditProfileDetailFragment
+import com.tech.young.ui.payment.payment_history.PaymentHistoryFragment
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
@@ -148,6 +149,16 @@ class PaymentDetailsFragment : BaseFragment<FragmentPaymentDetailsBinding>() , B
                     intent.putExtra("from", "package")
                     startActivity(intent)
 
+                }
+                R.id.tvHistoryPayment ->{
+                    val fragment = PaymentHistoryFragment().apply {
+
+                    }
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
             }
         }

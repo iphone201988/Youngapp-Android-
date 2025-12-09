@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="bean"
+            type="com.tech.young.data.model.PaymentHistoryApiResponse.Data.Payment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,34 +19,37 @@
             android:id="@+id/tvPlans"
             style="@style/TextView_600_SemiBold"
             android:layout_width="0dp"
-            android:layout_marginEnd="@dimen/_10sdp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_12ssp"
+            android:layout_marginEnd="@dimen/_10sdp"
             android:singleLine="true"
-            app:layout_constraintEnd_toStartOf="@id/tvDateTime"
+            android:text="One Time Subscription"
             android:textColor="@color/colorPrimary"
-            android:text="Monthly Subscription"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:textSize="@dimen/_10ssp"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/planId"
             style="@style/TextView_400_Regular"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="PlanCFG-982374"
+            android:text='@{"Transaction ID : " + bean.transaction_id}'
             android:textSize="@dimen/_10ssp"
             android:layout_marginTop="@dimen/_10sdp"
-            app:layout_constraintEnd_toEndOf="@id/tvPlans"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/tvPlans"
             app:layout_constraintTop_toBottomOf="@id/tvPlans"/>
 
         
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDateTime"
-            android:layout_width="wrap_content"
+            setNotificationDateFormat="@{bean.createdAt}"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Apr 05, 2025"
+            android:textSize="@dimen/_10ssp"
+            android:gravity="end"
+            app:layout_constraintStart_toEndOf="@id/tvPlans"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tvPlans"
             app:layout_constraintBottom_toBottomOf="@id/tvPlans"/>

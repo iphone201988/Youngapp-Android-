@@ -103,7 +103,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     style="@style/TextView_400_Regular"
-                    android:text='@{bean.user.firstName + " " + bean.user.lastName}'
+                    android:text='@{((bean.user.firstName != null ? bean.user.firstName : "") + " " + (bean.user.lastName != null ? bean.user.lastName : "")).trim()}'
                     android:gravity="end"
                     android:textColor="@color/text_gray"
                     app:layout_constraintStart_toEndOf="@id/tvName"
@@ -378,6 +378,18 @@
                     app:layout_constraintTop_toBottomOf="@id/tvChangePassword"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvHistoryPayment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextView_500_Medium"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Payment History"
+                    android:onClick="@{v -> vm.onClick(v)}"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvUpgradePlan"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvDownload"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -387,7 +399,7 @@
                     android:onClick="@{v -> vm.onClick(v)}"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvUpgradePlan"/>
+                    app:layout_constraintTop_toBottomOf="@id/tvHistoryPayment"/>
 
 
                 <androidx.appcompat.widget.AppCompatTextView

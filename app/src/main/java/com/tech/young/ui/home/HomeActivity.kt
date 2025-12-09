@@ -59,6 +59,7 @@ import com.tech.young.ui.my_profile_screens.profile_fragments.CalendarFragment
 import com.tech.young.ui.my_share.MyShareFragment
 import com.tech.young.ui.notification_fragment.NotificationFragment
 import com.tech.young.ui.payment.PaymentDetailsFragment
+import com.tech.young.ui.payment.payment_history.PaymentHistoryFragment
 import com.tech.young.ui.policies_about.AboutFragment
 import com.tech.young.ui.policies_about.PoliciesFragment
 import com.tech.young.ui.share_screen.CommonShareFragment
@@ -496,6 +497,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                     }
                     is NotificationFragment ->{
                         updateOtherUI("Notification")
+                    }
+                    is PaymentHistoryFragment ->{
+                        updateOtherUI("Payment History")
                     }
 
 

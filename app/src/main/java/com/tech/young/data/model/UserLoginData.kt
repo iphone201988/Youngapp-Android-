@@ -581,6 +581,10 @@ data class GetChatApiResponse(
 }
 
 
+
+
+
+
 /******************* get user  api response ********************/
 //data class GetUserApiResponse(
 //    var `data`: Data?,
@@ -2146,3 +2150,28 @@ data class Location(
     val type: String?, val coordinates: List<Double>?
 )
 
+
+/***************  payment history   response *********************/
+data class PaymentHistoryApiResponse(
+    val `data`: Data,
+    val message: String,
+    val success: Boolean
+) {
+    data class Data(
+        val payments: List<Payment>
+    ) {
+        data class Payment(
+            val _id: String,
+            val createdAt: String,
+            val original_transaction_id: String,
+            val postId: String,
+            val postTitle: String,
+            val postType: String,
+            val product_id: String,
+            val subscription_expiry: String,
+            val subscription_purchase_date: String,
+            val transaction_id: String,
+            val type: String
+        )
+    }
+}

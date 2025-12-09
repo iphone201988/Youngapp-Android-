@@ -75,6 +75,8 @@ object Constants {
   const val  UPGRADE_PLAN = "user/upgradePlan"
   const val NOTIFICATION = "user/getAllNotifications"
 
+  const val PAYMENT_HISTORY = "payment/userPayments"
+
     /*************** Temp value store****************/
        var chooseAccountType = ""
 

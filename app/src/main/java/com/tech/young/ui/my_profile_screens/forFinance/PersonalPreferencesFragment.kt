@@ -17,6 +17,7 @@ import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.github.dhaval2404.imagepicker.util.FileUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
@@ -60,6 +61,11 @@ class PersonalPreferencesFragment : BaseFragment<FragmentPersonalPreferencesBind
 
     private val viewModel: YourProfileVM by viewModels()
     private var profileData: GetProfileApiResponseData? = null
+
+    private val imagesToBeRemoved = mutableListOf<String>()
+
+
+
 
     // common sheet & adapter
     private var type: String? = null
@@ -354,6 +360,49 @@ class PersonalPreferencesFragment : BaseFragment<FragmentPersonalPreferencesBind
         }
         yourImageAdapter.list = getImageList()
         binding.rvYourPhotos.adapter = yourImageAdapter
+
+
+
+//        yourImageAdapter = SimpleRecyclerViewAdapter(
+//            R.layout.add_photos_item_view, BR.bean
+//        ) { v, m, pos ->
+//
+//            val position = pos
+//            if (position == RecyclerView.NO_POSITION) return@SimpleRecyclerViewAdapter
+//
+//            when (v.id) {
+//
+//                R.id.clImage, R.id.ivImage -> {
+//                    cameraGalleryBottomSheet.show()
+//                }
+//
+//                R.id.ivDelete -> {
+//
+//                    val url = m.image_Url
+//
+//                    if (!url.isNullOrEmpty()) {
+//
+//                        // 1️⃣ Add to remove list (no API call here)
+//                        imagesToBeRemoved.add(url)
+//
+//                        // 2️⃣ Remove item safely from adapter list
+//                        val list = yourImageAdapter.list.toMutableList()
+//
+//                        if (position < list.size) {
+//                            list.removeAt(position)
+//                            yourImageAdapter.list = list
+//                            yourImageAdapter.notifyItemRemoved(position)
+//                        }
+//
+//                        Log.e("RemovedList", imagesToBeRemoved.toString())
+//                    }
+//                }
+//            }
+//        }
+//                yourImageAdapter.list = getImageList()
+//        binding.rvYourPhotos.adapter = yourImageAdapter
+
+
 
 
         // children adapter
