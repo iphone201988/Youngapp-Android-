@@ -468,6 +468,8 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
 
 
     private fun getStreamExchange(title: String) {
+
+        Log.i( "search", "getStreamExchange: $searchData")
         page = 1
         val apiTitle = mapTitleToApiValue(title)
         val data = hashMapOf<String, Any>(
@@ -509,12 +511,16 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
 
     override fun onSearchQueryChanged(query: String) {
         searchData = query
-        getStreamExchange(selectedCategoryTitle.toString())
+        Log.i("selected Title", "onSearchQueryChanged: $searchData  $selectedCategoryTitle ")
+        val category = selectedCategoryTitle ?: "Members"
+        getStreamExchange(category)
     }
 
     override fun onResume() {
         super.onResume()
         if (adapterSelectedCategory != null){
+            Log.i("search", "onResume:  $searchData")
+
             categoryData = categoryList(adapterSelectedCategory)
             selectedCategoryTitle = categoryData.find { it.isSelected }?.title
 
@@ -523,7 +529,12 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
 
             // Initial fetch
             getStreamExchange(selectedCategoryTitle.toString())
+
+            // Apply search if available
+
+
         }else{
+            Log.i("search", "onResume:  $searchData")
             categoryData = categoryList(selectedCategoryForExchange)
             selectedCategoryTitle = categoryData.find { it.isSelected }?.title
 
@@ -532,7 +543,11 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
 
             // Initial fetch
             selectedCategoryTitle?.let { getStreamExchange(it) }
+            Log.i("selected Title", "onResume: $selectedCategoryTitle ")
+
+
         }
+
 
         Log.i("dsadsad", "onResume: $selectedCategoryTitle")
 

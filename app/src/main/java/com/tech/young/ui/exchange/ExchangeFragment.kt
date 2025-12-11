@@ -5,6 +5,7 @@ import android.util.SparseArray
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -40,6 +41,9 @@ class ExchangeFragment : BaseFragment<FragmentExchangeBinding>() {
     private val viewModel: ExchangeVM by viewModels()
     private lateinit var filterAdapter  : SimpleRecyclerViewAdapter<FilterItem, ItemLayoutFiterBinding>
     private var filterList = ArrayList<FilterItem>()
+    private var searchData: String? = null
+
+
     private lateinit var viewPagerAdapter: ViewPagerAdapter
     private var searchJob: Job? = null
 
@@ -53,7 +57,8 @@ class ExchangeFragment : BaseFragment<FragmentExchangeBinding>() {
 
         // Search TextListener
         binding.etSearch.doAfterTextChanged {
-            sendSearchQueryToActiveFragment(it.toString())
+         //   sendSearchQueryToActiveFragment(it.toString())
+            sendSearchQueryToAllFragments(it.toString())
         }
 
         binding.tabLayoutBottom.tabEcosystem.setOnClickListener {
@@ -181,6 +186,27 @@ class ExchangeFragment : BaseFragment<FragmentExchangeBinding>() {
         }
     }
 
+    private fun sendSearchQueryToAllFragments(query: String) {
+        searchJob?.cancel()
+
+        searchJob = lifecycleScope.launch {
+            delay(1000)  // debounce
+
+            searchData = if (query.isBlank()) null else query
+            Log.i("seasrchDAta", "sendSearchQueryToAllFragments: $searchData ")
+
+            val currentPosition = binding.viewPager.currentItem
+            val currentFragment = viewPagerAdapter.getFragment(currentPosition)
+
+            if (currentFragment is Filterable) {
+                currentFragment.onSearchQueryChanged(query)
+            }
+        }
+    }
+
+
+
+
 
     /** handle observer **/
     private fun initObserver() {
@@ -188,10 +214,71 @@ class ExchangeFragment : BaseFragment<FragmentExchangeBinding>() {
     }
 
     /** view pager & tab layout handling **/
+//    private fun initViewPagerAdapter() {
+//        viewPagerAdapter = ViewPagerAdapter(this)
+//        binding.viewPager.isUserInputEnabled = false
+//        binding.viewPager.adapter = viewPagerAdapter
+//        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+//            tab.text = when (position) {
+//                0 -> "Share"
+//                1 -> "Stream"
+//                2 -> "Vault"
+//                else -> "Share"
+//            }
+//        }.attach()
+//
+//        for (i in 0 until binding.tabLayout.tabCount) {
+//            binding.tabLayout.getTabAt(i)?.view?.setBackgroundResource(
+//                if (i == binding.tabLayout.selectedTabPosition) R.drawable.tab_bg else R.color.transparent
+//            )
+//        }
+//
+//        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+//            override fun onTabSelected(p0: Tab?) {
+//                p0?.view?.setBackgroundResource(R.drawable.tab_bg)
+//            }
+//
+//            override fun onTabUnselected(p0: Tab?) {
+//                p0?.view?.setBackgroundResource(R.color.transparent)
+//            }
+//
+//            override fun onTabReselected(p0: Tab?) {
+//                p0?.view?.setBackgroundResource(R.drawable.tab_bg)
+//            }
+//        }
+//
+//        )
+//    }
+//
+//    inner class ViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+//
+//        // Hold fragment references safely
+//        private val fragmentMap = SparseArray<Fragment>()
+//
+//        override fun getItemCount(): Int = 3
+//
+//        override fun createFragment(position: Int): Fragment {
+//            val fragment = when (position) {
+//                0 -> ShareExchangeFragment()
+//                1 -> StreamExchangeFragment()
+//                2 -> VaultExchangeFragment()
+//                else -> ShareExchangeFragment()
+//            }
+//            fragmentMap.put(position, fragment)
+//            return fragment
+//        }
+//
+//        // Safely return fragment if already created
+//        fun getFragment(position: Int): Fragment? = fragmentMap.get(position)
+//    }
+
+
+
     private fun initViewPagerAdapter() {
         viewPagerAdapter = ViewPagerAdapter(this)
         binding.viewPager.isUserInputEnabled = false
         binding.viewPager.adapter = viewPagerAdapter
+
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> "Share"
@@ -201,32 +288,61 @@ class ExchangeFragment : BaseFragment<FragmentExchangeBinding>() {
             }
         }.attach()
 
+        // Background UI (same as before)
         for (i in 0 until binding.tabLayout.tabCount) {
             binding.tabLayout.getTabAt(i)?.view?.setBackgroundResource(
                 if (i == binding.tabLayout.selectedTabPosition) R.drawable.tab_bg else R.color.transparent
             )
         }
 
+        // 🔥 Apply same search text when switching tabs
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(p0: Tab?) {
-                p0?.view?.setBackgroundResource(R.drawable.tab_bg)
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.view?.setBackgroundResource(R.drawable.tab_bg)
+
+                val position = tab?.position ?: return
+
+                // Use postDelayed to ensure fragment is ready
+                tab.view?.postDelayed({
+                    val fragment = viewPagerAdapter.getFragment(position)
+                    if (fragment is Filterable) {
+                        Log.i("SearchData", "onTabSelected: $searchData ")
+                        fragment.onSearchQueryChanged(searchData ?: "")
+                    }
+                }, 50) // Small delay
             }
 
-            override fun onTabUnselected(p0: Tab?) {
-                p0?.view?.setBackgroundResource(R.color.transparent)
+
+//            override fun onTabSelected(tab: TabLayout.Tab?) {
+//                tab?.view?.setBackgroundResource(R.drawable.tab_bg)
+//
+//                val position = tab?.position ?: return
+//                val fragment = viewPagerAdapter.getFragment(position)
+//
+//                // 🔹 Apply previous search text to newly selected fragment
+//                if (fragment is Filterable) {
+//                    Log.i("SearchData", "onTabSelected: $searchData ")
+//                    fragment.onSearchQueryChanged(searchData ?: "")
+//                }
+//
+//            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                tab?.view?.setBackgroundResource(R.color.transparent)
             }
 
-            override fun onTabReselected(p0: Tab?) {
-                p0?.view?.setBackgroundResource(R.drawable.tab_bg)
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                tab?.view?.setBackgroundResource(R.drawable.tab_bg)
             }
-        }
+        })
 
-        )
     }
+
+
 
     inner class ViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-        // Hold fragment references safely
         private val fragmentMap = SparseArray<Fragment>()
 
         override fun getItemCount(): Int = 3
@@ -238,12 +354,15 @@ class ExchangeFragment : BaseFragment<FragmentExchangeBinding>() {
                 2 -> VaultExchangeFragment()
                 else -> ShareExchangeFragment()
             }
+
             fragmentMap.put(position, fragment)
             return fragment
         }
 
-        // Safely return fragment if already created
         fun getFragment(position: Int): Fragment? = fragmentMap.get(position)
     }
+
+
+
 
 }

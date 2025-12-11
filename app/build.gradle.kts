@@ -40,6 +40,8 @@ android {
     kotlinOptions {
         jvmTarget = "21"
     }
+
+    //signing info - key - boom, pass- boom123
 }
 
 dependencies {

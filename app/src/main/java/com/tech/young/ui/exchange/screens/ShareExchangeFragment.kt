@@ -526,6 +526,8 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
 
             // Initial fetch
             getShareExchange(selectedCategoryTitle.toString())
+
+
         }else{
             categoryData = categoryList(selectedCategoryForExchange)
             selectedCategoryTitle = categoryData.find { it.isSelected }?.title
@@ -542,6 +544,9 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
             }
             // Initial fetch
             selectedCategoryTitle?.let { getShareExchange(it) }
+
+
+
         }
 
 

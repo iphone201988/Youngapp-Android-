@@ -485,6 +485,8 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
             binding.rvCategories.adapter = categoryAdapter
 
             getVault(selectedCategoryTitle.toString())
+
+
         }
         else {
             categoryData = categoryList(selectedCategoryForExchange)
@@ -495,6 +497,9 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
 
             // Initial fetch
             selectedCategoryTitle?.let { getVault(it) }
+
+
+
         }
 
 
@@ -509,7 +514,8 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
 
     override fun onSearchQueryChanged(query: String) {
         searchData = query
-        getVault(selectedCategoryTitle.toString())
+        val category = selectedCategoryTitle ?: "Members"
+        getVault(category)
     }
 
 
