@@ -63,7 +63,7 @@
         android:layout_height="0dp"
         android:fillViewport="true"
         android:layout_marginBottom="@dimen/_20sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/llShare"
         app:layout_constraintTop_toBottomOf="@id/clTopBar"
         app:layout_constraintStart_toStartOf="@id/clTopBar"
         app:layout_constraintEnd_toEndOf="@id/clTopBar">
@@ -73,34 +73,60 @@
         android:layout_height="match_parent">
 
 
+        <!-- RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPaymentHistory"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
-            tools:itemCount="3"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_marginTop="@dimen/_20sdp"
+            tools:itemCount="3"
             tools:listitem="@layout/item_layout_payment_history"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/tvAds"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tvAds" />
 
+        <!-- No History Text -->
 
+        <!-- ✅ Barrier -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNoHistoryAvailable"
+            style="@style/TextView_400_Regular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:gravity="center"
+            android:text="@string/no_payment_records_available_at_the_moment"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/_14ssp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_layout_payment_history" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrierAboveAds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="rvPaymentHistory,tvNoHistoryAvailable" />
+
+        <!-- ADS Title -->
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvAds"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextView_600_SemiBold"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginBottom="@dimen/_15sdp"
             android:text="@string/ads"
             android:textColor="@color/colorPrimary"
+            android:layout_marginTop="@dimen/_15sdp"
             app:layout_constraintStart_toStartOf="parent"
-           app:layout_constraintBottom_toTopOf="@id/rvAds"
-            app:layout_constraintTop_toBottomOf="@id/rvPaymentHistory"
-            />
+            app:layout_constraintTop_toBottomOf="@id/barrierAboveAds" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvAds"
@@ -112,7 +138,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAds"
             tools:itemCount="5"
             tools:listitem="@layout/ads_item_view" />
 
@@ -121,6 +147,7 @@
     </androidx.core.widget.NestedScrollView>
 
         <LinearLayout
+            android:id="@+id/llShare"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_15sdp"

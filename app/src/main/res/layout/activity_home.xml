@@ -97,6 +97,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="@color/white"
+            android:layout_marginBottom="@dimen/_20sdp"
             android:fillViewport="true">
 
             <!-- Entire drawer UI here -->

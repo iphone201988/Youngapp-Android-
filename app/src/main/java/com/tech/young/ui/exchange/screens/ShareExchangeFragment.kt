@@ -391,22 +391,27 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                         "getShare" ->{
                             var myDataModel : ExchangeShareApiResponse? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
-                                if (myDataModel.data!= null){
-                                    totalPages = myDataModel.pagination?.total ?: 1
-                                    if (page <= totalPages!!) {
-                                        isLoading = false
-                                    }
-                                    if (page == 1){
-                                        shareAdapter.list = myDataModel.data?.posts
-                                        shareAdapter.notifyDataSetChanged()
-                                    } else{
-                                        shareAdapter.addToList(myDataModel.data?.posts)
-                                        shareAdapter.notifyDataSetChanged()
+                                try {
+                                    if (myDataModel.data!= null){
+                                        totalPages = myDataModel.pagination?.total ?: 1
+                                        if (page <= totalPages!!) {
+                                            isLoading = false
+                                        }
+                                        if (page == 1){
+                                            shareAdapter.list = myDataModel.data?.posts
+                                            shareAdapter.notifyDataSetChanged()
+                                        } else{
+                                            shareAdapter.addToList(myDataModel.data?.posts)
+                                            shareAdapter.notifyDataSetChanged()
+
+                                        }
+
 
                                     }
-
-
+                                }catch ( e : Exception){
+                                    e.printStackTrace()
                                 }
+
                             }
                         }
 

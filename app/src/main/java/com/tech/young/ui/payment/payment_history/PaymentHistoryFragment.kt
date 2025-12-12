@@ -68,17 +68,33 @@ class PaymentHistoryFragment : BaseFragment<FragmentPaymentHistoryBinding>() {
                                 }
                             }
                         }
-                        "getPaymentHistory" ->{
-                            val myDataModel : PaymentHistoryApiResponse? = BindingUtils.parseJson(it.data.toString())
-                            if (myDataModel != null){
-                                if (myDataModel.data != null){
-                                    if (myDataModel.data.payments != null){
-                                        historyAdapter.list = myDataModel.data.payments
-                                    }
+                        "getPaymentHistory" -> {
+                            try {
+                                val myDataModel: PaymentHistoryApiResponse? =
+                                    BindingUtils.parseJson(it.data.toString())
 
+                                val payments = myDataModel?.data?.payments
+
+                                if (payments.isNullOrEmpty()) {
+
+                                    // 🔥 No history → show text, hide list
+                                    binding.tvNoHistoryAvailable.visibility = View.VISIBLE
+                                    binding.rvPaymentHistory.visibility = View.GONE
+
+                                } else {
+
+                                    // 🔥 Data found → show list, hide text
+                                    binding.tvNoHistoryAvailable.visibility = View.GONE
+                                    binding.rvPaymentHistory.visibility = View.VISIBLE
+
+                                    historyAdapter.list = payments
                                 }
+                            }catch (e : Exception){
+                                e.printStackTrace()
                             }
-                        }
+                            }
+
+
                     }
                 }
                 Status.ERROR ->{

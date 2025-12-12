@@ -379,18 +379,23 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                             val myDataModel :GetStreamApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
-                                    totalPages = myDataModel.pagination?.total ?: 1
-                                    if (page <= totalPages!!) {
-                                        isLoading = false
-                                    }
-                                    if (page == 1){
-                                        streamAdapter.list = myDataModel.data?.posts
-                                        streamAdapter.notifyDataSetChanged()
-                                    } else{
-                                        streamAdapter.addToList(myDataModel.data?.posts)
-                                        streamAdapter.notifyDataSetChanged()
+                                    try {
+                                        totalPages = myDataModel.pagination?.total ?: 1
+                                        if (page <= totalPages!!) {
+                                            isLoading = false
+                                        }
+                                        if (page == 1){
+                                            streamAdapter.list = myDataModel.data?.posts
+                                            streamAdapter.notifyDataSetChanged()
+                                        } else{
+                                            streamAdapter.addToList(myDataModel.data?.posts)
+                                            streamAdapter.notifyDataSetChanged()
 
+                                        }
+                                    }catch (e : Exception){
+                                        e.printStackTrace()
                                     }
+
                                    // streamAdapter.list  = myDataModel.data?.posts
                                 }
                             }

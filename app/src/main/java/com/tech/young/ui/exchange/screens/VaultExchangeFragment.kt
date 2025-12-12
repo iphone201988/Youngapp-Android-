@@ -395,18 +395,23 @@ class VaultExchangeFragment : BaseFragment<FragmentVaultExchangeBinding>() , Fil
                             var myDataModel : VaultExchangeApiResponse? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data!= null){
-                                    totalPages = myDataModel.pagination?.total ?: 1
-                                    if (page <= totalPages!!) {
-                                        isLoading = false
-                                    }
-                                    if (page == 1){
-                                        vaultAdapter.list = myDataModel.data?.vaults
-                                        vaultAdapter.notifyDataSetChanged()
-                                    } else{
-                                        vaultAdapter.addToList(myDataModel.data?.vaults)
-                                        vaultAdapter.notifyDataSetChanged()
+                                    try {
+                                        totalPages = myDataModel.pagination?.total ?: 1
+                                        if (page <= totalPages!!) {
+                                            isLoading = false
+                                        }
+                                        if (page == 1){
+                                            vaultAdapter.list = myDataModel.data?.vaults
+                                            vaultAdapter.notifyDataSetChanged()
+                                        } else{
+                                            vaultAdapter.addToList(myDataModel.data?.vaults)
+                                            vaultAdapter.notifyDataSetChanged()
 
+                                        }
+                                    }catch (e : Exception){
+                                        e.printStackTrace()
                                     }
+
                                    // vaultAdapter .list = myDataModel.data?.vaults
                                 }
                             }
