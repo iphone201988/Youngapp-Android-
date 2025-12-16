@@ -23,6 +23,7 @@ import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
+import com.tech.young.base.utils.showCustomToast
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
 import com.tech.young.data.api.SimpleApiResponse
@@ -207,72 +208,78 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                     requireActivity().onBackPressedDispatcher.onBackPressed()
                 }
                 R.id.playBtn -> {
-                    when {
-                        scheduleDate != null -> {
-                            val utcDate = BindingUtils.utcStringToDate(scheduleDate)
-                            // Stream is scheduled in future
-                            if (currentUserId.equals(ownerUserId)){
-                                if (utcDate != null && utcDate <= Date()){
+                    if (sharedPrefManager.isSubscribed()){
+                        when {
+                            scheduleDate != null -> {
+                                val utcDate = BindingUtils.utcStringToDate(scheduleDate)
+                                // Stream is scheduled in future
+                                if (currentUserId.equals(ownerUserId)){
+                                    if (utcDate != null && utcDate <= Date()){
+                                        val intent= Intent(requireContext(), CommonActivity::class.java)
+                                        intent.putExtra("from","live_stream")
+                                        intent.putExtra("room_id",streamId)
+                                        startActivity(intent)
+                                    }
+                                    else{
+                                        showToast("Stream is scheduled for a future date")
+                                    }
+                                }else{
+                                    if (alreadyAdded == true){
+                                        showToast("This stream is already scheduled")
+                                    }else{
+                                        if (utcDate != null && utcDate.before(Date())) {
+                                            // ✅ If scheduled date is in the past
+                                            showToast("This stream schedule date has already passed")
+                                        } else {
+                                            // ✅ Schedule the stream
+                                            viewModel.scheduleSteam(Constants.SCHEDULE_STREAM + streamId)
+                                            showToast("This stream is scheduled")
+                                        }
+//                                    viewModel.scheduleSteam(Constants.SCHEDULE_STREAM+streamId)
+//                                    showToast("This stream is schedule")
+                                    }
+                                }
+
+
+
+
+                            }
+
+                            !streamUrl.isNullOrEmpty() -> {
+                                // Prefer recorded stream
+                                val intent = Intent(requireContext(), CommonActivity::class.java).apply {
+                                    putExtra("from", "recorded_stream")
+                                    putExtra("streamUrl", streamUrl)
+                                }
+                                startActivity(intent)
+                            }
+
+                            !streamId.isNullOrEmpty() -> {
+                                // Fallback to live stream via streamId
+                                if (currentUserId.equals(ownerUserId)){
                                     val intent= Intent(requireContext(), CommonActivity::class.java)
                                     intent.putExtra("from","live_stream")
                                     intent.putExtra("room_id",streamId)
                                     startActivity(intent)
-                                }
-                                else{
-                                    showToast("Stream is scheduled for a future date")
-                                }
-                            }else{
-                                if (alreadyAdded == true){
-                                    showToast("This stream is already scheduled")
                                 }else{
-                                    if (utcDate != null && utcDate.before(Date())) {
-                                        // ✅ If scheduled date is in the past
-                                        showToast("This stream schedule date has already passed")
-                                    } else {
-                                        // ✅ Schedule the stream
-                                        viewModel.scheduleSteam(Constants.SCHEDULE_STREAM + streamId)
-                                        showToast("This stream is scheduled")
+                                    val intent = Intent(requireContext(), CommonActivity::class.java).apply {
+                                        putExtra("from", "consumer_live_stream")
+                                        putExtra("streamId", streamId)
                                     }
-//                                    viewModel.scheduleSteam(Constants.SCHEDULE_STREAM+streamId)
-//                                    showToast("This stream is schedule")
+                                    startActivity(intent)
                                 }
+
                             }
 
-
-
-
-                        }
-
-                        !streamUrl.isNullOrEmpty() -> {
-                            // Prefer recorded stream
-                            val intent = Intent(requireContext(), CommonActivity::class.java).apply {
-                                putExtra("from", "recorded_stream")
-                                putExtra("streamUrl", streamUrl)
+                            else -> {
+                                Toast.makeText(requireContext(), "No valid stream available", Toast.LENGTH_SHORT).show()
                             }
-                            startActivity(intent)
-                        }
-
-                        !streamId.isNullOrEmpty() -> {
-                            // Fallback to live stream via streamId
-                            if (currentUserId.equals(ownerUserId)){
-                                val intent= Intent(requireContext(), CommonActivity::class.java)
-                                intent.putExtra("from","live_stream")
-                                intent.putExtra("room_id",streamId)
-                                startActivity(intent)
-                            }else{
-                                val intent = Intent(requireContext(), CommonActivity::class.java).apply {
-                                    putExtra("from", "consumer_live_stream")
-                                    putExtra("streamId", streamId)
-                                }
-                                startActivity(intent)
-                            }
-
-                        }
-
-                        else -> {
-                            Toast.makeText(requireContext(), "No valid stream available", Toast.LENGTH_SHORT).show()
                         }
                     }
+                    else{
+                        showCustomToast("Please subscribe to access this feature. Go to Profile Details > Account Details > Upgrade Plan.")
+                    }
+
                 }
                 R.id.ivSendChat ->{
                     if (TextUtils.isEmpty(binding.etChat.text.toString().trim())){

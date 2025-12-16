@@ -337,7 +337,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                                 BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null) {
                                 if (myDataModel.data != null) {
-                                    if (myDataModel.data?.user?.lastName.toString()!=null){
+                                    sharedPrefManager.setSubscribed(myDataModel.data?.user?.isSubscribed)
+                                    if(myDataModel.data?.user?.lastName.toString()!=null){
                                         name = myDataModel.data?.user?.firstName.toString() +" "+ myDataModel.data?.user?.lastName.toString()
                                     }
                                     else{

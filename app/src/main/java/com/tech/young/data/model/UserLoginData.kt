@@ -249,6 +249,7 @@ data class GetProfileApiResponse(
             val retirement: Boolean?,
             val riskTolerance: String?,
             val salaryRange: String?,
+            val isSubscribed: Boolean?,
             val yearsEmployed: String?,
             val cryptoInvestments: String?,
             val otherSecurityInvestments: String?,

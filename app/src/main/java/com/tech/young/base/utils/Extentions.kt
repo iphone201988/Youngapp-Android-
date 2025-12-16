@@ -72,6 +72,10 @@ fun Fragment.showToast(message: String) {
     Toast.makeText(this.context, message, Toast.LENGTH_LONG).show()
 }
 
+fun Fragment.showCustomToast(message: String) {
+    MyToast.custom(this.requireContext(), message,null, Toast.LENGTH_SHORT, false).show()
+}
+
 fun Fragment.showInfoToast(message: String) {
     MyToast.info(this.requireContext(), message, Toast.LENGTH_SHORT, true).show()
 }

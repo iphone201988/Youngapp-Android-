@@ -21,6 +21,7 @@ import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
+import com.tech.young.base.utils.showCustomToast
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
 import com.tech.young.data.model.GetAdsAPiResponse
@@ -52,6 +53,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
     private lateinit var shareAdapter:SimpleRecyclerViewAdapter<String,ShareProfileItemViewBinding>
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private var userId : String ? = null
+
+    private var subscribed : Boolean = false
     private var  role : String ? = null
     private var ratingsMap: GetRatingApiResponse.Data.RatingsCount? = null
     private var averageRating : Double = 0.0
@@ -90,14 +93,20 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                 .commit()
         }
 
+
         binding.includeShare.tabStream.setOnClickListener {
 //            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_stream")
 //            startActivity(intent)
 
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.frameLayout, CommonStreamFragment())
-                .addToBackStack(null)
-                .commit()
+            if (subscribed){
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameLayout, CommonStreamFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }else{
+                showCustomToast("Please subscribe to access this feature. Go to Profile Details > Account Details > Upgrade Plan.  ")
+            }
+
         }
 
 
@@ -105,10 +114,15 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
 //            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_vault")
 //            startActivity(intent)
 
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.frameLayout, CommonVaultFragment())
-                .addToBackStack(null)
-                .commit()
+            if (subscribed){
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameLayout, CommonVaultFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+            else{
+                showCustomToast("Please subscribe to access this feature. Go to Profile Details > Account Details > Upgrade Plan.  ")
+            }
         }
 
 
@@ -244,6 +258,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                                     userId = myDataModel.data?.user?._id
                                     role  = myDataModel.data?.user?.role
                                     binding.bean = myDataModel.data
+                                    subscribed = myDataModel.data?.user?.isSubscribed ?: false
                                     yourImageAdapter.list = myDataModel.data?.user?.additionalPhotos
                                     yourImageAdapter.notifyDataSetChanged()
                                 }

@@ -17,6 +17,7 @@ import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
+import com.tech.young.base.utils.showCustomToast
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.FilterItem
 import com.tech.young.data.SortingItem
@@ -354,11 +355,16 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                 R.id.addStream ->{
 //                    val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_stream")
 //                    startActivity(intent)
+                    if (sharedPrefManager.isSubscribed()){
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.frameLayout, CommonStreamFragment())
+                            .addToBackStack(null)
+                            .commit()
+                    }else{
+                        showCustomToast("Please subscribe to access this feature. Go to Profile Details > Account Details > Upgrade Plan.  ")
 
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.frameLayout, CommonStreamFragment())
-                        .addToBackStack(null)
-                        .commit()
+                    }
+
                 }
             }
         })

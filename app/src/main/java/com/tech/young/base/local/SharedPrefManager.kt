@@ -11,6 +11,10 @@ class SharedPrefManager @Inject constructor(private val sharedPreferences: Share
         const val IS_FIRST = "is_first"
         const val USER_ID  = "USER_ID"
         const val TOKEN = "token"
+
+        const val SUBSCRIBED = "subscribed"
+
+
     }
 
     fun setLoginData(isFirst: Verification2faApiResponse.Data) {
@@ -49,6 +53,16 @@ class SharedPrefManager @Inject constructor(private val sharedPreferences: Share
 
     fun getUserId(): String? {
         return sharedPreferences.getString(KEY.USER_ID, null)
+    }
+    // Save subscriber value
+    // Save subscriber value safely
+    fun setSubscribed(isSubscribed: Boolean?) {
+        sharedPreferences.edit().putBoolean(KEY.SUBSCRIBED, isSubscribed ?: false)
+    }
+
+    // Get subscriber value (default false)
+    fun isSubscribed(): Boolean {
+        return sharedPreferences.getBoolean(KEY.SUBSCRIBED, false)
     }
 
 
