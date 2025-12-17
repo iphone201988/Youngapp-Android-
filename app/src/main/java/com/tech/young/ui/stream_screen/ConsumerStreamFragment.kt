@@ -127,6 +127,21 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() , B
                     sendMessageSocket()
                 }
 
+                R.id.ivDropComment -> {
+
+                    val isVisible = binding.rvChats.visibility == View.VISIBLE
+
+                    // Toggle RecyclerView visibility
+                    binding.rvChats.visibility = if (isVisible) View.GONE else View.VISIBLE
+
+                    // Rotate icon
+                    binding.ivDropComment.animate()
+                        .rotation(if (isVisible) 0f else 180f)
+                        .setDuration(200)
+                        .start()
+                }
+
+
             }
         }
     }

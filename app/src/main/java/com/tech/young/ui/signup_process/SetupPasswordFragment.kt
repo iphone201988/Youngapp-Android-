@@ -175,7 +175,8 @@ class SetupPasswordFragment : BaseFragment<FragmentSetupPasswordBinding>() {
                             "phone" to phone.toString(),
                             "password" to confirmPassword.toString(),
                             "deviceToken" to token,
-                            "deviceType" to "2"
+                            "deviceType" to "2",
+                            "timezone" to Constants.timeZone
                         )
 
                         if (lat != 0.0 && long != 0.0) {

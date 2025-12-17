@@ -91,7 +91,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
                             "email" to username!!,
                             "password" to password!!,
                             "deviceToken" to token,
-                            "deviceType" to "2"
+                            "deviceType" to "2",
+                            "timezone" to Constants.timeZone
                         )
 
                         if (lat != 0.0 && long != 0.0) {

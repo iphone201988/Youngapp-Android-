@@ -28,7 +28,7 @@ interface ApiService {
 
     @POST
     suspend fun apiForRawBody(
-        @Body data: HashMap<String, Any>, @Url url: String
+        @Body data: HashMap<String, Any>, @Url url: String, @Header("timezone") timeZone : String
     ): Response<JsonObject>
 
     @POST

@@ -249,7 +249,7 @@ data class GetProfileApiResponse(
             val retirement: Boolean?,
             val riskTolerance: String?,
             val salaryRange: String?,
-            val isSubscribed: Boolean?,
+            val isSubscribed: IsSubscribed?,
             val yearsEmployed: String?,
             val cryptoInvestments: String?,
             val otherSecurityInvestments: String?,
@@ -276,6 +276,21 @@ data class GetProfileApiResponse(
                 val coordinates: List<Double?>?,
                 val type: String?,
             ) : Parcelable
+            @Parcelize
+            data class IsSubscribed(
+                val __v: Int?,
+                val _id: String?,
+                val createdAt: String?,
+                val original_transaction_id: String?,
+                val product_id: String?,
+                val subscription_expiry: String?,
+                val subscription_purchase_date: String?,
+                val transaction_id: String?,
+                val type: String?,
+                val updatedAt: String?,
+                val userId: String?
+            ) : Parcelable
+
 
             @Parcelize
             data class Rating(
@@ -286,6 +301,78 @@ data class GetProfileApiResponse(
     }
 }
 
+
+data class dfsdfsdf(
+    val `data`: Data,
+    val message: String,
+    val success: Boolean
+) {
+    data class Data(
+        val user: User
+    ) {
+        data class User(
+            val _id: String,
+            val additionalPhotos: List<String>,
+            val age: String,
+            val averageRating: Int,
+            val children: String,
+            val countryCode: String,
+            val createdAt: String,
+            val customers: Int,
+            val email: String,
+            val financialExperience: String,
+            val firstName: String,
+            val followers: Int,
+            val following: Int,
+            val formUpload: List<Any>,
+            val gender: String,
+            val homeOwnerShip: String,
+            val investmentAccounts: Boolean,
+            val investmentRealEstate: Boolean,
+            val investments: String,
+            val is2FAEnabled: Boolean,
+            val isConnectedWithProfile: Boolean,
+            val isDeactivatedByUser: Boolean,
+            val isFollowed: Boolean,
+            val isRegistrationCompleted: Boolean,
+            val isReported: Boolean,
+            val isSubscribed: IsSubscribed,
+            val isVerified: Boolean,
+            val lastLogin: String,
+            val lastName: String,
+            val location: Location,
+            val maritalStatus: String,
+            val objective: String,
+            val phone: String,
+            val retirement: Boolean,
+            val role: String,
+            val servicesInterested: String,
+            val sharesCount: Int,
+            val timezone: String,
+            val topicsOfInterest: List<String>,
+            val username: String
+        ) {
+            data class IsSubscribed(
+                val __v: Int,
+                val _id: String,
+                val createdAt: String,
+                val original_transaction_id: String,
+                val product_id: String,
+                val subscription_expiry: String,
+                val subscription_purchase_date: String,
+                val transaction_id: String,
+                val type: String,
+                val updatedAt: String,
+                val userId: String
+            )
+
+            data class Location(
+                val coordinates: List<Double>,
+                val type: String
+            )
+        }
+    }
+}
 
 //data class dsaas(
 //    var `data`: Data?,

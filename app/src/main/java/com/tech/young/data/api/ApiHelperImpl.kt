@@ -10,8 +10,8 @@ import javax.inject.Inject
 class ApiHelperImpl @Inject constructor(private val apiService: ApiService, private val sharedPrefManager: SharedPrefManager) :
     ApiHelper {
 
-    override suspend fun apiForRawBody(request: HashMap<String, Any>,url:String): Response<JsonObject> {
-        return apiService.apiForRawBody(request,url)
+    override suspend fun apiForRawBody(request: HashMap<String, Any>,url:String, ): Response<JsonObject> {
+        return apiService.apiForRawBody(request,url, Constants.timeZone)
     }
 
     override suspend fun apiPostForRawBody(

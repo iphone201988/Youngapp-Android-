@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -256,9 +257,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
                                     userId = myDataModel.data?.user?._id
+                                    Log.i("fdsfdf", "initObserver: $userId ")
                                     role  = myDataModel.data?.user?.role
                                     binding.bean = myDataModel.data
-                                    subscribed = myDataModel.data?.user?.isSubscribed ?: false
+                                    subscribed = myDataModel.data?.user?.isSubscribed != null
                                     yourImageAdapter.list = myDataModel.data?.user?.additionalPhotos
                                     yourImageAdapter.notifyDataSetChanged()
                                 }

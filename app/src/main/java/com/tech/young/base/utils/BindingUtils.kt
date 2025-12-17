@@ -1507,4 +1507,43 @@ object BindingUtils {
     }
 
 
+    @BindingAdapter("subscriptionType", "postType")
+    @JvmStatic
+    fun bindSubscriptionType(textView: TextView, type: String?, postType: String?) {
+        val typeMap = mapOf(
+            "one_time" to "One Time Subscription",
+            "recurring" to "Monthly Premium Subscription"
+        )
+
+        textView.text = if (!postType.isNullOrEmpty()) {
+            typeMap[type] ?: "One Time Subscription"
+        } else {
+            "Premium Subscription - $21.99"
+        }
+    }
+
+
+    @BindingAdapter("postTypeDescription")
+    @JvmStatic
+    fun bindDescription(textView: TextView, postType: String?) {
+        textView.text = if (!postType.isNullOrEmpty()) {
+            "Sponsored Feature Post - $9.99"
+        } else {
+            "Now you can access all the features of app."
+        }
+    }
+
+
+    @BindingAdapter("postTitle", "postTypeValue")
+    @JvmStatic
+    fun bindPostTitle(textView: TextView, postTitle: String?, postTypeValue: String?) {
+        if (!postTypeValue.isNullOrEmpty()) {
+            textView.visibility = View.VISIBLE
+            textView.text = "Post Title: ${postTitle ?: ""}"
+        } else {
+            textView.visibility = View.GONE
+            textView.text = ""
+        }
+    }
+
 }

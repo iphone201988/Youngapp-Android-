@@ -71,11 +71,24 @@
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_37sdp"
             android:src="@drawable/iv_send_btn"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:visibility="visible"
+            android:onClick="@{v->vm.onClick(v)}"
+            app:layout_constraintEnd_toStartOf="@id/ivDropComment"
+            app:layout_constraintBottom_toBottomOf="@id/etChat"/>
+
+
+
+        <ImageView
+            android:id="@+id/ivDropComment"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
+            android:src="@drawable/iv_drop_comment"
             android:layout_marginEnd="@dimen/_15sdp"
             android:visibility="visible"
             android:onClick="@{v->vm.onClick(v)}"
             app:layout_constraintEnd_toEndOf="@id/publisher_container"
-            app:layout_constraintBottom_toBottomOf="@id/etChat"/>
+            app:layout_constraintBottom_toBottomOf="@id/ivSendChat"/>
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etChat"
@@ -129,7 +142,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/etChat"
             app:layout_constraintStart_toStartOf="@id/etChat"
-            app:layout_constraintEnd_toEndOf="@id/ivSendChat"
+            app:layout_constraintEnd_toEndOf="@id/ivDropComment"
             tools:listitem="@layout/item_layout_live_comments" />
 
         <androidx.appcompat.widget.AppCompatTextView

@@ -1,5 +1,7 @@
 package com.tech.young.data.api
 
+import java.util.TimeZone
+
 
 object Constants {
    const val BASE_URL = "https://theboom.app:8000/api/v1/"
@@ -7,6 +9,10 @@ object Constants {
  //   const val BASE_URL_IMAGE = "http://192.168.0.159:8888"
     const val BASE_URL_IMAGE = "https://youngappbucket.s3.us-east-2.amazonaws.com"
 
+  val timeZone: String by lazy {
+    val tz = TimeZone.getDefault().id
+    if (tz == "Asia/Calcutta") "Asia/Kolkata" else tz
+  }
 
     const val GOOGLE_API_KEY = "AIzaSyD5Jt2e9ocVmXovnsOsdmtdhPRkP8m9IhQ"
 
