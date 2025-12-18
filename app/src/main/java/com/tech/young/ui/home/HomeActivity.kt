@@ -63,7 +63,9 @@ import com.tech.young.ui.payment.payment_history.PaymentHistoryFragment
 import com.tech.young.ui.policies_about.AboutFragment
 import com.tech.young.ui.policies_about.PoliciesFragment
 import com.tech.young.ui.share_screen.CommonShareFragment
+import com.tech.young.ui.share_screen.share_confirmation.ShareConfirmationFragment
 import com.tech.young.ui.stream_screen.CommonStreamFragment
+import com.tech.young.ui.stream_screen.stream_confirmation.StreamConfirmationFragment
 import com.tech.young.ui.user_profile.UserProfileFragment
 import com.tech.young.ui.vault_screen.CommonVaultFragment
 import com.tech.young.ui.vault_screen.people_screen.PeopleFragment
@@ -337,9 +339,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                                 BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null) {
                                 if (myDataModel.data != null) {
-                                    sharedPrefManager.setSubscribed(
-                                        myDataModel.data?.user?.isSubscribed != null
-                                    )
+                                    val isUserSubscribed = myDataModel.data?.user?.isSubscribed != null
+                                    sharedPrefManager.setSubscribed(isUserSubscribed)
                                     if(myDataModel.data?.user?.lastName.toString()!=null){
                                         name = myDataModel.data?.user?.firstName.toString() +" "+ myDataModel.data?.user?.lastName.toString()
                                     }
@@ -504,7 +505,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                     is PaymentHistoryFragment ->{
                         updateOtherUI("Payment History")
                     }
-
+                    is ShareConfirmationFragment ->{
+                        updateOtherUI("Share Confirmation")
+                    }
+                    is StreamConfirmationFragment ->{
+                        updateOtherUI("Stream Confirmation")
+                    }
 
 
                 }

@@ -52,6 +52,7 @@ import com.tech.young.ui.my_profile_screens.YourProfileVM
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.util.FileUtil
 import com.tech.young.base.utils.BaseCustomBottomSheet
+import com.tech.young.base.utils.showCustomToast
 import com.tech.young.data.api.SimpleApiResponse
 import com.tech.young.data.model.EventUpdateApiResponse
 import com.tech.young.databinding.BottomsheetEventDetailsBinding
@@ -449,20 +450,30 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
         binding.shareLayout.tabStream.setOnClickListener {
 //            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_stream")
 //            startActivity(intent)
+            if (sharedPrefManager.isSubscribed()){
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameLayout, CommonStreamFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }else{
+                showCustomToast("Please subscribe to access this feature. Go to Profile Details > Account Details > Upgrade Plan.  ")
 
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.frameLayout, CommonStreamFragment())
-                .addToBackStack(null)
-                .commit()
+            }
+
         }
         binding.shareLayout.tabVault.setOnClickListener {
 //            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_vault")
 //            startActivity(intent)
+            if (sharedPrefManager.isSubscribed()){
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameLayout, CommonVaultFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }else{
+                showCustomToast("Please subscribe to access this feature. Go to Profile Details > Account Details > Upgrade Plan.  ")
 
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.frameLayout, CommonVaultFragment())
-                .addToBackStack(null)
-                .commit()
+            }
+
         }
 
         binding.tabLayoutBottom.tabExchange.setOnClickListener {

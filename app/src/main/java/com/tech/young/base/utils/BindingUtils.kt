@@ -1518,7 +1518,7 @@ object BindingUtils {
         textView.text = if (!postType.isNullOrEmpty()) {
             typeMap[type] ?: "One Time Subscription"
         } else {
-            "Premium Subscription - $21.99"
+            "Premium Subscription\n($21.99)"
         }
     }
 

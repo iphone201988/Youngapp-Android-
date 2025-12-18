@@ -14,6 +14,7 @@ import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
+import com.tech.young.base.utils.showCustomToast
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
 import com.tech.young.data.model.CreatePostApiResponse
@@ -21,7 +22,12 @@ import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.ShareData
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentShareConfirmationBinding
+import com.tech.young.ui.ecosystem.EcosystemFragment
+import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.home.HomeActivity
+import com.tech.young.ui.share_screen.CommonShareFragment
+import com.tech.young.ui.stream_screen.CommonStreamFragment
+import com.tech.young.ui.vault_screen.CommonVaultFragment
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -50,6 +56,64 @@ class ShareConfirmationFragment : BaseFragment<FragmentShareConfirmationBinding>
         viewModel.getAds(Constants.GET_ADS)
         // click
         initOnClick()
+
+
+
+        binding.shareLayout.tabShare.setOnClickListener {
+
+
+//            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_share")
+//            startActivity(intent)
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, CommonShareFragment())
+                .addToBackStack(null)
+                .commit()
+
+        }
+        binding.shareLayout.tabStream.setOnClickListener {
+//            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_stream")
+//            startActivity(intent)
+            if (sharedPrefManager.isSubscribed()){
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameLayout, CommonStreamFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }else{
+                showCustomToast("Please subscribe to access this feature. Go to Profile Details > Account Details > Upgrade Plan.  ")
+
+            }
+
+        }
+        binding.shareLayout.tabVault.setOnClickListener {
+//            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_vault")
+//            startActivity(intent)
+            if (sharedPrefManager.isSubscribed()){
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameLayout, CommonVaultFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }else{
+                showCustomToast("Please subscribe to access this feature. Go to Profile Details > Account Details > Upgrade Plan.  ")
+
+            }
+
+        }
+
+        binding.tabLayoutBottom.tabExchange.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, ExchangeFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+        binding.tabLayoutBottom.tabEcosystem.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayout, EcosystemFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+
     }
 
 

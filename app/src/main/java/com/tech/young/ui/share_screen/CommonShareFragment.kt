@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
@@ -48,6 +49,8 @@ import com.tech.young.databinding.ItemLayoutDropDownBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
+import com.tech.young.ui.my_profile_screens.common_ui.EditProfileDetailFragment
+import com.tech.young.ui.share_screen.share_confirmation.ShareConfirmationFragment
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -306,11 +309,24 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
 
                         Log.i("dssaa", "initOnClick: $shareData")
 
-                        val intent = Intent(requireContext(), CommonActivity::class.java).apply {
-                            putExtra("from", "share_confirmation")
-                            putExtra("share_data", shareData)
+                        val fragment = ShareConfirmationFragment().apply {
+                            arguments = Bundle().apply {
+                                putParcelable("share_data", shareData)
+                            }
                         }
-                        startActivity(intent)
+
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.frameLayout, fragment)
+                            .addToBackStack(null)
+                            .commit()
+
+
+
+//                        val intent = Intent(requireContext(), CommonActivity::class.java).apply {
+//                            putExtra("from", "share_confirmation")
+//                            putExtra("share_data", shareData)
+//                        }
+//                        startActivity(intent)
 
 
                     }

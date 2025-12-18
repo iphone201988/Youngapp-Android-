@@ -16,6 +16,7 @@ import com.tech.young.ui.my_profile_screens.saved_fragments.VaultFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.Tab
 import com.google.android.material.tabs.TabLayoutMediator
+import com.tech.young.base.utils.showCustomToast
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
@@ -52,29 +53,41 @@ class SavedFragment : BaseFragment<FragmentSavedBinding>() {
 //            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_share")
 //            startActivity(intent)
 
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.frameLayout, CommonShareFragment())
-                .addToBackStack(null)
-                .commit()
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameLayout, CommonShareFragment())
+                    .addToBackStack(null)
+                    .commit()
 
         }
         binding.shareLayout.tabStream.setOnClickListener {
 //            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_stream")
 //            startActivity(intent)
 
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.frameLayout, CommonStreamFragment())
-                .addToBackStack(null)
-                .commit()
+            if (sharedPrefManager.isSubscribed()){
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameLayout, CommonStreamFragment())
+                    .addToBackStack(null)
+                    .commit()
+            } else{
+                showCustomToast("Please subscribe to access this feature. Go to Profile Details > Account Details > Upgrade Plan.  ")
+
+            }
+
+
         }
         binding.shareLayout.tabVault.setOnClickListener {
 //            val intent = Intent(requireContext(), CommonActivity::class.java).putExtra("from","common_vault")
 //            startActivity(intent)
+            if (sharedPrefManager.isSubscribed()){
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameLayout, CommonVaultFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }else{
+                showCustomToast("Please subscribe to access this feature. Go to Profile Details > Account Details > Upgrade Plan.  ")
 
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.frameLayout, CommonVaultFragment())
-                .addToBackStack(null)
-                .commit()
+            }
+
         }
 
         binding.tabLayoutBottom.tabExchange.setOnClickListener {

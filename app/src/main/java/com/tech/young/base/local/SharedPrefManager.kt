@@ -57,8 +57,11 @@ class SharedPrefManager @Inject constructor(private val sharedPreferences: Share
     // Save subscriber value
     // Save subscriber value safely
     fun setSubscribed(isSubscribed: Boolean?) {
-        sharedPreferences.edit().putBoolean(KEY.SUBSCRIBED, isSubscribed ?: false)
+        sharedPreferences.edit()
+            .putBoolean(KEY.SUBSCRIBED, isSubscribed ?: false)
+            .apply()   // VERY IMPORTANT
     }
+
 
     // Get subscriber value (default false)
     fun isSubscribed(): Boolean {

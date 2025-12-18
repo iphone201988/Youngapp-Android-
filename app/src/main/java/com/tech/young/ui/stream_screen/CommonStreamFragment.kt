@@ -7,6 +7,7 @@ import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
@@ -49,6 +50,8 @@ import com.tech.young.databinding.ItemLayoutDropDownBinding
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
+import com.tech.young.ui.share_screen.share_confirmation.ShareConfirmationFragment
+import com.tech.young.ui.stream_screen.stream_confirmation.StreamConfirmationFragment
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MultipartBody
 import java.io.File
@@ -344,11 +347,21 @@ class CommonStreamFragment : BaseFragment<FragmentCommonStreamBinding>() ,BaseCu
                             description = binding.etDescription.text.toString().trim()
                         )
 
-                        val intent = Intent(requireContext(), CommonActivity::class.java).apply {
-                            putExtra("from", "stream_confirmation")
-                            putExtra("stream_data", streamData)
+                        val fragment = StreamConfirmationFragment().apply {
+                            arguments = Bundle().apply {
+                                putParcelable("stream_data", streamData)
+                            }
                         }
-                        startActivity(intent)
+
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.frameLayout, fragment)
+                            .addToBackStack(null)
+                            .commit()
+//                        val intent = Intent(requireContext(), CommonActivity::class.java).apply {
+//                            putExtra("from", "stream_confirmation")
+//                            putExtra("stream_data", streamData)
+//                        }
+//                        startActivity(intent)
                     }
                 }
 

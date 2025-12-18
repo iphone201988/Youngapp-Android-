@@ -293,8 +293,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     private fun initView(){
-
-        val subscribed = sharedPrefManager.isSubscribed()
         binding.tabShare.tabShare.setOnClickListener {
 //         val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","common_share")
 //            startActivity(intent)
@@ -307,7 +305,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
 
         binding.tabShare.tabStream.setOnClickListener {
-            if (subscribed){
+            if (sharedPrefManager.isSubscribed()){
                 requireActivity().supportFragmentManager.beginTransaction()
                     .replace(R.id.frameLayout, CommonStreamFragment())
                     .addToBackStack(null)
@@ -326,7 +324,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         binding.tabShare.tabVault.setOnClickListener {
 //         val intent = Intent(requireContext(),CommonActivity::class.java).putExtra("from","common_vault")
 //            startActivity(intent)
-            if (subscribed){
+            if (sharedPrefManager.isSubscribed()){
                 requireActivity().supportFragmentManager.beginTransaction()
                     .replace(R.id.frameLayout, CommonVaultFragment())
                     .addToBackStack(null)

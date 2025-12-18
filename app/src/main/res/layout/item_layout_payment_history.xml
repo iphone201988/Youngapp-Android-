@@ -20,27 +20,29 @@
 
         <TextView
             android:id="@+id/tvPlans"
-            style="@style/TextView_600_SemiBold"
+            style="@style/TextView_700_Bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_10sdp"
-            android:singleLine="true"
+            android:maxLines="2"
+            android:ellipsize="end"
             app:subscriptionType="@{bean.type}"
             app:postType="@{bean.postType}"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/_10ssp"
-            app:layout_constraintHorizontal_bias="0.0"
+            android:textSize="@dimen/_12ssp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
+
         <TextView
             android:id="@+id/description"
-            style="@style/TextView_400_Regular"
+            style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="0dp"
             postTypeDescription = "@{bean.postType}"
             android:textColor="@color/colorPrimary"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/_10ssp"
             android:layout_marginTop="@dimen/_10sdp"
             app:layout_constraintTop_toBottomOf="@id/tvPlans"
             app:layout_constraintStart_toStartOf="parent"
@@ -49,25 +51,26 @@
 
         <TextView
             android:id="@+id/tvPostTitle"
-            style="@style/TextView_400_Regular"
+            style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="0dp"
             app:postTitle="@{bean.postTitle}"
             app:postTypeValue="@{bean.postType}"
             android:textColor="@color/colorPrimary"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_10ssp"
+            android:layout_marginTop="@dimen/_5sdp"
             app:layout_constraintTop_toBottomOf="@id/description"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
             android:id="@+id/planId"
-            style="@style/TextView_400_Regular"
+            style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text='@{"Transaction ID : " + bean.transaction_id}'
             android:textSize="@dimen/_10ssp"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/tvPlans"
             app:layout_constraintTop_toBottomOf="@id/tvPostTitle"/>
@@ -75,6 +78,7 @@
         
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDateTime"
+            style="@style/TextAppearance.AppCompat.Medium"
             setNotificationDateFormat="@{bean.createdAt}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
