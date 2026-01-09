@@ -1434,6 +1434,44 @@ data class ReceivedSocketComment(
     )
 }
 
+
+/*************** get Recorded comment api response *********************/
+
+data class GetRecordedCommentApiResponse(
+    val `data`: Data?,
+    val message: String?,
+    val pagination: Pagination?,
+    val success: Boolean?
+) {
+    data class Data(
+        val messages: List<Message?>?
+    ) {
+        data class Message(
+            val _id: String?,
+            val createdAt: String?,
+            val isLiveStreamingMessage: Boolean?,
+            val isRead: Boolean?,
+            val liveStreamId: String?,
+            val message: String?,
+            val senderId: SenderId?
+        ) {
+            data class SenderId(
+                val _id: String?,
+                val firstName: String?,
+                val lastName: String?,
+                val role: String?,
+                val username: String?
+            )
+        }
+    }
+
+    data class Pagination(
+        val limit: Int?,
+        val page: Int?,
+        val total: Int?
+    )
+}
+
 /*************** get latest user api response *********************/
 //data class GetLatestUserApiResponse(
 //    var `data`: Data?,

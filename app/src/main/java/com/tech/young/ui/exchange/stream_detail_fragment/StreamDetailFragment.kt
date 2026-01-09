@@ -250,6 +250,7 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                                 val intent = Intent(requireContext(), CommonActivity::class.java).apply {
                                     putExtra("from", "recorded_stream")
                                     putExtra("streamUrl", streamUrl)
+                                    putExtra("streamId",streamId)
                                 }
                                 startActivity(intent)
                             }

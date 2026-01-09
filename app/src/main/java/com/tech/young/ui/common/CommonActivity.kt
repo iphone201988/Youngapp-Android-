@@ -215,8 +215,10 @@ class CommonActivity : BaseActivity<ActivityCommonBinding>()  {
                                     setStartDestination(R.id.fragmentStreamDetail)
                                 }
                                 "recorded_stream" ->{
-                                    val streamId=intent.getStringExtra("streamUrl").toString()
-                                    bundle.putString("streamUrl",streamId)
+                                    val streamUrl=intent.getStringExtra("streamUrl").toString()
+                                    val streamId=intent.getStringExtra("streamId").toString()
+                                    bundle.putString("streamUrl",streamUrl)
+                                    bundle.putString("streamId",streamId)
                                     setStartDestination(R.id.fragmentRecordedStream)
                                 }
                                 "single_news"->{

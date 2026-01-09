@@ -54,17 +54,81 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true"
+        android:layout_marginBottom="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clTopBar"
+        app:layout_constraintStart_toStartOf="@id/clTopBar"
+        app:layout_constraintEnd_toEndOf="@id/clTopBar">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
         <androidx.media3.ui.PlayerView
             android:id="@+id/playerView"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_180sdp"
             android:visibility="visible"
             android:layout_marginTop="@dimen/_20sdp"
-            app:layout_constraintEnd_toEndOf="@id/clTopBar"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginBottom="@dimen/_10sdp"
-            app:layout_constraintStart_toStartOf="@id/clTopBar"
-            app:layout_constraintTop_toBottomOf="@id/clTopBar" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etChat"
+            style="@style/TextView_400_Regular"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_42sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@drawable/radius_border_gray"
+            android:gravity="start|center"
+            android:hint="Comment..."
+            android:inputType="textCapSentences"
+            android:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@id/ivSendChat"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:singleLine="true"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:textColorHint="@color/text_gray"
+            app:layout_constraintTop_toBottomOf="@id/playerView"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+            android:id="@+id/ivSendChat"
+            android:layout_width="@dimen/_42sdp"
+            android:layout_height="@dimen/_42sdp"
+            android:src="@drawable/iv_send_btn"
+            android:visibility="visible"
+            android:onClick="@{v->vm.onClick(v)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/etChat"
+            app:layout_constraintBottom_toBottomOf="@id/etChat"/>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvComments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"
+            android:nestedScrollingEnabled="false"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintTop_toBottomOf="@id/etChat"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

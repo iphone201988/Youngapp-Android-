@@ -39,4 +39,53 @@ class StreamVM @Inject constructor(private val apiHelper: ApiHelper) : BaseViewM
             }
         }
     }
+
+
+    fun getRecordedComment(data : HashMap<String,Any>, url : String){
+        CoroutineScope(Dispatchers.IO).launch {
+            observeCommon.postValue(Resource.loading(null))
+            try {
+                val response = apiHelper.apiGetWithQueryAuth(url,data)
+                if (response.isSuccessful && response.body() != null){
+                    observeCommon.postValue(Resource.success("getRecordedComment", response.body()))
+                }
+                else{
+                    observeCommon.postValue(
+                        Resource.error(
+                            handleErrorResponse(
+                                response.errorBody(),
+                                response.code()
+                            ), null
+                        )
+                    )
+                }
+            }catch (e : Exception){
+                observeCommon.postValue(Resource.error(e.message.toString(), null))
+            }
+        }
+    }
+
+    fun addComment(data : HashMap<String,Any>, url : String){
+        CoroutineScope(Dispatchers.IO).launch {
+            observeCommon.postValue(Resource.loading(null))
+            try {
+                val response = apiHelper.apiGetWithQueryAuth(url,data)
+                if (response.isSuccessful && response.body() != null){
+                    observeCommon.postValue(Resource.success("addComment", response.body()))
+                }
+                else{
+                    observeCommon.postValue(
+                        Resource.error(
+                            handleErrorResponse(
+                                response.errorBody(),
+                                response.code()
+                            ), null
+                        )
+                    )
+                }
+            }catch (e : Exception){
+                observeCommon.postValue(Resource.error(e.message.toString(), null))
+            }
+        }
+    }
 }

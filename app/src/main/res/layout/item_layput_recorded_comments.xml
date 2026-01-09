@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="bean"
+            type="com.tech.young.data.model.GetRecordedCommentApiResponse.Data.Message" />
+        <variable
+            name="callback"
+            type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
+        <variable
+            name="pos"
+            type="Integer" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:padding="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@drawable/unselected_side_menu_bg"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profileImage"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/dummy_person"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvUserName"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text='@{(bean.SenderId.firstName != null ? bean.SenderId.firstName : "") + " " + ( bean.SenderId.lastName != null ?  bean.SenderId.lastName : "")}'
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:singleLine="true"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toStartOf="@id/ivHearts"
+            app:layout_constraintTop_toTopOf="@id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/profileImage"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/role"
+            style="@style/TextView_400_Regular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:text="@{bean.SenderId.role}"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintTop_toBottomOf="@id/tvUserName"
+            app:layout_constraintStart_toStartOf="@id/tvUserName"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDate"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_10ssp"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:singleLine="true"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toEndOf="@id/tvUserName"
+            app:layout_constraintTop_toBottomOf="@id/role"
+            app:layout_constraintStart_toStartOf="@id/tvUserName"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/likesData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/colorPrimary"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvUserName"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivHearts"
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:src="@drawable/ic_heart"
+            android:visibility="gone"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            app:layout_constraintBottom_toBottomOf="@id/likesData"
+            app:layout_constraintEnd_toStartOf="@id/likesData"
+            app:layout_constraintTop_toTopOf="@id/likesData"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etDescription"
+            style="@style/TextView_400_Regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@{bean.message}"
+            app:layout_constraintTop_toBottomOf="@id/profileImage"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

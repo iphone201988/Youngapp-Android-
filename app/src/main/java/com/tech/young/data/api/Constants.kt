@@ -83,6 +83,8 @@ object Constants {
 
   const val PAYMENT_HISTORY = "payment/userPayments"
 
+  const val GET_RECORDED_STREAM_COMMENT = "chat/getLiveStreamingMessages"
+
     /*************** Temp value store****************/
        var chooseAccountType = ""
 
