@@ -13,6 +13,7 @@ import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tech.young.BR;
+import com.tech.young.data.model.GetRecordedCommentApiResponse;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -120,11 +121,38 @@ public class SimpleRecyclerViewAdapter<M, B extends ViewDataBinding> extends Rec
         notifyDataSetChanged();
     }
 
+
+    public void addToTop(@Nullable M item) {
+        if (item == null) return;
+
+        // dataList is final & already initialized
+        for (M m : dataList) {
+            if (m instanceof GetRecordedCommentApiResponse.Data.Message &&
+                    item instanceof GetRecordedCommentApiResponse.Data.Message) {
+
+                String oldId = ((GetRecordedCommentApiResponse.Data.Message) m).get_id();
+                String newId = ((GetRecordedCommentApiResponse.Data.Message) item).get_id();
+
+                if (oldId != null && oldId.equals(newId)) return;
+            }
+        }
+
+        dataList.add(0, item);
+        notifyItemInserted(0);
+    }
+
+
+
+
     public void addData(@NonNull M data) {
         int positionStart = dataList.size();
         dataList.add(data);
         notifyItemInserted(positionStart);
     }
+
+
+
+
 
     static class SimpleViewHolder<S extends ViewDataBinding> extends RecyclerView.ViewHolder {
         final S binding;

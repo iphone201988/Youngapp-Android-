@@ -95,7 +95,7 @@ class RecordedStreamFragment : BaseFragment<FragmentRecordedStreamBinding>() {
         val data = HashMap<String,Any>()
             data["liveStreamId"] = streamId.toString()
             data["page"] = 1
-            data["limit"] = 5
+            data["limit"] = 20
             viewModel.getRecordedComment(data,Constants.GET_RECORDED_STREAM_COMMENT)
 
     }
@@ -108,7 +108,7 @@ class RecordedStreamFragment : BaseFragment<FragmentRecordedStreamBinding>() {
         if (streamId != null){
             data["liveStreamId"] = streamId.toString()
             data["page"] = page
-            data["limit"] = 5
+            data["limit"] = 20
             viewModel.getRecordedComment(data,Constants.GET_RECORDED_STREAM_COMMENT)
         }
     }
@@ -206,14 +206,27 @@ class RecordedStreamFragment : BaseFragment<FragmentRecordedStreamBinding>() {
                 Status.SUCCESS ->{
                     hideLoading()
                     when(it.message){
-                        "addComment" ->{
-                            val myDataModel  : GetRecordedCommentApiResponse? = BindingUtils.parseJson(it.data.toString())
-                            if (myDataModel != null){
-                                if (myDataModel.data != null){
-                                    getComments()
-                                }
+                        "addComment" -> {
+                            val myDataModel: GetRecordedCommentApiResponse? =
+                                BindingUtils.parseJson(it.data.toString())
+
+                            val newComment: GetRecordedCommentApiResponse.Data.Message? =
+                                myDataModel
+                                    ?.data
+                                    ?.messages
+                                    ?.firstOrNull { it?._id != null }
+
+                            if (newComment != null) {
+                                binding.rvComments.visibility = View.VISIBLE
+
+                                commentAdapter.addToTop(newComment)
+
+                                binding.etChat.setText("")
+                                binding.rvComments.scrollToPosition(0)
                             }
                         }
+
+
                         "getRecordedComment" ->{
                             val myDataModel : GetRecordedCommentApiResponse? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
