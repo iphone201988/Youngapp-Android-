@@ -157,6 +157,15 @@ object DummyLists {
         return list
     }
 
+
+    fun getPLanList():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("$250- 1 month"))
+//        list.add(DropDownData("$1,250- 6 months"))
+//        list.add(DropDownData("$2,000- 1 year"))
+        return list
+    }
+
     fun getMartialStatus():ArrayList<DropDownData>{
         val list=ArrayList<DropDownData>()
         list.add(DropDownData("Single"))
@@ -169,17 +178,28 @@ object DummyLists {
 
     fun getEduLevel():ArrayList<DropDownData>{
         val list=ArrayList<DropDownData>()
-        list.add(DropDownData("High school"))
-        list.add(DropDownData("College"))
-        list.add(DropDownData("Graduate school"))
+        list.add(DropDownData("No formal education"))
+        list.add(DropDownData("High school / Secondary school"))
+        list.add(DropDownData("Diploma / Certificate"))
+        list.add(DropDownData("Associate degree"))
+        list.add(DropDownData("Bachelor’s degree"))
+        list.add(DropDownData("Master’s degree"))
+        list.add(DropDownData("MBA"))
+        list.add(DropDownData("Doctorate (PhD)"))
+        list.add(DropDownData("Professional degree (MD, JD, etc.)"))
+        list.add(DropDownData("Trade / Vocational training"))
         return list
     }
 
     fun homeOwnershipStatusList():ArrayList<DropDownData>{
         val list=ArrayList<DropDownData>()
-        list.add(DropDownData("Rent"))
-        list.add(DropDownData("Own"))
-        list.add(DropDownData("Other"))
+        list.add(DropDownData("Renter"))
+        list.add(DropDownData("Homeowner (with mortgage)"))
+        list.add(DropDownData("Homeowner (fully paid)"))
+        list.add(DropDownData("Living with family"))
+        list.add(DropDownData("Shared accommodation"))
+        list.add(DropDownData("Student housing"))
+        list.add(DropDownData("Company-provided housing"))
         return list
     }
 
@@ -218,13 +238,17 @@ object DummyLists {
 
     fun getSalaryRange():ArrayList<DropDownData>{
         val list=ArrayList<DropDownData>()
-        list.add(DropDownData("Unemployed"))
-        list.add(DropDownData("$0-10K"))
-        list.add(DropDownData("$11-50K"))
-        list.add(DropDownData("$51-100K"))
-        list.add(DropDownData("$101-200K"))
-        list.add(DropDownData("$201-250K"))
-        list.add(DropDownData("over $251K"))
+        list.add(DropDownData("<$25k"))
+        list.add(DropDownData("$25k – $50k"))
+        list.add(DropDownData("$50k – $75k"))
+        list.add(DropDownData("$100k – $250k"))
+        list.add(DropDownData("$250k – $500k"))
+        list.add(DropDownData("$500k – $1M"))
+        list.add(DropDownData("$1M – $2M"))
+        list.add(DropDownData("$2M – $5M"))
+        list.add(DropDownData( "$5M – $10M"))
+        list.add(DropDownData("$10M+"))
+        list.add(DropDownData("Prefer not to say"))
         return list
     }
 
@@ -333,5 +357,29 @@ object DummyLists {
         list.add(DropDownData(">$25M"))
         return list
     }
+
+
+
+
+    fun getEmploymentStatus():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Employed full-time"))
+        list.add(DropDownData("Employed part-time"))
+        list.add(DropDownData("Freelancer / Contractor"))
+        list.add(DropDownData("Business owner"))
+        list.add(DropDownData("Unemployed"))
+        list.add(DropDownData("Student"))
+        list.add(DropDownData("Retired"))
+        list.add(DropDownData("Homemaker"))
+        list.add(DropDownData("Intern / Trainee"))
+        list.add(DropDownData("Between jobs"))
+        list.add(DropDownData("Unable to work"))
+        list.add(DropDownData("Other"))
+        return list
+    }
+
+
+
+
 
 }

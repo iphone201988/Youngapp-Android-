@@ -288,4 +288,15 @@
     <string name="download_history">Download History</string>
     <string name="view">View</string>
     <string name="no_payment_records_available_at_the_moment">No payment records available \nat the moment.</string>
+    <string name="primary_investment_goal">Primary Investment Goal</string>
+    <string name="dei_importance">DEI Importance</string>
+    <string name="investment_horizon">Investment Horizon</string>
+    <string name="environmental_esg_priority">Environmental / ESG Priority</string>
+    <string name="what_do_you_seek_from_investments">What do you seek from investments?</string>
+    <string name="your_investments">Your Investments</string>
+    <string name="people_with_similar_profiles">People with similar profiles</string>
+    <string name="ticker_symbol">Ticker / Symbol</string>
+    <string name="add_investment">Add Investment</string>
+    <string name="current_value">Current Value ($)</string>
+    <string name="add_to_portfolio">Add to Portfolio</string>
 </resources>

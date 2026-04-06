@@ -25,6 +25,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -36,13 +37,18 @@ import com.tech.young.base.utils.BaseCustomBottomSheet
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
+import com.tech.young.data.DropDownData
 import com.tech.young.data.api.Constants
 import com.tech.young.data.api.SimpleApiResponse
+import com.tech.young.data.model.DummyLists.getAgeList
+import com.tech.young.data.model.DummyLists.getPLanList
 import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.BottomSheetCameraGalleryBinding
+import com.tech.young.databinding.BotttomSheetTopicsBinding
 import com.tech.young.databinding.FragmentAdvertiseBinding
 import com.tech.young.databinding.ItemLayoutAdvertisePopupBinding
+import com.tech.young.databinding.ItemLayoutDropDownBinding
 import com.tech.young.ui.home.HomeActivity
 import com.tech.young.ui.signup_process.RegistrationDataHolder
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,13 +56,20 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import kotlin.math.log
 
 @AndroidEntryPoint
-class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
+class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() , BaseCustomBottomSheet.Listener {
 
     private val viewModel: AdvertiseFragmentVm by viewModels()
     private lateinit var cameraGalleryBottomSheet: BaseCustomBottomSheet<BottomSheetCameraGalleryBinding>
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
+    private lateinit var planBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
+    private lateinit var planAdapter : SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
+
+    private var selectedPlan : String ?= null
+
+
     private var select = 0
     private var selectedImagePart: MultipartBody.Part? = null
 
@@ -64,6 +77,11 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
     private var photoFile: File? = null
     private var photoURI: Uri? = null
     private var imageUri : Uri? = null
+
+
+    var isChecked = false
+
+
 
     // adapter
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
@@ -186,6 +204,12 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
             }
         cameraGalleryBottomSheet.behavior.isDraggable = true
         cameraGalleryBottomSheet.setCancelable(true)
+
+
+
+        planBottomSheet = BaseCustomBottomSheet(requireContext(),R.layout.botttom_sheet_topics,this)
+        planBottomSheet.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        planBottomSheet.behavior.isDraggable = true
     }
 
     private var allGranted = false
@@ -216,13 +240,10 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
         viewModel.onClick.observe(requireActivity()){
             when(it?.id){
                 R.id.ivCheck -> {
-                    if (select == 0) {
-                        select = 1
-                        binding.check = true
-                    } else {
-                        select = 0
-                        binding.check = false
-                    }
+                        isChecked = !isChecked
+                        // update UI if using data binding
+                        binding.check = isChecked
+
                 }
                 R.id.etUploadFile ->{
                 cameraGalleryBottomSheet.show()
@@ -235,6 +256,7 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
                         data["company"] = binding.etCompany.text.toString().trim().toRequestBody()
                         data["email"] = binding.etEmail.text.toString().trim().toRequestBody()
                         data["website"] = binding.etWebsite.text.toString().trim().toRequestBody()
+                        data["adsPlan"] = binding.etPlan.text.toString().trim().toRequestBody()
 
                         if (selectedImagePart != null){
                             viewModel.advertise(data,Constants.GET_ADS,selectedImagePart)
@@ -248,6 +270,10 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
 //                    showDialog()
                 }
 
+                R.id.etPlan ->{
+                    planBottomSheet.show()
+                }
+
             }
         }
     }
@@ -259,6 +285,30 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
             }
         }
         binding.rvAds.adapter = adsAdapter
+
+        planAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_drop_down, BR.bean) { v, m, pos ->
+            when (v.id) {
+                R.id.consMain, R.id.title -> {
+                    binding.etPlan.setText(m.title)
+                    when(m.title){
+                        "$250- 1 month" ->{
+                            selectedPlan = "one_month"
+                        }
+//                        "$1,250- 6 months" ->{
+//                            selectedPlan = "six_month"
+//                        }
+//                        "$2,000- 1 year" ->{
+//                            selectedPlan = "one_year"
+//                        }
+
+                    }
+                    Log.i("selectedPlan", "initAdapter: $selectedPlan")
+                    planBottomSheet.dismiss()
+                }
+            }
+        }
+        planBottomSheet.binding.rvTopics.adapter = planAdapter
+        planAdapter.list = getPLanList()
     }
 
     private var getList = listOf(
@@ -389,9 +439,20 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() {
             showToast("Please select image")
             return false
         }
-
+        if (TextUtils.isEmpty(binding.etPlan.text.toString().trim())){
+            showToast("Please select plan")
+            return false
+        }
+        if (!isChecked) {
+            showToast("Please review and agree to our policies and agreements to submit the form.")
+            return false
+        }
 
         return true
+    }
+
+    override fun onViewClick(view: View?) {
+
     }
 
 

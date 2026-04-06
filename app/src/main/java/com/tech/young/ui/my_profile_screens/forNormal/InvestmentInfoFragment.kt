@@ -5,26 +5,41 @@ import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
+import com.tech.young.base.SimpleRecyclerViewAdapter
+import com.tech.young.base.utils.BaseCustomBottomSheet
 import com.tech.young.base.utils.BindingUtils
 import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
+import com.tech.young.data.DropDownData
 import com.tech.young.data.api.Constants
+import com.tech.young.data.model.DummyLists.getYearsEmployed
 import com.tech.young.data.model.GetProfileApiResponse.GetProfileApiResponseData
 import com.tech.young.data.model.UpdateUserProfileResponse
+import com.tech.young.databinding.BotttomSheetTopicsBinding
 import com.tech.young.databinding.FragmentInvestmentInfoBinding
+import com.tech.young.databinding.ItemLayoutDropDownBinding
 import com.tech.young.ui.my_profile_screens.YourProfileVM
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
 @AndroidEntryPoint
-class InvestmentInfoFragment : BaseFragment<FragmentInvestmentInfoBinding>() {
+class InvestmentInfoFragment : BaseFragment<FragmentInvestmentInfoBinding>()  ,  BaseCustomBottomSheet.Listener{
     private val viewModel:YourProfileVM by viewModels()
     // data
     private var profileData: GetProfileApiResponseData? = null
+    private var type: String? = null
+
+    private lateinit var commonBottomSheet: BaseCustomBottomSheet<BotttomSheetTopicsBinding>
+
+    private lateinit var commonAdapter: SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
+
+
     override fun onCreateView(view: View) {
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.clInvestment) { view, insets ->
@@ -35,10 +50,48 @@ class InvestmentInfoFragment : BaseFragment<FragmentInvestmentInfoBinding>() {
         }
         // view
         initView()
+
+        initBottomSheet()
         // click
         initOnClick()
+
+
         // observer
         initObserver()
+
+        initAdapter()
+    }
+
+    /** handle bottom sheets **/
+    private fun initBottomSheet() {
+        // years bottom sheet
+        commonBottomSheet =
+            BaseCustomBottomSheet(requireContext(), R.layout.botttom_sheet_topics, this)
+        commonBottomSheet.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        commonBottomSheet.behavior.isDraggable = true
+    }
+    private fun initAdapter() {
+        commonAdapter =
+            SimpleRecyclerViewAdapter(R.layout.item_layout_drop_down, BR.bean) { v, m, pos ->
+                when (v.id) {
+                    R.id.consMain, R.id.title -> {
+                        if (type != null) {
+                            when (type) {
+                                "1" -> binding.etPrimaryInvestmentGoal.setText(m.title)
+                                "2" -> binding.etInvestmentHorizon.setText(m.title)
+                                "3" -> binding.etDeiImportance.setText(m.title)
+                                "4" -> binding.etCommunityReinvestmentImportance.setText(m.title)
+                                "5" ->binding.etEnvironmental.setText(m.title)
+                                "6" ->binding.etFromInvestment.setText(m.title)
+                                "7" -> binding.etEmergencyFund.setText(m.title)
+
+                            }
+                        }
+                        commonBottomSheet.dismiss()
+                    }
+                }
+            }
+        commonBottomSheet.binding.rvTopics.adapter = commonAdapter
     }
 
     override fun getLayoutResource(): Int {
@@ -68,6 +121,34 @@ class InvestmentInfoFragment : BaseFragment<FragmentInvestmentInfoBinding>() {
                 R.id.tvSave -> {
                     // handle click
                     apiCall()
+                }
+                R.id.etPrimaryInvestmentGoal ->{
+                    type = "1"
+
+                }
+                R.id.etInvestmentHorizon ->{
+                    type = "2"
+
+                }
+                R.id.etDeiImportance ->{
+                    type = "3"
+
+                }
+                R.id.etCommunityReinvestmentImportance ->{
+                    type = "4"
+
+                }
+                R.id.etEnvironmental ->{
+                    type = "5"
+
+                }
+                R.id.etFromInvestment ->{
+                    type = "6"
+
+                }
+                R.id.etEmergencyFund ->{
+                    type = "7"
+
                 }
             }
         }
@@ -132,6 +213,10 @@ class InvestmentInfoFragment : BaseFragment<FragmentInvestmentInfoBinding>() {
         data["savings"] = binding.etSavings.text.toString().toRequestBody()
         data["startups"] = binding.etStartUp.text.toString().toRequestBody()
         viewModel.updateProfile(Constants.UPDATE_USER, data, null,null)
+    }
+
+    override fun onViewClick(view: View?) {
+
     }
 
 }

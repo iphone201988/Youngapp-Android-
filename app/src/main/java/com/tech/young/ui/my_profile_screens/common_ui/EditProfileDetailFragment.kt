@@ -28,10 +28,12 @@ import com.tech.young.data.DropDownData
 import com.tech.young.data.api.Constants
 import com.tech.young.data.model.DummyLists.getAgeList
 import com.tech.young.data.model.DummyLists.getEduLevel
+import com.tech.young.data.model.DummyLists.getEmploymentStatus
 import com.tech.young.data.model.DummyLists.getGenderList
 import com.tech.young.data.model.DummyLists.getIndustries
 import com.tech.young.data.model.DummyLists.getMartialStatus
 import com.tech.young.data.model.DummyLists.getRaceList
+import com.tech.young.data.model.DummyLists.homeOwnershipStatusList
 import com.tech.young.data.model.GetProfileApiResponse
 import com.tech.young.data.model.GetProfileApiResponse.GetProfileApiResponseData
 import com.tech.young.data.model.UpdateUserProfileResponse
@@ -64,6 +66,19 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
     // age
     private lateinit var ageBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
     private lateinit var ageAdapter : SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
+
+   //residence
+    private lateinit var residenceAdapter : SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
+    private lateinit var residenceBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
+
+    // education
+    private lateinit var educationAdapter  : SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
+    private lateinit var educationBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
+
+   //employment status
+    private lateinit var employmentAdapter  : SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
+    private lateinit var employmentBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
+
     // martial/ education/ industry
     private lateinit var commonBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
     private lateinit var commonAdapter : SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
@@ -220,6 +235,18 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                 R.id.etMarital,R.id.etEducationFinance,R.id.etIndustryStartup->{
                     commonBottomSheet.show()
                 }
+                R.id.etResidenceStatus ->{
+                    residenceBottomSheet.show()
+                }
+                R.id.etEducationLevel ->{
+                    educationBottomSheet.show()
+                }
+
+                R.id.etEmploymentStatus ->
+                {
+                    employmentBottomSheet.show()
+                }
+
 
                 /** api call ***/
                 R.id.tvUpdate,R.id.tvUpdateFinance,R.id.tvUpdateStartup,R.id.tvUpdateInvestor -> {
@@ -353,6 +380,23 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
         commonBottomSheet = BaseCustomBottomSheet(requireContext(),R.layout.botttom_sheet_topics,this)
         commonBottomSheet.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         commonBottomSheet.behavior.isDraggable = true
+
+
+        //residence bottomsheet
+        residenceBottomSheet = BaseCustomBottomSheet(requireContext(),R.layout.botttom_sheet_topics,this)
+        residenceBottomSheet.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        residenceBottomSheet.behavior.isDraggable = true
+
+
+        //education bottomsheet
+        educationBottomSheet = BaseCustomBottomSheet(requireContext(),R.layout.botttom_sheet_topics,this)
+        educationBottomSheet.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        educationBottomSheet.behavior.isDraggable = true
+
+        // employmentBottomSheet
+        employmentBottomSheet = BaseCustomBottomSheet(requireContext(),R.layout.botttom_sheet_topics,this)
+        employmentBottomSheet.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        employmentBottomSheet.behavior.isDraggable = true
     }
 
     override fun onViewClick(view: View?) {
@@ -417,6 +461,59 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
         }
         ageBottomSheet.binding.rvTopics.adapter = ageAdapter
         ageAdapter.list = getAgeList()
+
+
+        // residence adapter
+        residenceAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_drop_down, BR.bean) { v, m, pos ->
+            when (v.id) {
+                R.id.consMain, R.id.title -> {
+                    if (type != null) {
+                        when (type) {
+                            1 -> binding.etResidenceStatus.text = m.title
+                        }
+                    }
+                    residenceBottomSheet.dismiss()
+                }
+            }
+        }
+        residenceBottomSheet.binding.rvTopics.adapter = residenceAdapter
+        residenceAdapter.list = homeOwnershipStatusList()
+
+
+        // education adapter
+        educationAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_drop_down, BR.bean) { v, m, pos ->
+            when (v.id) {
+                R.id.consMain, R.id.title -> {
+                    if (type != null) {
+                        when (type) {
+                            1 -> binding.etEducationLevel.text = m.title
+                        }
+                    }
+                    educationBottomSheet.dismiss()
+                }
+            }
+        }
+        educationBottomSheet.binding.rvTopics.adapter = educationAdapter
+        educationAdapter.list = getEduLevel()
+
+
+        // employment adapter
+        employmentAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_drop_down, BR.bean) { v, m, pos ->
+            when (v.id) {
+                R.id.consMain, R.id.title -> {
+                    if (type != null) {
+                        when (type) {
+                            1 -> binding.etEmploymentStatus.text = m.title
+                        }
+                    }
+                    employmentBottomSheet.dismiss()
+                }
+            }
+        }
+        employmentBottomSheet.binding.rvTopics.adapter = employmentAdapter
+        employmentAdapter.list = getEmploymentStatus()
+
+
 
         // common adapter
         commonAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_drop_down, BR.bean) { v, m, pos ->

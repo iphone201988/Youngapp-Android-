@@ -39,12 +39,14 @@ import com.tech.young.ui.change_password.ChangePasswordFragment
 import com.tech.young.ui.contact_screens.ContactUsFragment
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.ecosystem.EcosystemFragment.Companion.selectedCategoryForEcosystem
+import com.tech.young.ui.engagement.EngagementFragment
 import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.exchange.exchange_share_detail.ExchangeShareDetailFragment
 import com.tech.young.ui.exchange.screens.ShareExchangeFragment.Companion.selectedCategoryForExchange
 import com.tech.young.ui.exchange.stream_detail_fragment.StreamDetailFragment
 import com.tech.young.ui.inbox.InboxFragment
 import com.tech.young.ui.inbox.view_message.ViewMessageFragment
+import com.tech.young.ui.investment_tracker.InvestmentTrackerFragment
 import com.tech.young.ui.media.MediaFragment
 import com.tech.young.ui.my_profile_screens.YourProfileFragment
 import com.tech.young.ui.my_profile_screens.common_ui.BusinessInfoFragment
@@ -55,6 +57,7 @@ import com.tech.young.ui.my_profile_screens.forFinance.ProfessionalInformationFr
 import com.tech.young.ui.my_profile_screens.forNormal.FamilyDetailsFragment
 import com.tech.young.ui.my_profile_screens.forNormal.FinanceInfoFragment
 import com.tech.young.ui.my_profile_screens.forNormal.InvestmentInfoFragment
+import com.tech.young.ui.my_profile_screens.forNormal.PerformanceFragment
 import com.tech.young.ui.my_profile_screens.profile_fragments.CalendarFragment
 import com.tech.young.ui.my_share.MyShareFragment
 import com.tech.young.ui.notification_fragment.NotificationFragment
@@ -648,6 +651,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
         list.add(SideMenuBar(false, "Startups", "Ecosystem"))
         list.add(SideMenuBar(false, "Small Business", "Ecosystem"))
         list.add(SideMenuBar(false, "Investor/ VC", "Ecosystem"))
+
+        list.add(SideMenuBar(false, "Analytics"))
+        list.add(SideMenuBar(false, "Ecosystems"))
+        list.add(SideMenuBar(false, "Engagement"))
+        list.add(SideMenuBar(false,"Research Engine"))
+        list.add(SideMenuBar(false,"Brokers"))
+
+
         return list
 
     }
@@ -746,6 +757,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                     "Notification" ->{
                         displayFragment(NotificationFragment())
                         updateOtherUI("Notification")
+                    }
+                    "Engagement" ->{
+                        displayFragment(EngagementFragment())
+                        updateOtherUI("Engagement")
                     }
                 }
             }

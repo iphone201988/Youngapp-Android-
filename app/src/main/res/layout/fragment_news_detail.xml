@@ -61,8 +61,22 @@
             android:layout_height="wrap_content"
             android:text="Source: Nasdaq"
             android:layout_marginTop="@dimen/_10sdp"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/text_black"
             app:layout_constraintTop_toBottomOf="@id/clTopBar"
+            app:layout_constraintStart_toStartOf="@id/clTopBar"/>
+
+
+        <TextView
+            android:id="@+id/subHeading"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:onClick="@{v -> vm.onClick(v)}"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="@id/clTopBar"
+            app:layout_constraintTop_toBottomOf="@id/title"
             app:layout_constraintStart_toStartOf="@id/clTopBar"/>
 
         <TextView
@@ -73,7 +87,7 @@
             android:autoLink="web"
             android:visibility="gone"
             android:text="https://www.nasdaq.com/nasdaq-RSS-Feeds"
-            app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_constraintTop_toBottomOf="@id/subHeading"
             app:layout_constraintStart_toStartOf="@id/clTopBar"
             app:layout_constraintEnd_toEndOf="@id/clTopBar"/>
 
@@ -85,12 +99,23 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"
             android:orientation="vertical"
+            android:layout_marginHorizontal="@dimen/_15sdp"
             tools:listitem="@layout/item_layout_news_data"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/link"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/clTopBar"
-            app:layout_constraintEnd_toEndOf="@id/clTopBar"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

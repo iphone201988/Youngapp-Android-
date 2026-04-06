@@ -67,7 +67,7 @@
             android:layout_height="0dp"
             android:fitsSystemWindows="true"
             android:fillViewport="true"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/clTopBar"
             app:layout_constraintHorizontal_bias="0.0"
@@ -435,6 +435,126 @@
                     app:layout_constraintBottom_toBottomOf="@+id/etMarital"
                     app:layout_constraintEnd_toEndOf="@+id/etMarital"
                     app:layout_constraintTop_toTopOf="@+id/etMarital" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvResidenceStatus"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Residence Status"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etMarital" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/etResidenceStatus"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Renter"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvResidenceStatus" />
+
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etResidenceStatus"
+                    app:layout_constraintEnd_toEndOf="@+id/etResidenceStatus"
+                    app:layout_constraintTop_toTopOf="@+id/etResidenceStatus" />
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvEducationLevel"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Education Level"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etResidenceStatus" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/etEducationLevel"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Bachelor's"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvEducationLevel" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etEducationLevel"
+                    app:layout_constraintEnd_toEndOf="@+id/etEducationLevel"
+                    app:layout_constraintTop_toTopOf="@+id/etEducationLevel" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvEmployeeStatus"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Employment Status"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etEducationLevel" />
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/etEmploymentStatus"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Employed Full-time"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvEmployeeStatus" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etEmploymentStatus"
+                    app:layout_constraintEnd_toEndOf="@+id/etEmploymentStatus"
+                    app:layout_constraintTop_toTopOf="@+id/etEmploymentStatus" />
+
                 <ImageView
                     android:id="@+id/ivInfo2"
                     android:layout_width="@dimen/_15sdp"
@@ -442,7 +562,7 @@
                     android:layout_marginTop="@dimen/_12sdp"
                     android:src="@drawable/ic_info"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/etMarital"
+                    app:layout_constraintTop_toBottomOf="@id/etEmploymentStatus"
                     app:tint="@color/gray" />
 
                 <androidx.appcompat.widget.AppCompatTextView

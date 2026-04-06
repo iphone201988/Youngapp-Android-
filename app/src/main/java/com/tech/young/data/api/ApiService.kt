@@ -123,7 +123,7 @@ interface ApiService {
     @Multipart
     @JvmSuppressWildcards
     @POST
-    suspend fun apiForPostMultipart(
+        suspend fun apiForPostMultipart(
         @Url url: String,
         @Header("Authorization") token: String,
         @PartMap data: Map<String, RequestBody>,

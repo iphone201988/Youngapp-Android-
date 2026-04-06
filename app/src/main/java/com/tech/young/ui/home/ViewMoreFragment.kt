@@ -61,7 +61,8 @@ class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>(){
     private fun getNewsList() {
          newsSections = arrayListOf(
             NewsSection("Nasdaq",
-                "",
+                "https://www.nasdaq.com/nasdaq-RSS-Feeds",
+                "Markets, IPOs, crypto and investing insights",
                 arrayListOf(
                 NewsItem("Cryptocurrencies","https://www.nasdaq.com/feed/rssoutbound?category=Cryptocurrencies"),
                 NewsItem("Markets","https://www.nasdaq.com/feed/rssoutbound?category=Markets"),
@@ -73,8 +74,9 @@ class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>(){
             )
             ),
             NewsSection("Investing.com",
-                ""
-                ,arrayListOf(
+                "https://www.investing.com/"
+                ,"Global financial markets, stocks and crypto news",
+                arrayListOf(
                 NewsItem("All News","https://www.investing.com/rss/investing_news.rss"),
                 NewsItem("Stock Market News","https://www.investing.com/rss/news_25.rss"),
                 NewsItem("Cryptocurrency news","https://www.investing.com/rss/news_301.rss"),
@@ -83,7 +85,8 @@ class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>(){
             )
             ),
              NewsSection("MarketWatch",
-                 "",
+                 "https://www.marketwatch.com/site/rss",
+                 "Breaking market news, analysis and real-time updates",
                  arrayListOf(
                  NewsItem("Top Stories","https://feeds.content.dowjones.io/public/rss/mw_topstories"),
                  NewsItem("Real-time headlines","https://feeds.content.dowjones.io/public/rss/mw_realtimeheadlines"),
@@ -93,6 +96,7 @@ class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>(){
              ),
              NewsSection("CNBC",
                  "https://www.cnbc.com/rss-feeds/",
+                 "Business, economy and personal finance coverage",
                  arrayListOf(
                  NewsItem("Business","https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10001147"),
                  NewsItem("Earnings","https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=15839135"),
@@ -106,7 +110,8 @@ class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>(){
              )
              ),
              NewsSection("WSJ",
-                 "",
+                 "https://www.cnbc.com/rss-feeds/",
+                 "U.S. business, markets and economic insights",
                  arrayListOf(
                  NewsItem("U.S Business","https://feeds.content.dowjones.io/public/rss/WSJcomUSBusiness"),
                  NewsItem("Market News","https://feeds.content.dowjones.io/public/rss/RSSMarketsMain"),
@@ -115,7 +120,8 @@ class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>(){
              )
              ),
              NewsSection("CNN",
-                 "",
+                 "https://edition.cnn.com/",
+                 "Latest global business and economic news",
                  arrayListOf(
                  NewsItem("Business News","http://rss.cnn.com/rss/money_latest.rss"),
                  NewsItem("Top Stories","http://rss.cnn.com/rss/money_topstories.rss"),
@@ -199,7 +205,9 @@ class ViewMoreFragment : BaseFragment<FragmentViewMoreBinding>(){
         subViewClick.observe(requireActivity(), Observer { it ->
             val bundle = Bundle()
             bundle.putString("url", it?.data?.bean?.link) // 👈 pass URL from observer
-
+            bundle.putString("heading", it?.data?.sectionTitle)
+            bundle.putString("subHeading", it?.data?.sectionSubTitle)
+            bundle.putString("headingLink", it?.data?.sectionLink)
             val fragment = NewsDetailFragment()
             fragment.arguments = bundle
 

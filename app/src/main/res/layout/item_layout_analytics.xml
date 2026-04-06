@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="bean"
+            type="String" />
+        <variable
+            name="callback"
+            type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
+        <variable
+            name="pos"
+            type="Integer" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@drawable/profile_share_bg">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivImage"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_150sdp"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="@dimen/_8sdp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/dummy_profile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/Shape10" />
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivUserImage"
+            android:layout_width="@dimen/_32sdp"
+            android:layout_height="@dimen/_32sdp"
+            android:src="@drawable/dummy_person"
+            app:shapeAppearance="@style/Shape50"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivImage"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvUserName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/TextView_500_Medium"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:textSize="@dimen/_14ssp"
+            android:text="Username"
+            android:singleLine="true"
+            android:onClick="@{v ->callback.onItemClick(v,bean,pos)}"
+            android:paddingHorizontal="@dimen/_8sdp"
+            app:layout_constraintStart_toEndOf="@id/ivUserImage"
+            app:layout_constraintEnd_toStartOf="@+id/ivStar"
+            app:layout_constraintTop_toTopOf="@id/ivUserImage"/>
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivStar"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
+            android:src="@drawable/ic_star"
+            app:layout_constraintEnd_toStartOf="@id/tvRating"
+            app:layout_constraintTop_toTopOf="@id/ivUserImage"
+            app:layout_constraintBottom_toBottomOf="@id/ivUserImage"
+            android:layout_marginEnd="@dimen/_3sdp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView_500_Medium"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ivStar"
+            app:layout_constraintBottom_toBottomOf="@id/ivStar"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/TextView_400_Regular"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/_10ssp"
+            android:text="12 January at 09:28PM"
+            android:singleLine="true"
+            android:paddingHorizontal="@dimen/_8sdp"
+            app:layout_constraintStart_toEndOf="@id/ivUserImage"
+            app:layout_constraintTop_toBottomOf="@id/tvUserName"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLastActivity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/TextView_400_Regular"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/_10ssp"
+            android:text="Last Activity: 12 January at 09:28PM"
+            android:paddingHorizontal="@dimen/_8sdp"
+            app:layout_constraintStart_toEndOf="@id/ivUserImage"
+            app:layout_constraintTop_toBottomOf="@id/tvDate"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSymbol"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:singleLine="true"
+            android:text="Symbol: "
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvLastActivity" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDescription"
+            style="@style/TextView_500_Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_11ssp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginHorizontal="@dimen/_8sdp"
+            android:text="Join the discussion about the best growth stock to invest in."
+            app:layout_constraintTop_toBottomOf="@id/tvSymbol"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <View
+            android:id="@+id/viewLine"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/viewLine"
+            android:layout_marginTop="@dimen/_13sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvViews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView_400_Regular"
+            android:text="Views"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/_11ssp"
+            android:layout_marginStart="@dimen/_8sdp"
+            app:layout_constraintTop_toBottomOf="@id/viewLine"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pointViews"
+            style="@style/TextView_500_Medium"
+            android:textSize="@dimen/_11ssp"
+            android:textColor="@color/text_gray"
+            android:text="(+18% this week)"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvViews"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etViews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1.5k"
+            style="@style/TextView_500_Medium"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:textSize="@dimen/_11ssp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/pointViews"
+            app:layout_constraintTop_toTopOf="@id/pointViews"
+            app:layout_constraintEnd_toStartOf="@id/pointViews"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvReshare"
+            style="@style/TextView_400_Regular"
+            android:textSize="@dimen/_11ssp"
+            android:textColor="@color/text_black"
+            android:text="Reshare"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/tvViews"
+            app:layout_constraintTop_toBottomOf="@id/pointViews"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pointReshare"
+            style="@style/TextView_500_Medium"
+            android:textSize="@dimen/_11ssp"
+            android:textColor="@color/text_gray"
+            android:text="(+12)"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvReshare"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etReshare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="13"
+            style="@style/TextView_500_Medium"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:textSize="@dimen/_11ssp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/pointReshare"
+            app:layout_constraintTop_toTopOf="@id/pointReshare"
+            app:layout_constraintEnd_toStartOf="@id/pointReshare"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSaves"
+            style="@style/TextView_400_Regular"
+            android:textSize="@dimen/_11ssp"
+            android:textColor="@color/text_black"
+            android:text="Saves"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/tvViews"
+            app:layout_constraintTop_toBottomOf="@id/pointReshare"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pointSaves"
+            style="@style/TextView_500_Medium"
+            android:textSize="@dimen/_11ssp"
+            android:textColor="@color/text_gray"
+            android:text="(+12)"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvSaves"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etSaves"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView_500_Medium"
+            android:text="123"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:textSize="@dimen/_11ssp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toTopOf="@id/pointSaves"
+            app:layout_constraintBottom_toBottomOf="@id/pointSaves"
+            app:layout_constraintEnd_toStartOf="@id/pointSaves"/>
+
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvBooms"
+            style="@style/TextView_400_Regular"
+            android:textSize="@dimen/_11ssp"
+            android:textColor="@color/text_black"
+            android:text="Booms"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/tvViews"
+            app:layout_constraintTop_toBottomOf="@id/pointSaves"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pointBooms"
+            style="@style/TextView_500_Medium"
+            android:textSize="@dimen/_11ssp"
+            android:textColor="@color/text_gray"
+            android:text="(+12)"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvBooms"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etBooms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView_500_Medium"
+            android:text="123"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:textSize="@dimen/_11ssp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toTopOf="@id/pointBooms"
+            app:layout_constraintBottom_toBottomOf="@id/pointBooms"
+            app:layout_constraintEnd_toStartOf="@id/pointBooms"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvFollowerGrowth"
+            style="@style/TextView_400_Regular"
+            android:textSize="@dimen/_11ssp"
+            android:textColor="@color/text_black"
+            android:text="Follower growth"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/tvViews"
+            app:layout_constraintTop_toBottomOf="@id/pointBooms"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pointGrowth"
+            style="@style/TextView_500_Medium"
+            android:textSize="@dimen/_11ssp"
+            android:textColor="@color/text_gray"
+            android:text="(+12)"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvFollowerGrowth"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etGrowth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView_500_Medium"
+            android:text="3"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:textSize="@dimen/_11ssp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toTopOf="@id/pointGrowth"
+            app:layout_constraintBottom_toBottomOf="@id/pointGrowth"
+            app:layout_constraintEnd_toStartOf="@id/pointGrowth"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

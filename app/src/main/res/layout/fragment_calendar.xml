@@ -41,13 +41,97 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/etSearch"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_42sdp"
+                        android:layout_marginTop="24dp"
+                        android:background="@drawable/radius_border_gray"
+                        android:gravity="start|center"
+                        android:visibility="gone"
+                        android:hint="@string/search_here"
+                        android:paddingStart="@dimen/_10sdp"
+                        android:paddingEnd="@dimen/_50sdp"
+                        android:layout_marginEnd="-12dp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/text_gray"
+                        app:layout_constraintEnd_toStartOf="@id/filterList"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/filterList"
+                        android:layout_width="@dimen/_42sdp"
+                        android:layout_height="@dimen/_42sdp"
+                        android:src="@drawable/iv_bg_search"
+                        android:scaleType="fitXY"
+                        android:visibility="gone"
+                        android:onClick="@{v -> vm.onClick(v)}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/etSearch"
+                        app:layout_constraintBottom_toBottomOf="@id/etSearch"/>
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvViewPublicEvent"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="View Public events"
+                        android:visibility="gone"
+                        android:layout_marginTop="@dimen/_13sdp"
+                        android:textSize="@dimen/_13ssp"
+                        app:layout_constraintTop_toBottomOf="@id/etSearch"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvAcceptedEvents"
+                        style="@style/TextView_500_Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="View accepted events"
+                        android:visibility="gone"
+                        android:layout_marginTop="@dimen/_13sdp"
+                        android:textSize="@dimen/_13ssp"
+                        app:layout_constraintTop_toBottomOf="@id/tvViewPublicEvent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchPublicEvent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_30sdp"
+                        android:thumb="@drawable/switch_thumb"
+                        app:track="@drawable/switch_track"
+                        android:checked="true"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toTopOf="@id/tvViewPublicEvent"
+                        app:layout_constraintBottom_toBottomOf="@id/tvViewPublicEvent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchAcceptedEvent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_30sdp"
+                        android:thumb="@drawable/switch_thumb"
+                        app:track="@drawable/switch_track"
+                        android:checked="true"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toTopOf="@id/tvAcceptedEvents"
+                        app:layout_constraintBottom_toBottomOf="@id/tvAcceptedEvents"
+                        app:layout_constraintEnd_toEndOf="parent"/>
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/consMain"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
                         android:background="@drawable/bg_cons_stroke"
                         android:paddingBottom="@dimen/_10sdp"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toBottomOf="@id/tvAcceptedEvents">
 
 
                         <ImageView
@@ -445,8 +529,8 @@
                         style="@style/TextView_500_Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Visibility Mode"
-                        android:visibility="gone"
+                        android:text="Visibility"
+                        android:visibility="visible"
                         android:layout_marginTop="@dimen/_12sdp"
                         android:textColor="@color/colorPrimary"
                         app:layout_constraintStart_toStartOf="parent"
@@ -458,7 +542,7 @@
                         android:layout_height="@dimen/_42sdp"
                         android:layout_marginTop="@dimen/_8sdp"
                         android:padding="@dimen/_5sdp"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:background="@drawable/bg_standard"
                         app:layout_constraintTop_toBottomOf="@id/tvVisibilityMode"
                         app:layout_constraintStart_toStartOf="@id/etDescription"

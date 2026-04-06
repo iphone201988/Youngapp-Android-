@@ -109,9 +109,7 @@ class FinanceInfoFragment : BaseFragment<FragmentFinanceInfoBinding>(),
                 }
 
                 R.id.etSalary -> {
-                    type = "2"
-                    commonAdapter.list = getSalaryRange()
-                    commonBottomSheet.show()
+
                 }
 
                 R.id.etFinance -> {
@@ -132,6 +130,17 @@ class FinanceInfoFragment : BaseFragment<FragmentFinanceInfoBinding>(),
                         DropDownData(title = title)
                     }
                     commonAdapter.list = modelList
+                    commonBottomSheet.show()
+                }
+
+                R.id.etSalaryRange ->{
+                    type = "6"
+                    commonAdapter.list = getSalaryRange()
+                    commonBottomSheet.show()
+                }
+                R.id.etNetWorthEstimate ->{
+                    type = "7"
+                    commonAdapter.list = getSalaryRange()
                     commonBottomSheet.show()
                 }
 
@@ -304,7 +313,7 @@ class FinanceInfoFragment : BaseFragment<FragmentFinanceInfoBinding>(),
                         if (type != null) {
                             when (type) {
                                 "1" -> binding.etYears.text = m.title
-                                "2" -> binding.etSalary.text = m.title
+
                                 "3" -> binding.etFinance.text = m.title
                                 "4" -> binding.etLowRisk.text = m.title
                                 "5" -> {
@@ -316,6 +325,8 @@ class FinanceInfoFragment : BaseFragment<FragmentFinanceInfoBinding>(),
                                         Log.i("dasdasdasd", "initAdapter: $selectedCategory")
                                     }
                                 }
+                                "6" -> binding.etSalaryRange.setText(m.title)
+                                "7" -> binding.etNetWorthEstimate.setText(m.title)
                             }
                         }
                         commonBottomSheet.dismiss()

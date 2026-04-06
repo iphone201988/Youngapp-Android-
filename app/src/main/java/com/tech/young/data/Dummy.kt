@@ -23,15 +23,19 @@ data class DropDownData(
 
 
 data class SubViewClickBean(
-    var v : View,
-    var bean : NewsItem,
-    var position : Int
+    val view: View,
+    val bean: NewsItem,
+    val position: Int,
+    val sectionTitle: String? = null ,
+    val sectionSubTitle: String? = null,
+    val sectionLink: String? = null   // 👈 NEW
 )
 
 // Parent item - Section
 data class NewsSection(
     val heading: String,
     val headingLink: String? = null,
+    val subHeading : String?,
     val items: List<NewsItem>
 )
 
@@ -139,4 +143,13 @@ data class SubscriptionFeatureList(
 data class SelectionItem(
     val name: String,
     var isSelected: Boolean = false
+)
+
+
+data class InvestmentItem(
+    val symbol: String,
+    val name: String,
+    val type: String,
+    val value: String,
+    val isUp: Boolean
 )

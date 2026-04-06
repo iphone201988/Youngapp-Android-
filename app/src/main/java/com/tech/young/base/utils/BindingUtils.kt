@@ -885,33 +885,50 @@ object BindingUtils {
 
 
 
-    @BindingAdapter("childNewsAdapter")
+    @BindingAdapter(
+        value = ["childNewsAdapter", "sectionTitle", "sectionSubTitle", "sectionLink"],
+        requireAll = false
+    )
     @JvmStatic
-    fun childNewsAdapter(view : RecyclerView , subNews : List<NewsItem>?){
-
-        // Create and set a LayoutManager for the inner RecyclerView
+    fun childNewsAdapter(
+        view: RecyclerView,
+        subNews: List<NewsItem>?,
+        sectionTitle: String?,
+        sectionSubTitle: String?,
+        sectionLink: String?
+    ) {
         val layoutManager = LinearLayoutManager(view.context)
         view.layoutManager = layoutManager
+
         val context = view.context
-        val eventAdapter = SimpleRecyclerViewAdapter<NewsItem, ItemLayoutSubNewsBinding>(R.layout.item_layout_sub_news,BR.bean){ v, m, pos ->
-            when(v.id){
-                R.id.consMain ->{
-//                    val intent=Intent(context, CommonActivity::class.java)
-//                    intent.putExtra("from","news_details")
-//                    intent.putExtra("url",m.link)
-//                    context.startActivity(intent)
-                    val clickData = SubViewClickBean(v!!, m, pos)
-                    ViewMoreFragment.subViewClick.value = Resource.success("dssaasas",clickData)
 
+        val eventAdapter =
+            SimpleRecyclerViewAdapter<NewsItem, ItemLayoutSubNewsBinding>(
+                R.layout.item_layout_sub_news,
+                BR.bean
+            ) { v, m, pos ->
 
+                when (v.id) {
+                    R.id.consMain -> {
 
+                        val clickData = SubViewClickBean(
+                            v!!,
+                            m,
+                            pos,
+                            sectionTitle,
+                            sectionSubTitle,
+                            sectionLink   // 👈 PASS HERE
+                        )
+
+                        ViewMoreFragment.subViewClick.value =
+                            Resource.success("data", clickData)
+                    }
                 }
             }
-        }
+
         view.adapter = eventAdapter
         eventAdapter.list = subNews
         eventAdapter.notifyDataSetChanged()
-
     }
 
 

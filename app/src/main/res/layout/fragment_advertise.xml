@@ -211,6 +211,8 @@
             android:gravity="start|center"
             android:inputType="textCapSentences"
             android:hint="$250 for 1 month"
+            android:focusable="false"
+            android:onClick="@{v -> vm.onClick(v)}"
             android:paddingHorizontal="@dimen/_10sdp"
             android:singleLine="true"
             android:textColorHint="@color/text_gray"

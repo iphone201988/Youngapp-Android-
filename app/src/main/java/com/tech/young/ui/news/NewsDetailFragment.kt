@@ -11,7 +11,6 @@ import com.tech.young.R
 import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
-import com.tech.young.data.NewsItem
 import com.tech.young.data.RSSItem
 import com.tech.young.databinding.FragmentNewsDetailBinding
 import com.tech.young.databinding.ItemLayoutNewsDataBinding
@@ -25,7 +24,6 @@ import okhttp3.Protocol
 import okhttp3.Request
 import org.jsoup.Jsoup
 import org.xmlpull.v1.XmlPullParser
-import java.io.IOException
 import java.io.InputStream
 import java.net.MalformedURLException
 import java.net.URL
@@ -35,67 +33,115 @@ import java.util.concurrent.TimeUnit
 class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
 
     private val viewModel: NewsViewModel by viewModels()
+    private var headingLink : String ? =null
     private lateinit var newsAdapter: SimpleRecyclerViewAdapter<RSSItem, ItemLayoutNewsDataBinding>
     private val rssItems = mutableListOf<RSSItem>()
 
     override fun onCreateView(view: View) {
         val url = arguments?.getString("url")
+        val heading = arguments?.getString("heading")
+        val subHeading = arguments?.getString("subHeading")
+        headingLink = arguments?.getString("headingLink")
+
+
+        binding.title.text = "Source: ${heading ?: "Unknown"}"
+        binding.subHeading.text = subHeading ?: ""
         initAdapter()
+
         lifecycleScope.launch {
+
+            binding.progressBar.visibility = View.VISIBLE
+
             try {
                 val items = parseFeed("$url")
-                Log.e("xxx", "${items.size}")
-                val updatedItems = items.map { item ->
-                    val metadata = fetchUrlMetadata(item.link ?: "")
-                    val imageUrlMeta = metadata["imageUrl"]
-                    val imageUrl = resolveImageUrl("${url}", imageUrlMeta)
-                    item.copy(imageURL = imageUrl)
+                Log.e("RSS_DEBUG", "Feed parsed. Total items: ${items.size}")
+
+                val updatedItems = items.mapIndexed { index, item ->
+
+                    Log.e("RSS_DEBUG", "-----------------------------")
+                    Log.e("RSS_DEBUG", "Item Index: $index")
+                    Log.e("RSS_DEBUG", "Item Title: ${item.title}")
+                    Log.e("RSS_DEBUG", "Item Link: ${item.link}")
+
+                    var finalImageUrl: String? = null
+
+                    // ✅ STEP 1: Try metadata (existing logic)
+                    try {
+                        val metadata = fetchUrlMetadata(item.link ?: "")
+                        val imageUrlMeta = metadata["imageUrl"]
+
+                        Log.e("RSS_DEBUG", "Metadata image: $imageUrlMeta")
+
+                        finalImageUrl = resolveImageUrl("$url", imageUrlMeta)
+                    } catch (e: Exception) {
+                        Log.e("RSS_DEBUG", "Metadata fetch failed", e)
+                    }
+
+                    // ✅ STEP 2: Fallback to RSS image
+                    if (finalImageUrl.isNullOrEmpty()) {
+                        Log.e("RSS_DEBUG", "⚠️ Using RSS/description fallback")
+
+                        finalImageUrl = item.imageURL
+                            ?: extractImageFromDescription(item.description)
+                    }
+
+                    Log.e("RSS_DEBUG", "✅ Final Image URL: $finalImageUrl")
+
+                    item.copy(imageURL = finalImageUrl)
                 }
+
                 rssItems.clear()
                 rssItems.addAll(updatedItems)
+
                 newsAdapter.list = rssItems
                 newsAdapter.notifyDataSetChanged()
+
             } catch (e: Exception) {
-                Log.e("RSS", "Error parsing feed", e)
+                Log.e("RSS_DEBUG", "❌ Error parsing feed", e)
             }
+
+            binding.progressBar.visibility = View.GONE
         }
 
-        // click
         initOnClick()
-
     }
 
-    override fun getLayoutResource(): Int {
-        return R.layout.fragment_news_detail
-    }
+    override fun getLayoutResource(): Int = R.layout.fragment_news_detail
 
-    override fun getViewModel(): BaseViewModel {
-        return viewModel
-    }
+    override fun getViewModel(): BaseViewModel = viewModel
 
-    /** handle click **/
     private fun initOnClick() {
         viewModel.onClick.observe(requireActivity()) {
-            when (it?.id) {
-                R.id.ivBack -> {
+            when(it?.id){
+                R.id.ivBack ->{
                     requireActivity().onBackPressedDispatcher.onBackPressed()
+
+                }
+
+                R.id.subHeading ->{
+                    val intent = Intent(requireContext(), CommonActivity::class.java).apply {
+                        putExtra("from", "single_news")
+                        putExtra("linkUrl", headingLink)
+                    }
+                    startActivity(intent)
                 }
             }
+
+
+
+
         }
     }
 
-    /** handle adapter **/
     private fun initAdapter() {
         newsAdapter =
-            SimpleRecyclerViewAdapter(R.layout.item_layout_news_data, BR.bean) { v, m, pos ->
-                when (v.id) {
-                    R.id.consMain->{
-                        val intent= Intent(requireContext(),CommonActivity::class.java).apply {
-                            putExtra("from","single_news")
-                            putExtra("linkUrl",m.link)
-                        }
-                        startActivity(intent)
+            SimpleRecyclerViewAdapter(R.layout.item_layout_news_data, BR.bean) { v, m, _ ->
+                if (v.id == R.id.consMain) {
+                    val intent = Intent(requireContext(), CommonActivity::class.java).apply {
+                        putExtra("from", "single_news")
+                        putExtra("linkUrl", m.link)
                     }
+                    startActivity(intent)
                 }
             }
 
@@ -104,8 +150,7 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
     }
 
     suspend fun parseFeed(feedUrl: String): List<RSSItem> = withContext(Dispatchers.IO) {
-        val url = URL(feedUrl)
-        val stream = url.openConnection().getInputStream()
+        val stream = URL(feedUrl).openConnection().getInputStream()
         parse(stream)
     }
 
@@ -120,10 +165,42 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
 
         while (eventType != XmlPullParser.END_DOCUMENT) {
             val tagName = parser.name
+
             when (eventType) {
+
                 XmlPullParser.START_TAG -> {
+
                     if (tagName == "item") {
                         currentItem = RSSItem(null, null, null, null)
+                    }
+
+                    // ✅ media:content
+                    if (tagName == "media:content") {
+                        val imageUrl = parser.getAttributeValue(null, "url")
+                        if (!imageUrl.isNullOrEmpty()) {
+                            currentItem = currentItem?.copy(imageURL = imageUrl)
+                            Log.e("RSS_DEBUG", "media:content image: $imageUrl")
+                        }
+                    }
+
+                    // ✅ media:thumbnail
+                    if (tagName == "media:thumbnail") {
+                        val imageUrl = parser.getAttributeValue(null, "url")
+                        if (!imageUrl.isNullOrEmpty()) {
+                            currentItem = currentItem?.copy(imageURL = imageUrl)
+                            Log.e("RSS_DEBUG", "media:thumbnail image: $imageUrl")
+                        }
+                    }
+
+                    // ✅ enclosure
+                    if (tagName == "enclosure") {
+                        val imageUrl = parser.getAttributeValue(null, "url")
+                        val type = parser.getAttributeValue(null, "type")
+
+                        if (type?.startsWith("image") == true) {
+                            currentItem = currentItem?.copy(imageURL = imageUrl)
+                            Log.e("RSS_DEBUG", "enclosure image: $imageUrl")
+                        }
                     }
                 }
 
@@ -132,13 +209,23 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
                 }
 
                 XmlPullParser.END_TAG -> {
+
                     if (currentItem != null) {
                         when (tagName) {
+
                             "title" -> currentItem = currentItem.copy(title = text.trim())
                             "link" -> currentItem = currentItem.copy(link = text.trim())
                             "pubDate" -> currentItem = currentItem.copy(pubDate = text.trim())
-                            "description" -> currentItem =
-                                currentItem.copy(description = text.trim())
+
+                            "description" -> {
+                                currentItem = currentItem.copy(description = text.trim())
+
+                                val descImage = extractImageFromDescription(text)
+                                if (!descImage.isNullOrEmpty()) {
+                                    currentItem = currentItem.copy(imageURL = descImage)
+                                    Log.e("RSS_DEBUG", "description image: $descImage")
+                                }
+                            }
 
                             "item" -> {
                                 items.add(currentItem)
@@ -148,27 +235,28 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
                     }
                 }
             }
+
             eventType = parser.next()
         }
 
         return items
     }
 
+    private fun extractImageFromDescription(description: String?): String? {
+        val regex = Regex("<img[^>]+src=[\"']([^\"']+)[\"']")
+        return regex.find(description ?: "")?.groups?.get(1)?.value
+    }
+
     suspend fun fetchUrlMetadata(url: String): Map<String, String?> {
         val client = OkHttpClient.Builder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
-            .writeTimeout(15, TimeUnit.SECONDS)
             .protocols(listOf(Protocol.HTTP_1_1))
             .build()
 
         val request = Request.Builder()
             .url(url)
-            .header(
-                "User-Agent",
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-            )
-            .header("Accept", "text/html")
+            .header("User-Agent", "Mozilla/5.0")
             .build()
 
         return withContext(Dispatchers.IO) {
@@ -177,28 +265,14 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
                 val html = response.body?.string() ?: return@withContext emptyMap()
                 val doc = Jsoup.parse(html)
 
-                val title = doc.select("meta[property=og:title]").attr("content")
-                    .takeIf { it.isNotEmpty() } ?: doc.select("title").text()
-                val description = doc.select("meta[property=og:description]").attr("content")
-                    .takeIf { it.isNotEmpty() } ?: doc.select("meta[name=description]").attr("content")
-
                 var imageUrl = doc.select("meta[property=og:image]").attr("content")
-                if (imageUrl.isNullOrEmpty()) {
-                    imageUrl = doc.select("meta[name=image]").attr("content")
-                }
                 if (imageUrl.isNullOrEmpty()) {
                     imageUrl = doc.select("img[src]").firstOrNull()?.attr("src")
                 }
-                if (imageUrl.isNullOrEmpty()) {
-                    imageUrl = doc.select("link[rel=shortcut icon]").attr("href")
-                }
 
-                mapOf("title" to title, "description" to description, "imageUrl" to imageUrl)
-            } catch (e: IOException) {
-                Log.e("fetchUrlMetadata", "IOException: ${e.message}")
-                emptyMap()
+                mapOf("imageUrl" to imageUrl)
+
             } catch (e: Exception) {
-                Log.e("fetchUrlMetadata", "General Exception: ${e.message}")
                 emptyMap()
             }
         }
@@ -206,7 +280,7 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
 
     private fun resolveImageUrl(baseUrl: String, imageUrl: String?): String? {
         if (imageUrl.isNullOrEmpty()) return null
-        return if (imageUrl.startsWith("http")||imageUrl.startsWith("https")) {
+        return if (imageUrl.startsWith("http")) {
             imageUrl
         } else {
             try {
@@ -216,6 +290,4 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
             }
         }
     }
-
-
 }

@@ -18,12 +18,7 @@
             android:layout_height="match_parent"
             android:padding="@dimen/_20sdp"
             android:background="@drawable/unselected_side_menu_bg">
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+
         <RelativeLayout
             android:id="@+id/title_container"
             android:layout_width="0dp"
@@ -48,18 +43,29 @@
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/ic_cancel"/>
         </RelativeLayout>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvPolicy"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sdp"
-            tools:itemCount="1"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/policy_item_view"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title_container"
-            />
+
+
+            <WebView
+                android:id="@+id/webview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginVertical="@dimen/_10sdp"
+                app:layout_constraintTop_toBottomOf="@id/title_container"
+                app:layout_constraintBottom_toTopOf="@id/tvSubmit"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="@id/webview"
+                app:layout_constraintBottom_toBottomOf="@id/webview"
+                app:layout_constraintStart_toStartOf="@id/webview"
+                app:layout_constraintEnd_toEndOf="@id/webview"/>
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvSubmit"
             style="@style/TextView_500_Medium"
@@ -70,11 +76,11 @@
             android:text="@string/accept"
             android:textColor="@color/white"
             android:visibility="visible"
-            app:layout_constraintTop_toBottomOf="@id/rvPolicy"
             app:layout_constraintBottom_toBottomOf="parent"/>
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.core.widget.NestedScrollView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

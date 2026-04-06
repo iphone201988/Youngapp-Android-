@@ -16,6 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.my_profile_screens.forNormal.InvestmentInfoFragment">
+
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clTopBar"
             android:layout_width="match_parent"
@@ -24,6 +26,7 @@
             android:layout_marginHorizontal="@dimen/_18sdp"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="@dimen/_10sdp">
+
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivBack"
                 android:layout_width="@dimen/_35sdp"
@@ -281,6 +284,7 @@
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/etSavings" />
+
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etStartUp"
                     style="@style/TextView_400_Regular"
@@ -296,6 +300,327 @@
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"
                     app:layout_constraintTop_toBottomOf="@+id/tvStartUp" />
+
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvPrimaryInvestmentGoal"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:text="@string/primary_investment_goal"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etStartUp" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etPrimaryInvestmentGoal"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Retirement"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:focusable="false"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvPrimaryInvestmentGoal" />
+
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etPrimaryInvestmentGoal"
+                    app:layout_constraintEnd_toEndOf="@+id/etPrimaryInvestmentGoal"
+                    app:layout_constraintTop_toTopOf="@+id/etPrimaryInvestmentGoal" />
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvInvestmentHorizon"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:text="@string/investment_horizon"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etPrimaryInvestmentGoal" />
+
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etInvestmentHorizon"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="&lt; 1 year (Short-term)"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:focusable="false"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvInvestmentHorizon" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etInvestmentHorizon"
+                    app:layout_constraintEnd_toEndOf="@+id/etInvestmentHorizon"
+                    app:layout_constraintTop_toTopOf="@+id/etInvestmentHorizon" />
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvDeiImportance"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:text="@string/dei_importance"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etInvestmentHorizon" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etDeiImportance"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Not important"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:focusable="false"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDeiImportance" />
+
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etDeiImportance"
+                    app:layout_constraintEnd_toEndOf="@+id/etDeiImportance"
+                    app:layout_constraintTop_toTopOf="@+id/etDeiImportance" />
+
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvCommunityReinvestmentImportance"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:text="Community Reinvestment Importance"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etDeiImportance" />
+
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etCommunityReinvestmentImportance"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Not important"
+                    android:focusable="false"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvCommunityReinvestmentImportance" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etCommunityReinvestmentImportance"
+                    app:layout_constraintEnd_toEndOf="@+id/etCommunityReinvestmentImportance"
+                    app:layout_constraintTop_toTopOf="@+id/etCommunityReinvestmentImportance" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvEnvironmental"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:text="@string/environmental_esg_priority"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etCommunityReinvestmentImportance" />
+
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etEnvironmental"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Not a factor"
+                    android:focusable="false"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvEnvironmental" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etEnvironmental"
+                    app:layout_constraintEnd_toEndOf="@+id/etEnvironmental"
+                    app:layout_constraintTop_toTopOf="@+id/etEnvironmental" />
+
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvTopicOfInterest"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:text="@string/topics_of_interest"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etEnvironmental" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etTopicOfInterest"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Real Estate, AI, Green Energy"
+                    android:focusable="true"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTopicOfInterest" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvFromInvestment"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:text="@string/what_do_you_seek_from_investments"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etTopicOfInterest" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etFromInvestment"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Capital growth"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:focusable="false"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFromInvestment" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etFromInvestment"
+                    app:layout_constraintEnd_toEndOf="@+id/etFromInvestment"
+                    app:layout_constraintTop_toTopOf="@+id/etFromInvestment" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvEmergencyFund"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:text="Emergency Fund (months covered)"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etFromInvestment" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etEmergencyFund"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="None"
+                    android:focusable="false"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvEmergencyFund" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etEmergencyFund"
+                    app:layout_constraintEnd_toEndOf="@+id/etEmergencyFund"
+                    app:layout_constraintTop_toTopOf="@+id/etEmergencyFund" />
+
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvSave"
                     style="@style/TextView_500_Medium"
@@ -305,11 +630,13 @@
                     android:layout_marginBottom="@dimen/_6sdp"
                     android:background="@drawable/corner_radius_10"
                     android:gravity="center"
+
                     android:onClick="@{v ->vm.onClick(v)}"
                     android:text="@string/save_changes"
                     android:textColor="@color/white"
-                    app:layout_constraintTop_toBottomOf="@id/etStartUp"
+                    app:layout_constraintTop_toBottomOf="@id/etEmergencyFund"
                     app:layout_constraintBottom_toBottomOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 

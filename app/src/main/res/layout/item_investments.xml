@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="bean"
+            type="String" />
+        <variable
+            name="callback"
+            type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
+
+        <variable
+            name="pos"
+            type="Integer" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consMain"
+        android:onClick="@{v ->callback.onItemClick(v,bean,pos)}"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_30sdp">
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvHeading"
+            style="@style/TextView_400_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Apple"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/_13ssp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/symbol"
+            style="@style/TextView_400_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(APPL)"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:textSize="@dimen/_13ssp"
+            app:layout_constraintStart_toEndOf="@id/tvHeading"
+            app:layout_constraintTop_toTopOf="@id/tvHeading"
+            app:layout_constraintBottom_toBottomOf="@id/tvHeading"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/tvArrow"
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:src="@drawable/iv_dropdown"
+            android:rotation="270"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+
+
+        <View
+            android:id="@+id/tvView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/stroke_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/percentage"
+            style="@style/TextView_400_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+12.4%"
+            android:textSize="@dimen/_13ssp"
+            android:textColor="@color/green"
+            app:layout_constraintEnd_toStartOf="@id/tvArrow"
+            app:layout_constraintTop_toTopOf="@id/symbol"
+            app:layout_constraintBottom_toBottomOf="@id/symbol"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

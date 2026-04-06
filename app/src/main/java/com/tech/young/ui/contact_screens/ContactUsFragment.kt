@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -16,6 +17,8 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -48,7 +51,9 @@ import com.tech.young.base.permission.PermissionHandler
 import com.tech.young.base.permission.Permissions
 import com.tech.young.base.utils.BaseCustomBottomSheet
 import com.tech.young.data.model.GetAdsAPiResponse
+import com.tech.young.data.model.GetProfileApiResponse
 import com.tech.young.databinding.BottomSheetCameraGalleryBinding
+import com.tech.young.ui.custom_camera.CustomCameraActivity
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -76,7 +81,33 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
     private var photoURI: Uri? = null
     private var imageUri : Uri? = null
 
+    private val customCameraLauncher =
+        activity?.registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        )
+        { result ->
 
+            if (result.resultCode == Activity.RESULT_OK) {
+
+                val uriString =
+                    result.data?.getStringExtra("image_uri")
+
+                if (uriString != null) {
+
+                    val uri = uriString.toUri()
+
+                    Log.i("dsdsadsd", ": $uri ")
+
+                } else {
+                    Log.i("dsdsadsd", " no images ")
+
+                }
+
+            } else {
+                Log.i("dsdsadsd", " no images ")
+
+            }
+        }
     private var isEdited = false
 
     override fun onCreateView(view: View) {
@@ -85,6 +116,7 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
 
         // click
         initOnClick()
+        setData()
         viewModel.getAds(Constants.GET_ADS)
         // adapter
         initAdapter()
@@ -123,6 +155,11 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
         }
     }
 
+    private fun setData() {
+        viewModel.getProfile(Constants.GET_USER_PROFILE)
+
+    }
+
 
     fun hasUserEdited(): Boolean = isEdited
     /** show camera & gallery bottom sheet **/
@@ -131,7 +168,8 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
             BaseCustomBottomSheet(requireContext(), R.layout.bottom_sheet_camera_gallery) {
                 when (it.id) {
                     R.id.openCamara, R.id.openCamaraImage -> {
-                        openCamera()
+                       // openCamera()
+                        openMediaIntent()
                         cameraGalleryBottomSheet.dismiss()
                     }
 
@@ -153,6 +191,17 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
         cameraGalleryBottomSheet.behavior.isDraggable = true
         cameraGalleryBottomSheet.setCancelable(true)
     }
+
+
+
+    private fun openMediaIntent() {
+        val intent = Intent(
+            activity,
+            CustomCameraActivity::class.java
+        )
+        customCameraLauncher?.launch(intent)
+    }
+
 
     private fun galleryLauncher() {
         pickImageLauncher =
@@ -300,6 +349,21 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
                                 }
                             }
                         }
+                        "getProfile" ->{
+                            val myDataModel: GetProfileApiResponse? =
+                                BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null) {
+                                if (myDataModel.data != null) {
+                                    binding.bean = myDataModel.data
+                                    if(myDataModel.data?.user?.lastName.toString()!=null){
+                                        binding.etName.setText(myDataModel.data?.user?.firstName.toString() +" "+ myDataModel.data?.user?.lastName.toString())
+                                    }
+                                    else{
+                                        binding.etName.setText(myDataModel.data?.user?.firstName.toString())
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 Status.ERROR ->{
@@ -330,15 +394,7 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
                     showPolicyDialog()
                 }
 
-                R.id.ivCheck -> {
-                    if (select == 0) {
-                        select = 1
-                        binding.check = true
-                    } else {
-                        select = 0
-                        binding.check = false
-                    }
-                }
+
                 R.id.etUploadFile ->{
 //                    ImagePicker.with(this)
 //                        .compress(1024)
@@ -392,39 +448,50 @@ class ContactUsFragment : BaseFragment<FragmentContactUsBinding>() {
 
         val dialog = Dialog(requireContext())
         dialog.setContentView(bindingDialog.root)
+
+        val webView = bindingDialog.webview
+        val progressBar = bindingDialog.progressBar
+
+        webView.settings.javaScriptEnabled = true
+        webView.settings.domStorageEnabled = true
+
+        webView.webViewClient = object : WebViewClient() {
+
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                progressBar.visibility = View.VISIBLE
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                progressBar.visibility = View.GONE
+            }
+        }
+
+        webView.loadUrl("https://theboom.app/terms")
+
         dialog.window?.apply {
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
             setDimAmount(0f)
         }
+
         BindingUtils.statusBarStyleBlack(requireActivity())
         BindingUtils.styleSystemBars(requireActivity(), getColor(requireContext(), R.color.colorSecondary2))
-
-        policiesAdapter =
-            SimpleRecyclerViewAdapter(R.layout.policy_item_view, BR.bean) { v, m, pos ->
-                when (v.id) {
-
-                }
-            }
-        policiesAdapter.list = listOf(
-            "",""
-        )
-        bindingDialog.rvPolicy.adapter = policiesAdapter
-        policiesAdapter.notifyDataSetChanged()
 
         bindingDialog.tvSubmit.setOnClickListener {
             BindingUtils.statusBarStyleBlack(requireActivity())
             BindingUtils.styleSystemBars(requireActivity(), getColor(requireContext(), R.color.white))
-                    select = 1
-                    binding.check = true
+            select = 1
+            isChecked = true
+            binding.check = true
             dialog.dismiss()
         }
-        bindingDialog.close.setOnClickListener{
+
+        bindingDialog.close.setOnClickListener {
             BindingUtils.statusBarStyleBlack(requireActivity())
             BindingUtils.styleSystemBars(requireActivity(), getColor(requireContext(), R.color.white))
             dialog.dismiss()
-
         }
+
         dialog.setCancelable(false)
         dialog.show()
     }

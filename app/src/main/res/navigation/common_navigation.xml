@@ -180,4 +180,27 @@
         android:id="@+id/fragmentSelectYourPackage"
         android:name="com.tech.young.ui.signup_process.SelectYourAccountPackageFragment"
         tools:layout="@layout/fragment_select_your_account_package"/>
+
+
+    <fragment
+        android:id="@+id/fragmentPerformance"
+        android:name="com.tech.young.ui.my_profile_screens.forNormal.PerformanceFragment"
+        tools:layout="@layout/fragment_performance"/>
+
+    <fragment
+        android:id="@+id/fragmentAiChat"
+        android:name="com.tech.young.ui.ai_chat.AiChatFragment"
+        tools:layout="@layout/fragment_ai_chat"/>
+
+    <fragment
+        android:id="@+id/fragmentEngagement"
+        android:name="com.tech.young.ui.engagement.EngagementFragment"
+        tools:layout="@layout/fragment_engagement"/>
+
+
+    <fragment
+        android:id="@+id/fragmentInvestmentTracking"
+        android:name="com.tech.young.ui.investment_tracker.InvestmentTrackerFragment"
+        tools:layout="@layout/fragment_investment_tracker"/>
+
 </navigation>

@@ -28,9 +28,11 @@ import com.tech.young.databinding.FragmentEditProfileBinding
 import com.tech.young.databinding.ItemLayoutDeleteAccountPopupBinding
 import com.tech.young.databinding.ItemLayoutLogoutPopupBinding
 import com.tech.young.ui.MySplashActivity
+import com.tech.young.ui.ai_chat.AiChatFragment
 import com.tech.young.ui.change_password.ChangePasswordFragment
 import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.ecosystem.EcosystemFragment
+import com.tech.young.ui.engagement.EngagementFragment
 import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.my_profile_screens.YourProfileVM
 import com.tech.young.ui.my_profile_screens.common_ui.BusinessInfoFragment
@@ -41,6 +43,7 @@ import com.tech.young.ui.my_profile_screens.forFinance.ProfessionalInformationFr
 import com.tech.young.ui.my_profile_screens.forNormal.FamilyDetailsFragment
 import com.tech.young.ui.my_profile_screens.forNormal.FinanceInfoFragment
 import com.tech.young.ui.my_profile_screens.forNormal.InvestmentInfoFragment
+import com.tech.young.ui.my_profile_screens.forNormal.PerformanceFragment
 import com.tech.young.ui.payment.PaymentDetailsFragment
 import com.tech.young.utils.DiditService
 import dagger.hilt.android.AndroidEntryPoint
