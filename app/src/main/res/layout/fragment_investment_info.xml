@@ -452,6 +452,7 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="Not important"
+                    android:onClick="@{v->vm.onClick(v)}"
                     android:focusable="false"
                     android:inputType="textCapSentences"
                     android:paddingHorizontal="@dimen/_10sdp"

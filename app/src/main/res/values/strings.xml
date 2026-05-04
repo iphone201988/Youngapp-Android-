@@ -299,4 +299,6 @@
     <string name="add_investment">Add Investment</string>
     <string name="current_value">Current Value ($)</string>
     <string name="add_to_portfolio">Add to Portfolio</string>
+    <string name="reject">Reject</string>
+    <string name="accepted">Accepted</string>
 </resources>

@@ -2,16 +2,17 @@ package com.tech.young.utils
 
 import android.util.Base64
 import android.util.Log
+import com.tech.young.BuildConfig
 import com.tech.young.data.api.DiditApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object DiditService {
 
-    private const val CLIENT_ID = "QDPf650HjF-NyD4ARVlA4w"
-    private const val CLIENT_SECRET = "oVFp1ZwgNE_uNsF9b0Rz3hhbGg05zS-gd3boekX2aks"
-    private const val BASE_AUTH_URL = "https://apx.didit.me/"
-    private const val BASE_VERIFICATION_URL = "https://verification.didit.me/"
+    private const val CLIENT_ID = BuildConfig.DIDIT_CLIENT_ID
+    private const val CLIENT_SECRET = BuildConfig.DIDIT_CLIENT_SECRET
+    private const val BASE_AUTH_URL = BuildConfig.DIDIT_BASE_AUTH_URL
+    private const val BASE_VERIFICATION_URL = BuildConfig.DIDIT_BASE_VERIFICATION_URL
 
     private var accessToken: String? = null
     private var tokenExpiry: Long? = null
@@ -79,4 +80,3 @@ object DiditService {
         }
     }
 }
-

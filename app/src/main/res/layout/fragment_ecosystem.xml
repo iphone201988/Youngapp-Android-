@@ -57,132 +57,140 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nestedScrollView"
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:fillViewport="true"
-            android:layout_marginBottom="@dimen/_10sdp"
             app:layout_constraintBottom_toTopOf="@id/layoutStream"
             app:layout_constraintTop_toBottomOf="@id/clTopBar"
             app:layout_constraintStart_toStartOf="@id/clTopBar"
             app:layout_constraintEnd_toEndOf="@id/clTopBar">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nestedScrollView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                android:layout_marginBottom="@dimen/_10sdp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/etSearch"
-                    style="@style/TextView_400_Regular"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_42sdp"
-                    android:layout_marginTop="24dp"
-                    android:background="@drawable/radius_border_gray"
-                    android:gravity="start|center"
-                    android:hint="@string/search_here"
-                    android:paddingStart="@dimen/_10sdp"
-                    android:paddingEnd="@dimen/_50sdp"
-                    android:layout_marginEnd="-12dp"
-                    android:singleLine="true"
-                    android:textColorHint="@color/text_gray"
-                    app:layout_constraintEnd_toStartOf="@id/filterList"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/etSearch"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_42sdp"
+                        android:layout_marginTop="24dp"
+                        android:background="@drawable/radius_border_gray"
+                        android:gravity="start|center"
+                        android:hint="@string/search_here"
+                        android:paddingStart="@dimen/_10sdp"
+                        android:paddingEnd="@dimen/_50sdp"
+                        android:layout_marginEnd="-12dp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/text_gray"
+                        app:layout_constraintEnd_toStartOf="@id/filterList"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/filterList"
-                    android:layout_width="@dimen/_42sdp"
-                    android:layout_height="@dimen/_42sdp"
-                    android:src="@drawable/iv_filter_icon"
-                    android:scaleType="fitXY"
-                    android:onClick="@{v -> vm.onClick(v)}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/etSearch"
-                    app:layout_constraintBottom_toBottomOf="@id/etSearch"/>
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/filterList"
+                        android:layout_width="@dimen/_42sdp"
+                        android:layout_height="@dimen/_42sdp"
+                        android:src="@drawable/iv_filter_icon"
+                        android:scaleType="fitXY"
+                        android:onClick="@{v -> vm.onClick(v)}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/etSearch"
+                        app:layout_constraintBottom_toBottomOf="@id/etSearch"/>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvFilter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:orientation="vertical"
-                    android:background="@drawable/bg_cons"
-                    android:visibility="gone"
-                    android:paddingEnd="@dimen/_5sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:elevation="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    tools:listitem="@layout/item_layout_fiter"
-                    app:layout_constraintTop_toBottomOf="@id/filterList"
-                    app:layout_constraintEnd_toEndOf="@id/filterList"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvFilter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:orientation="vertical"
+                        android:background="@drawable/bg_cons"
+                        android:visibility="gone"
+                        android:paddingEnd="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:elevation="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        tools:listitem="@layout/item_layout_fiter"
+                        app:layout_constraintTop_toBottomOf="@id/filterList"
+                        app:layout_constraintEnd_toEndOf="@id/filterList"/>
 
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvCategories"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/TextView_500_Medium"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:text="@string/categories"
-                    app:layout_constraintTop_toBottomOf="@id/etSearch"
-                    app:layout_constraintStart_toStartOf="parent"/>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvCategories"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    tools:listitem="@layout/category_item_view"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:orientation="horizontal"
-                    app:layout_constraintTop_toBottomOf="@id/tvCategories"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvUsers"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:orientation="vertical"
-                    tools:itemCount="2"
-                    android:nestedScrollingEnabled="false"
-                    tools:listitem="@layout/item_view_users"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    app:layout_constraintTop_toBottomOf="@id/rvCategories"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvCategories"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/TextView_500_Medium"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:text="@string/categories"
+                        app:layout_constraintTop_toBottomOf="@id/etSearch"
+                        app:layout_constraintStart_toStartOf="parent"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvCategories"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        tools:listitem="@layout/category_item_view"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toBottomOf="@id/tvCategories"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvUsers"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:orientation="vertical"
+                        tools:itemCount="2"
+                        android:nestedScrollingEnabled="false"
+                        tools:listitem="@layout/item_view_users"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        app:layout_constraintTop_toBottomOf="@id/rvCategories"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvAds"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    style="@style/TextView_600_SemiBold"
-                    android:layout_marginTop="@dimen/_30sdp"
-                    android:text="@string/ads"
-                    android:textColor="@color/colorPrimary"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rvUsers"
-                    />
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvAds"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_10sdp"
-                    android:orientation="horizontal"
-                    tools:itemCount="5"
-                    tools:listitem="@layout/ads_item_view"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintTop_toBottomOf="@id/tvAds" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvAds"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        style="@style/TextView_600_SemiBold"
+                        android:layout_marginTop="@dimen/_30sdp"
+                        android:text="@string/ads"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/rvUsers"
+                        />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvAds"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:orientation="horizontal"
+                        tools:itemCount="5"
+                        tools:listitem="@layout/ads_item_view"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintTop_toBottomOf="@id/tvAds" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.core.widget.NestedScrollView>
+            </androidx.core.widget.NestedScrollView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
         <LinearLayout
         android:id="@+id/layoutStream"
         android:layout_width="0dp"

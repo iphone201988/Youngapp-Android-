@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/_10sdp"
+    android:background="@drawable/profile_share_bg"
+    android:paddingBottom="@dimen/_10sdp">
+
+    <View
+        android:id="@+id/ivImage"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_150sdp"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:layout_marginTop="8dp"
+        android:background="@color/viewLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/tvSymbol"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:background="@color/viewLine"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivImage" />
+
+    <View
+        android:id="@+id/tvDescription"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_11sdp"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:background="@color/viewLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSymbol" />
+
+    <View
+        android:id="@+id/viewLine"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_13sdp"
+        android:background="@color/viewLine"
+        app:layout_constraintTop_toBottomOf="@id/tvDescription" />
+
+    <View
+        android:id="@+id/tvViews"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_11sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/viewLine"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewLine" />
+
+    <View
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_11sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:background="@color/viewLine"
+        app:layout_constraintBottom_toBottomOf="@id/tvViews"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvViews" />
+
+    <View
+        android:id="@+id/tvReshare"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_11sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:background="@color/viewLine"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvViews" />
+
+    <View
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_11sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:background="@color/viewLine"
+        app:layout_constraintBottom_toBottomOf="@id/tvReshare"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvReshare" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -125,7 +125,7 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                 if (diff <= 0 && scrollY > oldScrollY) {
 
                     Log.d("Pagination", "Reached bottom, loading next page…")
-                    // ✅ User reached bottom
+                    //  User reached bottom
                     if (!isLoading && totalPages != null && page < totalPages!!) {
                         isLoading = true
                         loadNextPage()
@@ -228,10 +228,10 @@ class StreamDetailFragment : BaseFragment<FragmentStreamDetailBinding>() {
                                         showToast("This stream is already scheduled")
                                     }else{
                                         if (utcDate != null && utcDate.before(Date())) {
-                                            // ✅ If scheduled date is in the past
+                                            //  If scheduled date is in the past
                                             showToast("This stream schedule date has already passed")
                                         } else {
-                                            // ✅ Schedule the stream
+                                            //  Schedule the stream
                                             viewModel.scheduleSteam(Constants.SCHEDULE_STREAM + streamId)
                                             showToast("This stream is scheduled")
                                         }

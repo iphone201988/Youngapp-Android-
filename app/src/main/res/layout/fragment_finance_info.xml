@@ -301,30 +301,61 @@
                     style="@style/TextView_500_Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/topics_of_interest"
+                    android:text="@string/topic"
                     android:layout_marginTop="@dimen/_12sdp"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/llInvestRealEstate" />
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etTopic"
                     style="@style/TextView_400_Regular"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_42sdp"
+                    android:layout_height="@dimen/_90sdp"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:background="@drawable/radius_border_gray"
-                    android:gravity="start|center"
-                    android:onClick="@{v->vm.onClick(v)}"
-                    android:paddingHorizontal="@dimen/_10sdp"
-                    android:singleLine="true"
+                    android:gravity="start|top"
+                    app:role="@{bean.user.role}"
+                    app:topicsOfInterest="@{bean.user.topicsOfInterest}"
+                    android:hint="Topic"
+                    android:onClick="@{v -> vm.onClick(v)}"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:padding="@dimen/_10sdp"
                     android:textColorHint="@color/text_gray"
                     app:layout_constraintTop_toBottomOf="@+id/tvTopic" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/etTopic"
+                    app:layout_constraintEnd_toEndOf="@+id/etTopic"
+                    app:layout_constraintTop_toTopOf="@+id/etTopic" />
+
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTopics"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    app:layout_constraintTop_toBottomOf="@id/etTopic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvSelectedCategory"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginStart="@dimen/_2sdp"
+                    android:visibility="gone"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/item_layout_rv_category"
                     app:layout_constraintTop_toTopOf="@id/etTopic"
@@ -337,6 +368,7 @@
                     android:layout_height="@dimen/_20sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:src="@drawable/iv_dropdown"
+                    android:visibility="gone"
                     android:onClick="@{v->vm.onClick(v)}"
                     app:layout_constraintBottom_toBottomOf="@+id/etTopic"
                     app:layout_constraintEnd_toEndOf="@+id/etTopic"
@@ -350,7 +382,7 @@
                     android:layout_marginTop="@dimen/_12sdp"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/etTopic" />
+                    app:layout_constraintTop_toBottomOf="@id/rvTopics" />
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etGoals"
                     style="@style/TextView_400_Regular"
@@ -391,7 +423,6 @@
                     android:hint="$100k"
                     android:onClick="@{v -> vm.onClick(v)}"
                     android:inputType="textCapSentences"
-                    android:text="@{bean.user.goals}"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"

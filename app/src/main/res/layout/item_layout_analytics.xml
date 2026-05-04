@@ -5,13 +5,18 @@
     <data>
         <variable
             name="bean"
-            type="String" />
+            type="com.tech.young.data.model.Analytic" />
         <variable
             name="callback"
             type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
         <variable
             name="pos"
             type="Integer" />
+
+
+        <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +28,9 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivImage"
+            setImageFromUrl="@{bean.image}"
             android:layout_width="0dp"
+            android:visibility='@{TextUtils.isEmpty(bean.image) ? View.GONE : View.VISIBLE}'
             android:layout_height="@dimen/_150sdp"
             android:layout_marginTop="8dp"
             android:layout_marginHorizontal="@dimen/_8sdp"
@@ -42,6 +49,7 @@
             android:layout_height="@dimen/_32sdp"
             android:src="@drawable/dummy_person"
             app:shapeAppearance="@style/Shape50"
+            android:visibility="gone"
             android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
             android:layout_marginTop="@dimen/_8sdp"
             android:layout_marginStart="@dimen/_8sdp"
@@ -56,6 +64,8 @@
             android:textColor="@color/colorPrimary"
             android:layout_marginEnd="@dimen/_8sdp"
             android:textSize="@dimen/_14ssp"
+            android:visibility="gone"
+
             android:text="Username"
             android:singleLine="true"
             android:onClick="@{v ->callback.onItemClick(v,bean,pos)}"
@@ -70,6 +80,8 @@
             android:layout_width="@dimen/_15sdp"
             android:layout_height="@dimen/_15sdp"
             android:src="@drawable/ic_star"
+            android:visibility="gone"
+
             app:layout_constraintEnd_toStartOf="@id/tvRating"
             app:layout_constraintTop_toTopOf="@id/ivUserImage"
             app:layout_constraintBottom_toBottomOf="@id/ivUserImage"
@@ -92,6 +104,8 @@
             android:layout_height="wrap_content"
             style="@style/TextView_400_Regular"
             android:textColor="@color/text_gray"
+            android:visibility="gone"
+
             android:textSize="@dimen/_10ssp"
             android:text="12 January at 09:28PM"
             android:singleLine="true"
@@ -106,6 +120,8 @@
             style="@style/TextView_400_Regular"
             android:textColor="@color/text_gray"
             android:textSize="@dimen/_10ssp"
+            android:visibility="gone"
+
             android:text="Last Activity: 12 January at 09:28PM"
             android:paddingHorizontal="@dimen/_8sdp"
             app:layout_constraintStart_toEndOf="@id/ivUserImage"
@@ -119,7 +135,8 @@
             android:layout_marginTop="@dimen/_8sdp"
             android:paddingHorizontal="@dimen/_8sdp"
             android:singleLine="true"
-            android:text="Symbol: "
+            android:visibility="visible"
+            android:text="@{bean.title}"
             android:textSize="@dimen/_12ssp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +151,7 @@
             android:textSize="@dimen/_11ssp"
             android:layout_marginTop="@dimen/_8sdp"
             android:layout_marginHorizontal="@dimen/_8sdp"
-            android:text="Join the discussion about the best growth stock to invest in."
+            android:text="@{bean.description}"
             app:layout_constraintTop_toBottomOf="@id/tvSymbol"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -170,8 +187,7 @@
             style="@style/TextView_500_Medium"
             android:textSize="@dimen/_11ssp"
             android:textColor="@color/text_gray"
-            android:text="(+18% this week)"
-            android:layout_marginEnd="@dimen/_8sdp"
+            android:text='@{"(" + (bean.viewLastWeekPercentage >= 0 ? "+" : "") + bean.viewLastWeekPercentage + "% this week)"}'
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -181,7 +197,7 @@
             android:id="@+id/etViews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1.5k"
+            android:text='@{String.valueOf(bean.viewsCount)}'
             style="@style/TextView_500_Medium"
             android:layout_marginEnd="@dimen/_5sdp"
             android:textSize="@dimen/_11ssp"
@@ -209,8 +225,7 @@
             style="@style/TextView_500_Medium"
             android:textSize="@dimen/_11ssp"
             android:textColor="@color/text_gray"
-            android:text="(+12)"
-            android:layout_marginEnd="@dimen/_8sdp"
+            android:text='@{"(" + (bean.resharesLastWeek >= 0 ? "+" : "") + bean.resharesLastWeek + "% this week)"}'
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -220,7 +235,7 @@
             android:id="@+id/etReshare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="13"
+            android:text='@{String.valueOf(bean.reshares)}'
             style="@style/TextView_500_Medium"
             android:layout_marginEnd="@dimen/_5sdp"
             android:textSize="@dimen/_11ssp"
@@ -247,7 +262,7 @@
             style="@style/TextView_500_Medium"
             android:textSize="@dimen/_11ssp"
             android:textColor="@color/text_gray"
-            android:text="(+12)"
+            android:text='@{"(" + (bean.savedLastWeek >= 0 ? "+" : "") + bean.savedLastWeek + "% this week)"}'
             android:layout_marginEnd="@dimen/_8sdp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -259,7 +274,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextView_500_Medium"
-            android:text="123"
+            android:text='@{String.valueOf(bean.savedCount)}'
             android:layout_marginEnd="@dimen/_5sdp"
             android:textSize="@dimen/_11ssp"
             android:textColor="@color/colorPrimary"
@@ -287,7 +302,7 @@
             style="@style/TextView_500_Medium"
             android:textSize="@dimen/_11ssp"
             android:textColor="@color/text_gray"
-            android:text="(+12)"
+            android:text='@{"(" + (bean.likesLastWeek >= 0 ? "+" : "") + bean.likesLastWeek + "% this week)"}'
             android:layout_marginEnd="@dimen/_8sdp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -300,7 +315,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextView_500_Medium"
-            android:text="123"
+            android:text='@{String.valueOf(bean.likesCount)}'
             android:layout_marginEnd="@dimen/_5sdp"
             android:textSize="@dimen/_11ssp"
             android:textColor="@color/colorPrimary"
@@ -327,8 +342,7 @@
             style="@style/TextView_500_Medium"
             android:textSize="@dimen/_11ssp"
             android:textColor="@color/text_gray"
-            android:text="(+12)"
-            android:layout_marginEnd="@dimen/_8sdp"
+            android:text='@{"(" + (bean.followersLastWeek >= 0 ? "+" : "") + bean.followersLastWeek + "% this week)"}'            android:layout_marginEnd="@dimen/_8sdp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -340,7 +354,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextView_500_Medium"
-            android:text="3"
+            android:text='@{String.valueOf(bean.followerGrowth)}'
             android:layout_marginEnd="@dimen/_5sdp"
             android:textSize="@dimen/_11ssp"
             android:textColor="@color/colorPrimary"

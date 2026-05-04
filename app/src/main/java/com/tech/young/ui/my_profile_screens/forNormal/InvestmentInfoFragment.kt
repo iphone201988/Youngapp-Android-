@@ -17,7 +17,15 @@ import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.DropDownData
 import com.tech.young.data.api.Constants
+import com.tech.young.data.model.DummyLists.communityReinvestment
+import com.tech.young.data.model.DummyLists.emergencyFund
+import com.tech.young.data.model.DummyLists.esgPriority
+import com.tech.young.data.model.DummyLists.getDeiImportance
+import com.tech.young.data.model.DummyLists.getEmploymentStatus
 import com.tech.young.data.model.DummyLists.getYearsEmployed
+import com.tech.young.data.model.DummyLists.investmentGoal
+import com.tech.young.data.model.DummyLists.investmentHorizon
+import com.tech.young.data.model.DummyLists.investmentPreference
 import com.tech.young.data.model.GetProfileApiResponse.GetProfileApiResponseData
 import com.tech.young.data.model.UpdateUserProfileResponse
 import com.tech.young.databinding.BotttomSheetTopicsBinding
@@ -124,30 +132,45 @@ class InvestmentInfoFragment : BaseFragment<FragmentInvestmentInfoBinding>()  , 
                 }
                 R.id.etPrimaryInvestmentGoal ->{
                     type = "1"
+                    commonAdapter.list = investmentGoal()
+                    commonBottomSheet.show()
+
 
                 }
                 R.id.etInvestmentHorizon ->{
                     type = "2"
+                    commonAdapter.list =  investmentHorizon()
+
+                    commonBottomSheet.show()
 
                 }
                 R.id.etDeiImportance ->{
                     type = "3"
-
+                    commonAdapter.list = getDeiImportance()
+                    commonBottomSheet.show()
                 }
                 R.id.etCommunityReinvestmentImportance ->{
                     type = "4"
+                    commonAdapter.list = communityReinvestment()
+                    commonBottomSheet.show()
 
                 }
                 R.id.etEnvironmental ->{
                     type = "5"
+                    commonAdapter.list = esgPriority()
+                    commonBottomSheet.show()
 
                 }
                 R.id.etFromInvestment ->{
                     type = "6"
+                    commonAdapter.list = investmentPreference()
+                    commonBottomSheet.show()
 
                 }
                 R.id.etEmergencyFund ->{
                     type = "7"
+                    commonAdapter.list =  emergencyFund()
+                    commonBottomSheet.show()
 
                 }
             }

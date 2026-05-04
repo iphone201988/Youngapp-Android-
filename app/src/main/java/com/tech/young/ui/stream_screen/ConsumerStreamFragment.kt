@@ -198,11 +198,11 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() , B
                     val data = args[0] as JSONObject
                     Log.d("SocketMessage", "Received data: $data")
 
-                    // ✅ Convert JSON to model using Gson
+                    //  Convert JSON to model using Gson
                     val receivedData = Gson().fromJson(data.toString(), ReceivedData::class.java)
 
                     requireActivity().runOnUiThread {
-                        // ✅ Add the new message to your RecyclerView adapter
+                        //  Add the new message to your RecyclerView adapter
                         commentAdapter.addData(receivedData)
                         binding.rvChats.scrollToPosition(commentAdapter.itemCount - 1)
                     }
@@ -365,7 +365,7 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() , B
 //                                override fun onConnect(transport: Transport, dtlsParameters: String) {
 //                                    try {
 //                                        val jsonObject33 = JSONObject().apply {
-//                                            put("dtlsParameters", JSONObject(dtlsParameters)) // ✅ convert string to object
+//                                            put("dtlsParameters", JSONObject(dtlsParameters)) //  convert string to object
 //                                            put("serverConsumerTransportId", consumerModel?.params?.id)
 //                                        }
 //
@@ -575,7 +575,7 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() , B
 
                     // Step 2: Parse transport info
                     consumerModel = BindingUtils.parseJson((args[0] as JSONObject).toString())
-                    Log.i("WebRTC", "✅ Parsed consumerModel: $consumerModel")
+                    Log.i("WebRTC", " Parsed consumerModel: $consumerModel")
 
                     if (consumerModel == null) {
                         showToast("Failed to parse transport info")
@@ -630,7 +630,7 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() , B
 
                     // Step 6: Emit consume request
                     val consumePayload = JSONObject().apply {
-                        put("rtpCapabilities", JSONObject(mediaSoupDevice.rtpCapabilities)) // ✅ parse into object
+                        put("rtpCapabilities", JSONObject(mediaSoupDevice.rtpCapabilities)) //  parse into object
                         put("remoteProducerId", producerId)
                         put("serverConsumerTransportId", consumerModel?.params?.id)
                     }
@@ -688,7 +688,7 @@ class ConsumerStreamFragment : BaseFragment<FragmentConsumerStreamBinding>() , B
                             SocketManager.mSocket?.emit("consumer-resume", resumeJson)
                         }
 
-                        Log.i("WebRTC", "✅ Consumer successfully created and resumed")
+                        Log.i("WebRTC", " Consumer successfully created and resumed")
                         continuation.resume(consumerModel)
                     })
                 }

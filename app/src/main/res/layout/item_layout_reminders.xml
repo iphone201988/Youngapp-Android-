@@ -177,10 +177,92 @@
             android:textSize="@dimen/_10ssp"
             android:singleLine="true"
             android:layout_marginTop="@dimen/_5sdp"
-            app:layout_constraintEnd_toEndOf="@id/heading"
+            app:layout_constraintEnd_toStartOf="@id/tvAccept"
             app:layout_constraintTop_toBottomOf="@id/topic"
             app:layout_constraintStart_toStartOf="@id/heading"/>
 
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvReject"
+            style="@style/TextView_400_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reject"
+            android:textSize="@dimen/_12ssp"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:textColor="@color/reject_btn"
+            android:background="@drawable/bg_reject"
+            app:eventUserId="@{bean.userId}"
+            app:showIfPending="@{bean.attendanceStatus}"
+            android:padding="@dimen/_5sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivEnter"
+            app:layout_constraintBottom_toBottomOf="@id/description"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAccept"
+            style="@style/TextView_400_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Accept"
+            app:eventUserId="@{bean.userId}"
+            app:showIfPending="@{bean.attendanceStatus}"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:textColor="@color/colorPrimary"
+            android:background="@drawable/bg_accept"
+            android:padding="@dimen/_5sdp"
+            app:layout_constraintEnd_toStartOf="@id/tvReject"
+            app:layout_constraintTop_toTopOf="@id/tvReject"
+            app:layout_constraintBottom_toBottomOf="@id/tvReject"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAccepted"
+            style="@style/TextView_400_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/accepted"
+            android:textSize="@dimen/_12ssp"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:textColor="@color/white"
+            app:eventUserId="@{bean.userId}"
+            app:showIfAccepted="@{bean.attendanceStatus}"
+            android:visibility="gone"
+            android:backgroundTint="@color/colorPrimary"
+            android:background="@drawable/bg_cons"
+            android:padding="@dimen/_5sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivEnter"
+            app:layout_constraintBottom_toBottomOf="@id/description"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvRejected"
+            style="@style/TextView_400_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rejected"
+            android:textSize="@dimen/_12ssp"
+            android:onClick="@{v -> callback.onItemClick(v,bean,pos)}"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:textColor="@color/white"
+            app:eventUserId="@{bean.userId}"
+            app:showIfRejected="@{bean.attendanceStatus}"
+            android:visibility="gone"
+            android:backgroundTint="@color/reject_btn"
+            android:background="@drawable/bg_cons"
+            android:padding="@dimen/_5sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivEnter"
+            app:layout_constraintBottom_toBottomOf="@id/description"/>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivEdit"

@@ -27,45 +27,30 @@
         android:paddingVertical="@dimen/_5sdp">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvTitle"
-            style="@style/TextView_500_Medium"
-            setMenuHeading="@{bean}"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_42sdp"
-            android:layout_marginTop="@dimen/_2sdp"
-            android:gravity="start|center"
-            android:hint="@string/email_or_user_name"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:textColorHint="@color/text_black"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvName"
             style="@style/TextView_500_Medium"
             sideMenuName="@{bean}"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_42sdp"
-            android:layout_marginTop="@dimen/_2sdp"
+            app:isHeaderMargin="@{bean.isHeader}"
             android:background="@drawable/unselected_side_menu_bg"
+
+            android:paddingStart="@dimen/_10sdp"
             android:gravity="start|center"
-            android:hint="@string/email_or_user_name"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:textColorHint="@color/text_black"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="@dimen/_15sdp"
             android:layout_height="@dimen/_15sdp"
             android:layout_marginEnd="@dimen/_10sdp"
+            android:rotation="@{bean.isExpanded ? 90 : 0}"
+
             android:src="@drawable/iv_forword"
-            android:visibility="@{pos==1?View.GONE:View.VISIBLE}"
-            app:layout_constraintBottom_toBottomOf="@+id/tvName"
-            app:layout_constraintEnd_toEndOf="@+id/tvName"
-            app:layout_constraintTop_toTopOf="@+id/tvName"
-            setTintColor='@{bean.isSelected}' />
+            android:visibility="@{bean.isHeader ? 0 : 2}"
 
-
+            app:layout_constraintBottom_toBottomOf="@id/tvName"
+            app:layout_constraintEnd_toEndOf="@id/tvName"
+            app:layout_constraintTop_toTopOf="@id/tvName" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </layout>

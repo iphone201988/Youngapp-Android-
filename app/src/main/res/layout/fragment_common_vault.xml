@@ -114,21 +114,34 @@
                     app:layout_constraintTop_toBottomOf="@id/etTitle" />
 
 
+
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etTopic"
                     style="@style/TextView_400_Regular"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_42sdp"
+                    android:layout_height="@dimen/_90sdp"
                     android:layout_marginTop="@dimen/_3sdp"
-                    android:onClick="@{ v -> vm.onClick(v)}"
                     android:background="@drawable/radius_border_gray"
-                    android:gravity="start|center"
+                    android:gravity="start|top"
                     android:hint="Topic"
+                    android:onClick="@{v -> vm.onClick(v)}"
                     android:focusable="false"
-                    android:paddingHorizontal="@dimen/_10sdp"
-                    android:singleLine="true"
+                    android:clickable="true"
+                    android:padding="@dimen/_10sdp"
                     android:textColorHint="@color/text_gray"
                     app:layout_constraintTop_toBottomOf="@+id/tvTopic" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/etTopic"
+                    app:layout_constraintEnd_toEndOf="@+id/etTopic"
+                    app:layout_constraintTop_toTopOf="@+id/etTopic" />
+
 
 
 
@@ -137,9 +150,22 @@
                     android:layout_height="@dimen/_20sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:src="@drawable/iv_dropdown"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/etTopic"
                     app:layout_constraintEnd_toEndOf="@+id/etTopic"
                     app:layout_constraintTop_toTopOf="@+id/etTopic" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTopics"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    app:layout_constraintTop_toBottomOf="@id/etTopic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvCategory"
@@ -150,7 +176,7 @@
                     android:layout_marginTop="@dimen/_12sdp"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/etTopic" />
+                    app:layout_constraintTop_toBottomOf="@id/rvTopics" />
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etCategory"
@@ -257,8 +283,11 @@
                     android:hint="Public"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
-                    android:textColorHint="@color/text_gray"
+                    android:textColorHint="@color/black"
                     app:layout_constraintTop_toBottomOf="@+id/tvVisibilityMode" />
+
+
+
 
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -272,7 +301,48 @@
                     app:layout_constraintBottom_toBottomOf="@id/etVisibilityMode"
                     app:layout_constraintEnd_toEndOf="@id/etVisibilityMode"/>
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvFoundersRoom"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Founder's Room"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etVisibilityMode" />
 
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etFounderMode"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:enabled="false"
+                    android:background="@drawable/bg_standard"
+                    android:gravity="start|center"
+                    android:hint="Make this a Founder's Room"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/black"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFoundersRoom" />
+
+
+
+
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/setFounderDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_30sdp"
+                    android:thumb="@drawable/switch_thumb"
+                    app:track="@drawable/switch_track"
+                    android:checked="true"
+                    app:layout_constraintTop_toTopOf="@id/etFounderMode"
+                    app:layout_constraintBottom_toBottomOf="@id/etFounderMode"
+                    app:layout_constraintEnd_toEndOf="@id/etFounderMode"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvDescription"
@@ -283,7 +353,7 @@
                     android:layout_marginTop="@dimen/_12sdp"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/etVisibilityMode" />
+                    app:layout_constraintTop_toBottomOf="@id/etFounderMode" />
 
 
                 <androidx.appcompat.widget.AppCompatEditText
@@ -332,6 +402,42 @@
                     app:layout_constraintStart_toStartOf="@id/ivUploadImage"
                     app:layout_constraintEnd_toEndOf="@id/ivUploadImage"/>
 
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvUploadPitchDeck"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Upload Pitch Deck(PDF)"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ivUploadImage" />
+
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivUploadDeck"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/radius_border_gray"
+                    android:layout_height="@dimen/_140sdp"
+                    android:scaleType="centerCrop"
+                    android:onClick="@{v -> vm.onClick(v)}"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    app:layout_constraintTop_toBottomOf="@id/tvUploadPitchDeck" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:src="@drawable/iv_upload_doc"
+                    app:tint="@color/border_gray"
+                    app:layout_constraintTop_toTopOf="@id/ivUploadDeck"
+                    app:layout_constraintBottom_toBottomOf="@id/ivUploadDeck"
+                    app:layout_constraintStart_toStartOf="@id/ivUploadDeck"
+                    app:layout_constraintEnd_toEndOf="@id/ivUploadDeck"/>
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvCreate"
                     style="@style/TextView_500_Medium"
@@ -347,7 +453,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     android:textColor="@color/white"
                     android:visibility="visible"
-                    app:layout_constraintTop_toBottomOf="@id/ivUploadImage"/>
+                    app:layout_constraintTop_toBottomOf="@id/ivUploadDeck"/>
 
 
                 <androidx.appcompat.widget.AppCompatTextView

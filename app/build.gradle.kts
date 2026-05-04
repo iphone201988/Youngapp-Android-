@@ -18,19 +18,37 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BASE_URL", "\"https://theboom.app:8000/api/v1/\"")
+        buildConfigField("String", "BASE_URL_IMAGE", "\"https://youngappbucket.s3.us-east-2.amazonaws.com\"")
+        buildConfigField("String", "GOOGLE_API_KEY", "\"AIzaSyD5Jt2e9ocVmXovnsOsdmtdhPRkP8m9IhQ\"")
+        buildConfigField("String", "HEADER_API", "\"lkcMuYllSgc3jsFi1gg896mtbPxIBzYkEL\"")
+        buildConfigField("String", "SOCKET_URL", "\"https://theboom.app:8000\"")
+        buildConfigField("String", "FINNHUB_BASE_URL", "\"https://finnhub.io/api/v1/\"")
+        buildConfigField("String", "FINNHUB_API_KEY", "\"d1s7jehr01qskg7s19agd1s7jehr01qskg7s19b0\"")
+        buildConfigField("String", "DIDIT_CLIENT_ID", "\"QDPf650HjF-NyD4ARVlA4w\"")
+        buildConfigField("String", "DIDIT_CLIENT_SECRET", "\"oVFp1ZwgNE_uNsF9b0Rz3hhbGg05zS-gd3boekX2aks\"")
+        buildConfigField("String", "DIDIT_BASE_AUTH_URL", "\"https://apx.didit.me/\"")
+        buildConfigField("String", "DIDIT_BASE_VERIFICATION_URL", "\"https://verification.didit.me/\"")
+        buildConfigField("String", "RSS_FEED_URL", "\"https://feeds.content.dowjones.io/public/rss/mw_topstories\"")
     }
 
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
+        }
+        debug {
+            isMinifyEnabled = false
         }
     }
     compileOptions {
@@ -125,6 +143,7 @@ dependencies {
     //mp chart
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
-
+    implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.shimmer)
 
 }

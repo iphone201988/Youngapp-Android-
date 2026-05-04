@@ -115,6 +115,7 @@
                     android:layout_height="@dimen/_50sdp"
                     android:layout_marginTop="@dimen/_30sdp"
                     android:src="@drawable/app_logo"
+                    android:onClick="@{v -> vm.onClick(v)}"
                     app:layout_constraintStart_toStartOf="@+id/rvNav"
                     app:layout_constraintTop_toTopOf="parent" />
 

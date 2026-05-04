@@ -70,7 +70,9 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
         // observer
         initObserver()
 
-
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.getProfile(Constants.GET_USER_PROFILE)
+        }
     }
 
     override fun getLayoutResource(): Int {
@@ -246,10 +248,12 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when(it?.status){
                 Status.LOADING ->{
-                    showLoading()
+                    if (!binding.swipeRefresh.isRefreshing) {
+                        showLoading()
+                    }
                 }
                 Status.SUCCESS ->{
-
+                    binding.swipeRefresh.isRefreshing = false
                     when(it.message){
                         "getProfile" ->{
                             viewModel.getAds(Constants.GET_ADS)
@@ -296,6 +300,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                 }
                 Status.ERROR ->{
                     hideLoading()
+                    binding.swipeRefresh.isRefreshing = false
                     showToast(it.message.toString())
                 }
                 else ->{}
@@ -389,7 +394,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
 
         // Set total ratings text
         bindingDialog.totalRatings.text = "$totalCount ratings"
-        // ✅ Always get 5★ → 1★ order
+        //  Always get 5★ → 1★ order
         val ratingData = listOf(
             ratingsMap?.`5` ?: 0,
             ratingsMap?.`4` ?: 0,
@@ -410,7 +415,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
             val starCount = itemView.findViewById<TextView>(R.id.star_count)
             val starProgress = itemView.findViewById<ProgressBar>(R.id.star_progress)
 
-            // ✅ If total = 0, percent will be 0
+            //  If total = 0, percent will be 0
             val percent = if (total > 0) {
                 (ratingData[i] / total * 100).toInt()
             } else {

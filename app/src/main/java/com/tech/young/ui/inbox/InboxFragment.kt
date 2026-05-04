@@ -64,13 +64,17 @@ class InboxFragment : BaseFragment<FragmentInboxBinding>() {
                 if (diff <= 0 && scrollY > oldScrollY) {
 
                     Log.d("Pagination", "Reached bottom, loading next page…")
-                    // ✅ User reached bottom
+                    //  User reached bottom
                     if (!isLoading && page < totalPages!!) {
                         isLoading = true
                         loadNextPage()
                     }
                 }
             }
+        }
+
+        binding.swipeRefresh.setOnRefreshListener {
+            getChat()
         }
 
 
@@ -201,10 +205,13 @@ class InboxFragment : BaseFragment<FragmentInboxBinding>() {
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when(it?.status){
                 Status.LOADING ->{
-                    showLoading()
+                    if (!binding.swipeRefresh.isRefreshing) {
+                        showLoading()
+                    }
                 }
                 Status.SUCCESS ->{
                     hideLoading()
+                    binding.swipeRefresh.isRefreshing = false
                     when(it.message){
                         "getChat" -> {
                             val myDataModel: GetChatApiResponse? = BindingUtils.parseJson(it.data.toString())
@@ -247,6 +254,7 @@ class InboxFragment : BaseFragment<FragmentInboxBinding>() {
 
                 Status.ERROR ->{
                     hideLoading()
+                    binding.swipeRefresh.isRefreshing = false
                     showToast(it.message.toString())
                 }
                 else ->{

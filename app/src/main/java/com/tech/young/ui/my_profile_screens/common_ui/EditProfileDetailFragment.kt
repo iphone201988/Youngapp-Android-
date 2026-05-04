@@ -32,6 +32,7 @@ import com.tech.young.data.model.DummyLists.getEmploymentStatus
 import com.tech.young.data.model.DummyLists.getGenderList
 import com.tech.young.data.model.DummyLists.getIndustries
 import com.tech.young.data.model.DummyLists.getMartialStatus
+import com.tech.young.data.model.DummyLists.getPoliticalValues
 import com.tech.young.data.model.DummyLists.getRaceList
 import com.tech.young.data.model.DummyLists.homeOwnershipStatusList
 import com.tech.young.data.model.GetProfileApiResponse
@@ -52,6 +53,10 @@ import okhttp3.RequestBody.Companion.toRequestBody
 class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>(),
     BaseCustomBottomSheet.Listener {
     private val viewModel: YourProfileVM by viewModels()
+
+
+    var isChecked = false
+
     private var imageUri: Uri? = null
     // data
     private var profileData: GetProfileApiResponseData?=null
@@ -70,6 +75,12 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
    //residence
     private lateinit var residenceAdapter : SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
     private lateinit var residenceBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
+
+
+
+    //political value
+    private lateinit var politicalAdapter : SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
+    private lateinit var politicalBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
 
     // education
     private lateinit var educationAdapter  : SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
@@ -235,7 +246,7 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                 R.id.etMarital,R.id.etEducationFinance,R.id.etIndustryStartup->{
                     commonBottomSheet.show()
                 }
-                R.id.etResidenceStatus ->{
+                R.id.etResidenceStatus , R.id.etResidenceStatusFinance , R.id.etResidenceStatusStartup , R.id.etResidenceStatusInvestor->{
                     residenceBottomSheet.show()
                 }
                 R.id.etEducationLevel ->{
@@ -247,10 +258,20 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                     employmentBottomSheet.show()
                 }
 
+                R.id.etPoliticalValue  , R.id.etPoliticalValueFinance, R.id.etPoliticalValueStartUp, R.id.etPoliticalValueInvestor->{
+                    politicalBottomSheet.show()
+                }
 
                 /** api call ***/
                 R.id.tvUpdate,R.id.tvUpdateFinance,R.id.tvUpdateStartup,R.id.tvUpdateInvestor -> {
                     apiCall()
+                }
+
+
+                R.id.ivCheck , R.id.ivCheckFinance,R.id.ivCheckStartup,R.id.ivCheckInvestor->{
+                    isChecked = !isChecked
+                    // update UI if using data binding
+                    binding.check = isChecked
                 }
             }
         }
@@ -388,6 +409,11 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
         residenceBottomSheet.behavior.isDraggable = true
 
 
+        // political  bottomsheet
+        politicalBottomSheet = BaseCustomBottomSheet(requireContext(),R.layout.botttom_sheet_topics,this)
+        politicalBottomSheet.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        politicalBottomSheet.behavior.isDraggable = true
+
         //education bottomsheet
         educationBottomSheet = BaseCustomBottomSheet(requireContext(),R.layout.botttom_sheet_topics,this)
         educationBottomSheet.behavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -470,6 +496,9 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                     if (type != null) {
                         when (type) {
                             1 -> binding.etResidenceStatus.text = m.title
+                            2 -> binding.etResidenceStatusFinance.text = m.title
+                            3 -> binding.etResidenceStatusStartup.text = m.title
+
                         }
                     }
                     residenceBottomSheet.dismiss()
@@ -521,9 +550,10 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                 R.id.consMain, R.id.title -> {
                     if (type != null) {
                         when (type) {
-                            1 -> binding.etMarital.setText(m.title)
-                            2 -> binding.etEducationFinance.setText(m.title)
-                            3 -> binding.etIndustryStartup.setText(m.title)
+                            1 -> binding.etMarital.text = m.title
+                            2 -> binding.etEducationFinance.text = m.title
+                            3 -> binding.etIndustryStartup.text = m.title
+
                         }
                     }
                     commonBottomSheet.dismiss()
@@ -537,6 +567,28 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
             3-> commonAdapter.list= getIndustries()
 
         }
+
+
+        // political adapter
+        politicalAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_drop_down, BR.bean) { v, m, pos ->
+            when (v.id) {
+                R.id.consMain, R.id.title -> {
+                    if (type != null) {
+                        when (type) {
+                            1 -> binding.etPoliticalValue.text = m.title
+                            2 -> binding.etPoliticalValueFinance.text = m.title
+                            3 -> binding.etPoliticalValueStartUp.text = m.title
+                            4 -> binding.etPoliticalValueInvestor.text = m.title
+
+                        }
+                    }
+                    politicalBottomSheet.dismiss()
+                }
+            }
+        }
+        politicalBottomSheet.binding.rvTopics.adapter = politicalAdapter
+        politicalAdapter.list = getPoliticalValues()
+
     }
 
     /*** api call **/
@@ -552,6 +604,11 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                 data["gender"]=binding.etGender.text.toString().trim().toRequestBody()
                 data["ageRange"]=binding.etAge.text.toString().trim().toRequestBody()
                 data["maritalStatus"]=binding.etMarital.text.toString().trim().toRequestBody()
+                data["residenceStatus"] =  binding.etResidenceStatus.text.toString().trim().toRequestBody()
+                data["educationLevel"] =binding.etEducationLevel.text.toString().trim().toRequestBody()
+                data["employmentStatus"] = binding.etEmploymentStatus.text.toString().trim().toRequestBody()
+                data["politicalAffection"] = binding.etPoliticalValue.text.toString().trim().toRequestBody()
+
             }
             2->{
                 data["firstName"]=binding.etFirstNameFinance.text.toString().trim().toRequestBody()
@@ -564,6 +621,9 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                 data["gender"]=binding.etGenderFinance.text.toString().trim().toRequestBody()
                 data["ageRange"]=binding.etAgeFinance.text.toString().trim().toRequestBody()
                 data["educationLevel"]=binding.etEducationFinance.text.toString().trim().toRequestBody()
+                data["residenceStatus"] =  binding.etResidenceStatusFinance.text.toString().trim().toRequestBody()
+                data["politicalAffection"] = binding.etPoliticalValueFinance.text.toString().trim().toRequestBody()
+
             }
             3->{
                 data["firstName"]=binding.etFirstNameStartup.text.toString().trim().toRequestBody()
@@ -577,6 +637,9 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                 data["ageRange"]=binding.etAgeStartup.text.toString().trim().toRequestBody()
                 data["industriesSeeking"]=binding.etIndustryStartup.text.toString().trim().toRequestBody()
                 data["launchDate"]=binding.etLaunchDateStartup.text.toString().trim().toRequestBody()
+                data["residenceStatus"] =  binding.etPoliticalValueStartUp.text.toString().trim().toRequestBody()
+                data["politicalAffection"] = binding.etPoliticalValueStartUp.text.toString().trim().toRequestBody()
+
 
             }
             4->{
@@ -590,6 +653,9 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                 data["gender"]=binding.etGenderInvestor.text.toString().trim().toRequestBody()
                 data["ageRange"]=binding.etAgeInvestor.text.toString().trim().toRequestBody()
                 data["yearFounded"]=binding.etYearFoundedInvestor.text.toString().trim().toRequestBody()
+                data["residenceStatus"] =  binding.etResidenceStatusInvestor.text.toString().trim().toRequestBody()
+                data["politicalAffection"] = binding.etPoliticalValueInvestor.text.toString().trim().toRequestBody()
+
 
             }
         }

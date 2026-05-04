@@ -11,9 +11,12 @@ data class ChooseAccountType(
 )
 
 data class SideMenuBar(
-    var isSelected: Boolean = false, val name: String,var heading:String?=null,var headingShow:Boolean=false
+    var isSelected: Boolean = false,
+    var name: String? = null,
+    var heading: String? = null,
+    var isHeader: Boolean = false,
+    var isExpanded: Boolean = false
 )
-
 data class EditProfileListModel(
     var title:String,var subTitle:String,var image:Int, var listType:Int, var verificationClickable : Boolean = false, var isTop:Boolean=false,  var verify : Int = 0
 )
@@ -21,3 +24,20 @@ data class EditProfileListModel(
 data class CategoryModel(
     var title: String,var isSelected:Boolean=false
 )
+
+
+data class MenuItem(
+    val title: String,
+    val type: Int,
+    var isExpanded: Boolean = false,
+    val children: List<MenuItem> = emptyList(),
+    val isChild: Boolean = false,
+
+    var isSelected: Boolean = false
+
+) {
+    companion object {
+        const val HEADER = 0
+        const val CHILD = 1
+    }
+}

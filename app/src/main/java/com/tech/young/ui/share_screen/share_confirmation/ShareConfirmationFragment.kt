@@ -34,6 +34,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 
 @AndroidEntryPoint
 class ShareConfirmationFragment : BaseFragment<FragmentShareConfirmationBinding>() {
@@ -90,7 +91,7 @@ class ShareConfirmationFragment : BaseFragment<FragmentShareConfirmationBinding>
 //            startActivity(intent)
             if (sharedPrefManager.isSubscribed()){
                 requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.frameLayout, CommonVaultFragment())
+                    .replace(R.id.frameLayout, CommonStreamFragment())
                     .addToBackStack(null)
                     .commit()
             }else{
@@ -133,7 +134,24 @@ class ShareConfirmationFragment : BaseFragment<FragmentShareConfirmationBinding>
 
         shareData?.let { data ->
             binding.tvTitle.text = data.title
-            binding.tvTopic.text = data.topic
+            
+            // 🔹 Pretty format JSON for display
+            try {
+                val json = JSONObject(data.topic)
+                val prettyTopics = mutableListOf<String>()
+                val keys = json.keys()
+                while (keys.hasNext()) {
+                    val key = keys.next() as String
+                    val array = json.getJSONArray(key)
+                    for (i in 0 until array.length()) {
+                        prettyTopics.add(array.getString(i))
+                    }
+                }
+                binding.tvTopic.text = prettyTopics.joinToString(", ")
+            } catch (e: Exception) {
+                binding.tvTopic.text = data.topic
+            }
+            
             binding.tvDescription.text = data.description
             if (data.image != null){
                 binding.ivAdsImage.visibility = View.VISIBLE

@@ -2,10 +2,7 @@ package com.tech.young.ui.notification_fragment
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,9 +17,7 @@ import com.tech.young.base.utils.Status
 import com.tech.young.base.utils.showToast
 import com.tech.young.data.UserData
 import com.tech.young.data.api.Constants
-import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.NotificationApiResponse
-import com.tech.young.data.model.TrendingTopicApiResponse
 import com.tech.young.databinding.FragmentNotificationBinding
 import com.tech.young.databinding.ItemLayoutNotificationBinding
 import com.tech.young.ui.exchange.exchange_share_detail.ExchangeShareDetailFragment
@@ -42,7 +37,6 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
 
     private var page  = 1
     private var isLoading = false
-    private var isLastPage = false
     private var totalPages : Int ? = null
 
 
@@ -59,9 +53,13 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
         initAdapter()
         initObserver()
 
+        binding.swipeRefresh.setOnRefreshListener {
+            getNotification()
+        }
+
         binding.rvNotification.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                // 👇 Only continue if scrolling down
+
                 if (dy <= 0) return
 
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
@@ -69,11 +67,11 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
                 val totalItemCount = layoutManager.itemCount
                 val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
-                if (!isLoading && page < totalPages!!) {
+                if (!isLoading && page < (totalPages ?: 0)) {
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
                         firstVisibleItemPosition >= 0
                     ) {
-                        isLoading = true // ✅ Lock before load
+                        isLoading = true
                         loadMoreData()
                     }
                 }
@@ -93,14 +91,13 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
     }
 
     private fun initAdapter() {
-      notificationAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_notification, BR.bean){v,m,pos ->
+      notificationAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_notification, BR.bean){ v, m, _ ->
           when(v.id){
               R.id.ivImage ->{
                   val bundle = Bundle().apply {
                       putString("from", "user_profile")
-                      putString("userId", m.senderId?._id) // assuming m._id is a String
+                      putString("userId", m.senderId?._id)
                   }
-//                    val name = m.firstName + " " + m.lastName  // ← add space here
                   val name  = m?.senderId?.firstName + " " + m?.senderId?.lastName
                   HomeActivity.userName  = name
                   val userProfileFragment = UserProfileFragment().apply {
@@ -131,7 +128,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
 
                       "message" -> {
                           val chatUser = UserData(
-                              _id = m.senderId?._id, // ✅ should map from FcmPayload.userId, not payload?._id
+                              _id = m.senderId?._id,
                               profileImage = m.senderId?.profileImage,
                               role = m.senderId?.role,
                               username = m.senderId?.username,
@@ -169,7 +166,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
                           val userProfileFragment = UserProfileFragment().apply {
                               arguments  = Bundle().apply {
                                   putString("from", "user_profile")
-                                  putString("userId", m.senderId?._id) // assuming m._id is a String
+                                  putString("userId", m.senderId?._id)
                               }
                           }
 
@@ -297,7 +294,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
                           val userProfileFragment = UserProfileFragment().apply {
                               arguments  = Bundle().apply {
                                   putString("from", "user_profile")
-                                  putString("userId", m.senderId?._id) // assuming m._id is a String
+                                  putString("userId", m.senderId?._id)
                               }
                           }
 
@@ -318,17 +315,19 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when(it?.status){
                 Status.LOADING ->{
-                    showLoading()
+                    if (!binding.swipeRefresh.isRefreshing) {
+                        showLoading()
+                    }
                 }
                 Status.SUCCESS ->{
                     hideLoading()
+                    binding.swipeRefresh.isRefreshing = false
                     when(it.message){
                         "getNotification" ->{
                            val myDataModel : NotificationApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
                                     if (myDataModel.data!!.notifications != null){
-                                    //    notificationAdapter.list = myDataModel.data!!.notifications
                                         totalPages = myDataModel.pagination?.totalPages ?: 1
                                         if (page <= totalPages!!) {
                                             isLoading = false
@@ -351,6 +350,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
                 }
                 Status.ERROR ->{
                     hideLoading()
+                    binding.swipeRefresh.isRefreshing = false
                     showToast(it.message.toString())
                 }
                 else ->{

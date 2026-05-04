@@ -19,7 +19,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
             android:background="@drawable/bg_recyclerview"
-            tools:listitem="@layout/item_investments"
+            tools:listitem="@layout/item_layout_similar_profile"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

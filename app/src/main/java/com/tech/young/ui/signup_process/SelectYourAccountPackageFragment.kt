@@ -153,7 +153,7 @@ class SelectYourAccountPackageFragment : BaseFragment<FragmentSelectYourAccountP
             billingClient.startConnection(object : BillingClientStateListener {
                 override fun onBillingSetupFinished(billingResult: BillingResult) {
                     if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                        purchaseSubscription(planId) // ✅ Retry after reconnect
+                        purchaseSubscription(planId) //  Retry after reconnect
                     } else {
                         showToast("Billing setup failed, please try again.")
                     }
@@ -166,14 +166,14 @@ class SelectYourAccountPackageFragment : BaseFragment<FragmentSelectYourAccountP
             return
         }
 
-        // ✅ Ensure plans are available
+        //  Ensure plans are available
         if (!::plansList.isInitialized || plansList.isEmpty()) {
             showToast("Loading plans, please wait...")
           //  queryAvailableSubscriptions()
             return
         }
 
-        // ✅ Find only monthly/yearly plan
+        //  Find only monthly/yearly plan
         val productDetails = plansList.find { it.productId == planId }
         if (productDetails == null) {
             showToast("Subscription plan not found.")

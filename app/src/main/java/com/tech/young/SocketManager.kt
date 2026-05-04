@@ -1,9 +1,6 @@
 package com.tech.young
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.widget.Toast
 import io.socket.client.IO
 import io.socket.client.Manager
 import io.socket.client.Socket
@@ -14,11 +11,8 @@ import org.webrtc.SessionDescription
 import java.net.URISyntaxException
 
 object SocketManager {
-    private const val SERVER_URL = "https://theboom.app:8000"
-//    private const val SERVER_URL = "http://192.168.1.57:8888"
+    private const val SERVER_URL = BuildConfig.SOCKET_URL
     var mSocket: Socket? = null
-
-
 
     @Synchronized
     fun setSocket(token: String) {
@@ -81,14 +75,14 @@ object SocketManager {
         type: String?,
         roomId: String?,
     ) {
-        val message = JSONObject().apply {
+        val messageJson = JSONObject().apply {
             put("message", message)
             put("id", id)
             put("name", name)
             put("type", type)
             put("roomId", roomId)
         }
-        mSocket?.emit("sendMessage2", message)
+        mSocket?.emit("sendMessage2", messageJson)
     }
 
     fun emiLeaveMessage(id: String?) {
@@ -131,12 +125,12 @@ object SocketManager {
     @Synchronized
     fun getSocket(): Socket? {
         if (mSocket?.connected() == true) {
-            Log.d("_root_ide_package_.com.tech.young.SocketManager.mSocket", "getSocket: Already Connected")
+            Log.d("SocketManager", "getSocket: Already Connected")
         } else if (mSocket?.connected() == false) {
-            Log.d("_root_ide_package_.com.tech.young.SocketManager.mSocket", "getSocket: Socket is disconnected, attempting to reconnect.")
+            Log.d("SocketManager", "getSocket: Socket is disconnected, attempting to reconnect.")
             mSocket?.connect()
         } else {
-            Log.d("_root_ide_package_.com.tech.young.SocketManager.mSocket", "getSocket: Socket is neither connected nor disconnected, attempting to connect.")
+            Log.d("SocketManager", "getSocket: Socket is neither connected nor disconnected, attempting to connect.")
             mSocket?.connect()
         }
 
@@ -161,7 +155,7 @@ object SocketManager {
 
         if (!mSocket!!.connected()) {
             mSocket!!.connect()
-            Log.d("SocketHandler", "Attempting to establish _root_ide_package_.com.tech.young.SocketManager.mSocket connection...")
+            Log.d("SocketHandler", "Attempting to establish mSocket connection...")
 
             // Listen for successful connection
             mSocket!!.on(Socket.EVENT_CONNECT) {
@@ -177,9 +171,6 @@ object SocketManager {
             mSocket!!.on(Socket.EVENT_CONNECT_ERROR) { args ->
                 Log.e("SocketHandler", "Socket connection error: ${args.joinToString()}")
             }
-
-
-
 
         } else {
             Log.d("SocketHandler", "Socket is already connected.")
@@ -197,4 +188,3 @@ object SocketManager {
         }
     }
 }
-

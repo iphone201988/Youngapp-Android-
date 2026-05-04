@@ -35,6 +35,7 @@ import com.tech.young.databinding.ItemLayoutLogoutPopupBinding
 import com.tech.young.databinding.ItemLayoutSideNavBinding
 import com.tech.young.ui.MySplashActivity
 import com.tech.young.ui.advertise_screen.AdvertiseFragment
+import com.tech.young.ui.ai_chat.AiChatFragment
 import com.tech.young.ui.change_password.ChangePasswordFragment
 import com.tech.young.ui.contact_screens.ContactUsFragment
 import com.tech.young.ui.ecosystem.EcosystemFragment
@@ -44,8 +45,10 @@ import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.exchange.exchange_share_detail.ExchangeShareDetailFragment
 import com.tech.young.ui.exchange.screens.ShareExchangeFragment.Companion.selectedCategoryForExchange
 import com.tech.young.ui.exchange.stream_detail_fragment.StreamDetailFragment
+import com.tech.young.ui.financial_business.FinancialBusinessFragment
 import com.tech.young.ui.inbox.InboxFragment
 import com.tech.young.ui.inbox.view_message.ViewMessageFragment
+import com.tech.young.ui.investment_plan.InvestmentPlanFragment
 import com.tech.young.ui.investment_tracker.InvestmentTrackerFragment
 import com.tech.young.ui.media.MediaFragment
 import com.tech.young.ui.my_profile_screens.YourProfileFragment
@@ -140,7 +143,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
 
                 "message" -> {
                     val chatUser = UserData(
-                        _id = payload?.userId, // ✅ should map from FcmPayload.userId, not payload?._id
+                        _id = payload?.userId, //  should map from FcmPayload.userId, not payload?._id
                         profileImage = payload?.profileImage,
                         role = payload?.role,
                         username = payload?.username,
@@ -577,13 +580,17 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                 }
 
                 R.id.tvAbout -> {
-                    displayFragment(AboutFragment())
+                    displayFragment(AboutFragment()) 
                     updateOtherUI(getString(R.string.about))
                 }
 
                 R.id.tvPoliciesAndAgreement -> {
                     displayFragment(PoliciesFragment())
                     updateOtherUI(getString(R.string.policies_and_agreement))
+                }
+                R.id.ivAppLogo ->{
+                    displayFragment(HomeFragment())
+                    updateHomeUI()
                 }
                 R.id.tvLogout ->{
                     logoutPopup.show()
@@ -607,138 +614,192 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
 
     private lateinit var adapter: SimpleRecyclerViewAdapter<SideMenuBar, ItemLayoutSideNavBinding>
     private fun initAdapter() {
-        adapter = SimpleRecyclerViewAdapter(R.layout.item_layout_side_nav, BR.bean) { _v, m, pos_ ->
-            when (_v.id) {
-                R.id.consMain -> {
-                    adapter.list.forEach {
-                        it.isSelected = false
-                    }
-                    m.isSelected = true
-                    Constants.chooseAccountType = m.name
-                    adapter.notifyDataSetChanged()
-                    handleNavClick(m.name, m.heading)
-//                    m.id?.let {it->
-//                        if (navController.currentDestination?.id != it) {
-//                            navController.navigate(it)
-//                        }
-//                        binding.drawerLayout.closeDrawer(GravityCompat.START)
-//                    }
 
+        adapter = SimpleRecyclerViewAdapter(R.layout.item_layout_side_nav, BR.bean) { _v, m, pos ->
+
+            when (_v.id) {
+
+                R.id.consMain -> {
+
+                    if (m.isHeader) {
+
+                        val index = adapter.list.indexOf(m)
+
+                        if (m.isExpanded) {
+                            // COLLAPSE
+                            val toRemove = adapter.list.filter { it.heading == m.name }
+                            adapter.list.removeAll(toRemove)
+                            m.isExpanded = false
+
+                        } else {
+                            // EXPAND
+                            val children = getChildren(m.name ?: "")
+                            adapter.list.addAll(index + 1, children)
+                            m.isExpanded = true
+                        }
+
+                        adapter.notifyDataSetChanged()
+
+                    } else {
+
+                        adapter.list.forEach { it.isSelected = false }
+                        m.isSelected = true
+
+                        Constants.chooseAccountType = m.name!!
+                        adapter.notifyDataSetChanged()
+
+                        handleNavClick(m.name, m.heading)
+                    }
                 }
             }
-
         }
+
         binding.rvNav.adapter = adapter
         adapter.list = listChooseAccountType()
     }
 
     private fun listChooseAccountType(): ArrayList<SideMenuBar> {
         val list = ArrayList<SideMenuBar>()
-        list.add(SideMenuBar(true, "Home"))
-        list.add(SideMenuBar(false, name.toString(), null))
-        list.add(SideMenuBar(false, "Profile"))
-        list.add(SideMenuBar(false, "Inbox"))
-        list.add(SideMenuBar(false,"Notification"))
-//        list.add(SideMenuBar(false, "Dashboard"))
-//        list.add(SideMenuBar(false, "Analytics"))
-        list.add(SideMenuBar(false, "Member", "Exchange", true))
-        list.add(SideMenuBar(false, "Financial Advisors", "Exchange"))
-        list.add(SideMenuBar(false, "Startups", "Exchange"))
-        list.add(SideMenuBar(false, "Small Business", "Exchange"))
-        list.add(SideMenuBar(false, "Investor/ VC", "Exchange"))
-        list.add(SideMenuBar(false, "Member", "Ecosystem", true))
-        list.add(SideMenuBar(false, "Financial Advisors", "Ecosystem"))
-        list.add(SideMenuBar(false, "Startups", "Ecosystem"))
-        list.add(SideMenuBar(false, "Small Business", "Ecosystem"))
-        list.add(SideMenuBar(false, "Investor/ VC", "Ecosystem"))
 
-        list.add(SideMenuBar(false, "Analytics"))
-        list.add(SideMenuBar(false, "Ecosystems"))
-        list.add(SideMenuBar(false, "Engagement"))
-        list.add(SideMenuBar(false,"Research Engine"))
-        list.add(SideMenuBar(false,"Brokers"))
+        list.add(SideMenuBar(true, "Home" , null, true))
 
+        // Name (Header)
+        list.add(SideMenuBar(false, name.toString(), null, true))
+
+        // Exchange
+        list.add(SideMenuBar(false, "Exchange", null, true))
+
+        // Ecosystem
+        list.add(SideMenuBar(false, "Ecosystem", null, true))
+
+        // Tools
+        list.add(SideMenuBar(false, "Tools", null, true))
 
         return list
-
     }
+
+
+
+    private fun getChildren(header: String): List<SideMenuBar> {
+        return when (header) {
+
+            name -> listOf(
+                SideMenuBar(false, "Profile", name),
+                SideMenuBar(false, "Inbox", name),
+                SideMenuBar(false, "Notification", name)
+            )
+
+            "Exchange" -> listOf(
+                SideMenuBar(false, "Member", "Exchange"),
+                SideMenuBar(false, "Financial Advisors", "Exchange"),
+                SideMenuBar(false, "Startups", "Exchange"),
+                SideMenuBar(false, "Small Business", "Exchange"),
+                SideMenuBar(false, "Investor/ VC", "Exchange"),
+                SideMenuBar(false, "Life Insurance", "Exchange"),
+                SideMenuBar(false, "Brokers/Dealer", "Exchange"),
+                SideMenuBar(false, "Investment Mangers", "Exchange")
+            )
+
+            "Ecosystem" -> listOf(
+                SideMenuBar(false, "Member", "Ecosystem"),
+                SideMenuBar(false, "Financial Advisors", "Ecosystem"),
+                SideMenuBar(false, "Startups", "Ecosystem"),
+                SideMenuBar(false, "Small Business", "Ecosystem"),
+                SideMenuBar(false, "Investor/ VC", "Ecosystem"),
+                SideMenuBar(false, "Life Insurance", "Ecosystem"),
+                SideMenuBar(false, "Brokers/Dealer", "Ecosystem"),
+                SideMenuBar(false, "Investment Mangers", "Ecosystem")
+            )
+
+            "Tools" -> listOf(
+                SideMenuBar(false, "Portfolio", "Tools"),
+                SideMenuBar(false, "Performance", "Tools"),
+                SideMenuBar(false, "Engagement", "Tools"),
+                SideMenuBar(false, "Investment Plan", "Tools"),
+                SideMenuBar(false, "Financial/Business", "Tools"),
+                SideMenuBar(false, "Research Engine", "Tools")
+            )
+
+            else -> emptyList()
+        }
+    }
+
+
 
     /** handle nav clicks **/
     private fun handleNavClick(title: String?, heading: String?) {
-        if (heading != null) {
-            if (heading == "Exchange") {
-                if (title != null) {
-                    when (title) {
-                        "Member" -> {
-                            selectedCategoryForExchange = "Members"
-                            displayFragment(ExchangeFragment())
-                            updateOtherUI(getString(R.string.exchange))
-                        }
 
-                        "Financial Advisors" -> {
-                            selectedCategoryForExchange = "Advisors"
-                            displayFragment(ExchangeFragment())
-                            updateOtherUI(getString(R.string.exchange))
-                        }
+        if (title.isNullOrEmpty()) return
 
-                        "Startups" -> {
-                            selectedCategoryForExchange = "Startups"
-                            displayFragment(ExchangeFragment())
-                            updateOtherUI(getString(R.string.exchange))
-                        }
+        when (heading) {
 
-                        "Small Business" -> {
-                            selectedCategoryForExchange = "Small Businesses"
-                            displayFragment(ExchangeFragment())
-                            updateOtherUI(getString(R.string.exchange))
-                        }
-
-                        "Investor/ VC" -> {
-                            selectedCategoryForExchange = "Investor"
-                            //selectedCategoryForExchange="VCs"
-                            displayFragment(ExchangeFragment())
-                            updateOtherUI(getString(R.string.exchange))
-                        }
-                    }
+            "Exchange" -> {
+                when (title) {
+                    "Member" -> selectedCategoryForExchange = "Members"
+                    "Financial Advisors" -> selectedCategoryForExchange = "Advisors"
+                    "Startups" -> selectedCategoryForExchange = "Startups"
+                    "Small Business" -> selectedCategoryForExchange = "Small Businesses"
+                    "Investor/ VC" -> selectedCategoryForExchange = "Investor"
+                    "Life Insurance" -> selectedCategoryForExchange = "Insurance"
+                    "Brokers/Dealer" -> selectedCategoryForExchange = "Broker"
+                    "Investment Mangers" -> selectedCategoryForExchange = "Investment Managers"
                 }
-            } else if (heading == "Ecosystem") {
-                if (title != null) {
-                    when (title) {
-                        "Member" -> {
-                            selectedCategoryForEcosystem = "Members"
-                            displayFragment(EcosystemFragment())
-                            updateOtherUI(getString(R.string.ecosystem))
-                        }
 
-                        "Financial Advisors" -> {
-                            selectedCategoryForEcosystem = "Advisors"
-                            displayFragment(EcosystemFragment())
-                            updateOtherUI(getString(R.string.ecosystem))
-                        }
+                displayFragment(ExchangeFragment())
+                updateOtherUI(getString(R.string.exchange))
+            }
 
-                        "Startups" -> {
-                            selectedCategoryForEcosystem = "Startups"
-                            displayFragment(EcosystemFragment())
-                            updateOtherUI(getString(R.string.ecosystem))
-                        }
+            "Ecosystem" -> {
+                when (title) {
+                    "Member" -> selectedCategoryForEcosystem = "Members"
+                    "Financial Advisors" -> selectedCategoryForEcosystem = "Advisors"
+                    "Startups" -> selectedCategoryForEcosystem = "Startups"
+                    "Small Business" -> selectedCategoryForEcosystem = "Small Businesses"
+                    "Investor/ VC" -> selectedCategoryForEcosystem = "Investor"
+                    "Life Insurance" -> selectedCategoryForEcosystem = "Insurance"
+                    "Brokers/Dealer" -> selectedCategoryForEcosystem = "Broker"
+                    "Investment Mangers" -> selectedCategoryForEcosystem = "Investment Managers"
+                }
 
-                        "Small Business" -> {
-                            selectedCategoryForEcosystem = "Small Businesses"
-                            displayFragment(EcosystemFragment())
-                            updateOtherUI(getString(R.string.ecosystem))
-                        }
+                displayFragment(EcosystemFragment())
+                updateOtherUI(getString(R.string.ecosystem))
+            }
 
-                        "Investor/ VC" -> {
-                            selectedCategoryForEcosystem = "Investor"
-                            //selectedCategoryForEcosystem ="VCs"
-                            displayFragment(EcosystemFragment())
-                            updateOtherUI(getString(R.string.ecosystem))
-                        }
+            "Tools" -> {
+                when (title) {
+                    "Performance" -> {
+                        displayFragment(PerformanceFragment())
+                        updateOtherUI("Performance")
+                    }
+
+                    "Portfolio" -> {
+                        displayFragment(InvestmentTrackerFragment())
+                        updateOtherUI("Investment & financial tracker")
+                    }
+
+                    "Research Engine" -> {
+                        displayFragment(AiChatFragment())
+                        updateOtherUI("AI")
+                    }
+
+                    "Investment Plan" -> {
+                        displayFragment(InvestmentPlanFragment())
+                        updateOtherUI("Investment Plan")
+                    }
+
+                    "Financial/Business" -> {
+                        displayFragment(FinancialBusinessFragment())
+                        updateOtherUI("Financial Business")
+                    }
+                    "Engagement" -> {
+                        displayFragment(EngagementFragment())
+                        updateOtherUI("Engagement")
                     }
                 }
             }
-        } else {
-            if (title != null) {
+
+            else  -> {
+                // Main menu (no heading)
                 when (title) {
                     "Home" -> {
                         displayFragment(HomeFragment())
@@ -754,14 +815,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                         displayFragment(InboxFragment())
                         updateOtherUI(getString(R.string.inbox))
                     }
-                    "Notification" ->{
+
+                    "Notification" -> {
                         displayFragment(NotificationFragment())
                         updateOtherUI("Notification")
                     }
-                    "Engagement" ->{
-                        displayFragment(EngagementFragment())
-                        updateOtherUI("Engagement")
-                    }
+
+
                 }
             }
         }

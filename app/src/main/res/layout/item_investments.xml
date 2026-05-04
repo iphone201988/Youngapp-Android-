@@ -5,7 +5,7 @@
     <data>
         <variable
             name="bean"
-            type="String" />
+            type="com.tech.young.data.model.Investment" />
         <variable
             name="callback"
             type="com.tech.young.base.SimpleRecyclerViewAdapter.SimpleCallback" />
@@ -27,7 +27,7 @@
             style="@style/TextView_400_Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Apple"
+            android:text="@{bean.name}"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="@dimen/_10sdp"
             android:textColor="@color/colorPrimary"
@@ -40,7 +40,7 @@
             style="@style/TextView_400_Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="(APPL)"
+            android:text="@{bean.symbol != null ? `(` + bean.symbol + `)` : ``}"
             android:layout_marginStart="@dimen/_5sdp"
             android:textSize="@dimen/_13ssp"
             app:layout_constraintStart_toEndOf="@id/tvHeading"
@@ -77,7 +77,7 @@
             style="@style/TextView_400_Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+12.4%"
+            android:text='@{String.valueOf(bean.percentageGrowth) + "%"}'
             android:textSize="@dimen/_13ssp"
             android:textColor="@color/green"
             app:layout_constraintEnd_toStartOf="@id/tvArrow"

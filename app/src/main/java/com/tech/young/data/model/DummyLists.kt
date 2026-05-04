@@ -236,19 +236,50 @@ object DummyLists {
         return list
     }
 
+
+    fun getInvestmentPerformance():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Outperforming","outperforming"))
+        list.add(DropDownData("Meeting expectations","meeting_expectations"))
+        list.add(DropDownData("Neutral","neutral"))
+        list.add(DropDownData("Slightly underperforming","significantly_underperforming"))
+        list.add(DropDownData("Too early to tel","too_early_to_tell"))
+        return list
+    }
+
+    fun getInvestments():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Savings Account"))
+        list.add(DropDownData("Checking Account"))
+        list.add(DropDownData("Emergency Fund"))
+        list.add(DropDownData("Retirement Account"))
+        list.add(DropDownData("Brokerage Account"))
+        list.add(DropDownData("Crypto Wallet"))
+        list.add(DropDownData("Real Estate Property"))
+        list.add(DropDownData("Business Investment"))
+        list.add(DropDownData("Fixed Deposit"))
+        list.add(DropDownData("Gold Precious Metals"))
+        list.add(DropDownData("Insurance linked Investment"))
+        list.add(DropDownData("Education Fund"))
+        list.add(DropDownData("Other"))
+        return list
+    }
+
+
+
     fun getSalaryRange():ArrayList<DropDownData>{
         val list=ArrayList<DropDownData>()
-        list.add(DropDownData("<$25k"))
-        list.add(DropDownData("$25k – $50k"))
-        list.add(DropDownData("$50k – $75k"))
-        list.add(DropDownData("$100k – $250k"))
-        list.add(DropDownData("$250k – $500k"))
-        list.add(DropDownData("$500k – $1M"))
-        list.add(DropDownData("$1M – $2M"))
-        list.add(DropDownData("$2M – $5M"))
-        list.add(DropDownData( "$5M – $10M"))
-        list.add(DropDownData("$10M+"))
-        list.add(DropDownData("Prefer not to say"))
+        list.add(DropDownData("<$25k","0_25k"))
+        list.add(DropDownData("$25k – $50k","25k_50k"))
+        list.add(DropDownData("$50k – $75k","50k_100k"))
+        list.add(DropDownData("$100k – $250k","100k_250k"))
+        list.add(DropDownData("$250k – $500k","250k_500k"))
+        list.add(DropDownData("$500k – $1M","500k_1m"))
+        list.add(DropDownData("$1M – $2M","1m_2m"))
+        list.add(DropDownData("$2M – $5M","2m_5m"))
+        list.add(DropDownData( "$5M – $10M","5m_10m"))
+        list.add(DropDownData("$10M+","10m_plus"))
+        list.add(DropDownData("Prefer not to say","prefer_not_to_say"))
         return list
     }
 
@@ -380,6 +411,108 @@ object DummyLists {
 
 
 
+    fun getDeiImportance():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Not important"))
+        list.add(DropDownData("Slightly important"))
+        list.add(DropDownData("Moderately important"))
+        list.add(DropDownData("Very important"))
+        list.add(DropDownData("Extremely important"))
+        list.add(DropDownData("Not sure"))
+        return list
+    }
+
+    fun communityReinvestment():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Not important"))
+        list.add(DropDownData("Slightly important"))
+        list.add(DropDownData("Moderately important"))
+        list.add(DropDownData("Very important"))
+        list.add(DropDownData("Extremely important"))
+        list.add(DropDownData("Not sure"))
+        return list
+    }
+
+
+    fun esgPriority():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Not a priority"))
+        list.add(DropDownData("Low priority"))
+        list.add(DropDownData("Moderate priority"))
+        list.add(DropDownData("High priority"))
+        list.add(DropDownData("Very high priority"))
+        list.add(DropDownData("Strictly ESG-focused"))
+        list.add(DropDownData("Not sure"))
+        return list
+    }
+
+
+
+    fun investmentPreference():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Capital growth"))
+        list.add(DropDownData("Passive income (dividends/interest)"))
+        list.add(DropDownData("Capital preservation"))
+        list.add(DropDownData("Tax efficiency"))
+        list.add(DropDownData("Portfolio diversification"))
+        list.add(DropDownData("Inflation protection"))
+        list.add(DropDownData("Speculative/high returns"))
+        list.add(DropDownData("Balanced growth & income"))
+        list.add(DropDownData("Not sure"))
+        return list
+    }
+
+
+    fun emergencyFund():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("0 months"))
+        list.add(DropDownData("< 1 month"))
+        list.add(DropDownData("1 – 3 months"))
+        list.add(DropDownData("3 – 6 months"))
+        list.add(DropDownData("6 – 12 months"))
+        list.add(DropDownData("12+ months"))
+        list.add(DropDownData("Not sure"))
+        return list
+    }
+
+
+    fun investmentGoal():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Build emergency fund"))
+        list.add(DropDownData("Pay off debt"))
+        list.add(DropDownData("Save for a major purchase"))
+        list.add(DropDownData("Grow wealth (capital appreciation)"))
+        list.add(DropDownData("Generate passive income"))
+        list.add(DropDownData("Retirement planning"))
+        list.add(DropDownData("Financial independence (FIRE)"))
+        list.add(DropDownData("Preserve wealth"))
+        list.add(DropDownData("Not sure"))
+        return list
+    }
+
+    fun investmentHorizon():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("< 1 year"))
+        list.add(DropDownData("1 – 3 years"))
+        list.add(DropDownData("3 – 5 years"))
+        list.add(DropDownData("5 – 10 years"))
+        list.add(DropDownData("Generate passive income"))
+        list.add(DropDownData("10+ years"))
+        list.add(DropDownData("Not sure"))
+        return list
+    }
+
+
+
+
+    fun getPoliticalValues():ArrayList<DropDownData>{
+        val list=ArrayList<DropDownData>()
+        list.add(DropDownData("Liberal"))
+        list.add(DropDownData("Moderate"))
+        list.add(DropDownData("Conservative"))
+        list.add(DropDownData("No Preference"))
+        return list
+    }
 
 
 }

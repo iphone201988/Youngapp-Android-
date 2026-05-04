@@ -92,7 +92,6 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
                 if (diff <= 0 && scrollY > oldScrollY) {
 
                     Log.d("Pagination", "Reached bottom, loading next page…")
-                    // ✅ User reached bottom
                     if (!isLoading && totalPages != null && page < totalPages!!) {
                         isLoading = true
                         loadNextPage()
@@ -199,10 +198,10 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
                     //    binding.rvComments.scrollToPosition(newList.size - 1)
                     }
                 } catch (e: Exception) {
-                    Log.e("SocketHandler", "❌ Failed to parse vaultMessage: ${e.message}", e)
+                    Log.e("SocketHandler", " Failed to parse vaultMessage: ${e.message}", e)
                 }
             } else {
-                Log.w("SocketHandler", "⚠️ vaultMessage event received with empty or invalid data")
+                Log.w("SocketHandler", " vaultMessage event received with empty or invalid data")
             }
         }
     }
@@ -241,12 +240,12 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
 
                 mSocket?.on(Socket.EVENT_CONNECT) {
                     if (!isAdded) {
-                        Log.w("VaultFragment", "⚠️ Fragment not attached, skipping joinVault")
+                        Log.w("VaultFragment", " Fragment not attached, skipping joinVault")
                         return@on
                     }
 
                     activity?.runOnUiThread {
-                        Log.i("VaultFragment", "✅ Socket connected/reconnected")
+                        Log.i("VaultFragment", " Socket connected/reconnected")
 
                         vaultId?.let {
                             receivedMessage()
@@ -259,12 +258,12 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
 
                 mSocket?.on(Socket.EVENT_DISCONNECT) {
                     if (!isAdded) {
-                        Log.w("VaultFragment", "⚠️ Fragment not attached, skipping disconnect UI update")
+                        Log.w("VaultFragment", " Fragment not attached, skipping disconnect UI update")
                         return@on
                     }
 
                     activity?.runOnUiThread {
-                        Log.w("VaultFragment", "⚠️ Socket disconnected")
+                        Log.w("VaultFragment", " Socket disconnected")
                     }
                 }
 
@@ -525,7 +524,7 @@ class VaultRoomFragment : BaseFragment<FragmentVaultRoomBinding>() {
                         if (mSocket.connected()) {
                             Log.i("SocketHandler", "📤 Emitting messageInVault: $params")
                             mSocket.emit("messageInVault", params)
-                            Log.i("SocketHandler", "✅ messageInVault event emitted")
+                            Log.i("SocketHandler", " messageInVault event emitted")
                         } else {
                             Log.e("SocketHandler", "❌ Socket not connected. Message not sent.")
                         }

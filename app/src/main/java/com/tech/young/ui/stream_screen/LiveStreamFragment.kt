@@ -106,11 +106,11 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
                     val data = args[0] as JSONObject
                     Log.d("SocketMessage", "Received data: $data")
 
-                    // ✅ Convert JSON to model using Gson
+                    //  Convert JSON to model using Gson
                     val receivedData = Gson().fromJson(data.toString(), ReceivedData::class.java)
 
                     requireActivity().runOnUiThread {
-                        // ✅ Add the new message to your RecyclerView adapter
+                        //  Add the new message to your RecyclerView adapter
                         commentAdapter.addData(receivedData)
                         binding.rvChats.scrollToPosition(commentAdapter.itemCount - 1)
                     }
@@ -282,12 +282,12 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
         val completableFuture = CompletableFuture<transprtProduceModel>()
 
         try {
-            val rtpJson = JSONObject(rtpParameters) // ✅ convert string to JSONObject
-            val appDataJson = JSONObject(appData)   // ✅ if appData is also JSON string
+            val rtpJson = JSONObject(rtpParameters) //  convert string to JSONObject
+            val appDataJson = JSONObject(appData)   //  if appData is also JSON string
 
             val messageTemp = JSONObject().apply {
                 put("kind", kind)
-                put("rtpParameters", rtpJson) // ✅ send as JSON object
+                put("rtpParameters", rtpJson) //  send as JSON object
                 put("appData", appDataJson)
             }
 
@@ -374,9 +374,9 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
                                         Log.i("WebRTC", "onConnect called with DTLS parameters")
 
                                         try {
-                                            val dtlsJson = JSONObject(dtlsParameters) // ✅ convert to JSON
+                                            val dtlsJson = JSONObject(dtlsParameters) //  convert to JSON
                                             val connectPayload = JSONObject().apply {
-                                                put("dtlsParameters", dtlsJson) // ✅ send as nested object
+                                                put("dtlsParameters", dtlsJson) //  send as nested object
                                             }
 
                                             SocketManager.mSocket?.emit("transport-connect", connectPayload)
@@ -499,7 +499,7 @@ class LiveStreamFragment : BaseFragment<FragmentLiveStreamBinding>() ,BaseCustom
     override fun onViewClick(view: View?) {
         when (view?.id) {
             R.id.tvYes -> {
-                // ✅ Emit event to notify server
+                //  Emit event to notify server
                 //    SocketManager.mSocket?.emit("admin-disconnected")
 
                 // Disconnect socket

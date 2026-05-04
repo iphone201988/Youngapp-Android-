@@ -59,7 +59,6 @@ class VaultFragment : BaseFragment<FragmentVaultBinding>(){
 
         binding.rvShare.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                // 👇 Only continue if scrolling down
                 if (dy <= 0) return
 
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
@@ -71,7 +70,7 @@ class VaultFragment : BaseFragment<FragmentVaultBinding>(){
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
                         firstVisibleItemPosition >= 0
                     ) {
-                        isLoading = true // ✅ Lock before load
+                        isLoading = true
 
                         loadMoreData()
 

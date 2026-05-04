@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.tech.young.BR
+import com.tech.young.BuildConfig
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
@@ -29,6 +30,8 @@ import com.tech.young.data.api.StockQuoteService
 import com.tech.young.data.model.ExchangeShareApiResponse
 import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.TrendingTopicApiResponse
+import com.tech.young.data.model.VariableApiResponse
+import com.tech.young.data.model.VariableApiResponseData
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentHomeBinding
 import com.tech.young.databinding.HolderTrendingTopicBinding
@@ -86,6 +89,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         getFeatureData()
         initView()
         viewModel.getTrendingTopics(Constants.GET_TRENDING_TOPICS)
+        viewModel.getVariable(Constants.VARIABLES)
 
 
         // click
@@ -104,7 +108,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private fun loadRSS() {
         lifecycleScope.launch {
             try {
-                val url = "https://feeds.content.dowjones.io/public/rss/mw_topstories"
+                val url = BuildConfig.RSS_FEED_URL
                 val items = parseFeed(url)
 
                 // Only take the top 5 items
@@ -134,9 +138,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     suspend fun fetchUrlMetadata(url: String): Map<String, String?> {
         val client = OkHttpClient.Builder()
-            .connectTimeout(15, TimeUnit.SECONDS)
-            .readTimeout(15, TimeUnit.SECONDS)
-            .writeTimeout(15, TimeUnit.SECONDS)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
             .protocols(listOf(Protocol.HTTP_1_1))
             .build()
 
@@ -183,7 +188,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
     suspend fun parseFeed(feedUrl: String): List<RSSItem> = withContext(Dispatchers.IO) {
         val url = URL(feedUrl)
-        val stream = url.openConnection().getInputStream()
+        val stream = url.openConnection().apply {
+            connectTimeout = 60000
+            readTimeout = 60000
+        }.getInputStream()
         parse(stream)
     }
 
@@ -289,7 +297,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     override fun getViewModel(): BaseViewModel {
-       return viewModel
+        return viewModel
     }
 
     private fun initView(){
@@ -349,7 +357,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 .addToBackStack(null)
                 .commit()
         }
-        setupTickerRecycler()
 
 
 
@@ -550,6 +557,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
                         }
 
+                        "getVariable" ->{
+                            val myDataModel : VariableApiResponse?= BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null) {
+                                if (myDataModel.data != null) {
+
+                                    val apiKey = myDataModel.data.Finnhub_API_Key
+                                    setupTickerRecycler(apiKey)
+                                }
+                            }
+
+                        }
+
 
                     }
                 }
@@ -595,13 +614,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
 
 
-    fun setupTickerRecycler() {
+    fun setupTickerRecycler(apiKey: String) {
         val rvTicker = binding.rvTicker
         val adapter = TickerAdapter(emptyList())
         rvTicker.adapter = adapter
         rvTicker.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
-        // ✅ Updated symbols (replaced SPX, RUT, VIX, ISIC, XAU)
+        //  Updated symbols (replaced SPX, RUT, VIX, ISIC, XAU)
         val symbols = listOf(
             "INX",  // replaces SPX (S&P 500)
             "DJI",  // replaces DJIA / Dow
@@ -613,9 +632,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             "NVDA", "MSFT", "AAPL", "GOOG", "AMZN", "META", "TSLA"
         )
 
+
+
+
         viewLifecycleOwner.lifecycleScope.launch {
             // Fetch data from API
-            val quotes = StockQuoteService.fetchQuotes(symbols)
+            val quotes = StockQuoteService.fetchQuotes(symbols,apiKey)
             Log.i("TickerSetup", "Raw quotes: $quotes")
 
             // Convert to StockItem list
@@ -793,7 +815,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         params.height = if (hasData) {
             RecyclerView.LayoutParams.WRAP_CONTENT
         } else {
-            requireContext().dpToPx(120)   // ✅ Correct
+            requireContext().dpToPx(120)   //  Correct
         }
         rv.layoutParams = params
     }

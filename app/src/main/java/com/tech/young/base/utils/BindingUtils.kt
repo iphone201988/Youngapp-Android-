@@ -20,6 +20,7 @@ import android.os.Environment
 import android.text.InputType
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowInsetsController
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -50,6 +51,7 @@ import com.tech.young.databinding.ItemLayoutRvMembersBinding
 import com.github.dhaval2404.imagepicker.util.FileUtil.getTempFile
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.gson.Gson
+import com.tech.young.base.local.SharedPrefManager
 import com.tech.young.data.ImageModel
 import com.tech.young.data.NewsItem
 import com.tech.young.data.NewsSection
@@ -290,21 +292,30 @@ object BindingUtils {
 
         textView.text = data.name
     }
-     @BindingAdapter("setMenuHeading")
+
+
+    @BindingAdapter("isHeaderMargin")
     @JvmStatic
-    fun setMenuHeading(textView: AppCompatTextView, data: SideMenuBar) {
-         if(data.heading!=null && data.headingShow){
-             textView.visibility=View.VISIBLE
-             textView.text = data.heading
-             textView.setTextColor(ContextCompat.getColor(textView.context, R.color.green))
-         }
-         else{
-             textView.visibility=View.GONE
-         }
+    fun setHeaderMargin(view: View, isHeader: Boolean) {
+        val params = view.layoutParams as ViewGroup.MarginLayoutParams
+        val margin = if (isHeader) 0
+        else view.context.resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._10sdp)
 
-
+        params.marginStart = margin
+        view.layoutParams = params
     }
 
+    @BindingAdapter("menuPadding")
+    @JvmStatic
+    fun setMenuPadding(view: View, bean: SideMenuBar) {
+        val context = view.context
+        val padding = if (bean.heading != null) {
+            context.resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._22ssp)
+        } else {
+            context.resources.getDimensionPixelSize(com.intuit.ssp.R.dimen._22ssp)
+        }
+        view.setPadding(padding, view.paddingTop, view.paddingRight, view.paddingBottom)
+    }
 
     @BindingAdapter("setTintColor")
     @JvmStatic
@@ -1562,5 +1573,80 @@ object BindingUtils {
             textView.text = ""
         }
     }
+
+
+    @BindingAdapter("setArrowDirection")
+    @JvmStatic
+    fun setArrowDirection(view: ImageView, value: Int?) {
+
+        value?.let {
+            if (it >= 0) {
+                view.setImageResource(R.drawable.iv_up_arrow)
+                view.setColorFilter(ContextCompat.getColor(view.context, R.color.green))
+            } else {
+                view.setImageResource(R.drawable.iv_down_arrow)
+                view.setColorFilter(ContextCompat.getColor(view.context, R.color.green))
+            }
+        }
+    }
+
+
+
+        object Status {
+            const val PENDING = "pending"
+            const val ACCEPTED = "accepted"
+            const val REJECTED = "rejected"
+        }
+
+        @BindingAdapter("showIfPending", "eventUserId")
+        @JvmStatic
+        fun View.showIfPending(
+            status: String?,
+            eventUserId: String?
+        ) {
+
+            visibility = if (
+                status.equals("pending", true) &&
+                userId != eventUserId
+            ) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        }
+
+        @BindingAdapter("showIfAccepted", "eventUserId")
+        @JvmStatic
+        fun View.showIfAccepted(
+            status: String?,
+            eventUserId: String?
+        ) {
+
+
+            visibility = if (
+                status.equals("accepted", true) &&
+                userId != eventUserId
+            ) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        }
+
+        @BindingAdapter("showIfRejected", "eventUserId")
+        @JvmStatic
+        fun View.showIfRejected(
+            status: String?,
+            eventUserId: String?
+        ) {
+            visibility = if (
+                status.equals("rejected", true) &&
+                userId != eventUserId
+            ) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        }
 
 }

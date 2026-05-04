@@ -89,7 +89,7 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
 
         binding.rvPeople.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                // 👇 Only continue if scrolling down
+
                 if (dy <= 0) return
 
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
@@ -101,7 +101,7 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>() {
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
                         firstVisibleItemPosition >= 0
                     ) {
-                        isLoading = true // ✅ Lock before load
+                        isLoading = true
 
                         loadMoreUsers()
                    //     selectedCategoryTitle?.let { loadNextPage(it) }

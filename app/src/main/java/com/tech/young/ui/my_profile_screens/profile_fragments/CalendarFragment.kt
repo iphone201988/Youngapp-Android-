@@ -51,6 +51,7 @@ import com.tech.young.databinding.ItemLayoutRemindersBinding
 import com.tech.young.ui.my_profile_screens.YourProfileVM
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.util.FileUtil
+import com.google.android.material.tabs.TabLayout
 import com.tech.young.base.utils.BaseCustomBottomSheet
 import com.tech.young.base.utils.showCustomToast
 import com.tech.young.data.api.SimpleApiResponse
@@ -86,7 +87,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
 
     private var topicList = ArrayList<DropDownData>()
     private var imageUri : Uri ?= null
-
+    private var viewPublicEvents: Boolean? = null
     private var streamId : String ?= null
     private var userSelectedDate: String? = null
     private var pagination: VerticalPagination? = null
@@ -120,6 +121,8 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
         getTopicsList()
 
         initOnClick()
+
+        setupTabs()
 
         initAdapter()
         // observer
@@ -167,7 +170,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
                 if (diff <= 0 && scrollY > oldScrollY) {
 
                     Log.d("Pagination", "Reached bottom, loading next page…")
-                    // ✅ User reached bottom
                     if (!isLoading && page < totalPages!!) {
                         isLoading = true
                         loadMoreData()
@@ -177,26 +179,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
         }
 
 
-//        binding.rvReminder.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                // 👇 Only continue if scrolling down
-//                if (dy <= 0) return
-//
-//                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-//                val visibleItemCount = layoutManager.childCount
-//                val totalItemCount = layoutManager.itemCount
-//                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-//
-//                if (!isLoading && page < totalPages!!) {
-//                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
-//                        firstVisibleItemPosition >= 0
-//                    ) {
-//                        isLoading = true // ✅ Lock before load
-//                        loadMoreData()
-//                    }
-//                }
-//            }
-//        })
+
 
     }
 
@@ -210,12 +193,42 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
 
     }
 
+
+    private fun setupTabs() {
+        val tabLayout = binding.tabLayout
+
+        tabLayout.addTab(tabLayout.newTab().setText("All"))
+        tabLayout.addTab(tabLayout.newTab().setText("Public"))
+        tabLayout.addTab(tabLayout.newTab().setText("Private"))
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> getEventsData()
+                    1 -> {
+                        getEventsData(true)
+                        viewPublicEvents = true
+                    }
+                    2 ->{
+                        getEventsData(false)
+                        viewPublicEvents = false
+                    }
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+    }
+
+
     private fun loadMoreData() {
         isLoading = true
         page++
         Log.i("dsadasd", "onLoadMore: $page")
         val data =  HashMap<String,Any>()
         data["page"] = page
+        viewPublicEvents?.let { data["viewPublicEvents"] = it }
 
         viewModel.getEvents(data, Constants.GET_EVENTS)
     }
@@ -243,11 +256,14 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
         topicList.add(DropDownData("Annuities"))
     }
 
-    private fun getEventsData() {
+    private fun getEventsData(viewPublicEvents : Boolean? = null) {
         page = 1
         val data =  HashMap<String,Any>()
         data["page"] = 1
         data["limit"] = 50
+        if (viewPublicEvents != null){
+            data["viewPublicEvents"] = viewPublicEvents
+        }
         viewModel.getEvents(data, Constants.GET_EVENTS)
     }
 
@@ -355,6 +371,22 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
 ////                        binding.ivDoc.visibility = View.GONE
 //
 //                    }
+                }
+
+                R.id.tvAccept ->{
+                    val data = HashMap<String, Any>()
+                    data["eventId"]  = m._id.toString()
+                    data["attendanceStatus"]  = "accepted"
+
+                    viewModel.acceptedRejected(data, Constants.ACCEPT_REJECT_EVENT)
+                }
+                R.id.tvReject ->{
+                    val data = HashMap<String, Any>()
+                    data["eventId"] = m._id.toString()
+                    data["attendanceStatus"] = "rejected"
+
+                    viewModel.acceptedRejected(data, Constants.ACCEPT_REJECT_EVENT)
+
                 }
 
             }
@@ -508,6 +540,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
             val data = HashMap<String, Any>()
             data["calenderDate"] = apiDate
             data["page"] = 1
+            viewPublicEvents?.let { data["viewPublicEvents"] = it }
             viewModel.getEvents(data, Constants.GET_EVENTS)
 
         }
@@ -545,7 +578,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
                     binding.etUploadFile.setText("")
 
 
-                    // ✅ Re-enable editing
                     binding.etTitle.isEnabled = true
                     binding.etTitle.isFocusable = true
                     binding.etTitle.isFocusableInTouchMode = true
@@ -579,7 +611,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
                             put("scheduledDate", userSelectedDate.toString().toRequestBody())
                         }
 
-                        // ✅ If deleted, send empty "file" part
                         val multipartImage = if (isImageDeleted) {
                             MultipartBody.Part.createFormData("file", "", "".toRequestBody("text/plain".toMediaTypeOrNull()))
                         } else {
@@ -729,7 +760,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
                                     totalPages = eventData.pagination?.total ?: 1
                                     eventsList = eventData.events ?: emptyList()
 
-                                    // 🔥 Update each event's isExpired flag
                                     eventData.events?.forEach { event ->
                                         event?.isExpired = isEventExpired(event?.scheduledDate)
                                     }
@@ -773,6 +803,12 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
                                     binding.consAddEvent.visibility = View.GONE
 
                                 }
+                            }
+                        }
+                        "acceptedRejected" ->{
+                            val myDataModel : SimpleApiResponse  ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                getEventsData()
                             }
                         }
 
@@ -916,7 +952,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
 
     fun handleBackPress(): Boolean {
         return if (binding.consAddEvent.visibility == View.VISIBLE) {
-            // 🔙 Switch back to calendar view
             binding.consAddEvent.visibility = View.GONE
             binding.calendarCons.visibility = View.VISIBLE
             true // means handled here — don't exit fragment

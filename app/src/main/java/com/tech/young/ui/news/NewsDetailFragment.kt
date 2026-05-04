@@ -17,6 +17,7 @@ import com.tech.young.databinding.ItemLayoutNewsDataBinding
 import com.tech.young.ui.common.CommonActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -28,6 +29,7 @@ import java.io.InputStream
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.concurrent.TimeUnit
+import kotlin.collections.map
 
 @AndroidEntryPoint
 class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
@@ -56,38 +58,41 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
                 val items = parseFeed("$url")
                 Log.e("RSS_DEBUG", "Feed parsed. Total items: ${items.size}")
 
-                val updatedItems = items.mapIndexed { index, item ->
+                val updatedItems = withContext(Dispatchers.IO) {
 
-                    Log.e("RSS_DEBUG", "-----------------------------")
-                    Log.e("RSS_DEBUG", "Item Index: $index")
-                    Log.e("RSS_DEBUG", "Item Title: ${item.title}")
-                    Log.e("RSS_DEBUG", "Item Link: ${item.link}")
+                    items.map { item ->
 
-                    var finalImageUrl: String? = null
+                        async {
 
-                    // ✅ STEP 1: Try metadata (existing logic)
-                    try {
-                        val metadata = fetchUrlMetadata(item.link ?: "")
-                        val imageUrlMeta = metadata["imageUrl"]
+                            var finalImageUrl: String? = item.imageURL
 
-                        Log.e("RSS_DEBUG", "Metadata image: $imageUrlMeta")
+                            //  Step 1: If RSS already has image → skip API
+                            if (finalImageUrl.isNullOrEmpty()) {
 
-                        finalImageUrl = resolveImageUrl("$url", imageUrlMeta)
-                    } catch (e: Exception) {
-                        Log.e("RSS_DEBUG", "Metadata fetch failed", e)
-                    }
+                                try {
+                                    val metadata = fetchUrlMetadata(item.link ?: "")
+                                    val imageUrlMeta = metadata["imageUrl"]
 
-                    // ✅ STEP 2: Fallback to RSS image
-                    if (finalImageUrl.isNullOrEmpty()) {
-                        Log.e("RSS_DEBUG", "⚠️ Using RSS/description fallback")
+                                    finalImageUrl = resolveImageUrl(url ?: "", imageUrlMeta)
 
-                        finalImageUrl = item.imageURL
-                            ?: extractImageFromDescription(item.description)
-                    }
+                                } catch (e: Exception) {
+                                    Log.e("RSS_DEBUG", "Metadata fetch failed", e)
+                                }
+                            }
 
-                    Log.e("RSS_DEBUG", "✅ Final Image URL: $finalImageUrl")
+                            //  Step 2: Fallback → description image
+                            if (finalImageUrl.isNullOrEmpty()) {
+                                finalImageUrl = extractImageFromDescription(item.description)
+                            }
 
-                    item.copy(imageURL = finalImageUrl)
+                            //  Step 3: Final fallback → placeholder
+                            if (finalImageUrl.isNullOrEmpty()) {
+                                finalImageUrl = "https://via.placeholder.com/300x200?text=No+Image"
+                            }
+
+                            item.copy(imageURL = finalImageUrl)
+                        }
+                    }.map { it.await() }
                 }
 
                 rssItems.clear()
@@ -97,7 +102,7 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
                 newsAdapter.notifyDataSetChanged()
 
             } catch (e: Exception) {
-                Log.e("RSS_DEBUG", "❌ Error parsing feed", e)
+                Log.e("RSS_DEBUG", "Error parsing feed", e)
             }
 
             binding.progressBar.visibility = View.GONE
@@ -150,7 +155,10 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
     }
 
     suspend fun parseFeed(feedUrl: String): List<RSSItem> = withContext(Dispatchers.IO) {
-        val stream = URL(feedUrl).openConnection().getInputStream()
+        val stream = URL(feedUrl).openConnection().apply {
+            connectTimeout = 60000
+            readTimeout = 60000
+        }.getInputStream()
         parse(stream)
     }
 
@@ -174,7 +182,7 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
                         currentItem = RSSItem(null, null, null, null)
                     }
 
-                    // ✅ media:content
+                    //media:content
                     if (tagName == "media:content") {
                         val imageUrl = parser.getAttributeValue(null, "url")
                         if (!imageUrl.isNullOrEmpty()) {
@@ -183,7 +191,7 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
                         }
                     }
 
-                    // ✅ media:thumbnail
+                    // media:thumbnail
                     if (tagName == "media:thumbnail") {
                         val imageUrl = parser.getAttributeValue(null, "url")
                         if (!imageUrl.isNullOrEmpty()) {
@@ -192,7 +200,7 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
                         }
                     }
 
-                    // ✅ enclosure
+                    // enclosure
                     if (tagName == "enclosure") {
                         val imageUrl = parser.getAttributeValue(null, "url")
                         val type = parser.getAttributeValue(null, "type")
@@ -248,9 +256,12 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
     }
 
     suspend fun fetchUrlMetadata(url: String): Map<String, String?> {
+
         val client = OkHttpClient.Builder()
-            .connectTimeout(15, TimeUnit.SECONDS)
-            .readTimeout(15, TimeUnit.SECONDS)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
             .protocols(listOf(Protocol.HTTP_1_1))
             .build()
 
@@ -262,10 +273,14 @@ class NewsDetailFragment : BaseFragment<FragmentNewsDetailBinding>() {
         return withContext(Dispatchers.IO) {
             try {
                 val response = client.newCall(request).execute()
+
+                if (!response.isSuccessful) return@withContext emptyMap()
+
                 val html = response.body?.string() ?: return@withContext emptyMap()
                 val doc = Jsoup.parse(html)
 
                 var imageUrl = doc.select("meta[property=og:image]").attr("content")
+
                 if (imageUrl.isNullOrEmpty()) {
                     imageUrl = doc.select("img[src]").firstOrNull()?.attr("src")
                 }

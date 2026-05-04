@@ -13,7 +13,9 @@
             name="bean"
             type="com.tech.young.data.model.GetProfileApiResponse.GetProfileApiResponseData" />
 
-
+        <variable
+            name="check"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -67,7 +69,7 @@
             android:layout_height="0dp"
             android:fitsSystemWindows="true"
             android:fillViewport="true"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/clTopBar"
             app:layout_constraintHorizontal_bias="0.0"
@@ -546,6 +548,9 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvEmployeeStatus" />
 
 
+
+
+
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
@@ -555,6 +560,86 @@
                     app:layout_constraintEnd_toEndOf="@+id/etEmploymentStatus"
                     app:layout_constraintTop_toTopOf="@+id/etEmploymentStatus" />
 
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvPoliticalValue"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Political Value"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etEmploymentStatus" />
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/etPoliticalValue"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Liberal"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvPoliticalValue" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etPoliticalValue"
+                    app:layout_constraintEnd_toEndOf="@+id/etPoliticalValue"
+                    app:layout_constraintTop_toTopOf="@+id/etPoliticalValue" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvImportant"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Is it important that companies that you invest in support your values?"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etPoliticalValue" />
+
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivCheck"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:scaleType="centerCrop"
+                    android:tint="@color/colorPrimary"
+                    android:src="@{check ? @drawable/ic_check_selected :@drawable/ic_check_unselected}"
+                    app:layout_constraintTop_toBottomOf="@+id/tvImportant"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tvYesItSupport"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_14ssp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:textColor="@color/text_gray"
+                    android:text="Yes, it support my values."
+                    android:onClick="@{v->vm.onClick(v)}"
+                    app:layout_constraintTop_toTopOf="@id/ivCheck"
+                    app:layout_constraintStart_toEndOf="@id/ivCheck"
+                    app:layout_constraintBottom_toBottomOf="@id/ivCheck"/>
+
                 <ImageView
                     android:id="@+id/ivInfo2"
                     android:layout_width="@dimen/_15sdp"
@@ -562,7 +647,7 @@
                     android:layout_marginTop="@dimen/_12sdp"
                     android:src="@drawable/ic_info"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/etEmploymentStatus"
+                    app:layout_constraintTop_toBottomOf="@id/ivCheck"
                     app:tint="@color/gray" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -592,6 +677,12 @@
                     app:layout_constraintTop_toBottomOf="@id/tvInfo2"
                     app:layout_constraintBottom_toBottomOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
 
         </androidx.core.widget.NestedScrollView>
         <!-- for financial Profile -->
@@ -1027,6 +1118,131 @@
                     app:layout_constraintBottom_toBottomOf="@+id/etEducationFinance"
                     app:layout_constraintEnd_toEndOf="@+id/etEducationFinance"
                     app:layout_constraintTop_toTopOf="@+id/etEducationFinance" />
+
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvResidenceStatusFinance"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Residence Status"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etEducationFinance" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/etResidenceStatusFinance"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Renter"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvResidenceStatusFinance" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etResidenceStatusFinance"
+                    app:layout_constraintEnd_toEndOf="@+id/etResidenceStatusFinance"
+                    app:layout_constraintTop_toTopOf="@+id/etResidenceStatusFinance" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvPoliticalValueFinance"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Political Value"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etResidenceStatusFinance" />
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/etPoliticalValueFinance"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Liberal"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvPoliticalValueFinance" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etPoliticalValueFinance"
+                    app:layout_constraintEnd_toEndOf="@+id/etPoliticalValueFinance"
+                    app:layout_constraintTop_toTopOf="@+id/etPoliticalValueFinance" />
+
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvImportantFianance"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Is it important that companies that you invest in support your values?"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etPoliticalValueFinance" />
+
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivCheckFinance"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:scaleType="centerCrop"
+                    android:tint="@color/colorPrimary"
+                    android:src="@{check ? @drawable/ic_check_selected :@drawable/ic_check_unselected}"
+                    app:layout_constraintTop_toBottomOf="@+id/tvImportantFianance"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tvYesItSupportStartUp"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_14ssp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:textColor="@color/text_gray"
+                    android:text="Yes, it support my values."
+                    android:onClick="@{v->vm.onClick(v)}"
+                    app:layout_constraintTop_toTopOf="@id/ivCheckFinance"
+                    app:layout_constraintStart_toEndOf="@id/ivCheckFinance"
+                    app:layout_constraintBottom_toBottomOf="@id/ivCheckFinance"/>
+
+
                 <ImageView
                     android:id="@+id/ivInfoFinance2"
                     android:layout_width="@dimen/_15sdp"
@@ -1034,7 +1250,7 @@
                     android:layout_marginTop="@dimen/_12sdp"
                     android:src="@drawable/ic_info"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/etEducationFinance"
+                    app:layout_constraintTop_toBottomOf="@id/tvYesItSupportStartUp"
                     app:tint="@color/gray" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -1510,6 +1726,8 @@
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/etIndustryStartup" />
+
+
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etLaunchDateStartup"
                     style="@style/TextView_400_Regular"
@@ -1525,6 +1743,132 @@
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"
                     app:layout_constraintTop_toBottomOf="@+id/tvLaunchDateStartup" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvResidenceStatusStartup"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Residence Status"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etLaunchDateStartup" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/etResidenceStatusStartup"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Renter"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvResidenceStatusStartup" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etResidenceStatusStartup"
+                    app:layout_constraintEnd_toEndOf="@+id/etResidenceStatusStartup"
+                    app:layout_constraintTop_toTopOf="@+id/etResidenceStatusStartup" />
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvPoliticalValueStartUp"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Political Value"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etResidenceStatusStartup" />
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/etPoliticalValueStartUp"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Liberal"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvPoliticalValueStartUp" />
+
+
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvImportantStartUp"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Is it important that companies that you invest in support your values?"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etPoliticalValueStartUp" />
+
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivCheckStartup"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:scaleType="centerCrop"
+                    android:tint="@color/colorPrimary"
+                    android:src="@{check ? @drawable/ic_check_selected :@drawable/ic_check_unselected}"
+                    app:layout_constraintTop_toBottomOf="@+id/tvImportantStartUp"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tvYesItSupportFinance"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_14ssp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:textColor="@color/text_gray"
+                    android:text="Yes, it support my values."
+                    android:onClick="@{v->vm.onClick(v)}"
+                    app:layout_constraintTop_toTopOf="@id/ivCheckStartup"
+                    app:layout_constraintStart_toEndOf="@id/ivCheckStartup"
+                    app:layout_constraintBottom_toBottomOf="@id/ivCheckStartup"/>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etPoliticalValueStartUp"
+                    app:layout_constraintEnd_toEndOf="@+id/etPoliticalValueStartUp"
+                    app:layout_constraintTop_toTopOf="@+id/etPoliticalValueStartUp" />
+
+
+
+
                 <ImageView
                     android:id="@+id/ivInfoStartup2"
                     android:layout_width="@dimen/_15sdp"
@@ -1532,7 +1876,7 @@
                     android:layout_marginTop="@dimen/_12sdp"
                     android:src="@drawable/ic_info"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/etLaunchDateStartup"
+                    app:layout_constraintTop_toBottomOf="@id/tvYesItSupportFinance"
                     app:tint="@color/gray" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -1986,6 +2330,131 @@
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"
                     app:layout_constraintTop_toBottomOf="@+id/tvYearFoundedInvestor" />
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvResidenceStatusInvestor"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Residence Status"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etYearFoundedInvestor" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/etResidenceStatusInvestor"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Renter"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvResidenceStatusInvestor" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etResidenceStatusInvestor"
+                    app:layout_constraintEnd_toEndOf="@+id/etResidenceStatusInvestor"
+                    app:layout_constraintTop_toTopOf="@+id/etResidenceStatusInvestor" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvPoliticalValueInvestor"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Political Value"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etResidenceStatusInvestor" />
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/etPoliticalValueInvestor"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Liberal"
+                    android:inputType="textCapSentences"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvPoliticalValueInvestor" />
+
+
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etPoliticalValueInvestor"
+                    app:layout_constraintEnd_toEndOf="@+id/etPoliticalValueInvestor"
+                    app:layout_constraintTop_toTopOf="@+id/etPoliticalValueInvestor" />
+
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvImportantInvestor"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Is it important that companies that you invest in support your values?"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etPoliticalValueInvestor" />
+
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivCheckInvestor"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:scaleType="centerCrop"
+                    android:tint="@color/colorPrimary"
+                    android:src="@{check ? @drawable/ic_check_selected :@drawable/ic_check_unselected}"
+                    app:layout_constraintTop_toBottomOf="@+id/tvImportantInvestor"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tvYesItSupportInvestor"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_14ssp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:textColor="@color/text_gray"
+                    android:text="Yes, it support my values."
+                    android:onClick="@{v->vm.onClick(v)}"
+                    app:layout_constraintTop_toTopOf="@id/ivCheckInvestor"
+                    app:layout_constraintStart_toEndOf="@id/ivCheckInvestor"
+                    app:layout_constraintBottom_toBottomOf="@id/ivCheckInvestor"/>
+
+
                 <ImageView
                     android:id="@+id/ivInfoInvestor2"
                     android:layout_width="@dimen/_15sdp"
@@ -1993,7 +2462,7 @@
                     android:layout_marginTop="@dimen/_12sdp"
                     android:src="@drawable/ic_info"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/etYearFoundedInvestor"
+                    app:layout_constraintTop_toBottomOf="@id/tvYesItSupportInvestor"
                     app:tint="@color/gray" />
 
                 <androidx.appcompat.widget.AppCompatTextView

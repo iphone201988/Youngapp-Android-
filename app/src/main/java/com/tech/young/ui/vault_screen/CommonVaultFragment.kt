@@ -4,6 +4,8 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -21,6 +23,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -46,10 +49,12 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.tech.young.base.permission.PermissionHandler
 import com.tech.young.base.permission.Permissions
 import com.tech.young.data.model.GetAdsAPiResponse
+import com.tech.young.data.model.MenuItem
 import com.tech.young.databinding.BottomSheetCameraGalleryBinding
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.my_profile_screens.common_ui.EditProfileDetailFragment
+import com.tech.young.ui.share_screen.ExpandableMenuAdapter
 import com.tech.young.ui.vault_screen.people_screen.PeopleFragment
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -63,7 +68,8 @@ import java.io.File
 class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCustomBottomSheet.Listener{
     private val viewModel: VaultVM by viewModels()
 
-
+    private lateinit var adapter: ExpandableMenuAdapter
+    private lateinit var menuList: MutableList<MenuItem>
     // adapter
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private lateinit var topicBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
@@ -80,7 +86,7 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
 
     private var visibilityMode : String = "public"
 
-
+    private var selectedTopicsJson: String = ""
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
     private var selectedImagePart: MultipartBody.Part? = null
 
@@ -88,6 +94,22 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
     private var photoFile: File? = null
     private var photoURI: Uri? = null
     private var imageUri : Uri? = null
+
+    private val roleToHeaderMap = mapOf(
+        "general_member" to "Member",
+        "financial_advisor" to "Financial Advisor",
+        "startup" to "Startups",
+        "small_business" to "Small Businesses",
+        "investor" to "VC / Investors",
+        "life_insurance" to "Insurance",
+        "broker" to "Brokers / Dealers",
+        "investment_managers" to "Investment Managers",
+        "financial_firm" to "Financial Firm"
+    )
+
+    private fun getHeaderKey(headerTitle: String): String {
+        return roleToHeaderMap.entries.find { it.value == headerTitle }?.key ?: headerTitle
+    }
 
 
     companion object{
@@ -127,6 +149,7 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
 
         getCategoryList()
         initAdapter()
+        setupRecycler()
 
         binding.setDefault.setOnCheckedChangeListener { _, isChecked ->
              visibilityMode = if (isChecked) "public" else "private"
@@ -339,6 +362,11 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
                     cameraGalleryBottomSheet.show()
                 }
 
+                R.id.ivUploadDeck ->{
+                    pickPdfLauncher.launch(arrayOf("application/pdf"))
+
+                }
+
                 R.id.tvCreate -> {
 
                     if (isEmptyField()){
@@ -348,7 +376,7 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
 
                         val data = HashMap<String, RequestBody>()
                         data["title"] = binding.etTitle.text.toString().trim().toRequestBody()
-                        data["topic"] = binding.etTopic.text.toString().trim().toRequestBody()
+                        data["topic"] = selectedTopicsJson.toRequestBody()
                         data["description"] = binding.etDescription.text.toString().trim().toRequestBody()
                         data["access"] = visibilityMode.toRequestBody()
                         data["members"] = selectedUserId.toRequestBody()
@@ -381,7 +409,7 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
                 }
 
                 R.id.etTopic -> {
-                    topicBottomSheet.show()
+
                 }
                 R.id.etCategory ->{
                     categoryBottomSheet.show()
@@ -390,6 +418,42 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
         }
 
     }
+
+
+    private val pickPdfLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+            uri?.let {
+                showPdfThumbnail(it)
+            }
+        }
+
+
+    private fun showPdfThumbnail(uri: Uri) {
+        try {
+            val fileDescriptor = requireContext().contentResolver.openFileDescriptor(uri, "r")
+            val pdfRenderer = PdfRenderer(fileDescriptor!!)
+
+            val page = pdfRenderer.openPage(0)
+
+            val bitmap = Bitmap.createBitmap(
+                page.width,
+                page.height,
+                Bitmap.Config.ARGB_8888
+            )
+
+            page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+
+            binding.ivUploadDeck.setImageBitmap(bitmap)
+
+            page.close()
+            pdfRenderer.close()
+            fileDescriptor.close()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
 
 //    private val startForImageResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
 //        try {
@@ -450,6 +514,56 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
 
     }
 
+
+
+    private fun setupRecycler() {
+
+        menuList = getMenuList()
+
+//        adapter = ExpandableMenuAdapter(menuList) { item ->
+//            // 👉 Handle child click
+//       //     binding.etTopic.setText(item.title)
+//        }
+
+
+        adapter = ExpandableMenuAdapter(menuList) { selectedItems  ->
+            // 👉 Group topics by header
+            val groupedTopics = mutableMapOf<String, MutableList<String>>()
+            selectedItems.forEach { child ->
+                val parentHeader = menuList.find { header ->
+                    header.type == MenuItem.HEADER && header.children.any { it.title == child.title }
+                }?.title ?: "Other"
+
+                val roleKey = getHeaderKey(parentHeader)
+
+                if (!groupedTopics.containsKey(roleKey)) {
+                    groupedTopics[roleKey] = mutableListOf()
+                }
+                groupedTopics[roleKey]?.add(child.title)
+            }
+
+            if (groupedTopics.isEmpty()) {
+                selectedTopicsJson = ""
+                binding.etTopic.setText("")
+            } else {
+                // Build JSON string manually
+                val jsonEntries = groupedTopics.map { (header, children) ->
+                    "\"$header\": [${children.joinToString(", ") { "\"$it\"" }}]"
+                }
+                selectedTopicsJson = "{ ${jsonEntries.joinToString(", ")} }"
+
+                val displayValues = selectedItems.joinToString(", ") { it.title }
+                binding.etTopic.setText(displayValues)
+            }
+        }
+        
+        
+        
+        binding.rvTopics.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvTopics.adapter = adapter
+    }
+
+
     /** handle adapter **/
     private fun initAdapter() {
         adsAdapter = SimpleRecyclerViewAdapter(R.layout.ads_item_view, BR.bean) { v, m, pos ->
@@ -464,6 +578,14 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
             when(v.id){
                 R.id.consMain , R.id.title->{
                     binding.etTopic.setText(m.title)
+                    
+                    val parentHeader = getMenuList().find { header ->
+                        header.children.any { it.title.equals(m.title, ignoreCase = true) }
+                    }?.title ?: "Other"
+
+                    val roleKey = getHeaderKey(parentHeader)
+                    selectedTopicsJson = "{ \"$roleKey\": [\"${m.title}\"] }"
+
                     topicBottomSheet.dismiss()
                 }
             }
@@ -570,4 +692,155 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
 
         return true
     }
+
+
+
+    private fun getMenuList(): MutableList<MenuItem> {
+        val role = sharedPrefManager.getLoginData()?.role
+        val allMenus = mutableListOf(
+
+            MenuItem("Member", MenuItem.HEADER, children = listOf(
+                MenuItem("Stocks", MenuItem.CHILD, true),
+                MenuItem("Crypto", MenuItem.CHILD, true),
+                MenuItem("Insurance", MenuItem.CHILD, true),
+                MenuItem("Savings", MenuItem.CHILD, true),
+                MenuItem("Investment Management", MenuItem.CHILD, true),
+                MenuItem("Child Education", MenuItem.CHILD, true),
+                MenuItem("Student Loan Management", MenuItem.CHILD, true),
+                MenuItem("Debt Management", MenuItem.CHILD, true),
+                MenuItem("Tax Planning", MenuItem.CHILD, true),
+                MenuItem("Financial Planning", MenuItem.CHILD, true),
+                MenuItem("Wealth Education", MenuItem.CHILD, true),
+                MenuItem("Estate Planning", MenuItem.CHILD, true),
+                MenuItem("Investor", MenuItem.CHILD, true),
+                MenuItem("Venture Capitalist", MenuItem.CHILD, true),
+                MenuItem("Small Business", MenuItem.CHILD, true),
+                MenuItem("Grants", MenuItem.CHILD, true),
+                MenuItem("Loans", MenuItem.CHILD, true),
+                MenuItem("Insurance", MenuItem.CHILD, true),
+                MenuItem("Annuities", MenuItem.CHILD, true),
+
+                )),
+
+            MenuItem("Financial Advisor", MenuItem.HEADER, children = listOf(
+                MenuItem("Retirement Planning", MenuItem.CHILD, true),
+                MenuItem("Estate & Legacy", MenuItem.CHILD, true),
+                MenuItem("Tax Strategy", MenuItem.CHILD, true),
+                MenuItem("Education Funding", MenuItem.CHILD, true),
+                MenuItem("Financial Literacy", MenuItem.CHILD, true),
+                MenuItem("Risk Management", MenuItem.CHILD, true),
+                MenuItem("Behavioral Finance", MenuItem.CHILD, true),
+                MenuItem("Holistic Wealth", MenuItem.CHILD, true),
+                MenuItem("Charitable Giving", MenuItem.CHILD, true),
+                MenuItem("Client Updates", MenuItem.CHILD, true)
+            )),
+
+            MenuItem("Startups", MenuItem.HEADER, children = listOf(
+                MenuItem("Fundraising", MenuItem.CHILD, true),
+                MenuItem("Product Launch", MenuItem.CHILD, true),
+                MenuItem("Company Culture", MenuItem.CHILD, true),
+                MenuItem("Growth & Scaling", MenuItem.CHILD, true),
+                MenuItem("Founder Journey", MenuItem.CHILD, true),
+                MenuItem("Industry Disruptor", MenuItem.CHILD, true),
+                MenuItem("Operations", MenuItem.CHILD, true),
+                MenuItem("Customer Stories", MenuItem.CHILD, true),
+                MenuItem("Pitch Deck", MenuItem.CHILD, true),
+                MenuItem("Tech Stack", MenuItem.CHILD, true)
+            )),
+
+            MenuItem("Small Businesses", MenuItem.HEADER, children = listOf(
+                MenuItem("Local Community", MenuItem.CHILD, true),
+                MenuItem("Daily Operations", MenuItem.CHILD, true),
+                MenuItem("Hiring & Talent", MenuItem.CHILD, true),
+                MenuItem("Customer Service", MenuItem.CHILD, true),
+                MenuItem("Business Finance", MenuItem.CHILD, true),
+                MenuItem("Marketing & SEO", MenuItem.CHILD, true),
+                MenuItem("Product/ Service Demo", MenuItem.CHILD, true),
+                MenuItem("Sustainability", MenuItem.CHILD, true),
+                MenuItem("Work-Life Balance", MenuItem.CHILD, true),
+                MenuItem("Tools of the Trade", MenuItem.CHILD, true)
+            )),
+
+            MenuItem("VC / Investors", MenuItem.HEADER, children = listOf(
+                MenuItem("Deal Flow", MenuItem.CHILD, true),
+                MenuItem("Market Trends", MenuItem.CHILD, true),
+                MenuItem("Portfolio Update", MenuItem.CHILD, true),
+                MenuItem("Investment Strategy", MenuItem.CHILD, true),
+                MenuItem("Due Diligence", MenuItem.CHILD, true),
+                MenuItem("Exit Events", MenuItem.CHILD, true),
+                MenuItem("Limited Partners (LP)", MenuItem.CHILD, true),
+                MenuItem("Valuation", MenuItem.CHILD, true),
+                MenuItem("Economic Outlook", MenuItem.CHILD, true),
+                MenuItem("Mentorship", MenuItem.CHILD, true)
+            )),
+
+            MenuItem("Insurance", MenuItem.HEADER, children = listOf(
+                MenuItem("Estate Planning", MenuItem.CHILD, true),
+                MenuItem("Policy Types", MenuItem.CHILD, true),
+                MenuItem("Retirement Income", MenuItem.CHILD, true),
+                MenuItem("Claims Stories", MenuItem.CHILD, true),
+                MenuItem("Wellness & Longevity", MenuItem.CHILD, true),
+                MenuItem("Underwriting", MenuItem.CHILD, true),
+                MenuItem("Financial Literacy", MenuItem.CHILD, true),
+                MenuItem("Family Security", MenuItem.CHILD, true),
+                MenuItem("Tax Advantages", MenuItem.CHILD, true),
+                MenuItem("Agent Spotlight", MenuItem.CHILD, true)
+            )),
+
+            MenuItem("Brokers / Dealers", MenuItem.HEADER, children = listOf(
+                MenuItem("Compliance & Regs", MenuItem.CHILD, true),
+                MenuItem("Market Liquidity", MenuItem.CHILD, true),
+                MenuItem("Trading Platform", MenuItem.CHILD, true),
+                MenuItem("Asset Classes", MenuItem.CHILD, true),
+                MenuItem("Wealth Management", MenuItem.CHILD, true),
+                MenuItem("Risk Management", MenuItem.CHILD, true),
+                MenuItem("Finfluencer Ethics", MenuItem.CHILD, true),
+                MenuItem("Clearing & Settlement", MenuItem.CHILD, true),
+                MenuItem("Fee Structures", MenuItem.CHILD, true),
+                MenuItem("Client Education", MenuItem.CHILD, true)
+            )),
+
+            MenuItem("Investment Managers", MenuItem.HEADER, children = listOf(
+                MenuItem("Market Outlook", MenuItem.CHILD, true),
+                MenuItem("Asset Allocation", MenuItem.CHILD, true),
+                MenuItem("Fixed Income", MenuItem.CHILD, true),
+                MenuItem("Sustainable Finance", MenuItem.CHILD, true),
+                MenuItem("Alternative Assets", MenuItem.CHILD, true),
+                MenuItem("Portfolio Rebalancing", MenuItem.CHILD, true),
+                MenuItem("Sector Analysis", MenuItem.CHILD, true),
+                MenuItem("Dividend Growth", MenuItem.CHILD, true),
+                MenuItem("Emerging Markets", MenuItem.CHILD, true),
+                MenuItem("Economic Indicators", MenuItem.CHILD, true)
+            )),
+
+            MenuItem("Financial Firm", MenuItem.HEADER, children = listOf(
+                MenuItem("Retirement Planning", MenuItem.CHILD, true),
+                MenuItem("Estate & Legacy", MenuItem.CHILD, true),
+                MenuItem("Tax Strategy", MenuItem.CHILD, true),
+                MenuItem("Education Funding", MenuItem.CHILD, true),
+                MenuItem("Financial Literacy", MenuItem.CHILD, true),
+                MenuItem("Risk Management", MenuItem.CHILD, true),
+                MenuItem("Behavioral Finance", MenuItem.CHILD, true),
+                MenuItem("Holistic Wealth", MenuItem.CHILD, true),
+                MenuItem("Charitable Giving", MenuItem.CHILD, true),
+                MenuItem("Client Updates", MenuItem.CHILD, true)
+            ))
+        )
+
+        val targetHeader = roleToHeaderMap[role]
+
+        val filteredList = if (targetHeader != null) {
+            allMenus.filter { it.title == targetHeader }.toMutableList()
+        } else {
+            allMenus.toMutableList()
+        }
+
+        // Always add Other
+        filteredList.add(MenuItem("Other", MenuItem.HEADER, children = listOf(
+            MenuItem("Other", MenuItem.CHILD, true)
+        )))
+
+        return filteredList
+    }
+
 }

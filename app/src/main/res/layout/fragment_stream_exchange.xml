@@ -89,18 +89,24 @@
             app:layout_constraintTop_toBottomOf="@id/tvSort"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvStream"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/_10sdp"
-            tools:listitem="@layout/item_layout_stream_exchange" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvStream"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_layout_stream_exchange" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
         <ImageView

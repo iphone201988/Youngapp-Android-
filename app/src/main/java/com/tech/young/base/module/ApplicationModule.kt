@@ -3,6 +3,7 @@ package com.tech.young.base.module
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.tech.young.BuildConfig
 import com.tech.young.base.utils.event.NetworkErrorHandler
 import com.tech.young.data.api.ApiHelper
 import com.tech.young.data.api.ApiHelperImpl
@@ -13,6 +14,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.Protocol
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -25,7 +27,6 @@ class ApplicationModule {
 
     @Provides
     fun provideBaseUrl() = Constants.BASE_URL
-//    fun provideBaseUrl() = BuildConfig.BASE_URL
 
     @Singleton
     @Provides
@@ -37,34 +38,21 @@ class ApplicationModule {
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        if (BuildConfig.DEBUG) {
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        } else {
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE)
+        }
+
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
-            .connectTimeout(5, TimeUnit.MINUTES)
-            .writeTimeout(5, TimeUnit.MINUTES)
-            .readTimeout(5, TimeUnit.MINUTES)
-        .build()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
+            .protocols(listOf(Protocol.HTTP_1_1)) // Force HTTP/1.1 to fix StreamResetException
+            .build()
     }
-
-//    @Provides
-//    @Singleton
-//    fun provideOkHttpClient() = if (BuildConfig.DEBUG) {
-//        val loggingInterceptor = HttpLoggingInterceptor()
-//        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-//        OkHttpClient.Builder()
-//            .addInterceptor(loggingInterceptor)
-//            .connectTimeout(5, TimeUnit.MINUTES)
-//            .writeTimeout(5, TimeUnit.MINUTES) // write timeout
-//            .readTimeout(5, TimeUnit.MINUTES) // read timeout
-//            /*.addInterceptor(BasicAuthInterceptor(Constants.USERNAME, Constants.PASSWORD))*/
-//            .build()
-//    } else OkHttpClient
-//        .Builder()
-//        .connectTimeout(5, TimeUnit.MINUTES)
-//        .writeTimeout(5, TimeUnit.MINUTES) // write timeout
-//        .readTimeout(5, TimeUnit.MINUTES) // read timeout
-//        .build()
-
 
     @Provides
     @Singleton

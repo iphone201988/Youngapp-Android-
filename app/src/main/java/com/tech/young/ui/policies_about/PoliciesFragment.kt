@@ -1,6 +1,9 @@
 package com.tech.young.ui.policies_about
 
+import android.graphics.Bitmap
 import android.view.View
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.tech.young.BR
@@ -27,7 +30,7 @@ class PoliciesFragment : BaseFragment<FragmentPoliciesBinding>() {
     private val viewModel: AboutPolicesVM by viewModels()
     // adapter
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
-    private lateinit var policiesAdapter: SimpleRecyclerViewAdapter<String, PolicyItemViewBinding>
+//    private lateinit var policiesAdapter: SimpleRecyclerViewAdapter<String, PolicyItemViewBinding>
     override fun onCreateView(view: View) {
        // view
         initView()
@@ -38,6 +41,28 @@ class PoliciesFragment : BaseFragment<FragmentPoliciesBinding>() {
         initOnClick()
         // observer
         initObserver()
+
+
+    binding.webview.apply {
+        settings.javaScriptEnabled = true
+        settings.domStorageEnabled = true
+
+        webViewClient = object : WebViewClient() {
+
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                super.onPageStarted(view, url, favicon)
+                binding.progressBar.visibility = View.VISIBLE
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+                binding.progressBar.visibility = View.GONE
+            }
+        }
+
+        loadUrl("https://theboom.app/privacy-policy")
+    }
+
     }
 
     override fun getLayoutResource(): Int {
@@ -142,14 +167,14 @@ class PoliciesFragment : BaseFragment<FragmentPoliciesBinding>() {
             }
         }
         binding.rvAds.adapter=adsAdapter
-
-        policiesAdapter = SimpleRecyclerViewAdapter(R.layout.policy_item_view, BR.bean) { v, m, pos ->
-            when (v.id) {
-
-            }
-        }
-        policiesAdapter.list = getList
-        binding.rvPolicies.adapter=policiesAdapter
+//
+//        policiesAdapter = SimpleRecyclerViewAdapter(R.layout.policy_item_view, BR.bean) { v, m, pos ->
+//            when (v.id) {
+//
+//            }
+//        }
+//        policiesAdapter.list = getList
+//        binding.rvPolicies.adapter=policiesAdapter
     }
 
     private var getList = listOf(

@@ -105,7 +105,7 @@ class ExchangeShareDetailFragment : BaseFragment<FragmentExchangeShareDetailBind
                 if (diff <= 0 && scrollY > oldScrollY) {
 
                     Log.d("Pagination", "Reached bottom, loading next page…")
-                    // ✅ User reached bottom
+                    //  User reached bottom
                     if (!isLoading && totalPages != null && page < totalPages!!) {
                         isLoading = true
                         loadNextPage()

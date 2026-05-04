@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="bean"
+            type="com.tech.young.data.model.BusinessPlanApiResponseData" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_popup"
+        android:backgroundTint="@color/light_gray"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:padding="@dimen/_10sdp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvRecommendation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView_600_SemiBold"
+            android:text="Recommendation"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etRecommendation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{bean.recommendedSector}"
+            android:textSize="@dimen/_10ssp"
+            android:textColor="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toBottomOf="@id/tvRecommendation"
+            app:layout_constraintStart_toStartOf="@id/tvRecommendation"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView_600_SemiBold"
+            android:text="Title"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/etRecommendation"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{bean.title}"
+            android:textSize="@dimen/_10ssp"
+            android:textColor="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:layout_constraintStart_toStartOf="@id/tvTitle"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView_600_SemiBold"
+            android:text="Description"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/etTitle"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{bean.description}"
+            android:textSize="@dimen/_10ssp"
+            android:textColor="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription"
+            app:layout_constraintStart_toStartOf="@id/tvDescription"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvInvestmentType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView_600_SemiBold"
+            android:text="Investment Type"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/etDescription"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etInvestmentType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{bean.investmentType}"
+            android:textSize="@dimen/_10ssp"
+            android:textColor="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toBottomOf="@id/tvInvestmentType"
+            app:layout_constraintStart_toStartOf="@id/tvInvestmentType"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvRiskLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView_600_SemiBold"
+            android:text="Risk Level"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/etInvestmentType"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etRiskLevel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{bean.riskLevel}"
+            android:textSize="@dimen/_10ssp"
+            android:textColor="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toBottomOf="@id/tvRiskLevel"
+            app:layout_constraintStart_toStartOf="@id/tvRiskLevel"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvGrowth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView_600_SemiBold"
+            android:text="Growth Potential"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/etRiskLevel"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etGrowth"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{bean.growthPotential}"
+            android:textSize="@dimen/_10ssp"
+            android:textColor="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toBottomOf="@id/tvGrowth"
+            app:layout_constraintStart_toStartOf="@id/tvGrowth"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTimeHorizon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextView_600_SemiBold"
+            android:text="Time Horizon"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/etGrowth"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/etTimeHorizon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{bean.timeHorizon}"
+            android:textSize="@dimen/_10ssp"
+            android:textColor="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toBottomOf="@id/tvTimeHorizon"
+            app:layout_constraintStart_toStartOf="@id/tvTimeHorizon"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

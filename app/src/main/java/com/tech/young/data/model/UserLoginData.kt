@@ -452,7 +452,9 @@ data class GetEventsApiResponse(
             var streamId: String?,
             var userId: String?,
             var public: Boolean?,
-            var isExpired: Boolean?
+            var isExpired: Boolean?,
+
+            var attendanceStatus : String?
         )
 
         data class Pagination(
@@ -2327,3 +2329,361 @@ data class PaymentHistoryApiResponse(
         )
     }
 }
+
+// get performance api response
+
+data class GetPerformanceApiResponse(
+    val `data`: PerformanceData,
+    val message: String,
+    val success: Boolean
+)
+
+data class PerformanceData(
+    val currentStatus: CurrentStatus,
+    val investments: List<Investment>,
+    val performance: Performance,
+    val similarProfile: List<SimilarProfile>
+)
+
+data class CurrentStatus(
+    val riskLevel: Int,
+    val riskTolerance: String,
+    val salaryRange: String
+)
+
+data class Investment(
+    val _id: String,
+    val currentValue: Int,
+    val initialValue: Int,
+    val name: String,
+    val percentageGrowth: Double,
+    val status: String,
+    val symbol: String,
+    val lastQuarterPerformance : Int?
+)
+
+data class Performance(
+    val income: Int,
+    val portfolioGrowth: Double,
+    val riskLevel: Int,
+    val topics: Int
+)
+
+data class SimilarProfile(
+    val __v: Int,
+    val _id: String,
+    val additionalPhotos: List<String>,
+    val age: String,
+    val children: String,
+    val countryCode: String,
+    val createdAt: String,
+    val deviceToken: String,
+    val deviceType: Int,
+    val email: String,
+    val financialExperience: String,
+    val firstName: String,
+    val formUpload: List<Any>,
+    val gender: String,
+    val goals: String,
+    val homeOwnerShip: String,
+    val investmentAccounts: Boolean,
+    val investmentRealEstate: Boolean,
+    val investments: String,
+    val is2FAEnabled: Boolean,
+    val isDeactivated: Boolean,
+    val isDeactivatedByUser: Boolean,
+    val isDeleted: Boolean,
+    val isRegistrationCompleted: Boolean,
+    val isVerified: Boolean,
+    val jti: String,
+    val lastActivityAt: String,
+    val lastLogin: String,
+    val lastName: String,
+    val location: PerformanceLocation,
+    val maritalStatus: String,
+    val netWorthEstimate: String,
+    val objective: String,
+    val otpVerified: Boolean,
+    val password: String,
+    val phone: String,
+    val retirement: Boolean,
+    val riskTolerance: String,
+    val role: String,
+    val salaryNum: Int,
+    val salaryRange: String,
+    val savings: String,
+    val savingsNum: Int,
+    val secret: String,
+    val servicesInterested: String,
+    val timezone: String,
+    val topicsOfInterest: List<String>,
+    val updatedAt: String,
+    val username: String,
+    val yearsEmployed: String
+)
+
+data class PerformanceLocation(
+    val coordinates: List<Double>,
+    val type: String
+)
+
+
+
+
+
+
+// variable api response data
+data class VariableApiResponse(
+    val `data`: VariableApiResponseData,
+    val message: String,
+    val success: Boolean
+)
+
+
+data class VariableApiResponseData(
+    val Finnhub_API_Key: String,
+    val Finnhub_Secret_Key: String
+)
+
+
+// monthly investment aoi response
+
+data class MonthlyAnalysisApiResponse(
+    val `data`: List<MonthlyAnalysisApiResponseData>,
+    val firstValue: Int,
+    val lastValue: Int,
+    val message: String,
+    val success: Boolean
+)
+
+data class MonthlyAnalysisApiResponseData(
+    val month: String,
+    val value: Int
+)
+
+
+// Get Post analysis api response data
+
+//data class GetPostAnalysisApiResponse(
+//    val `data`: PostAnalysisApiResponse,
+//    val message: String,
+//    val success: Boolean
+//)
+//
+//data class PostAnalysisApiResponse(
+//    val analytics: List<Analytic>
+//)
+//
+//data class Analytic(
+//    val __v: Int,
+//    val _id: String,
+//    val createdAt: String,
+//    val description: String,
+//    val followerGrowth: Int,
+//    val followersLastWeek: Int,
+//    val isDeleted: Boolean,
+//    val isPublished: Boolean,
+//    val image: String?,
+//    val likesCount: Int,
+//    val likesLastWeek: Int,
+//    val ratings: List<Any>,
+//    val reSharedBy: String,
+//    val reSharedPostId: String,
+//    val reshares: Int,
+//    val resharesLastWeek: Int,
+//    val savedCount: Int,
+//    val savedLastWeek: Int,
+//    val symbol: String,
+//    val symbolValue: String,
+//    val title: String,
+//    val topic: String,
+//    val type: String,
+//    val updatedAt: String,
+//    val userId: String,
+//    val viewLastWeekPercentage: Int,
+//    val viewsCount: Int,
+//    val viewsLastWeek: Int
+//)
+
+data class GetPostAnalysisApiResponse(
+    val `data`: PostAnalysisApiResponse?,
+    val message: String?,
+    val success: Boolean?
+)
+
+data class PostAnalysisApiResponse(
+    val analytics: List<Analytic?>?
+)
+
+data class Analytic(
+    val __v: Int?,
+    val _id: String?,
+    val createdAt: String?,
+    val description: String?,
+    val flagType: String?,
+    val followerGrowth: Int?,
+    val followersLastWeek: Int?,
+    val image: String?,
+    val isDeleted: Boolean?,
+    val isPublished: Boolean?,
+    val likesCount: Int?,
+    val likesLastWeek: Int?,
+    val ratings: List<Any?>?,
+    val reason: String?,
+    val reshares: Int?,
+    val resharesLastWeek: Int?,
+    val savedCount: Int?,
+    val savedLastWeek: Int?,
+    val symbol: String?,
+    val title: String?,
+    val topic: List<Topic?>?,
+    val type: String?,
+    val updatedAt: String?,
+    val userId: String?,
+    val viewLastWeekPercentage: Int?,
+    val viewsCount: Int?,
+    val viewsLastWeek: Int?
+)
+
+data class Topic(
+    val _id: String?,
+    val name: String?,
+    val subTopics: List<String?>?
+)
+
+
+/// get investment api response
+
+//data class GetPortfolioApiResponse(
+//    val `data`: List<GetPortfolioData>,
+//    val message: String,
+//    val success: Boolean
+//)
+//
+//data class GetPortfolioData(
+//    val __v: Int,
+//    val _id: String,
+//    val childId: String,
+//    val createdAt: String,
+//    val currentValue: Int,
+//    val generalInvestment: String,
+//    val investmentPerformingWell: String,
+//    val lastChild: String,
+//    val name: String,
+//    val parentId: String,
+//    val symbol: String,
+//    val topMostParent: String,
+//    val type: String,
+//    val units: Int,
+//    val updatedAt: String,
+//    val userId: String
+//)
+
+
+
+data class GetPortfolioApiResponse(
+    val `data`: List<GetPortfolioData>,
+    val message: String,
+    val success: Boolean
+)
+
+data class GetPortfolioData(
+    val __v: Int,
+    val _id: String,
+    val childId: String,
+    val createdAt: String,
+    val currentValue: Double,
+    val generalInvestment: String,
+    val initialValue: Int,
+    val investmentPerformingWell: String,
+    val lastChild: String,
+    val name: String,
+    val parentId: String,
+    val percentageGrowth: Double,
+    val status: String,
+    val symbol: String,
+    val topMostParent: String,
+    val type: String,
+    val units: Double,
+    val updatedAt: String,
+    val userId: String
+)
+
+
+/// add investment api response
+data class AddInvestmentApiResponse(
+    val data: AddInvestmentApiResponseData,
+    val message: String,
+    val success: Boolean
+)
+
+data class AddInvestmentApiResponseData(
+    val __v: Int,
+    val _id: String,
+    val childId: Any,
+    val createdAt: String,
+    val currentValue: Int,
+    val generalInvestment: String,
+    val investmentPerformingWell: String,
+    val lastChild: Any,
+    val name: String,
+    val parentId: Any,
+    val symbol: String,
+    val topMostParent: Any,
+    val type: String,
+    val units: Double,
+    val updatedAt: String,
+    val userId: String
+)
+
+// Investment Plan api response
+
+data class InvestmentPlanApiResponse(
+    val `data`: List<InvestmentPlanApiResponseData>,
+    val message: String,
+    val success: Boolean
+)
+
+data class InvestmentPlanApiResponseData(
+    val allocationPercentage: Int,
+    val category: String,
+    val logic: String,
+    val planName: String,
+    val riskLevel: String
+)
+
+
+// Investment Plan api response
+
+data class BusinessPlanApiResponse(
+    val `data`: List<BusinessPlanApiResponseData>,
+    val message: String,
+    val success: Boolean
+)
+
+data class BusinessPlanApiResponseData(
+    val description: String,
+    val exampleCompanies: List<String>,
+    val growthPotential: String,
+    val howToInvest: List<String>,
+    val investmentType: String,
+    val recommendedSector: String,
+    val riskLevel: String,
+    val timeHorizon: String,
+    val title: String
+)
+
+
+data class PerformanceDetailApiResponse(
+    val `data`: List<PerformanceDetailApiResponseData>,
+    val firstValue: Int,
+    val lastValue: Int,
+    val message: String,
+    val success: Boolean
+)
+
+data class PerformanceDetailApiResponseData(
+    val month: String,
+    val value: Int
+)
+

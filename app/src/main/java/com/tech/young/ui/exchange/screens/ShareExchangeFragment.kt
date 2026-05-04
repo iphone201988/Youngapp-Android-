@@ -79,11 +79,12 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
         initOnClick()
         searchView()
         initObserver()
+        setupSwipeRefresh()
 
 
         binding.rvShare.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                // 👇 Only continue if scrolling down
+
                 if (dy <= 0) return
 
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
@@ -95,7 +96,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
                         firstVisibleItemPosition >= 0
                     ) {
-                        isLoading = true // ✅ Lock before load
+                        isLoading = true
                         selectedCategoryTitle?.let { loadNextPage(it) }
                     }
                 }
@@ -107,6 +108,12 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
 
 
 
+    }
+
+    private fun setupSwipeRefresh() {
+        binding.swipeRefresh.setOnRefreshListener {
+            selectedCategoryTitle?.let { getShareExchange(it) }
+        }
     }
 
     private fun loadNextPage(title: String) {
@@ -382,10 +389,13 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer let@{
             when(it?.status){
                 Status.LOADING ->{
-                    showLoading()
+                    if (!binding.swipeRefresh.isRefreshing) {
+                        showLoading()
+                    }
                 }
 
                 Status.SUCCESS ->{
+                    binding.swipeRefresh.isRefreshing = false
                     hideLoading()
                     when(it.message){
                         "getShare" ->{
@@ -456,6 +466,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
                 }
 
                 Status.ERROR ->{
+                    binding.swipeRefresh.isRefreshing = false
                     hideLoading()
                     showToast(it.message.toString())
                 }
@@ -492,7 +503,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
 
     /** Category list with preselection **/
     private fun categoryList(selectedCategory: String? = null): ArrayList<CategoryModel> {
-        val items = listOf("Members", "Advisors", "Startups", "Small Businesses", "Investor", "Firm")
+        val items = listOf("Members", "Advisors", "Startups", "Small Businesses", "Investor", "Firm", "Insurance", "Broker", "Investment Managers")
         return ArrayList(items.mapIndexed { index, item ->
             val isSelected = if (selectedCategory != null) {
                 item.equals(selectedCategory, ignoreCase = true)
@@ -510,6 +521,9 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
             "Investor" -> "investor"
             "Firm" -> "financial_firm"
             "Members" -> "general_member"
+            "Insurance" -> "life_insurance"
+            "Broker" -> "broker"
+            "Investment Managers" -> "investment_managers"
             else -> title.lowercase().replace(" ", "_")
         }
     }
@@ -540,7 +554,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
             categoryAdapter.list = categoryData
             binding.rvCategories.adapter = categoryAdapter
 
-            // ✅ Find index of initially selected category
+            //  Find index of initially selected category
             val scrollToIndex = categoryData.indexOfFirst { it.isSelected }
             if (scrollToIndex != -1) {
                 binding.rvCategories.post {

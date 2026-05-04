@@ -85,9 +85,13 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
         searchView()
         initObserver()
 
+        binding.swipeRefresh.setOnRefreshListener {
+            getLatestUser(selectedCategoryTitle.toString())
+        }
+
 //        binding.rvUsers.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 //            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                // 👇 Only continue if scrolling down
+//
 //                if (dy <= 0) return
 //
 //                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
@@ -99,7 +103,7 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
 //                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
 //                        firstVisibleItemPosition >= 0
 //                    ) {
-//                        isLoading = true // ✅ Lock before load
+//                        isLoading = true
 //                        selectedCategoryTitle?.let { loadNextPage(it) }
 //                    }
 //                }
@@ -114,8 +118,8 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
                 if (diff <= 0 && scrollY > oldScrollY) {
 
                     Log.d("Pagination", "Reached bottom, loading next page…")
-                    // ✅ User reached bottom
-                    if (!isLoading && page < totalPages!!) {
+                    //  User reached bottom
+                    if (!isLoading && page < (totalPages ?: 0)) {
                         isLoading = true
                         selectedCategoryTitle?.let { loadNextPage(it) }
                     }
@@ -343,17 +347,20 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
          viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
              when(it?.status){
                  Status.LOADING ->{
-                     showLoading()
+                     if (!binding.swipeRefresh.isRefreshing) {
+                         showLoading()
+                     }
                  }
                  Status.SUCCESS ->{
                      hideLoading()
+                     binding.swipeRefresh.isRefreshing = false
                      when(it.message){
                          "getLatestUser" ->{
                              val myDataModel : GetLatestUserApiResponse ? = BindingUtils.parseJson(it.data.toString())
                              if (myDataModel != null){
                                  if (myDataModel.data != null){
                                      if (myDataModel.data?.users != null){
-                                         totalPages = myDataModel?.pagination?.totalPages ?: 1
+                                         totalPages = myDataModel.pagination?.totalPages ?: 1
 
                                          if (page <= totalPages!!) {
                                              isLoading = false
@@ -384,6 +391,7 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
                  }
                  Status.ERROR ->{
                      hideLoading()
+                     binding.swipeRefresh.isRefreshing = false
                      showToast(it.message.toString())
                  }
                  else ->{
@@ -525,7 +533,10 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
             "Startups",
             "Small Businesses",
             "Investor",
-            "Firm"
+            "Firm",
+            "Insurance",
+            "Broker",
+            "Investment Managers"
         )
 
         return ArrayList(items.mapIndexed { index, item ->
@@ -548,6 +559,9 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
             "Investor" -> "investor"
             "Firm" -> "financial_firm"
             "Members" -> "general_member"
+            "Insurance" -> "life_insurance"
+            "Broker" -> "broker"
+            "Investment Managers" -> "investment_mangers"
             else -> title.lowercase().replace(" ", "_")
         }
     }
@@ -574,7 +588,7 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
             binding.rvCategories.adapter = categoryAdapter
 
 
-            // ✅ Find index of initially selected category
+            //  Find index of initially selected category
             val scrollToIndex = categoryData.indexOfFirst { it.isSelected }
             if (scrollToIndex != -1) {
                 binding.rvCategories.post {

@@ -21,6 +21,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.tech.young.BR
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
@@ -30,7 +31,6 @@ import com.tech.young.base.utils.showToast
 import com.tech.young.data.api.Constants
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.FragmentCommonShareBinding
-import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.util.FileUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.tech.young.base.permission.PermissionHandler
@@ -41,22 +41,18 @@ import com.tech.young.base.utils.Status
 import com.tech.young.data.DropDownData
 import com.tech.young.data.model.CreatePostApiResponse
 import com.tech.young.data.model.GetAdsAPiResponse
+import com.tech.young.data.model.MenuItem
 import com.tech.young.data.model.ShareData
-import com.tech.young.data.model.StreamData
 import com.tech.young.databinding.BottomSheetCameraGalleryBinding
 import com.tech.young.databinding.BotttomSheetTopicsBinding
 import com.tech.young.databinding.ItemLayoutDropDownBinding
-import com.tech.young.ui.common.CommonActivity
 import com.tech.young.ui.ecosystem.EcosystemFragment
 import com.tech.young.ui.exchange.ExchangeFragment
-import com.tech.young.ui.my_profile_screens.common_ui.EditProfileDetailFragment
 import com.tech.young.ui.share_screen.share_confirmation.ShareConfirmationFragment
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 @AndroidEntryPoint
@@ -72,18 +68,35 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
     private var topicList = ArrayList<DropDownData>()
     private lateinit var cameraGalleryBottomSheet: BaseCustomBottomSheet<BottomSheetCameraGalleryBinding>
 
-//    private var selectedOption: String  = "stock"  // default
-      private var selectedOption: String ? = null  // default
+    private var selectedOption: String ? = null  // default
 
-
+    private lateinit var adapter: ExpandableMenuAdapter
+    private lateinit var menuList: MutableList<MenuItem>
 
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
-    private var selectedImagePart: MultipartBody.Part? = null
 
     //// camera
     private var photoFile: File? = null
-    private var photoURI: Uri? = null
     private var imageUri : Uri? = null
+
+    private var selectedTopicsJson: String = ""
+
+    private val headerToRoleMap = mapOf(
+        "Member" to "general_member",
+        "Financial Advisor" to "financial_advisor",
+        "Startups" to "startup",
+        "Small Businesses" to "small_business",
+        "VC / Investors" to "investor",
+        "Insurance" to "life_insurance",
+        "Brokers / Dealers" to "broker",
+        "Investment Managers" to "investment_managers",
+        "Financial Firm" to "financial_firm",
+        "Other" to "Other"
+    )
+
+    private fun getHeaderKey(headerTitle: String): String {
+        return headerToRoleMap[headerTitle] ?: headerTitle
+    }
 
 
     override fun onCreateView(view: View) {
@@ -128,6 +141,49 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
         return viewModel
     }
 
+
+
+    private fun setupRecycler() {
+
+        menuList = getMenuList()
+
+        adapter = ExpandableMenuAdapter(menuList) { selectedItems  ->
+            // 👉 Group topics by header
+            val groupedTopics = mutableMapOf<String, MutableList<String>>()
+            val fullList = getFullMenuList()
+
+            selectedItems.forEach { child ->
+                val parentHeader = fullList.find { header ->
+                    header.type == MenuItem.HEADER && header.children.any { it.title == child.title }
+                }?.title ?: "Other"
+
+                val roleKey = getHeaderKey(parentHeader)
+
+                if (!groupedTopics.containsKey(roleKey)) {
+                    groupedTopics[roleKey] = mutableListOf()
+                }
+                groupedTopics[roleKey]?.add(child.title)
+            }
+
+            if (groupedTopics.isEmpty()) {
+                selectedTopicsJson = ""
+                binding.etTopic.setText("")
+            } else {
+                // Build JSON string manually
+                val jsonEntries = groupedTopics.map { (header, children) ->
+                    "\"$header\": [${children.joinToString(", ") { "\"$it\"" }}]"
+                }
+                selectedTopicsJson = "{ ${jsonEntries.joinToString(", ")} }"
+
+                val displayValues = selectedItems.joinToString(", ") { it.title }
+                binding.etTopic.setText(displayValues)
+            }
+        }
+
+        binding.rvTopics.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvTopics.adapter = adapter
+    }
+
     private fun initBottomsheet() {
         topicBottomSheet = BaseCustomBottomSheet(requireContext(),R.layout.botttom_sheet_topics,this)
 
@@ -165,11 +221,12 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
     }
 
     /** handle view **/
-    private fun initView() {
+    private fun  initView() {
         initBottomsheet()
         galleryLauncher()
 
         getTopicsList()
+        setupRecycler()
         initAdapter()
         setupToggle()
 
@@ -193,15 +250,6 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
                     if (imageUri != null){
                         binding.ivUploadImage.setImageURI(imageUri)
                     }
-
-//                    if (imageUri != null) {
-//                        selectedImagePart = BindingUtils.createImageMultipartFromUri(
-//                            requireContext(),
-//                            imageUri!!,
-//                            "file" // <-- or any string key like "profile", "photo"
-//                        )
-//                        Log.i("ImageUpload", "galleryLauncher: $imageUri")
-//                    }
                 }
             }
     }
@@ -212,7 +260,6 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
     private val permissionResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             for (it in permissions.entries) {
-                it.key
                 val isGranted = it.value
                 allGranted = isGranted
             }
@@ -265,17 +312,7 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
             if (result.resultCode == Activity.RESULT_OK) {
                 try {
                     imageUri = photoFile!!.absoluteFile.toUri()
-                    if (imageUri != null){
-                        binding.ivUploadImage.setImageURI(imageUri)
-                    }
-//                    if (photoURI != null) {
-//                        selectedImagePart = BindingUtils.createImageMultipartFromUri(
-//                            requireContext(),
-//                            photoURI!!,
-//                            "file" // or appropriate key
-//                        )
-//                        Log.i("ImageUpload", "cameraLauncher: $photoURI")
-//                    }
+                    binding.ivUploadImage.setImageURI(imageUri)
                 } catch (ex: Exception) {
                     ex.printStackTrace()
                 }
@@ -299,7 +336,7 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
 
                         val shareData = ShareData(
                           title = binding.etTitle.text.toString().trim(),
-                            topic =  binding.etTopic.text.toString().trim(),
+                            topic =  selectedTopicsJson,
                             description = binding.etDescription.text.toString().trim(),
                             symbol = selectedOption,
                             symbolValue =  binding.etSymbol.text.toString().trim(),
@@ -319,51 +356,16 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
                             .replace(R.id.frameLayout, fragment)
                             .addToBackStack(null)
                             .commit()
-
-
-
-//                        val intent = Intent(requireContext(), CommonActivity::class.java).apply {
-//                            putExtra("from", "share_confirmation")
-//                            putExtra("share_data", shareData)
-//                        }
-//                        startActivity(intent)
-
-
                     }
                 }
                 R.id.ivUploadImage ->{
-//                    ImagePicker.with(this)
-//                        .compress(1024)
-//                        .maxResultSize(1080, 1080)
-//                        .createIntent { intent ->
-//                            startForImageResult.launch(intent)
-//                        }
                     cameraGalleryBottomSheet.show()
                 }
                 R.id.etTopic ->{
-                    topicBottomSheet.show()
                 }
             }
         }
 
-    }
-
-    private val startForImageResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        try {
-            val resultCode = result.resultCode
-            val data = result.data
-            if (resultCode == Activity.RESULT_OK) {
-                val fileUri = data?.data
-                imageUri = fileUri
-                binding.ivUploadImage.setImageURI(imageUri)
-
-                //  Log.i("dasd", ": $imageUri")
-            } else if (resultCode == ImagePicker.RESULT_ERROR) {
-
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
     }
 
     /** handle observer **/
@@ -408,17 +410,24 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
 
     /** handle adapter **/
     private fun initAdapter() {
-        adsAdapter = SimpleRecyclerViewAdapter(R.layout.ads_item_view, BR.bean) { v, m, pos ->
-            when (v.id) {
-
-            }
+        adsAdapter = SimpleRecyclerViewAdapter(R.layout.ads_item_view, BR.bean) { _, _, _ ->
         }
         binding.rvAds.adapter = adsAdapter
 
-        topicAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_drop_down,BR.bean){v,m,pos ->
+        topicAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_drop_down,BR.bean){v,m,_ ->
             when(v.id){
                 R.id.consMain , R.id.title->{
                     binding.etTopic.setText(m.title)
+                    
+                    // Update JSON for single selection
+                    val fullList = getFullMenuList()
+                    val parentHeader = fullList.find { header ->
+                        header.children.any { it.title.equals(m.title, ignoreCase = true) }
+                    }?.title ?: "Other"
+                    
+                    val roleKey = getHeaderKey(parentHeader)
+                    selectedTopicsJson = "{ \"$roleKey\": [\"${m.title}\"] }"
+
                     topicBottomSheet.dismiss()
                 }
             }
@@ -428,39 +437,11 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
         topicAdapter.notifyDataSetChanged()
     }
 
-    private var getList = listOf(
-        "", "", "", "", ""
-    )
-
-//    private fun setupToggle() {
-//        binding.yesOption.label.text = "Stock"
-//        binding.noOption.label.text = "Crypto"
-//
-//        // Default selection
-//        selectedOption = "stock"
-//        binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_selected)
-//        binding.noOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
-//
-//        binding.yesOption.box.setOnClickListener {
-//            selectedOption = "stock"
-//            binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_selected)
-//            binding.noOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
-//        }
-//
-//        binding.noOption.box.setOnClickListener {
-//            selectedOption = "crypto"
-//            binding.noOption.box.setBackgroundResource(R.drawable.ic_check_selected)
-//            binding.yesOption.box.setBackgroundResource(R.drawable.ic_check_unselected)
-//        }
-//    }
-
-
 
     private fun setupToggle() {
         binding.yesOption.label.text = "Stock"
         binding.noOption.label.text = "Crypto"
 
-        // 🚫 No default selection
         selectedOption = null
         binding.etSymbol.isEnabled = false
         binding.etSymbol.alpha = 0.5f
@@ -520,20 +501,11 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
             showToast("Please enter description")
             return false
         }
-        // ✅ Validate symbol only if required
         if (isSymbolRequired && TextUtils.isEmpty(binding.etSymbol.text.toString().trim())) {
             showToast("Please enter symbol")
             return false
         }
         return true
-    }
-    private fun convertImageToMultipart(imageUri: Uri): MultipartBody.Part {
-        val file = FileUtil.getTempFile(requireContext(), imageUri)
-        return MultipartBody.Part.createFormData(
-            "image",
-            file!!.name,
-            file.asRequestBody("image/png".toMediaTypeOrNull())
-        )
     }
 
     override fun onViewClick(view: View?) {
@@ -562,5 +534,168 @@ class CommonShareFragment : BaseFragment<FragmentCommonShareBinding>() ,BaseCust
         topicList.add(DropDownData("Loans"))
         topicList.add(DropDownData("Insurance"))
         topicList.add(DropDownData("Annuities"))
+    }
+
+
+    private fun getFullMenuList(): List<MenuItem> {
+        return listOf(
+            MenuItem("Member", MenuItem.HEADER, children = listOf(
+                MenuItem("Stocks", MenuItem.CHILD, true),
+                MenuItem("Crypto", MenuItem.CHILD, true),
+                MenuItem("Insurance", MenuItem.CHILD, true),
+                MenuItem("Savings", MenuItem.CHILD, true),
+                MenuItem("Investment Management", MenuItem.CHILD, true),
+                MenuItem("Child Education", MenuItem.CHILD, true),
+                MenuItem("Student Loan Management", MenuItem.CHILD, true),
+                MenuItem("Debt Management", MenuItem.CHILD, true),
+                MenuItem("Tax Planning", MenuItem.CHILD, true),
+                MenuItem("Financial Planning", MenuItem.CHILD, true),
+                MenuItem("Wealth Education", MenuItem.CHILD, true),
+                MenuItem("Estate Planning", MenuItem.CHILD, true),
+                MenuItem("Investor", MenuItem.CHILD, true),
+                MenuItem("Venture Capitalist", MenuItem.CHILD, true),
+                MenuItem("Small Business", MenuItem.CHILD, true),
+                MenuItem("Grants", MenuItem.CHILD, true),
+                MenuItem("Loans", MenuItem.CHILD, true),
+                MenuItem("Insurance", MenuItem.CHILD, true),
+                MenuItem("Annuities", MenuItem.CHILD, true),
+            )),
+
+            MenuItem("Financial Advisor", MenuItem.HEADER, children = listOf(
+                MenuItem("Retirement Planning", MenuItem.CHILD, true),
+                MenuItem("Estate & Legacy", MenuItem.CHILD, true),
+                MenuItem("Tax Strategy", MenuItem.CHILD, true),
+                MenuItem("Education Funding", MenuItem.CHILD, true),
+                MenuItem("Financial Literacy", MenuItem.CHILD, true),
+                MenuItem("Risk Management", MenuItem.CHILD, true),
+                MenuItem("Behavioral Finance", MenuItem.CHILD, true),
+                MenuItem("Holistic Wealth", MenuItem.CHILD, true),
+                MenuItem("Charitable Giving", MenuItem.CHILD, true),
+                MenuItem("Client Updates", MenuItem.CHILD, true)
+            )),
+
+            MenuItem("Startups", MenuItem.HEADER, children = listOf(
+                MenuItem("Fundraising", MenuItem.CHILD, true),
+                MenuItem("Product Launch", MenuItem.CHILD, true),
+                MenuItem("Company Culture", MenuItem.CHILD, true),
+                MenuItem("Growth & Scaling", MenuItem.CHILD, true),
+                MenuItem("Founder Journey", MenuItem.CHILD, true),
+                MenuItem("Industry Disruptor", MenuItem.CHILD, true),
+                MenuItem("Operations", MenuItem.CHILD, true),
+                MenuItem("Customer Stories", MenuItem.CHILD, true),
+                MenuItem("Pitch Deck", MenuItem.CHILD, true),
+                MenuItem("Tech Stack", MenuItem.CHILD, true)
+            )),
+
+            MenuItem("Small Businesses", MenuItem.HEADER, children = listOf(
+                MenuItem("Local Community", MenuItem.CHILD, true),
+                MenuItem("Daily Operations", MenuItem.CHILD, true),
+                MenuItem("Hiring & Talent", MenuItem.CHILD, true),
+                MenuItem("Customer Service", MenuItem.CHILD, true),
+                MenuItem("Business Finance", MenuItem.CHILD, true),
+                MenuItem("Marketing & SEO", MenuItem.CHILD, true),
+                MenuItem("Product/ Service Demo", MenuItem.CHILD, true),
+                MenuItem("Sustainability", MenuItem.CHILD, true),
+                MenuItem("Work-Life Balance", MenuItem.CHILD, true),
+                MenuItem("Tools of the Trade", MenuItem.CHILD, true)
+            )),
+
+            MenuItem("VC / Investors", MenuItem.HEADER, children = listOf(
+                MenuItem("Deal Flow", MenuItem.CHILD, true),
+                MenuItem("Market Trends", MenuItem.CHILD, true),
+                MenuItem("Portfolio Update", MenuItem.CHILD, true),
+                MenuItem("Investment Strategy", MenuItem.CHILD, true),
+                MenuItem("Due Diligence", MenuItem.CHILD, true),
+                MenuItem("Exit Events", MenuItem.CHILD, true),
+                MenuItem("Limited Partners (LP)", MenuItem.CHILD, true),
+                MenuItem("Valuation", MenuItem.CHILD, true),
+                MenuItem("Economic Outlook", MenuItem.CHILD, true),
+                MenuItem("Mentorship", MenuItem.CHILD, true)
+            )),
+
+            MenuItem("Insurance", MenuItem.HEADER, children = listOf(
+                MenuItem("Estate Planning", MenuItem.CHILD, true),
+                MenuItem("Policy Types", MenuItem.CHILD, true),
+                MenuItem("Retirement Income", MenuItem.CHILD, true),
+                MenuItem("Claims Stories", MenuItem.CHILD, true),
+                MenuItem("Wellness & Longevity", MenuItem.CHILD, true),
+                MenuItem("Underwriting", MenuItem.CHILD, true),
+                MenuItem("Financial Literacy", MenuItem.CHILD, true),
+                MenuItem("Family Security", MenuItem.CHILD, true),
+                MenuItem("Tax Advantages", MenuItem.CHILD, true),
+                MenuItem("Agent Spotlight", MenuItem.CHILD, true)
+            )),
+
+            MenuItem("Brokers / Dealers", MenuItem.HEADER, children = listOf(
+                MenuItem("Compliance & Regs", MenuItem.CHILD, true),
+                MenuItem("Market Liquidity", MenuItem.CHILD, true),
+                MenuItem("Trading Platform", MenuItem.CHILD, true),
+                MenuItem("Asset Classes", MenuItem.CHILD, true),
+                MenuItem("Wealth Management", MenuItem.CHILD, true),
+                MenuItem("Risk Management", MenuItem.CHILD, true),
+                MenuItem("Finfluencer Ethics", MenuItem.CHILD, true),
+                MenuItem("Clearing & Settlement", MenuItem.CHILD, true),
+                MenuItem("Fee Structures", MenuItem.CHILD, true),
+                MenuItem("Client Education", MenuItem.CHILD, true)
+            )),
+
+            MenuItem("Investment Managers", MenuItem.HEADER, children = listOf(
+                MenuItem("Market Outlook", MenuItem.CHILD, true),
+                MenuItem("Asset Allocation", MenuItem.CHILD, true),
+                MenuItem("Fixed Income", MenuItem.CHILD, true),
+                MenuItem("Sustainable Finance", MenuItem.CHILD, true),
+                MenuItem("Alternative Assets", MenuItem.CHILD, true),
+                MenuItem("Portfolio Rebalancing", MenuItem.CHILD, true),
+                MenuItem("Sector Analysis", MenuItem.CHILD, true),
+                MenuItem("Dividend Growth", MenuItem.CHILD, true),
+                MenuItem("Emerging Markets", MenuItem.CHILD, true),
+                MenuItem("Economic Indicators", MenuItem.CHILD, true)
+            )),
+
+            MenuItem("Financial Firm", MenuItem.HEADER, children = listOf(
+                MenuItem("Retirement Planning", MenuItem.CHILD, true),
+                MenuItem("Estate & Legacy", MenuItem.CHILD, true),
+                MenuItem("Tax Strategy", MenuItem.CHILD, true),
+                MenuItem("Education Funding", MenuItem.CHILD, true),
+                MenuItem("Financial Literacy", MenuItem.CHILD, true),
+                MenuItem("Risk Management", MenuItem.CHILD, true),
+                MenuItem("Behavioral Finance", MenuItem.CHILD, true),
+                MenuItem("Holistic Wealth", MenuItem.CHILD, true),
+                MenuItem("Charitable Giving", MenuItem.CHILD, true),
+                MenuItem("Client Updates", MenuItem.CHILD, true)
+            ))
+        )
+    }
+
+    private fun getMenuList(): MutableList<MenuItem> {
+        val role = sharedPrefManager.getLoginData()?.role
+        val allMenus = getFullMenuList()
+
+        val roleToHeader = mapOf(
+            "general_member" to "Member",
+            "financial_advisor" to "Financial Advisor",
+            "startup" to "Startups",
+            "small_business" to "Small Businesses",
+            "investor" to "VC / Investors",
+            "life_insurance" to "Insurance",
+            "broker" to "Brokers / Dealers",
+            "investment_managers" to "Investment Managers",
+            "financial_firm" to "Financial Firm"
+        )
+
+        val targetHeader = roleToHeader[role]
+
+        val filteredList = if (targetHeader != null) {
+            allMenus.filter { it.title == targetHeader }.toMutableList()
+        } else {
+            allMenus.toMutableList()
+        }
+
+        // Always add Other
+        filteredList.add(MenuItem("Other", MenuItem.HEADER, children = listOf(
+            MenuItem("Other", MenuItem.CHILD, true)
+        )))
+
+        return filteredList
     }
 }

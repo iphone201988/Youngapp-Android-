@@ -115,30 +115,57 @@
             app:layout_constraintTop_toBottomOf="@id/etTitle" />
 
 
+
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etTopic"
             style="@style/TextView_400_Regular"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_42sdp"
+            android:layout_height="@dimen/_90sdp"
             android:layout_marginTop="@dimen/_3sdp"
             android:background="@drawable/radius_border_gray"
-            android:gravity="start|center"
-            android:onClick="@{v -> vm.onClick(v)}"
+            android:gravity="start|top"
             android:hint="Topic"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:singleLine="true"
+            android:onClick="@{v -> vm.onClick(v)}"
             android:focusable="false"
+            android:clickable="true"
+            android:padding="@dimen/_10sdp"
             android:textColorHint="@color/text_gray"
             app:layout_constraintTop_toBottomOf="@+id/tvTopic" />
+
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:src="@drawable/iv_dropdown"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/etTopic"
             app:layout_constraintEnd_toEndOf="@+id/etTopic"
             app:layout_constraintTop_toTopOf="@+id/etTopic" />
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:src="@drawable/iv_dropdown"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/etTopic"
+            app:layout_constraintEnd_toEndOf="@+id/etTopic"
+            app:layout_constraintTop_toTopOf="@+id/etTopic" />
+
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTopics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/_3sdp"
+            app:layout_constraintTop_toBottomOf="@id/etTopic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDescription"
@@ -149,7 +176,7 @@
             android:layout_marginTop="@dimen/_12sdp"
             android:textColor="@color/colorPrimary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etTopic" />
+            app:layout_constraintTop_toBottomOf="@id/rvTopics" />
 
 
         <androidx.appcompat.widget.AppCompatEditText

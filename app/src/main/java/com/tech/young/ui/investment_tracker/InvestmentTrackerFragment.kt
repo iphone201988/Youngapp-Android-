@@ -9,24 +9,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tech.young.R
 import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
 import com.tech.young.databinding.FragmentInvestmentTrackerBinding
-import com.tech.young.ui.my_profile_screens.YourProfileVM
-import com.tech.young.ui.my_profile_screens.forNormal.SimilarProfileFragment
-import com.tech.young.ui.my_profile_screens.forNormal.YourInvestmentFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.getValue
-
 
 @AndroidEntryPoint
 class InvestmentTrackerFragment : BaseFragment<FragmentInvestmentTrackerBinding>() {
 
-    private val viewModel: InvestmentTrackingVm by viewModels()
+    private val viewModel: InvestmentTrackingVm by activityViewModels()
+    private var isProgrammaticSelection = false
 
     override fun getLayoutResource(): Int {
         return R.layout.fragment_investment_tracker
@@ -64,9 +61,18 @@ class InvestmentTrackerFragment : BaseFragment<FragmentInvestmentTrackerBinding>
         binding.tvInfo.text = spannable
 
         initViewPagerAdapter()
+
+        // Handle starting tab from navigation arguments
+        val tabIndex = arguments?.getInt("tabIndex", 0) ?: 0
+        binding.viewPager.post {
+            binding.viewPager.currentItem = tabIndex
+        }
     }
 
-
+    fun switchToValuesTab() {
+        isProgrammaticSelection = true
+        binding.viewPager.currentItem = 1
+    }
 
     /** view pager & tab layout handling **/
     private fun initViewPagerAdapter() {
@@ -80,6 +86,24 @@ class InvestmentTrackerFragment : BaseFragment<FragmentInvestmentTrackerBinding>
                 else -> "Portfolio"
             }
         }.attach()
+
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab?.position == 1) {
+                    if (!isProgrammaticSelection) {
+                        viewModel.selectedInvestment.value = null
+                    }
+                }
+                isProgrammaticSelection = false
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                if (tab?.position == 1) {
+                    viewModel.selectedInvestment.value = null
+                }
+            }
+        })
     }
 
     inner class ViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {

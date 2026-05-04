@@ -352,7 +352,7 @@ class PersonalPreferencesFragment : BaseFragment<FragmentPersonalPreferencesBind
                             Constants.UPDATE_USER,
                             hashMapOf(),              // no other data
                             null,                     // no single file
-                            mutableListOf(part)       // ✅ send as a list
+                            mutableListOf(part)       //  send as a list
                         )
                     }
                 }

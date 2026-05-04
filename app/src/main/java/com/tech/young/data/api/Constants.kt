@@ -1,23 +1,21 @@
 package com.tech.young.data.api
 
+import com.tech.young.BuildConfig
 import java.util.TimeZone
 
 
 object Constants {
-   const val BASE_URL = "https://theboom.app:8000/api/v1/"
-  //  const val BASE_URL = "http://192.168.1.57:8888/api/v1/"
- //   const val BASE_URL_IMAGE = "http://192.168.0.159:8888"
-    const val BASE_URL_IMAGE = "https://youngappbucket.s3.us-east-2.amazonaws.com"
+    const val BASE_URL = BuildConfig.BASE_URL
+    const val BASE_URL_IMAGE = BuildConfig.BASE_URL_IMAGE
 
-  val timeZone: String by lazy {
-    val tz = TimeZone.getDefault().id
-    if (tz == "Asia/Calcutta") "Asia/Kolkata" else tz
-  }
+    val timeZone: String by lazy {
+        val tz = TimeZone.getDefault().id
 
-    const val GOOGLE_API_KEY = "AIzaSyD5Jt2e9ocVmXovnsOsdmtdhPRkP8m9IhQ"
+        if (tz == "Asia/Calcutta") "Asia/Kolkata" else tz
+    }
+
 
     /**************** API LIST *****************/
-    const val HEADER_API = "X-API-Key:lkcMuYllSgc3jsFi1gg896mtbPxIBzYkEL"
     const val LOGIN = "user/login"
     const val REGISTER = "user/register"
     const val VERIFY_OTP = "user/verifyOtp"
@@ -66,28 +64,52 @@ object Constants {
     const val DOWNLOAD_HISTORY = "post/downloadHistory"
     const val DELETE_ACCOUNT = "deleteAccount"
 
-     const val SCHEDULE_STREAM = "event/scheduleStreamEvent/"
+    const val SCHEDULE_STREAM = "event/scheduleStreamEvent/"
 
     const val media = "user/getUploadedMedia"
 
 
-  const val DELETE_EVENT = "event/"
-  const val EDIT_EVENTS = "event/editEvent/"
+    const val DELETE_EVENT = "event/"
+    const val EDIT_EVENTS = "event/editEvent/"
 
-  const val RESET_PASSWORD = "user/resetPassword"
+    const val RESET_PASSWORD = "user/resetPassword"
 
-  const val LAST_24_HOURS = "post/subscription/last24hours"
+    const val LAST_24_HOURS = "post/subscription/last24hours"
 
-  const val  UPGRADE_PLAN = "user/upgradePlan"
-  const val NOTIFICATION = "user/getAllNotifications"
+    const val  UPGRADE_PLAN = "user/upgradePlan"
+    const val NOTIFICATION = "user/getAllNotifications"
 
-  const val PAYMENT_HISTORY = "payment/userPayments"
+    const val PAYMENT_HISTORY = "payment/userPayments"
 
-  const val GET_RECORDED_STREAM_COMMENT = "chat/getLiveStreamingMessages"
+    const val GET_RECORDED_STREAM_COMMENT = "chat/getLiveStreamingMessages"
+
+    const val POST_ANALYTICS = "post/analytics"
+
+    const val AI_CHAT = "research/ask"
+
+    const val GET_PERFORMANCE = "invest/performance"
+
+    const val MONTHLY_ANALYSIS = "invest/montly-analysis"
+
+    const val ADD_INVESTMENT = "invest/add-investment"
+
+    const val UPDATE_INVESTMENT = "invest/update-investment"
+
+    const val INVESTMENT_PLAN = "research/plans"
+
+    const val BUSINESS_PLAN = "research/business"
+    const val GET_INVESTMENT = "invest/get-investment"
+
+
+    const val VARIABLES = "user/variables"
+
+
+    const val ACCEPT_REJECT_EVENT = "event/respond"
+
 
     /*************** Temp value store****************/
-       var chooseAccountType = ""
+    var chooseAccountType = ""
 
-       var userLastLogin = ""
+    var userLastLogin = ""
 
 }

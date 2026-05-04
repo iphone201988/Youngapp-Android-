@@ -1,13 +1,13 @@
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.tech.young.R
-import com.tech.young.data.InvestmentItem
+import com.tech.young.data.model.GetPortfolioData
 import com.tech.young.databinding.ItemInvestmentBinding
 
 class InvestmentAdapter(
-    private val list: List<InvestmentItem>
+    private var list: List<GetPortfolioData>,
+    private val onItemClick: (GetPortfolioData) -> Unit
 ) : RecyclerView.Adapter<InvestmentAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemInvestmentBinding) :
@@ -29,15 +29,26 @@ class InvestmentAdapter(
 
         with(holder.binding) {
             tvSymbol.text = item.symbol
-            tvName.text = item.name
-            tvType.text = item.type
-            tvValue.text = item.value
+            tvName.text = if (item.name.isNullOrEmpty()) item.symbol else item.name
+            tvType.text = item.type.replace("_", " ").capitalize()
+            tvValue.text = "$${item.currentValue}"
 
-            if (item.isUp) {
+            // Check if performing well to show up or down arrow
+            if (item.investmentPerformingWell == "outperforming" || item.investmentPerformingWell == "meeting_expectations") {
                 ivStatus.setImageResource(R.drawable.iv_up_arrow)
             } else {
                 ivStatus.setImageResource(R.drawable.iv_down_arrow)
             }
+
+            root.setOnClickListener {
+                onItemClick(item)
+            }
+
         }
+    }
+
+    fun updateList(newList: List<GetPortfolioData>) {
+        list = newList
+        notifyDataSetChanged()
     }
 }

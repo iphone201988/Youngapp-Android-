@@ -12,7 +12,9 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -27,6 +29,11 @@ import com.tech.young.base.BaseFragment
 import com.tech.young.base.BaseViewModel
 import com.tech.young.base.SimpleRecyclerViewAdapter
 import com.tech.young.base.utils.BaseCustomDialog
+import com.tech.young.base.utils.BindingUtils
+import com.tech.young.base.utils.Status
+import com.tech.young.base.utils.showToast
+import com.tech.young.data.api.Constants
+import com.tech.young.data.model.GetPerformanceApiResponse
 import com.tech.young.databinding.FragmentPerformanceBinding
 import com.tech.young.databinding.ItemInvestmentsBinding
 import com.tech.young.databinding.ItemPopupPerformanceGraphBinding
@@ -41,9 +48,8 @@ import kotlin.getValue
 @AndroidEntryPoint
 class PerformanceFragment : BaseFragment<FragmentPerformanceBinding>() {
 
-    private val viewModel: YourProfileVM by viewModels()
+    private val viewModel: YourProfileVM by activityViewModels()
 
-    private lateinit var performanceGraphPopup  : BaseCustomDialog<ItemPopupPerformanceGraphBinding>
 
 
     override fun getLayoutResource(): Int {
@@ -55,6 +61,9 @@ class PerformanceFragment : BaseFragment<FragmentPerformanceBinding>() {
     }
 
     override fun onCreateView(view: View) {
+
+
+
 
         val fullText = "Quarterly profile updates improve your Match Score accuracy by up to 34%"
 
@@ -88,18 +97,53 @@ class PerformanceFragment : BaseFragment<FragmentPerformanceBinding>() {
             insets
         }
 
-        initPopup()
 
         initViewPagerAdapter()
         initAdapter()
-        setupChart()
+
+        initObserver()
     }
 
-    private fun initPopup() {
-        performanceGraphPopup = BaseCustomDialog(requireContext(), R.layout.item_popup_performance_graph){
+    private fun initObserver() {
+        viewModel.observeCommon.observe(viewLifecycleOwner, Observer{
+            when(it?.status){
+                Status.LOADING -> {
+                    showLoading()
+                }
+                Status.SUCCESS -> {
+                    hideLoading()
+                    when(it.message){
+                        "getPerformance" ->{
+                            val myDataModel :  GetPerformanceApiResponse ? = BindingUtils.parseJson(it.data.toString())
+                            if (myDataModel != null){
+                                if (myDataModel.data != null){
+                                    myDataModel.data?.let {
+                                        viewModel.performanceData.postValue(it)
+                                    }
+                                }
+                                myDataModel.data?.performance?.let {
+                                    binding.bean = myDataModel.data.performance
+                                }
 
-        }
+                            }
+                        }
+                        "getMonthlyAnalytics" ->{
+
+                        }
+                    }
+
+                }
+                Status.ERROR ->  {
+                    hideLoading()
+                    showToast(it.message.toString())
+                }
+                else -> {
+
+                }
+            }
+        })
     }
+
 
     private fun initAdapter() {
 
@@ -107,75 +151,7 @@ class PerformanceFragment : BaseFragment<FragmentPerformanceBinding>() {
 
 
 
-    private fun setupChart() {
 
-        val entries = listOf(
-            Entry(0f, 100f),
-            Entry(1f, 450f),
-            Entry(2f, 400f),
-            Entry(3f, 550f),
-            Entry(4f, 1000f)
-        )
-
-        val dataSet = LineDataSet(entries, "")
-
-        dataSet.color = Color.parseColor("#16A34A")
-        dataSet.lineWidth = 2.5f
-        dataSet.setDrawCircles(false)
-        dataSet.setDrawValues(false)
-        dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
-        dataSet.cubicIntensity = 0.2f
-
-        dataSet.setDrawFilled(false)
-//        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.chart_gradient)
-//        dataSet.fillDrawable = drawable
-
-        dataSet.isHighlightEnabled = false
-
-        performanceGraphPopup.binding.lineChart.data = LineData(dataSet)
-
-        // 🧹 Clean UI
-        performanceGraphPopup.binding.lineChart.description.isEnabled = false
-        performanceGraphPopup.binding.lineChart.legend.isEnabled = false
-        performanceGraphPopup.binding.lineChart.setTouchEnabled(false)
-        performanceGraphPopup.binding.lineChart.setScaleEnabled(false)
-
-        val labels = listOf("jan", "feb", "mar", "apr", "may")
-
-        performanceGraphPopup.binding.lineChart.xAxis.apply {
-            valueFormatter = IndexAxisValueFormatter(labels)
-            position = XAxis.XAxisPosition.BOTTOM
-            setDrawGridLines(false)
-            setDrawAxisLine(false)
-            textColor = Color.GRAY
-            textSize = 12f
-            granularity = 1f
-        }
-
-        performanceGraphPopup.binding.lineChart.axisLeft.apply {
-            textColor = Color.GRAY
-            textSize = 12f
-            axisMinimum = 0f
-
-            enableGridDashedLine(10f, 10f, 0f)
-            gridColor = Color.LTGRAY
-            setDrawAxisLine(false)
-
-            valueFormatter = object : ValueFormatter() {
-                override fun getFormattedValue(value: Float): String {
-                    return "${value.toInt()}$"
-                }
-            }
-        }
-
-        performanceGraphPopup.binding.lineChart.axisRight.isEnabled = false
-
-        performanceGraphPopup.binding.lineChart.setExtraOffsets(10f, 10f, 10f, 10f)
-
-        performanceGraphPopup.binding.lineChart.animateX(1000)
-
-        performanceGraphPopup.binding.lineChart.invalidate()
-    }
 
 
 
@@ -205,6 +181,12 @@ class PerformanceFragment : BaseFragment<FragmentPerformanceBinding>() {
                 else -> YourInvestmentFragment()
             }
         }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getPerformance(Constants.GET_PERFORMANCE)
     }
 
 }

@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="vm"
+            type="com.tech.young.ui.ai_chat.AiChatVm" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,7 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
-
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/_10sdp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/etChat"
@@ -87,6 +90,7 @@
             android:layout_height="@dimen/_40sdp"
             android:src="@drawable/iv_ai_send"
             android:scaleType="centerCrop"
+            android:onClick="@{ v -> vm.onClick(v)}"
             app:layout_constraintTop_toTopOf="@id/etChat"
             app:layout_constraintBottom_toBottomOf="@id/etChat"
             app:layout_constraintEnd_toEndOf="parent"/>

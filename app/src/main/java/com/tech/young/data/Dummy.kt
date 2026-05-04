@@ -153,3 +153,8 @@ data class InvestmentItem(
     val value: String,
     val isUp: Boolean
 )
+
+
+data class AiChatModel(
+    val message: String,
+    val isSender: Boolean)

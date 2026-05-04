@@ -79,12 +79,13 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
         initOnClick()
         // observer
         initObserver()
+        setupSwipeRefresh()
 
 
 
         binding.rvStream.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                // 👇 Only continue if scrolling down
+
                 if (dy <= 0) return
 
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
@@ -96,12 +97,19 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 3 &&
                         firstVisibleItemPosition >= 0
                     ) {
-                        isLoading = true // ✅ Lock before load
+                        isLoading = true
                         selectedCategoryTitle?.let { loadNextPage(it) }
                     }
                 }
             }
         })
+    }
+
+    private fun setupSwipeRefresh() {
+        binding.swipeRefresh.setOnRefreshListener {
+            val category = selectedCategoryTitle ?: "Members"
+            getStreamExchange(category)
+        }
     }
 
     private fun loadNextPage(title: String) {
@@ -376,9 +384,12 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when(it?.status){
                 Status.LOADING ->{
-                    showLoading()
+                    if (!binding.swipeRefresh.isRefreshing) {
+                        showLoading()
+                    }
                 }
                 Status.SUCCESS ->{
+                    binding.swipeRefresh.isRefreshing = false
                     hideLoading()
                     when(it.message) {
                         "getStream" ->{
@@ -444,6 +455,7 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
                 }
 
                 Status.ERROR ->{
+                    binding.swipeRefresh.isRefreshing = false
                     hideLoading()
                     showToast(it.message.toString())
                 }
@@ -463,12 +475,15 @@ class StreamExchangeFragment : BaseFragment<FragmentStreamExchangeBinding>() , F
             "Investor" -> "investor"
             "Firm" -> "financial_firm"
             "Members" -> "general_member"
+            "Insurance" -> "life_insurance"
+            "Broker" -> "broker"
+            "Investment Managers" -> "investment_manager"
             else -> title.lowercase().replace(" ", "_")
         }
     }
 
     private fun categoryList(selectedCategory: String? = null): ArrayList<CategoryModel> {
-        val items = listOf("Members", "Advisors", "Startups", "Small Businesses", "Investor", "Firm")
+        val items = listOf("Members", "Advisors", "Startups", "Small Businesses", "Investor", "Firm", "Insurance", "Broker" ,"Investment Managers")
         return ArrayList(items.mapIndexed { index, item ->
             val isSelected = if (selectedCategory != null) {
                 item.equals(selectedCategory, ignoreCase = true)

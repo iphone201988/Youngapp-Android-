@@ -12,10 +12,28 @@
 #   public *;
 #}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Keep data models used for JSON parsing to avoid breakages in production
+-keep class com.tech.young.data.model.** { *; }
+-keep class com.tech.young.data.** { *; }
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Remove all Log statements from the release build
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+    public static *** i(...);
+    public static *** w(...);
+    public static *** e(...);
+}
+
+# Keep Hilt and Dagger classes
+-keep class dagger.hilt.** { *; }
+-keep class com.tech.young.base.module.** { *; }
+
+# Retrofit rules
+-keepattributes Signature, InnerClasses, EnclosingMethod
+-keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
+-keepattributes AnnotationDefault
+
+# Preserve the line number information for debugging stack traces.
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile

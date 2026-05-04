@@ -1,10 +1,13 @@
 package com.tech.young.ui.my_profile_screens
 
+import androidx.lifecycle.MutableLiveData
 import com.tech.young.base.BaseViewModel
 import com.tech.young.base.utils.Resource
 import com.tech.young.base.utils.event.SingleRequestEvent
 import com.tech.young.data.api.ApiHelper
 import com.google.gson.JsonObject
+import com.tech.young.data.model.GetPerformanceApiResponse
+import com.tech.young.data.model.PerformanceData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,8 +20,10 @@ import javax.inject.Inject
 class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel() {
 
     val observeCommon = SingleRequestEvent<JsonObject>()
+    val observeMonthlyAnalytics = SingleRequestEvent<JsonObject>()
 
 
+    var performanceData = MutableLiveData<PerformanceData>()
     fun getProfile(url: String){
         CoroutineScope(Dispatchers.IO).launch {
             observeCommon.postValue(Resource.loading(null))
@@ -67,6 +72,33 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
             }
         }
     }
+
+    fun acceptedRejected(data : HashMap<String,Any>, url: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            observeCommon.postValue(Resource.loading(null))
+            try {
+                val response = apiHelper.apiPostForRawBody(url,data)
+                if (response.isSuccessful && response.body() != null){
+                    observeCommon.postValue(Resource.success("acceptedRejected", response.body()))
+                }
+                else{
+                    observeCommon.postValue(
+                        Resource.error(
+                            handleErrorResponse(
+                                response.errorBody(),
+                                response.code()
+                            ), null
+                        )
+                    )
+                }
+            }catch (e : Exception){
+                observeCommon.postValue(Resource.error(e.message.toString(), null))
+            }
+        }
+    }
+
+
+
 
     fun editEvent(request: HashMap<String, RequestBody>, url: String, profileImage: MultipartBody.Part?){
         CoroutineScope(Dispatchers.IO).launch {
@@ -189,6 +221,30 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
     }
 
 
+    fun getPerformance(url : String){
+        CoroutineScope(Dispatchers.IO).launch {
+            observeCommon.postValue(Resource.loading(null))
+            try {
+                val response = apiHelper.apiGetOnlyAuthToken(url)
+                if (response.isSuccessful && response.body() != null){
+                    observeCommon.postValue(Resource.success("getPerformance", response.body()))
+                }
+                else{
+                    observeCommon.postValue(
+                        Resource.error(
+                            handleErrorResponse(
+                                response.errorBody(),
+                                response.code()
+                            ), null
+                        )
+                    )
+                }
+            }catch (e : Exception){
+                observeCommon.postValue(Resource.error(e.message.toString(), null))
+            }
+        }
+    }
+
     fun deleteEvent(url : String){
         CoroutineScope(Dispatchers.IO).launch {
             observeCommon.postValue(Resource.loading(null))
@@ -237,5 +293,32 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
         }
 
 
+    }
+
+    /**
+     * get monthly analytics
+     */
+    fun getMonthlyAnalytics(url : String, data: HashMap<String, Any>){
+        CoroutineScope(Dispatchers.IO).launch {
+            observeMonthlyAnalytics.postValue(Resource.loading(null))
+            try {
+                val response = apiHelper.apiGetWithQueryAuth(url,data)
+                if (response.isSuccessful && response.body() != null){
+                    observeMonthlyAnalytics.postValue(Resource.success("getMonthlyAnalytics", response.body()))
+                }
+                else{
+                    observeMonthlyAnalytics.postValue(
+                        Resource.error(
+                            handleErrorResponse(
+                                response.errorBody(),
+                                response.code()
+                            ), null
+                        )
+                    )
+                }
+            }catch (e : Exception){
+                observeMonthlyAnalytics.postValue(Resource.error(e.message.toString(), null))
+            }
+        }
     }
 }

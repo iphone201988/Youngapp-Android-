@@ -1,11 +1,14 @@
 package com.tech.young.ui.signup_process
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -33,7 +36,28 @@ class TermAndConditionsFragment : BaseFragment<FragmentTermAndConditionsBinding>
         initView()
         initOnClick()
         initObserver()
+
+
+        binding.webview.apply {
+            settings.javaScriptEnabled = true
+            settings.domStorageEnabled = true
+
+            webViewClient = object : WebViewClient() {
+
+                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                    super.onPageStarted(view, url, favicon)
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    binding.progressBar.visibility = View.GONE
+                }
+            }
+
+            loadUrl("https://theboom.app/terms")
     }
+        }
 
     override fun getLayoutResource(): Int {
         return R.layout.fragment_term_and_conditions

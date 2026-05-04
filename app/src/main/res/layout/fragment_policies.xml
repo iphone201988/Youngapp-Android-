@@ -15,27 +15,27 @@
         android:layout_height="match_parent"
         android:paddingHorizontal="@dimen/_20sdp"
         tools:context=".ui.policies_about.PoliciesFragment">
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvTitle"
+
+
+        <WebView
+            android:id="@+id/webview"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            style="@style/TextView_600_SemiBold"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:text="@string/policies_agreement"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvPolicies"
-            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/_10sdp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_marginTop="@dimen/_10sdp"
-            tools:listitem="@layout/policy_item_view"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle"
-            app:layout_constraintBottom_toTopOf="@id/tvAds"/>
+            android:layout_marginVertical="@dimen/_10sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tvAds"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@id/webview"
+            app:layout_constraintBottom_toBottomOf="@id/webview"
+            app:layout_constraintStart_toStartOf="@id/webview"
+            app:layout_constraintEnd_toEndOf="@id/webview"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvAds"
