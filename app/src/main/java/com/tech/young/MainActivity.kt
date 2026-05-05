@@ -51,7 +51,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         viewModel.observeCommon.observe(this) {
             when (it?.status) {
                 Status.LOADING -> {
-                   showLoading()
+                             hideLoading()
                 }
 
                 Status.SUCCESS -> {

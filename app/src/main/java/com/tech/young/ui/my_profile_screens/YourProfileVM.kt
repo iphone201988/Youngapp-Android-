@@ -26,7 +26,7 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
     var performanceData = MutableLiveData<PerformanceData>()
     fun getProfile(url: String){
         CoroutineScope(Dispatchers.IO).launch {
-            observeCommon.postValue(Resource.loading(null))
+            observeCommon.postValue(Resource.loading("getProfile", null))
             try {
                 val response = apiHelper.apiGetOnlyAuthToken(url)
                 if (response.isSuccessful && response.body() != null){
@@ -51,7 +51,7 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
 
     fun getEvents(data : HashMap<String,Any>, url: String){
         CoroutineScope(Dispatchers.IO).launch {
-            observeCommon.postValue(Resource.loading(null))
+            observeCommon.postValue(Resource.loading("getEvents", null))
             try {
                 val response = apiHelper.apiGetWithQueryAuth(url,data)
                 if (response.isSuccessful && response.body() != null){
@@ -75,7 +75,7 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
 
     fun acceptedRejected(data : HashMap<String,Any>, url: String){
         CoroutineScope(Dispatchers.IO).launch {
-            observeCommon.postValue(Resource.loading(null))
+            observeCommon.postValue(Resource.loading("acceptedRejected", null))
             try {
                 val response = apiHelper.apiPostForRawBody(url,data)
                 if (response.isSuccessful && response.body() != null){
@@ -102,7 +102,7 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
 
     fun editEvent(request: HashMap<String, RequestBody>, url: String, profileImage: MultipartBody.Part?){
         CoroutineScope(Dispatchers.IO).launch {
-            observeCommon.postValue(Resource.loading(null))
+            observeCommon.postValue(Resource.loading("editEvent", null))
             try {
                 val response = apiHelper.apiForMultipartPut(url, request, profileImage)
                 if (response.isSuccessful && response.body() != null){
@@ -126,7 +126,7 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
 
     fun addEvent(request: HashMap<String, RequestBody>, url: String, profileImage: MultipartBody.Part?){
         CoroutineScope(Dispatchers.IO).launch {
-            observeCommon.postValue(Resource.loading(null))
+            observeCommon.postValue(Resource.loading("addEvent", null))
             try {
                 val response = apiHelper.apiForPostMultipart(url, request, profileImage)
                 if (response.isSuccessful && response.body() != null){
@@ -150,7 +150,7 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
 
     fun updateProfile(url: String, data: HashMap<String, RequestBody>, part: MultipartBody.Part?,partList:MutableList<MultipartBody.Part>?){
         CoroutineScope(Dispatchers.IO).launch {
-            observeCommon.postValue(Resource.loading(null))
+            observeCommon.postValue(Resource.loading("updateProfile", null))
             try {
                 val response = apiHelper.apiForPutMultipart(url,data,part,partList)
                 if (response.isSuccessful && response.body() != null){
@@ -174,7 +174,7 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
 
     fun getAds(url : String){
         CoroutineScope(Dispatchers.IO).launch {
-            observeCommon.postValue(Resource.loading(null))
+            observeCommon.postValue(Resource.loading("getAds", null))
             try {
                 val response = apiHelper.apiGetOnlyAuthToken(url)
                 if (response.isSuccessful && response.body() != null){
@@ -198,7 +198,7 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
 
     fun getRating(data : HashMap<String,Any> , url : String){
         CoroutineScope(Dispatchers.IO).launch {
-            observeCommon.postValue(Resource.loading(null))
+            observeCommon.postValue(Resource.loading("getRating", null))
             try {
                 val response = apiHelper.apiGetWithQueryAuth(url,data)
                 if (response.isSuccessful && response.body() != null){
@@ -223,7 +223,7 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
 
     fun getPerformance(url : String){
         CoroutineScope(Dispatchers.IO).launch {
-            observeCommon.postValue(Resource.loading(null))
+            observeCommon.postValue(Resource.loading("getPerformance", null))
             try {
                 val response = apiHelper.apiGetOnlyAuthToken(url)
                 if (response.isSuccessful && response.body() != null){
@@ -247,7 +247,7 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
 
     fun deleteEvent(url : String){
         CoroutineScope(Dispatchers.IO).launch {
-            observeCommon.postValue(Resource.loading(null))
+            observeCommon.postValue(Resource.loading("deleteEvent", null))
             try {
                 val response = apiHelper.deletePost(url)
                 if (response.isSuccessful && response.body() != null){
@@ -271,7 +271,7 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
 
     fun logout(url: String){
         CoroutineScope(Dispatchers.IO).launch {
-            observeCommon.postValue(Resource.loading(null))
+            observeCommon.postValue(Resource.loading("logout", null))
             try {
                 val response = apiHelper.apiGetOnlyAuthToken(url)
                 if (response.isSuccessful && response.body() != null){
@@ -300,7 +300,7 @@ class YourProfileVM @Inject constructor(val apiHelper: ApiHelper):BaseViewModel(
      */
     fun getMonthlyAnalytics(url : String, data: HashMap<String, Any>){
         CoroutineScope(Dispatchers.IO).launch {
-            observeMonthlyAnalytics.postValue(Resource.loading(null))
+            observeMonthlyAnalytics.postValue(Resource.loading("getMonthlyAnalytics", null))
             try {
                 val response = apiHelper.apiGetWithQueryAuth(url,data)
                 if (response.isSuccessful && response.body() != null){

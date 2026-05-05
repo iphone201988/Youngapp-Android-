@@ -316,11 +316,12 @@
                     app:layout_constraintTop_toBottomOf="@id/etStartUp" />
 
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/etPrimaryInvestmentGoal"
                     style="@style/TextView_400_Regular"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
+                    primaryInvestmentGoal="@{bean.user.primaryInvestmentGoal}"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
@@ -359,10 +360,11 @@
 
 
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/etInvestmentHorizon"
                     style="@style/TextView_400_Regular"
                     android:layout_width="match_parent"
+                    investmentHorizon="@{bean.user.investmentHorizone}"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:background="@drawable/radius_border_gray"
@@ -399,9 +401,10 @@
                     app:layout_constraintTop_toBottomOf="@id/etInvestmentHorizon" />
 
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/etDeiImportance"
                     style="@style/TextView_400_Regular"
+                    deiImportance = "@{bean.user.DEIImportance}"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
@@ -443,10 +446,11 @@
 
 
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/etCommunityReinvestmentImportance"
                     style="@style/TextView_400_Regular"
                     android:layout_width="match_parent"
+                    communityImportance= "@{bean.user.communityReinvestmentImportance}"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:background="@drawable/radius_border_gray"
@@ -484,9 +488,10 @@
 
 
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/etEnvironmental"
                     style="@style/TextView_400_Regular"
+                    esgPriority="@{bean.user.ESGPriority}"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
@@ -533,6 +538,7 @@
                     android:layout_marginTop="@dimen/_3sdp"
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
+                    android:text="@{bean.user.investmentInterests}"
                     android:hint="Real Estate, AI, Green Energy"
                     android:focusable="true"
                     android:inputType="textCapSentences"
@@ -554,9 +560,10 @@
                     app:layout_constraintTop_toBottomOf="@id/etTopicOfInterest" />
 
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/etFromInvestment"
                     style="@style/TextView_400_Regular"
+                    investment="@{bean.user.seekFromInvestment}"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
@@ -594,9 +601,10 @@
                     app:layout_constraintTop_toBottomOf="@id/etFromInvestment" />
 
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/etEmergencyFund"
                     style="@style/TextView_400_Regular"
+                    emergencyFund="@{bean.user.emergencyFund}"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"

@@ -40,11 +40,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="@dimen/_15sdp"
-            android:layout_height="@dimen/_15sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:rotation="@{bean.isExpanded ? 90 : 0}"
-
+            android:padding="@dimen/_5sdp"
             android:src="@drawable/iv_forword"
             android:visibility="@{bean.isHeader ? 0 : 2}"
 

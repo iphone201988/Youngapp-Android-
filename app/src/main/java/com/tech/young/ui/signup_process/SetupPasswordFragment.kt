@@ -58,7 +58,7 @@ class SetupPasswordFragment : BaseFragment<FragmentSetupPasswordBinding>() {
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when (it?.status) {
                 Status.LOADING -> {
-                    showLoading()
+                         hideLoading()
                 }
 
                 Status.SUCCESS -> {
@@ -120,6 +120,15 @@ class SetupPasswordFragment : BaseFragment<FragmentSetupPasswordBinding>() {
 
             "Investor/ VC" -> {
                 role = "investor"
+            }
+            "Life Insurance" -> {
+                role = "life_insurance"
+            }
+            "Broker" -> {
+                role = "broker"
+            }
+            "Investment Managers" ->{
+                role = "investment_managers"
             }
 
         }

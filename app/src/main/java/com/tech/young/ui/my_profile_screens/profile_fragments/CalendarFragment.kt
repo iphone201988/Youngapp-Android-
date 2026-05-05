@@ -422,6 +422,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
 
 
         BindingUtils.userId = sharedPrefManager.getUserId().toString()
+        Log.i("dsadsa", "initView: ${BindingUtils.userId}")
 
 
         // Step 1: Initialize with current date
@@ -724,7 +725,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>()  ,BaseCustomBot
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when(it?.status){
                 Status.LOADING ->{
-                    showLoading()
+                         showLoading()
                 }
                 Status.SUCCESS ->{
                     hideLoading()

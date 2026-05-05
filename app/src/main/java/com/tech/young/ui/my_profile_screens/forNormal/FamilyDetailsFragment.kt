@@ -105,7 +105,7 @@ class FamilyDetailsFragment : BaseFragment<FragmentFamilyDetailsBinding>(),
     private fun initObserver() {
         viewModel.observeCommon.observe(requireActivity()) {
             when (it?.status) {
-                Status.LOADING -> showLoading()
+                Status.LOADING ->      hideLoading()
                 Status.SUCCESS -> {
                     hideLoading()
                     when (it.message) {

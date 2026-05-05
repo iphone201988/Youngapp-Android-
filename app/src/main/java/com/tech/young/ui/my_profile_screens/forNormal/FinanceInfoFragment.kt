@@ -23,6 +23,7 @@ import com.tech.young.data.model.DummyLists.getFinancialExpList
 import com.tech.young.data.model.DummyLists.getRiskToleranceList
 import com.tech.young.data.model.DummyLists.getSalaryRange
 import com.tech.young.data.model.DummyLists.getYearsEmployed
+import com.tech.young.data.model.DummyLists.investmentGoal
 import com.tech.young.data.model.GetProfileApiResponse.GetProfileApiResponseData
 import com.tech.young.data.model.MenuItem
 import com.tech.young.data.model.UpdateUserProfileResponse
@@ -46,6 +47,7 @@ class FinanceInfoFragment : BaseFragment<FragmentFinanceInfoBinding>(),
     private var isInvestmentSelected: Boolean = false
     private var isRetirementSelected: Boolean = false
     private var isEstateSelected: Boolean = false
+    private var isInvestorSelected: Boolean = false
 
     // common bottom sheet & adapter
     private var type: String? = null
@@ -103,6 +105,7 @@ class FinanceInfoFragment : BaseFragment<FragmentFinanceInfoBinding>(),
         setupYesNoToggleForInvestment()
         setupYesNoToggleForRetirment()
         setupYesNoToggleForEstate()
+        setupYesNoToggleForInvestor()
         
         if (profileData != null) {
             binding.bean = profileData
@@ -141,8 +144,23 @@ class FinanceInfoFragment : BaseFragment<FragmentFinanceInfoBinding>(),
     }
 
     private fun preSelectTopics(savedTopics: List<String>) {
-        val trimmedTopics = savedTopics.map { it.trim() }
-        val savedSet = trimmedTopics.map { it.lowercase() }.toSet()
+        val allTopics = mutableListOf<String>()
+        savedTopics.forEach { topic ->
+            val trimmed = topic.trim()
+            if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+                try {
+                    val fromJson = Gson().fromJson(trimmed, Array<String>::class.java).toList()
+                    allTopics.addAll(fromJson)
+                } catch (e: Exception) {
+                    allTopics.add(trimmed.replace("[", "").replace("]", "").replace("\"", "").trim())
+                }
+            } else {
+                allTopics.add(trimmed)
+            }
+        }
+
+        val cleanedTopics = allTopics.filter { it.isNotEmpty() }.distinct()
+        val savedSet = cleanedTopics.map { it.lowercase() }.toSet()
 
         menuList.forEach { header ->
             header.children.forEach { child ->
@@ -157,9 +175,9 @@ class FinanceInfoFragment : BaseFragment<FragmentFinanceInfoBinding>(),
         }
 
         // Use the original saved topics (trimmed) to display in the EditText
-        if (trimmedTopics.isNotEmpty()) {
-            selectedTopicsJson = trimmedTopics
-            binding.etTopic.setText(trimmedTopics.joinToString(", "))
+        if (cleanedTopics.isNotEmpty()) {
+            selectedTopicsJson = cleanedTopics
+            binding.etTopic.setText(cleanedTopics.joinToString(", "))
         }
     }
 
@@ -179,6 +197,12 @@ class FinanceInfoFragment : BaseFragment<FragmentFinanceInfoBinding>(),
 
                 R.id.etSalary -> {
 
+                }
+
+                R.id.etGoals ->{
+                    type = "2"
+                    commonAdapter.list = investmentGoal()
+                    commonBottomSheet.show()
                 }
 
                 R.id.etFinance -> {
@@ -216,7 +240,7 @@ class FinanceInfoFragment : BaseFragment<FragmentFinanceInfoBinding>(),
     private fun initObserver() {
         viewModel.observeCommon.observe(requireActivity()) {
             when (it?.status) {
-                Status.LOADING -> showLoading()
+                Status.LOADING ->      hideLoading()
                 Status.SUCCESS -> {
                     hideLoading()
                     when (it.message) {
@@ -262,91 +286,109 @@ class FinanceInfoFragment : BaseFragment<FragmentFinanceInfoBinding>(),
     private fun setupYesNoToggleForInvestment() {
         binding.yesOptionInvestment.label.text = "Yes"
         binding.noOptionInvestment.label.text = "No"
+        
         binding.yesOptionInvestment.box.setOnClickListener {
-            isInvestmentSelected = true
-            binding.yesOptionInvestment.box.setBackgroundResource(R.drawable.ic_check_selected)
-            binding.noOptionInvestment.box.setBackgroundResource(R.drawable.ic_check_unselected)
+            updateInvestmentUI(true)
         }
         binding.noOptionInvestment.box.setOnClickListener {
-            isInvestmentSelected = false
-            binding.noOptionInvestment.box.setBackgroundResource(R.drawable.ic_check_selected)
-            binding.yesOptionInvestment.box.setBackgroundResource(R.drawable.ic_check_unselected)
+            updateInvestmentUI(false)
         }
-        if (profileData != null) {
-            if (profileData?.user?.investmentAccounts == true) {
-                isInvestmentSelected = true
-                binding.yesOptionInvestment.box.setBackgroundResource(R.drawable.ic_check_selected)
-                binding.noOptionInvestment.box.setBackgroundResource(R.drawable.ic_check_unselected)
-            } else {
-                isInvestmentSelected = false
-                binding.noOptionInvestment.box.setBackgroundResource(R.drawable.ic_check_selected)
-                binding.yesOptionInvestment.box.setBackgroundResource(R.drawable.ic_check_unselected)
-            }
+
+        // Set initial state from API
+        val initialValue = profileData?.user?.investmentAccounts == true
+        updateInvestmentUI(initialValue)
+    }
+
+    private fun updateInvestmentUI(isSelected: Boolean) {
+        isInvestmentSelected = isSelected
+        if (isSelected) {
+            binding.yesOptionInvestment.box.setBackgroundResource(R.drawable.ic_check_selected)
+            binding.noOptionInvestment.box.setBackgroundResource(R.drawable.ic_check_unselected)
         } else {
-            isInvestmentSelected = false
-            binding.noOptionInvestment.box.setBackgroundResource(R.drawable.ic_check_selected)
             binding.yesOptionInvestment.box.setBackgroundResource(R.drawable.ic_check_unselected)
+            binding.noOptionInvestment.box.setBackgroundResource(R.drawable.ic_check_selected)
         }
     }
 
     private fun setupYesNoToggleForRetirment() {
         binding.yesOptionRetirement.label.text = "Yes"
         binding.noOptionRetirement.label.text = "No"
+
         binding.yesOptionRetirement.box.setOnClickListener {
-            isRetirementSelected = true
-            binding.yesOptionRetirement.box.setBackgroundResource(R.drawable.ic_check_selected)
-            binding.noOptionRetirement.box.setBackgroundResource(R.drawable.ic_check_unselected)
+            updateRetirementUI(true)
         }
         binding.noOptionRetirement.box.setOnClickListener {
-            isRetirementSelected = false
-            binding.noOptionRetirement.box.setBackgroundResource(R.drawable.ic_check_selected)
-            binding.yesOptionRetirement.box.setBackgroundResource(R.drawable.ic_check_unselected)
+            updateRetirementUI(false)
         }
 
-        if (profileData != null) {
-            if (profileData?.user?.retirement == true) {
-                isRetirementSelected = true
-                binding.noOptionRetirement.box.setBackgroundResource(R.drawable.ic_check_unselected)
-                binding.yesOptionRetirement.box.setBackgroundResource(R.drawable.ic_check_selected)
-            } else {
-                isRetirementSelected = false
-                binding.noOptionRetirement.box.setBackgroundResource(R.drawable.ic_check_selected)
-                binding.yesOptionRetirement.box.setBackgroundResource(R.drawable.ic_check_unselected)
-            }
+        // Set initial state from API
+        val initialValue = profileData?.user?.retirement == true
+        updateRetirementUI(initialValue)
+    }
+
+    private fun updateRetirementUI(isSelected: Boolean) {
+        isRetirementSelected = isSelected
+        if (isSelected) {
+            binding.yesOptionRetirement.box.setBackgroundResource(R.drawable.ic_check_selected)
+            binding.noOptionRetirement.box.setBackgroundResource(R.drawable.ic_check_unselected)
         } else {
-            isRetirementSelected = false
-            binding.noOptionRetirement.box.setBackgroundResource(R.drawable.ic_check_selected)
             binding.yesOptionRetirement.box.setBackgroundResource(R.drawable.ic_check_unselected)
+            binding.noOptionRetirement.box.setBackgroundResource(R.drawable.ic_check_selected)
         }
     }
 
     private fun setupYesNoToggleForEstate() {
         binding.yesOptionRealEstate.label.text = "Yes"
         binding.noOptionRealEstate.label.text = "No"
+
         binding.yesOptionRealEstate.box.setOnClickListener {
-            isEstateSelected = true
-            binding.yesOptionRealEstate.box.setBackgroundResource(R.drawable.ic_check_selected)
-            binding.noOptionRealEstate.box.setBackgroundResource(R.drawable.ic_check_unselected)
+            updateEstateUI(true)
         }
         binding.noOptionRealEstate.box.setOnClickListener {
-            isEstateSelected = false
-            binding.noOptionRealEstate.box.setBackgroundResource(R.drawable.ic_check_selected)
-            binding.yesOptionRealEstate.box.setBackgroundResource(R.drawable.ic_check_unselected)
+            updateEstateUI(false)
         }
-        if (profileData != null) {
-            if (profileData?.user?.investmentRealEstate == true) {
-                isEstateSelected = true
-                binding.noOptionRealEstate.box.setBackgroundResource(R.drawable.ic_check_unselected)
-                binding.yesOptionRealEstate.box.setBackgroundResource(R.drawable.ic_check_selected)
-            } else {
-                isEstateSelected = false
-                binding.noOptionRealEstate.box.setBackgroundResource(R.drawable.ic_check_selected)
-                binding.yesOptionRealEstate.box.setBackgroundResource(R.drawable.ic_check_unselected)
-            }
+
+        // Set initial state from API
+        val initialValue = profileData?.user?.investmentRealEstate == true
+        updateEstateUI(initialValue)
+    }
+
+    private fun updateEstateUI(isSelected: Boolean) {
+        isEstateSelected = isSelected
+        if (isSelected) {
+            binding.yesOptionRealEstate.box.setBackgroundResource(R.drawable.ic_check_selected)
+            binding.noOptionRealEstate.box.setBackgroundResource(R.drawable.ic_check_unselected)
         } else {
-            isEstateSelected = false
-            binding.noOptionRealEstate.box.setBackgroundResource(R.drawable.ic_check_selected)
             binding.yesOptionRealEstate.box.setBackgroundResource(R.drawable.ic_check_unselected)
+            binding.noOptionRealEstate.box.setBackgroundResource(R.drawable.ic_check_selected)
+        }
+    }
+
+    private fun setupYesNoToggleForInvestor() {
+        binding.yesOptionInvestor.label.text = "Yes"
+        binding.noOptionInvestor.label.text = "No"
+
+        binding.yesOptionInvestor.box.setOnClickListener {
+            updateInvestorUI(true)
+        }
+        binding.noOptionInvestor.box.setOnClickListener {
+            updateInvestorUI(false)
+        }
+
+        // Set initial state from API
+        val initialValue = profileData?.user?.investors == true
+        Log.i("initial", "setupYesNoToggleForInvestor:  $initialValue")
+        updateInvestorUI(initialValue)
+    }
+
+    private fun updateInvestorUI(isSelected: Boolean) {
+        isInvestorSelected = isSelected
+        if (isSelected) {
+            binding.yesOptionInvestor.box.setBackgroundResource(R.drawable.ic_check_selected)
+            binding.noOptionInvestor.box.setBackgroundResource(R.drawable.ic_check_unselected)
+        } else {
+            binding.yesOptionInvestor.box.setBackgroundResource(R.drawable.ic_check_unselected)
+            binding.noOptionInvestor.box.setBackgroundResource(R.drawable.ic_check_selected)
         }
     }
 
@@ -373,6 +415,7 @@ class FinanceInfoFragment : BaseFragment<FragmentFinanceInfoBinding>(),
                         if (type != null) {
                             when (type) {
                                 "1" -> binding.etYears.text = m.title
+                                "2" -> binding.etGoals.text = m.title
                                 "3" -> binding.etFinance.text = m.title
                                 "4" -> binding.etLowRisk.text = m.title
                                 "6" -> binding.etSalaryRange.setText(m.title)
@@ -403,8 +446,8 @@ class FinanceInfoFragment : BaseFragment<FragmentFinanceInfoBinding>(),
             selectedItems.map { it.title }
         }
 
-        // ✅ Convert List → JSON string
-        val topicsJson = Gson().toJson(topicsOfInterestValue)
+        // ✅ Convert List → Comma separated string
+        val topicsString = topicsOfInterestValue.joinToString(", ")
 
         data["occupation"] = binding.etOccupation.text.toString().toRequestBody()
         data["yearsEmployed"] = binding.etYears.text.toString().toRequestBody()
@@ -414,9 +457,10 @@ class FinanceInfoFragment : BaseFragment<FragmentFinanceInfoBinding>(),
         data["investmentAccounts"] = isInvestmentSelected.toString().toRequestBody()
         data["retirement"] = isRetirementSelected.toString().toRequestBody()
         data["investmentRealEstate"] = isEstateSelected.toString().toRequestBody()
+        data["investors"] = isInvestorSelected.toString().toRequestBody()
 
-        // ✅ FINAL FIX HERE
-        data["topicsOfInterest"] = topicsJson.toRequestBody()
+        // ✅ Updated to send as comma separated string
+        data["topicsOfInterest"] = topicsString.toRequestBody()
 
         data["goals"] = binding.etGoals.text.toString().toRequestBody()
         data["salaryRange"] = binding.etSalaryRange.text.toString().toRequestBody()

@@ -39,7 +39,7 @@ class AddLicenseCameraFragment : BaseFragment<FragmentAddLicenseCameraBinding>()
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when(it?.status){
                 Status.LOADING ->{
-                    showLoading()
+                         hideLoading()
                 }
                 Status.SUCCESS ->{
                     hideLoading()

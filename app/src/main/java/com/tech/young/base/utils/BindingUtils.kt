@@ -56,6 +56,7 @@ import com.tech.young.data.ImageModel
 import com.tech.young.data.NewsItem
 import com.tech.young.data.NewsSection
 import com.tech.young.data.SubViewClickBean
+import com.tech.young.data.model.DummyLists
 import com.tech.young.data.model.ExchangeShareApiResponse
 import com.tech.young.data.model.GetOtherUserProfileData
 import com.tech.young.data.model.GetProfileApiResponse
@@ -80,6 +81,7 @@ object BindingUtils {
 
     var currentUserId =""
     var  userId = ""
+
     var isAlreadyAddedToCalendar = false
     var lastLogin : String ? = null
 
@@ -1057,6 +1059,9 @@ object BindingUtils {
             "financial_firm" -> "Insurance"
             "financial_advisor" -> "Financial Advisor"
             "startup" -> "Startup"
+            "investment_managers" -> "Investment Manager"
+            "broker" -> "Broker"
+            "life_insurance" -> "Life Insurance"
             else -> ""  // default fallback
         }
         textView.text = label
@@ -1073,6 +1078,9 @@ object BindingUtils {
             "startup" -> "Services/Products"
             "financial_advisor" -> "Services/Products"
             "general_member" -> "Interested"
+            "investment_managers" -> "Services/Products"
+            "broker" -> "Services/Products"
+            "life_insurance" -> "Services/Products"
             else -> ""  // default fallback
         }
         textView.text = label
@@ -1091,7 +1099,22 @@ object BindingUtils {
         val safeRole = role?.lowercase().orEmpty()
 
         val topicsText = when (topicsOfInterest) {
-            is List<*> -> topicsOfInterest.filterIsInstance<String>().joinToString(", ")
+            is List<*> -> {
+                val list = topicsOfInterest.filterIsInstance<String>()
+                val cleanedList = list.flatMap { item ->
+                    val trimmed = item.trim()
+                    if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+                        try {
+                            Gson().fromJson(trimmed, Array<String>::class.java).toList()
+                        } catch (e: Exception) {
+                            listOf(trimmed.replace("[", "").replace("]", "").replace("\"", "").trim())
+                        }
+                    } else {
+                        listOf(trimmed)
+                    }
+                }
+                cleanedList.filter { it.isNotEmpty() }.distinct().joinToString(", ")
+            }
             is String -> topicsOfInterest
                 .replace("[", "")
                 .replace("]", "")
@@ -1121,6 +1144,9 @@ object BindingUtils {
             "startup" -> "Website"
             "financial_advisor" -> "Website"
             "general_member" -> "Goals"
+            "investment_managers" -> "Website"
+            "broker" -> "Website"
+            "life_insurance" -> "Website"
             else -> ""  // default fallback
         }
         textView.text = label
@@ -1136,6 +1162,9 @@ object BindingUtils {
             "startup" -> "Startup"
             "financial_advisor" -> "Financial Advisor"
             "general_member" -> "General Member"
+            "investment_managers" -> "Investment Manager"
+            "broker" -> "Broker"
+            "life_insurance" -> "Life Insurance"
             else -> ""  // default fallback
         }
         textView.text = label
@@ -1314,11 +1343,15 @@ object BindingUtils {
     @JvmStatic
     fun View.setEventTypeColor(type: String?) {
         val color = when (type) {
-            "scheduled_lives" -> Color.parseColor("#BF9000")
+            "scheduled_lives" -> Color.parseColor("#7D51F9")
             "general_events_by_admin" -> Color.parseColor("#AB8BC3")
             "own_events" -> Color.parseColor("#00B050")
+            "other_user_scheduled_lives" -> Color.parseColor("#7F7F7F")
+            "others_events", "public_event" -> Color.parseColor("#FF59BD")
+            "ipo" -> Color.parseColor("#FF5B5B")
             else -> Color.LTGRAY
         }
+
         this.backgroundTintList = ColorStateList.valueOf(color)
     }
 
@@ -1327,9 +1360,12 @@ object BindingUtils {
     @JvmStatic
     fun TextView.setEventTypeTextColor(type: String?) {
         val color = when (type) {
-            "scheduled_lives" -> Color.parseColor("#BF9000")
+            "scheduled_lives" -> Color.parseColor("#7D51F9")
             "general_events_by_admin" -> Color.parseColor("#AB8BC3")
             "own_events" -> Color.parseColor("#00B050")
+            "other_user_scheduled_lives" -> Color.parseColor("#7F7F7F")
+            "others_events", "public_event" -> Color.parseColor("#FF59BD")
+            "ipo" -> Color.parseColor("#FF5B5B")
             else -> Color.DKGRAY
         }
         setTextColor(color)
@@ -1592,11 +1628,7 @@ object BindingUtils {
 
 
 
-        object Status {
-            const val PENDING = "pending"
-            const val ACCEPTED = "accepted"
-            const val REJECTED = "rejected"
-        }
+
 
         @BindingAdapter("showIfPending", "eventUserId")
         @JvmStatic
@@ -1607,7 +1639,7 @@ object BindingUtils {
 
             visibility = if (
                 status.equals("pending", true) &&
-                userId != eventUserId
+                userId == eventUserId
             ) {
                 View.VISIBLE
             } else {
@@ -1625,7 +1657,7 @@ object BindingUtils {
 
             visibility = if (
                 status.equals("accepted", true) &&
-                userId != eventUserId
+                userId == eventUserId
             ) {
                 View.VISIBLE
             } else {
@@ -1641,12 +1673,184 @@ object BindingUtils {
         ) {
             visibility = if (
                 status.equals("rejected", true) &&
-                userId != eventUserId
+                userId == eventUserId
             ) {
                 View.VISIBLE
             } else {
                 View.GONE
             }
         }
+
+
+
+    @BindingAdapter("setEmploymentValue")
+    @JvmStatic
+    fun setEmploymentValue(view: AppCompatTextView, value: String?) {
+        if (value.isNullOrEmpty()) {
+            view.text = ""
+            return
+        }
+
+        val list = DummyLists.getEmploymentStatus() // 👈 reuse your existing list
+        val title = list.find { it.actualValue == value }?.title ?: value
+
+        view.text = title
+    }
+
+    @BindingAdapter("residenceStatus")
+    @JvmStatic
+    fun residenceStatus(view: AppCompatTextView, value: String?) {
+        if (value.isNullOrEmpty()) {
+            view.text = ""
+            return
+        }
+
+        val list = DummyLists.homeOwnershipStatusList() // 👈 reuse your existing list
+        val title = list.find { it.actualValue == value }?.title ?: value
+
+        view.text = title
+    }
+
+
+    @BindingAdapter("educationStatus")
+    @JvmStatic
+    fun educationStatus(view: AppCompatTextView, value: String?) {
+        if (value.isNullOrEmpty()) {
+            view.text = ""
+            return
+        }
+
+        val list = DummyLists.getEduLevel() // 👈 reuse your existing list
+        val title = list.find { it.actualValue == value }?.title ?: value
+
+        view.text = title
+    }
+
+
+    @BindingAdapter("politicalValue")
+    @JvmStatic
+    fun politicalValue(view: AppCompatTextView, value: String?) {
+        if (value.isNullOrEmpty()) {
+            view.text = ""
+            return
+        }
+
+        val list = DummyLists.getPoliticalValues() // 👈 reuse your existing list
+        val title = list.find { it.actualValue == value }?.title ?: value
+
+        view.text = title
+    }
+
+    @BindingAdapter("primaryInvestmentGoal")
+    @JvmStatic
+    fun primaryInvestmentGoal(view: AppCompatTextView, value: String?) {
+        if (value.isNullOrEmpty()) {
+            view.text = ""
+            return
+        }
+
+        val list = DummyLists.investmentGoal() // 👈 reuse your existing list
+        val title = list.find { it.actualValue == value }?.title ?: value
+
+        view.text = title
+    }
+
+    @BindingAdapter("investmentHorizon")
+    @JvmStatic
+    fun investmentHorizon(view: AppCompatTextView, value: String?) {
+        if (value.isNullOrEmpty()) {
+            view.text = ""
+            return
+        }
+
+        val list = DummyLists.investmentHorizon() // 👈 reuse your existing list
+        val title = list.find { it.actualValue == value }?.title ?: value
+
+        view.text = title
+    }
+
+
+    @BindingAdapter("deiImportance")
+    @JvmStatic
+    fun deiImportance(view: AppCompatTextView, value: String?) {
+        if (value.isNullOrEmpty()) {
+            view.text = ""
+            return
+        }
+
+        val list = DummyLists.getDeiImportance() // 👈 reuse your existing list
+        val title = list.find { it.actualValue == value }?.title ?: value
+
+        view.text = title
+    }
+
+
+    @BindingAdapter("communityImportance")
+    @JvmStatic
+    fun communityImportance(view: AppCompatTextView, value: String?) {
+        if (value.isNullOrEmpty()) {
+            view.text = ""
+            return
+        }
+
+        val list = DummyLists.communityReinvestment() // 👈 reuse your existing list
+        val title = list.find { it.actualValue == value }?.title ?: value
+
+        view.text = title
+    }
+
+    @BindingAdapter("esgPriority")
+    @JvmStatic
+    fun esgPriority(view: AppCompatTextView, value: String?) {
+        if (value.isNullOrEmpty()) {
+            view.text = ""
+            return
+        }
+
+        val list = DummyLists.esgPriority() // 👈 reuse your existing list
+        val title = list.find { it.actualValue == value }?.title ?: value
+
+        view.text = title
+    }
+
+    @BindingAdapter("investment")
+    @JvmStatic
+    fun investment(view: AppCompatTextView, value: String?) {
+        if (value.isNullOrEmpty()) {
+            view.text = ""
+            return
+        }
+
+        val list = DummyLists.investmentPreference() // 👈 reuse your existing list
+        val title = list.find { it.actualValue == value }?.title ?: value
+
+        view.text = title
+    }
+
+    @BindingAdapter("emergencyFund")
+    @JvmStatic
+    fun emergencyFund(view: AppCompatTextView, value: String?) {
+        if (value.isNullOrEmpty()) {
+            view.text = ""
+            return
+        }
+
+        val list = DummyLists.emergencyFund() // 👈 reuse your existing list
+        val title = list.find { it.actualValue == value }?.title ?: value
+
+        view.text = title
+    }
+
+    @BindingAdapter("checkState")
+    @JvmStatic
+    fun setCheckState(imageView: AppCompatImageView, isChecked: Boolean?) {
+        if (isChecked == true) {
+            imageView.setImageResource(R.drawable.ic_check_selected)
+        } else {
+            imageView.setImageResource(R.drawable.ic_check_unselected)
+        }
+    }
+
+
 
 }

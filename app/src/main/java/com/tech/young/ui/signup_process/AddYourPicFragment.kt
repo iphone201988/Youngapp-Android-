@@ -125,7 +125,7 @@ class AddYourPicFragment : BaseFragment<FragmentAddYourPicBinding>() {
 
 
                 R.id.tvNext -> {
-                    if (Constants.chooseAccountType == "Financial Advisor" || Constants.chooseAccountType == "Financial Firm") {
+                    if (Constants.chooseAccountType == "Financial Advisor" || Constants.chooseAccountType == "Financial Firm" || Constants.chooseAccountType == "Life Insurance" || Constants.chooseAccountType == "Broker" || Constants.chooseAccountType == "Investment Managers") {
                         findNavController().navigate(R.id.navigateToCrdNumberVerificationFragment)
                     } else {
                         findNavController().navigate(R.id.navigateToAddYourPersonalInfoFragment)

@@ -100,7 +100,7 @@ class StreamActivity : BaseActivity<ActivityStreamBinding>() {
 //                                   hideLoading()
 //                                   stopProgress = 0
 //                               } else {
-//                                   showLoading()
+//                                        hideLoading()
 //                               }
 //                           }*/
 //                    hideLoading()

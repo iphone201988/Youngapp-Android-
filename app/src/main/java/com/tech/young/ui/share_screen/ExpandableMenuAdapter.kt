@@ -73,7 +73,45 @@ class ExpandableMenuAdapter(
             } else {
                 // ✅ TOGGLE SELECTION
                 currentItem.isSelected = !currentItem.isSelected
-                notifyItemChanged(currentPos)
+
+                if (currentItem.isSelected) {
+                    if (currentItem.title.equals("Other", ignoreCase = true)) {
+                        // If "Other" is selected, deselect all other items
+                        list.forEach { item ->
+                            if (item != currentItem) {
+                                item.isSelected = false
+                            }
+                            item.children.forEach { child ->
+                                if (child != currentItem) {
+                                    child.isSelected = false
+                                }
+                            }
+                        }
+                        notifyDataSetChanged()
+                    } else {
+                        // If a non-"Other" item is selected, deselect "Other"
+                        var otherDeselected = false
+                        list.forEach { item ->
+                            if (item.title.equals("Other", ignoreCase = true) && item.isSelected) {
+                                item.isSelected = false
+                                otherDeselected = true
+                            }
+                            item.children.forEach { child ->
+                                if (child.title.equals("Other", ignoreCase = true) && child.isSelected) {
+                                    child.isSelected = false
+                                    otherDeselected = true
+                                }
+                            }
+                        }
+                        if (otherDeselected) {
+                            notifyDataSetChanged()
+                        } else {
+                            notifyItemChanged(currentPos)
+                        }
+                    }
+                } else {
+                    notifyItemChanged(currentPos)
+                }
 
                 // ✅ SEND SELECTED LIST
                 onSelectionChanged(getSelectedItems())

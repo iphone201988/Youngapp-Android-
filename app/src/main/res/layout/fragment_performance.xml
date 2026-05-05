@@ -59,6 +59,17 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/clTopBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="visible">
+        <include layout="@layout/shimmer_performance"/>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/clInvestment"

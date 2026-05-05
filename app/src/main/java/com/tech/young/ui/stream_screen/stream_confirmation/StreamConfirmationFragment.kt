@@ -130,7 +130,7 @@ class StreamConfirmationFragment : BaseFragment<FragmentStreamConfirmationBindin
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when(it?.status){
                 Status.LOADING ->{
-                    showLoading()
+                         showLoading()
                 }
                 Status.SUCCESS ->{
                     hideLoading()

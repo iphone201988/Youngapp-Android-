@@ -390,7 +390,7 @@ class ShareExchangeFragment : BaseFragment<FragmentShareExchangeBinding>() , Fil
             when(it?.status){
                 Status.LOADING ->{
                     if (!binding.swipeRefresh.isRefreshing) {
-                        showLoading()
+                                  hideLoading()
                     }
                 }
 

@@ -101,6 +101,9 @@ class SignupMainFragment : BaseFragment<FragmentSignupMainBinding>() {
         list.add(ChooseAccountType(false, "Small Business"))
         list.add(ChooseAccountType(false, "Startup"))
         list.add(ChooseAccountType(false, "Investor/ VC"))
+        list.add(ChooseAccountType(false, "Life Insurance"))
+        list.add(ChooseAccountType(false, "Broker"))
+        list.add(ChooseAccountType(false, "Investment Managers"))
         return list
 
     }

@@ -334,7 +334,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
         viewModel.observeCommon.observe(this, Observer {
             when (it?.status) {
                 Status.LOADING -> {
-                    showLoading()
+                         hideLoading()
                 }
 
                 Status.SUCCESS -> {
@@ -458,7 +458,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                     is PersonalPreferencesFragment -> {
                         val role = sharedPrefManager.getLoginData()?.role
                         when (role) {
-                            "financial_advisor", "financial_firm" -> updateOtherUI("Personal Preferences")
+                            "financial_advisor", "financial_firm" ,"life_insurance","broker","investment_managers" -> updateOtherUI("Personal Preferences")
                             else -> updateOtherUI("Additional Information")
                         }
                     }
@@ -486,6 +486,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
                     }
                     is StreamDetailFragment -> {
                         updateOtherUI("Stream")
+                    }
+                    is VaultRoomFragment ->{
+                        updateOtherUI("Vault Room")
                     }
                     is VaultRoomFragment ->{
                         updateOtherUI("Vault Room")
@@ -661,7 +664,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
     private fun listChooseAccountType(): ArrayList<SideMenuBar> {
         val list = ArrayList<SideMenuBar>()
 
-        list.add(SideMenuBar(true, "Home" , null, true))
+        list.add(SideMenuBar(true, "Home" , null, false))
 
         // Name (Header)
         list.add(SideMenuBar(false, name.toString(), null, true))

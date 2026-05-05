@@ -57,6 +57,15 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
 
     var isChecked = false
 
+    private var selectedPoliticalValue: String = ""
+    private var residenceStatus: String = ""
+    private var employmentStatus: String = ""
+    private var educationStatus: String = ""
+
+    var isSupport = false
+
+
+
     private var imageUri: Uri? = null
     // data
     private var profileData: GetProfileApiResponseData?=null
@@ -273,6 +282,7 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                     // update UI if using data binding
                     binding.check = isChecked
                 }
+
             }
         }
     }
@@ -282,7 +292,7 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when (it?.status) {
                 Status.LOADING -> {
-                    showLoading()
+                         hideLoading()
                 }
 
                 Status.SUCCESS -> {
@@ -501,6 +511,7 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
 
                         }
                     }
+                    residenceStatus = m.actualValue
                     residenceBottomSheet.dismiss()
                 }
             }
@@ -518,6 +529,7 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                             1 -> binding.etEducationLevel.text = m.title
                         }
                     }
+                    educationStatus = m.actualValue
                     educationBottomSheet.dismiss()
                 }
             }
@@ -535,6 +547,7 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                             1 -> binding.etEmploymentStatus.text = m.title
                         }
                     }
+                    employmentStatus = m.actualValue
                     employmentBottomSheet.dismiss()
                 }
             }
@@ -582,6 +595,8 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
 
                         }
                     }
+
+                    selectedPoliticalValue = m.actualValue
                     politicalBottomSheet.dismiss()
                 }
             }
@@ -604,10 +619,11 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                 data["gender"]=binding.etGender.text.toString().trim().toRequestBody()
                 data["ageRange"]=binding.etAge.text.toString().trim().toRequestBody()
                 data["maritalStatus"]=binding.etMarital.text.toString().trim().toRequestBody()
-                data["residenceStatus"] =  binding.etResidenceStatus.text.toString().trim().toRequestBody()
-                data["educationLevel"] =binding.etEducationLevel.text.toString().trim().toRequestBody()
-                data["employmentStatus"] = binding.etEmploymentStatus.text.toString().trim().toRequestBody()
-                data["politicalAffection"] = binding.etPoliticalValue.text.toString().trim().toRequestBody()
+                data["residenceStatus"] =  residenceStatus.toRequestBody()
+                data["educationLevel"] =educationStatus.toRequestBody()
+                data["employmentStatus"] = employmentStatus.toRequestBody()
+                data["politicalAffection"] = selectedPoliticalValue.toRequestBody()
+                data["investValueAlignment"] = isChecked.toString().toRequestBody()
 
             }
             2->{
@@ -620,9 +636,10 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                 data["race"]=binding.etRaceFinance.text.toString().trim().toRequestBody()
                 data["gender"]=binding.etGenderFinance.text.toString().trim().toRequestBody()
                 data["ageRange"]=binding.etAgeFinance.text.toString().trim().toRequestBody()
-                data["educationLevel"]=binding.etEducationFinance.text.toString().trim().toRequestBody()
-                data["residenceStatus"] =  binding.etResidenceStatusFinance.text.toString().trim().toRequestBody()
-                data["politicalAffection"] = binding.etPoliticalValueFinance.text.toString().trim().toRequestBody()
+                data["educationLevel"]= educationStatus.toRequestBody()
+                data["residenceStatus"] =  residenceStatus.toRequestBody()
+                data["politicalAffection"] = selectedPoliticalValue.toRequestBody()
+                data["investValueAlignment"] = isChecked.toString().toRequestBody()
 
             }
             3->{
@@ -637,8 +654,9 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                 data["ageRange"]=binding.etAgeStartup.text.toString().trim().toRequestBody()
                 data["industriesSeeking"]=binding.etIndustryStartup.text.toString().trim().toRequestBody()
                 data["launchDate"]=binding.etLaunchDateStartup.text.toString().trim().toRequestBody()
-                data["residenceStatus"] =  binding.etPoliticalValueStartUp.text.toString().trim().toRequestBody()
-                data["politicalAffection"] = binding.etPoliticalValueStartUp.text.toString().trim().toRequestBody()
+                data["residenceStatus"] = residenceStatus.toRequestBody()
+                data["politicalAffection"] = selectedPoliticalValue.toRequestBody()
+                data["investValueAlignment"] = isChecked.toString().toRequestBody()
 
 
             }
@@ -653,8 +671,9 @@ class EditProfileDetailFragment : BaseFragment<FragmentEditProfileDetailBinding>
                 data["gender"]=binding.etGenderInvestor.text.toString().trim().toRequestBody()
                 data["ageRange"]=binding.etAgeInvestor.text.toString().trim().toRequestBody()
                 data["yearFounded"]=binding.etYearFoundedInvestor.text.toString().trim().toRequestBody()
-                data["residenceStatus"] =  binding.etResidenceStatusInvestor.text.toString().trim().toRequestBody()
-                data["politicalAffection"] = binding.etPoliticalValueInvestor.text.toString().trim().toRequestBody()
+                data["residenceStatus"] =  residenceStatus.toRequestBody()
+                data["politicalAffection"] =selectedPoliticalValue.toRequestBody()
+                data["investValueAlignment"] = isChecked.toString().toRequestBody()
 
 
             }

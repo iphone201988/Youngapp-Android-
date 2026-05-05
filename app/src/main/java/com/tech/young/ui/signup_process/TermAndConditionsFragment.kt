@@ -149,7 +149,7 @@ class TermAndConditionsFragment : BaseFragment<FragmentTermAndConditionsBinding>
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when (it?.status) {
                 Status.LOADING -> {
-                    showLoading()
+                         showLoading()
                 }
 
                 Status.SUCCESS -> {

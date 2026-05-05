@@ -20,11 +20,11 @@ class VaultVM @Inject constructor(val apiHelper: ApiHelper) :BaseViewModel() {
     val observeCommon = SingleRequestEvent<JsonObject>()
 
 
-    fun createVault(request: HashMap<String, RequestBody>, url: String, profileImage: MultipartBody.Part?){
+    fun createVault(request: HashMap<String, RequestBody>, url: String, parts: MutableList<MultipartBody.Part>){
         CoroutineScope(Dispatchers.IO).launch {
             observeCommon.postValue(Resource.loading(null))
             try {
-                val response = apiHelper.apiForPostMultipart(url, request, profileImage)
+                val response = apiHelper.apiForPostMultipart(url, request, parts)
                 if (response.isSuccessful && response.body() != null){
                     observeCommon.postValue(Resource.success("createVault", response.body()))
                 }

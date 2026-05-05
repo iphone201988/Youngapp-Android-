@@ -348,7 +348,7 @@ class EcosystemFragment : BaseFragment<FragmentEcosystemBinding>() {
              when(it?.status){
                  Status.LOADING ->{
                      if (!binding.swipeRefresh.isRefreshing) {
-                         showLoading()
+                                   hideLoading()
                      }
                  }
                  Status.SUCCESS ->{

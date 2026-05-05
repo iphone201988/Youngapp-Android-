@@ -108,10 +108,17 @@ class PerformanceFragment : BaseFragment<FragmentPerformanceBinding>() {
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer{
             when(it?.status){
                 Status.LOADING -> {
-                    showLoading()
+                    if (it.message == "getPerformance") {
+                        binding.shimmerLayout.visibility = View.VISIBLE
+                        binding.shimmerLayout.startShimmer()
+                        binding.clInvestment.visibility = View.GONE
+                    }
                 }
                 Status.SUCCESS -> {
-                    hideLoading()
+                    binding.shimmerLayout.stopShimmer()
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.clInvestment.visibility = View.VISIBLE
+                    
                     when(it.message){
                         "getPerformance" ->{
                             val myDataModel :  GetPerformanceApiResponse ? = BindingUtils.parseJson(it.data.toString())
@@ -134,7 +141,9 @@ class PerformanceFragment : BaseFragment<FragmentPerformanceBinding>() {
 
                 }
                 Status.ERROR ->  {
-                    hideLoading()
+                    binding.shimmerLayout.stopShimmer()
+                    binding.shimmerLayout.visibility = View.GONE
+                    binding.clInvestment.visibility = View.VISIBLE
                     showToast(it.message.toString())
                 }
                 else -> {

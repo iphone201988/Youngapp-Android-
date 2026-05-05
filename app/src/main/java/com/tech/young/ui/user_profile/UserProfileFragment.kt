@@ -304,7 +304,7 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
     private fun initObserver() {
         viewModel.userProfileObserver.observe(requireActivity()){
             when(it?.status){
-                Status.LOADING -> showLoading()
+                Status.LOADING ->      hideLoading()
                 Status.SUCCESS -> {
                     hideLoading()
                     when(it.message){

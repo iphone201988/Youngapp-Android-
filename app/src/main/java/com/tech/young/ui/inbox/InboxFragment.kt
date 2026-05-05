@@ -206,7 +206,7 @@ class InboxFragment : BaseFragment<FragmentInboxBinding>() {
             when(it?.status){
                 Status.LOADING ->{
                     if (!binding.swipeRefresh.isRefreshing) {
-                        showLoading()
+                             hideLoading()
                     }
                 }
                 Status.SUCCESS ->{

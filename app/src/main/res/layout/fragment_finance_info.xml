@@ -89,6 +89,7 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="@string/occupation"
+                    android:text="@{bean.user.occupation}"
                     android:inputType="textCapSentences"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
@@ -138,17 +139,16 @@
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/etYears" />
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etSalary"
                     style="@style/TextView_400_Regular"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginTop="@dimen/_3sdp"
-                    android:onClick="@{v->vm.onClick(v)}"
                     android:text="@{bean.user.salaryRange}"
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
-                    android:hint="Unemployed"
+                    android:hint="0"
                     android:paddingHorizontal="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColorHint="@color/text_gray"
@@ -158,6 +158,7 @@
                     android:layout_height="@dimen/_20sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:src="@drawable/iv_dropdown"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/etSalary"
                     app:layout_constraintEnd_toEndOf="@+id/etSalary"
                     app:layout_constraintTop_toTopOf="@+id/etSalary" />
@@ -383,7 +384,7 @@
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/rvTopics" />
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/etGoals"
                     style="@style/TextView_400_Regular"
                     android:layout_width="match_parent"
@@ -392,6 +393,7 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="Goals"
+                    android:onClick="@{v -> vm.onClick(v)}"
                     android:inputType="textCapSentences"
                     android:text="@{bean.user.goals}"
                     android:paddingHorizontal="@dimen/_10sdp"
@@ -399,12 +401,24 @@
                     android:textColorHint="@color/text_gray"
                     app:layout_constraintTop_toBottomOf="@+id/tvGoals" />
 
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:visibility="visible"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etGoals"
+                    app:layout_constraintEnd_toEndOf="@+id/etGoals"
+                    app:layout_constraintTop_toTopOf="@+id/etGoals" />
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvSalaryRange"
                     style="@style/TextView_500_Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Salary Range"
+                    android:visibility="gone"
                     android:layout_marginTop="@dimen/_12sdp"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
@@ -421,6 +435,7 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="$100k"
+                    android:visibility="gone"
                     android:onClick="@{v -> vm.onClick(v)}"
                     android:inputType="textCapSentences"
                     android:paddingHorizontal="@dimen/_10sdp"
@@ -446,6 +461,7 @@
                     android:layout_height="wrap_content"
                     android:text="Net Worth Estimate"
                     android:layout_marginTop="@dimen/_12sdp"
+                    android:visibility="gone"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/etSalaryRange" />
@@ -460,6 +476,7 @@
                     android:background="@drawable/radius_border_gray"
                     android:gravity="start|center"
                     android:hint="&lt;$25k"
+                    android:visibility="gone"
                     android:focusable="false"
                     android:onClick="@{v -> vm.onClick(v)}"
                     android:inputType="textCapSentences"
@@ -473,10 +490,36 @@
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
+                    android:visibility="gone"
                     android:src="@drawable/iv_dropdown"
                     app:layout_constraintBottom_toBottomOf="@+id/etNetWorthEstimate"
                     app:layout_constraintEnd_toEndOf="@+id/etNetWorthEstimate"
                     app:layout_constraintTop_toTopOf="@+id/etNetWorthEstimate" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvInvestor"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Investors"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etGoals" />
+                <LinearLayout
+                    android:id="@+id/llInvestor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvInvestor">
+
+                    <include layout="@layout/item_custom_radio_box" android:id="@+id/yesOptionInvestor" />
+                    <include layout="@layout/item_custom_radio_box" android:id="@+id/noOptionInvestor" />
+                </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvSaveFinance"
@@ -489,7 +532,7 @@
                     android:onClick="@{v ->vm.onClick(v)}"
                     android:text="@string/save_changes"
                     android:textColor="@color/white"
-                    app:layout_constraintTop_toBottomOf="@id/etNetWorthEstimate"
+                    app:layout_constraintTop_toBottomOf="@id/llInvestor"
                     app:layout_constraintBottom_toBottomOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

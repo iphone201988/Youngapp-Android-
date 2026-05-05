@@ -256,7 +256,7 @@ class AddYourPersonalInfoFragment : BaseFragment<FragmentAddYourPersonalInfoBind
                 binding.consVCAccountRegistration.visibility = View.GONE
             }
 
-            "Financial Advisor", "Financial Firm" -> {
+            "Financial Advisor", "Financial Firm" ,"Life Insurance", "Broker", "Investment Managers" -> {
                 binding.consGeneralMember.visibility = View.GONE
                 binding.consFinancialAdvisorFirm.visibility = View.VISIBLE
                 binding.consStartupSmall.visibility = View.GONE

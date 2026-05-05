@@ -269,7 +269,19 @@ data class GetProfileApiResponse(
             val fundsRaised: String?,
             val stageOfBusiness: String?,
             var isRated: Double?,
-            var maritalStatus: String?
+            var maritalStatus: String?,
+            var politicalAffection : String?,
+            var employmentStatus : String?,
+            var investValueAlignment : Boolean?,
+            var DEIImportance : String?,
+            var investmentHorizone : String?,
+            var primaryInvestmentGoal : String?,
+            var communityReinvestmentImportance : String?,
+            var emergencyFund : String?,
+            var ESGPriority : String?,
+            var investmentInterests : String?,
+            var seekFromInvestment : String
+
         ) : Parcelable {
             @Parcelize
             data class Location(
@@ -538,7 +550,7 @@ data class GetSavedPostApiResponse(
             var symbol: String?,
             var symbolValue: String?,
             var title: String?,
-            var topic: String?,
+            var topic: List<String>?,
             var totalSavedCount: Int?,
             var type: String?,
             var userId: UserId?,
@@ -820,8 +832,7 @@ data class GetVaultApiResponse(
             var isSaved: Boolean?,
             var members: List<Member?>?,
             var title: String?,
-            var topic: String?,
-        ) {
+            var topic: List<String>?,        ) {
             data class Admin(
                 var _id: String?,
                 var firstName: String?,
@@ -1100,7 +1111,7 @@ data class ExchangeShareApiResponse(
             var symbol: String?,
             var symbolValue: String?,
             var title: String?,
-            var topic: String?,
+            var topic: List<String>?,
             var totalSavedCount: Int?,
             var type: String?,
             var userId: UserId?
@@ -1138,54 +1149,107 @@ data class ExchangeShareApiResponse(
 }
 
 /******************* get vaults api response  response ********************/
+//data class VaultExchangeApiResponse(
+//    var `data`: Data?,
+//    var message: String?,
+//    var pagination: Pagination?,
+//    var success: Boolean?,
+//) {
+//    data class Data(
+//        var vaults: List<Vault?>?,
+//    ) {
+//        data class Vault(
+//            var isReportVisible: Boolean = false,
+//            var _id: String?,
+//            var admin: Admin?,
+//            var commentsCount: Int?,
+//            var createdAt: String?,
+//            var description: String?,
+//            var totalSavedCount: Int?,
+//            var image: String?,
+//            var isReported: Boolean?,
+//            var members: List<Member?>?,
+//            var title: String?,
+//            var topic: List<String>?,
+//            var ratings: Double?,
+//            var isSaved: Boolean?,
+//        ) {
+//            data class Admin(
+//                var _id: String?,
+//                var firstName: String?,
+//                var lastName: String?,
+//                var profileImage: String?,
+//                var lastLogin: String?,
+//                var username: String?,
+//            )
+//
+//            data class Member(
+//                var _id: String?,
+//                var profileImage: String?,
+//            )
+//        }
+//    }
+//
+//    data class Pagination(
+//        var limit: Int?,
+//        var page: Int?,
+//        var total: Int?,
+//    )
+//
+//}
+
 data class VaultExchangeApiResponse(
-    var `data`: Data?,
-    var message: String?,
-    var pagination: Pagination?,
-    var success: Boolean?,
+    val `data`: Data?,
+    val message: String?,
+    val pagination: Pagination?,
+    val success: Boolean?
 ) {
     data class Data(
-        var vaults: List<Vault?>?,
+        val vaults: List<Vault?>?
     ) {
         data class Vault(
             var isReportVisible: Boolean = false,
-            var _id: String?,
-            var admin: Admin?,
-            var commentsCount: Int?,
-            var createdAt: String?,
-            var description: String?,
-            var totalSavedCount: Int?,
-            var image: String?,
-            var isReported: Boolean?,
-            var members: List<Member?>?,
-            var title: String?,
-            var topic: String?,
-            var ratings: Double?,
-            var isSaved: Boolean?,
+            val _id: String?,
+            val admin: Admin?,
+            val chatId: String?,
+            val commentsCount: Int?,
+            val createdAt: String?,
+            val description: String?,
+            val image: String?,
+            val isFoundersRoom: Boolean?,
+            val isReported: Boolean?,
+            val isSaved: Boolean?,
+            val members: List<Member?>?,
+            val ratings: Int?,
+            val title: String?,
+            val topic: String?,
+            val totalSavedCount: Int?
         ) {
             data class Admin(
-                var _id: String?,
-                var firstName: String?,
-                var lastName: String?,
-                var profileImage: String?,
-                var lastLogin: String?,
-                var username: String?,
+                val _id: String?,
+                val firstName: String?,
+                val lastLogin: String?,
+                val lastName: String?,
+                val profileImage: String?,
+                val username: String?
             )
 
             data class Member(
-                var _id: String?,
-                var profileImage: String?,
+                val _id: String?,
+                val profileImage: String?
             )
         }
     }
 
     data class Pagination(
-        var limit: Int?,
-        var page: Int?,
-        var total: Int?,
+        val limit: Int?,
+        val page: Int?,
+        val total: Int?
     )
-
 }
+
+
+
 
 /*******************saved post api response  response ********************/
 data class SavedPostApiResponse(
@@ -1577,7 +1641,7 @@ data class GetPostDetailsApiResponse(
             var symbol: String?,
             var symbolValue: String?,
             var title: String?,
-            var topic: String?,
+            var topic: List<String>?,
             var type: String?,
             var userId: UserId?,
             var rating: Double?,
@@ -1748,7 +1812,7 @@ data class StreamApiResponse(
             var likedBy: List<Any?>?,
             var scheduleDate: String?,
             var title: String?,
-            var topic: String?,
+            var topic: List<String>?,
             var type: String?,
             var updatedAt: String?,
         )
@@ -1823,7 +1887,7 @@ data class GetStreamApiResponse(
             var streamUrl: String?,
             var symbol: String?,
             var title: String?,
-            var topic: String?,
+            var topic: List<String>?,
             var type: String?,
             var ratings: Double?,
             var userId: UserId?,
@@ -1876,8 +1940,7 @@ data class StreamDetailApiResponse(
             var scheduleDate: String?,
             var streamUrl: String?,
             var title: String?,
-            var topic: String?,
-            var type: String?,
+ var topic: List<String>?,            var type: String?,
 
             var isAlreadyAddedToCalendar: Boolean?,
             var userId: UserId?,
@@ -1912,7 +1975,7 @@ data class CreatePostApiResponse(
             var isPublished: Boolean?,
             var symbol: String?,
             var title: String?,
-            var topic: String?,
+            var topic: List<String>?,
             var type: String?,
             var updatedAt: String?,
         )
@@ -1990,8 +2053,7 @@ data class DownloadHistoryApiResponse(
             var scheduleDate: String?,
             var symbol: String?,
             var title: String?,
-            var topic: String?,
-            var type: String?,
+ var topic: List<String>?,            var type: String?,
             var updatedAt: String?
         )
     }
@@ -2332,102 +2394,218 @@ data class PaymentHistoryApiResponse(
 
 // get performance api response
 
+//data class GetPerformanceApiResponse(
+//    val `data`: PerformanceData,
+//    val message: String,
+//    val success: Boolean
+//)
+//
+//data class PerformanceData(
+//    val currentStatus: CurrentStatus,
+//    val investments: List<Investment>,
+//    val performance: Performance,
+//    val similarProfile: List<SimilarProfile>
+//)
+//
+//data class CurrentStatus(
+//    val riskLevel: Int,
+//    val riskTolerance: String,
+//    val salaryRange: String
+//)
+//
+//data class Investment(
+//    val _id: String,
+//    val currentValue: Int,
+//    val initialValue: Int,
+//    val name: String,
+//    val percentageGrowth: Double,
+//    val status: String,
+//    val symbol: String,
+//    val lastQuarterPerformance : Int?
+//)
+//
+//data class Performance(
+//    val income: Int,
+//    val portfolioGrowth: Double,
+//    val riskLevel: Int,
+//    val topics: Int
+//)
+//
+//data class SimilarProfile(
+//    val __v: Int,
+//    val _id: String,
+//    val additionalPhotos: List<String>,
+//    val age: String,
+//    val children: String,
+//    val countryCode: String,
+//    val createdAt: String,
+//    val deviceToken: String,
+//    val deviceType: Int,
+//    val email: String,
+//    val financialExperience: String,
+//    val firstName: String,
+//    val formUpload: List<Any>,
+//    val gender: String,
+//    val goals: String,
+//    val homeOwnerShip: String,
+//    val investmentAccounts: Boolean,
+//    val investmentRealEstate: Boolean,
+//    val investments: String,
+//    val is2FAEnabled: Boolean,
+//    val isDeactivated: Boolean,
+//    val isDeactivatedByUser: Boolean,
+//    val isDeleted: Boolean,
+//    val isRegistrationCompleted: Boolean,
+//    val isVerified: Boolean,
+//    val jti: String,
+//    val lastActivityAt: String,
+//    val lastLogin: String,
+//    val lastName: String,
+//    val location: PerformanceLocation,
+//    val maritalStatus: String,
+//    val netWorthEstimate: String,
+//    val objective: String,
+//    val otpVerified: Boolean,
+//    val password: String,
+//    val phone: String,
+//    val retirement: Boolean,
+//    val riskTolerance: String,
+//    val role: String,
+//    val salaryNum: Int,
+//    val salaryRange: String,
+//    val savings: String,
+//    val savingsNum: Int,
+//    val secret: String,
+//    val servicesInterested: String,
+//    val timezone: String,
+//    val topicsOfInterest: List<String>,
+//    val updatedAt: String,
+//    val username: String,
+//    val yearsEmployed: String
+//)
+//
+//data class PerformanceLocation(
+//    val coordinates: List<Double>,
+//    val type: String
+//)
+
 data class GetPerformanceApiResponse(
-    val `data`: PerformanceData,
-    val message: String,
-    val success: Boolean
+    val `data`: PerformanceData?,
+    val message: String?,
+    val success: Boolean?
 )
 
 data class PerformanceData(
-    val currentStatus: CurrentStatus,
-    val investments: List<Investment>,
-    val performance: Performance,
-    val similarProfile: List<SimilarProfile>
+    val currentStatus: CurrentStatus?,
+    val investments: List<Investment?>?,
+    val performance: Performance?,
+    val similarProfile: List<SimilarProfile?>?
 )
 
 data class CurrentStatus(
-    val riskLevel: Int,
-    val riskTolerance: String,
-    val salaryRange: String
+    val riskLevel: Int?,
+    val riskTolerance: String?,
+    val salaryRange: String?
 )
 
 data class Investment(
-    val _id: String,
-    val currentValue: Int,
-    val initialValue: Int,
-    val name: String,
-    val percentageGrowth: Double,
-    val status: String,
-    val symbol: String,
-    val lastQuarterPerformance : Int?
+    val _id: String?,
+    val currentValue: Int?,
+    val initialValue: Int?,
+    val lastQuarterPerformance: Double?,
+    val name: String?,
+    val percentageGrowth: Double?,
+    val status: String?,
+    val symbol: String?
 )
 
 data class Performance(
-    val income: Int,
-    val portfolioGrowth: Double,
-    val riskLevel: Int,
-    val topics: Int
+    val income: Int?,
+    val portfolioGrowth: Double?,
+    val riskLevel: Int?,
+    val topics: Int?
 )
 
 data class SimilarProfile(
-    val __v: Int,
-    val _id: String,
-    val additionalPhotos: List<String>,
-    val age: String,
-    val children: String,
-    val countryCode: String,
-    val createdAt: String,
-    val deviceToken: String,
-    val deviceType: Int,
-    val email: String,
-    val financialExperience: String,
-    val firstName: String,
-    val formUpload: List<Any>,
-    val gender: String,
-    val goals: String,
-    val homeOwnerShip: String,
-    val investmentAccounts: Boolean,
-    val investmentRealEstate: Boolean,
-    val investments: String,
-    val is2FAEnabled: Boolean,
-    val isDeactivated: Boolean,
-    val isDeactivatedByUser: Boolean,
-    val isDeleted: Boolean,
-    val isRegistrationCompleted: Boolean,
-    val isVerified: Boolean,
-    val jti: String,
-    val lastActivityAt: String,
-    val lastLogin: String,
-    val lastName: String,
-    val location: PerformanceLocation,
-    val maritalStatus: String,
-    val netWorthEstimate: String,
-    val objective: String,
-    val otpVerified: Boolean,
-    val password: String,
-    val phone: String,
-    val retirement: Boolean,
-    val riskTolerance: String,
-    val role: String,
-    val salaryNum: Int,
-    val salaryRange: String,
-    val savings: String,
-    val savingsNum: Int,
-    val secret: String,
-    val servicesInterested: String,
-    val timezone: String,
-    val topicsOfInterest: List<String>,
-    val updatedAt: String,
-    val username: String,
-    val yearsEmployed: String
+    val DEIImportance: String?,
+    val ESGPriority: String?,
+    val __v: Int?,
+    val _id: String?,
+    val additionalPhotos: List<String?>?,
+    val age: String?,
+    val children: String?,
+    val communityReinvestmentImportance: String?,
+    val countryCode: String?,
+    val createdAt: String?,
+    val cryptoInvestments: String?,
+    val deviceToken: String?,
+    val deviceType: Int?,
+    val email: String?,
+    val emergencyFund: String?,
+    val employmentStatus: String?,
+    val financialExperience: String?,
+    val firstName: String?,
+    val formUpload: List<Any?>?,
+    val gender: String?,
+    val goals: String?,
+    val homeOwnerShip: String?,
+    val investValueAlignment: Boolean?,
+    val investmentAccounts: Boolean?,
+    val investmentHorizone: String?,
+    val investmentInterests: String?,
+    val investmentRealEstate: Boolean?,
+    val investments: String?,
+    val is2FAEnabled: Boolean?,
+    val isCrdNumberVerified: Boolean?,
+    val isDeactivated: Boolean?,
+    val isDeactivatedByUser: Boolean?,
+    val isDeleted: Boolean?,
+    val isRegistrationCompleted: Boolean?,
+    val isVerified: Boolean?,
+    val jti: String?,
+    val lastActivityAt: String?,
+    val lastLogin: String?,
+    val lastName: String?,
+    val location: PerformanceLocation?,
+    val maritalStatus: String?,
+    val netWorthEstimate: String?,
+    val objective: String?,
+    val occupation: String?,
+    val otherSecurityInvestments: String?,
+    val otpVerified: Boolean?,
+    val password: String?,
+    val phone: String?,
+    val politicalAffection: String?,
+    val primaryInvestmentGoal: String?,
+    val profileImage: String?,
+    val realEstate: String?,
+    val residenceStatus: String?,
+    val retirement: Boolean?,
+    val retirementAccount: String?,
+    val riskTolerance: String?,
+    val role: String?,
+    val salaryNum: Int?,
+    val salaryRange: String?,
+    val savings: String?,
+    val savingsNum: Int?,
+    val secret: String?,
+    val seekFromInvestment: String?,
+    val servicesInterested: String?,
+    val specificCryptoSymbols: String?,
+    val specificStockSymbols: String?,
+    val startups: String?,
+    val stockInvestments: String?,
+    val timezone: String?,
+    val topicsOfInterest: List<String?>?,
+    val updatedAt: String?,
+    val username: String?,
+    val yearsEmployed: String?
 )
 
 data class PerformanceLocation(
-    val coordinates: List<Double>,
-    val type: String
+    val coordinates: List<Double?>?,
+    val type: String?
 )
-
-
 
 
 
@@ -2505,6 +2683,52 @@ data class MonthlyAnalysisApiResponseData(
 //    val viewsLastWeek: Int
 //)
 
+//data class GetPostAnalysisApiResponse(
+//    val `data`: PostAnalysisApiResponse?,
+//    val message: String?,
+//    val success: Boolean?
+//)
+//
+//data class PostAnalysisApiResponse(
+//    val analytics: List<Analytic?>?
+//)
+//
+//data class Analytic(
+//    val __v: Int?,
+//    val _id: String?,
+//    val createdAt: String?,
+//    val description: String?,
+//    val flagType: String?,
+//    val followerGrowth: Int?,
+//    val followersLastWeek: Int?,
+//    val image: String?,
+//    val isDeleted: Boolean?,
+//    val isPublished: Boolean?,
+//    val likesCount: Int?,
+//    val likesLastWeek: Int?,
+//    val ratings: List<Any?>?,
+//    val reason: String?,
+//    val reshares: Int?,
+//    val resharesLastWeek: Int?,
+//    val savedCount: Int?,
+//    val savedLastWeek: Int?,
+//    val symbol: String?,
+//    val title: String?,
+//    val topic: List<Topic?>?,
+//    val type: String?,
+//    val updatedAt: String?,
+//    val userId: String?,
+//    val viewLastWeekPercentage: Int?,
+//    val viewsCount: Int?,
+//    val viewsLastWeek: Int?
+//)
+//
+//data class Topic(
+//    val _id: String?,
+//    val name: String?,
+//    val subTopics: List<String?>?
+//)
+
 data class GetPostAnalysisApiResponse(
     val `data`: PostAnalysisApiResponse?,
     val message: String?,
@@ -2520,7 +2744,6 @@ data class Analytic(
     val _id: String?,
     val createdAt: String?,
     val description: String?,
-    val flagType: String?,
     val followerGrowth: Int?,
     val followersLastWeek: Int?,
     val image: String?,
@@ -2528,15 +2751,15 @@ data class Analytic(
     val isPublished: Boolean?,
     val likesCount: Int?,
     val likesLastWeek: Int?,
-    val ratings: List<Any?>?,
-    val reason: String?,
+    val ratings: List<String?>?,
     val reshares: Int?,
     val resharesLastWeek: Int?,
     val savedCount: Int?,
     val savedLastWeek: Int?,
     val symbol: String?,
+    val symbolValue: String?,
     val title: String?,
-    val topic: List<Topic?>?,
+    val topic: List<String?>?,
     val type: String?,
     val updatedAt: String?,
     val userId: String?,
@@ -2544,13 +2767,6 @@ data class Analytic(
     val viewsCount: Int?,
     val viewsLastWeek: Int?
 )
-
-data class Topic(
-    val _id: String?,
-    val name: String?,
-    val subTopics: List<String?>?
-)
-
 
 /// get investment api response
 

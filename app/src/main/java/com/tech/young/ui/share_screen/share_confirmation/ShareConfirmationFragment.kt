@@ -177,7 +177,7 @@ class ShareConfirmationFragment : BaseFragment<FragmentShareConfirmationBinding>
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when(it?.status){
                 Status.LOADING ->{
-                    showLoading()
+                         showLoading()
                 }
                 Status.SUCCESS ->{
                     hideLoading()
@@ -190,15 +190,20 @@ class ShareConfirmationFragment : BaseFragment<FragmentShareConfirmationBinding>
                                 }
                             }
                         }
-                        "sharePost" ->{
-                            val myDataModel : CreatePostApiResponse ? = BindingUtils.parseJson(it.data.toString())
-                            if (myDataModel != null){
-                                if (myDataModel.data != null){
-                                    showToast(myDataModel.message.toString())
-                                    val intent = Intent(requireContext(), HomeActivity::class.java)
+                        "sharePost" -> {
+                            val myDataModel: CreatePostApiResponse? =
+                                BindingUtils.parseJson(it.data.toString())
+
+                            if (myDataModel?.data != null) {
+                                requireActivity().runOnUiThread {
+                                    showToast(myDataModel.message ?: "")
+                                    val intent = Intent(requireActivity(), HomeActivity::class.java)
+                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     startActivity(intent)
-                                   // requireActivity().onBackPressedDispatcher.onBackPressed()
+                                    requireActivity().finish()
                                 }
+                            } else {
+                                Log.d("DEBUG", "Data is null or parsing failed")
                             }
                         }
                     }

@@ -43,6 +43,16 @@ class InvestmentInfoFragment : BaseFragment<FragmentInvestmentInfoBinding>()  , 
     private var profileData: GetProfileApiResponseData? = null
     private var type: String? = null
 
+    private var esgPriority : String = ""
+    private var investment : String = ""
+    private var emergencyFund : String = ""
+    private var deiImportance : String = ""
+    private var investmentHorizon : String = ""
+    private var primaryGoal : String = ""
+    private var communityReinvestment : String = ""
+
+
+
     private lateinit var commonBottomSheet: BaseCustomBottomSheet<BotttomSheetTopicsBinding>
 
     private lateinit var commonAdapter: SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
@@ -85,13 +95,37 @@ class InvestmentInfoFragment : BaseFragment<FragmentInvestmentInfoBinding>()  , 
                     R.id.consMain, R.id.title -> {
                         if (type != null) {
                             when (type) {
-                                "1" -> binding.etPrimaryInvestmentGoal.setText(m.title)
-                                "2" -> binding.etInvestmentHorizon.setText(m.title)
-                                "3" -> binding.etDeiImportance.setText(m.title)
-                                "4" -> binding.etCommunityReinvestmentImportance.setText(m.title)
-                                "5" ->binding.etEnvironmental.setText(m.title)
-                                "6" ->binding.etFromInvestment.setText(m.title)
-                                "7" -> binding.etEmergencyFund.setText(m.title)
+                                "1" -> {
+                                    binding.etPrimaryInvestmentGoal.setText(m.title)
+                                    primaryGoal = m.actualValue
+                                }
+                                "2" ->{
+                                    binding.etInvestmentHorizon.setText(m.title)
+                                    investmentHorizon = m.actualValue
+
+                                }
+                                "3" ->{
+                                    binding.etDeiImportance.setText(m.title)
+                                    deiImportance = m.actualValue
+                                }
+                                "4" -> {
+                                    binding.etCommunityReinvestmentImportance.setText(m.title)
+                                    communityReinvestment = m.actualValue
+
+                                }
+                                "5" ->{
+                                    binding.etEnvironmental.setText(m.title)
+                                    esgPriority = m.actualValue
+                                }
+                                "6" ->{
+                                    binding.etFromInvestment.setText(m.title)
+                                    investment = m.actualValue
+                                }
+                                "7" -> {
+
+                                    binding.etEmergencyFund.setText(m.title)
+                                    emergencyFund = m.actualValue
+                                }
 
                             }
                         }
@@ -181,7 +215,7 @@ class InvestmentInfoFragment : BaseFragment<FragmentInvestmentInfoBinding>()  , 
     private fun initObserver() {
         viewModel.observeCommon.observe(requireActivity()) {
             when (it?.status) {
-                Status.LOADING -> showLoading()
+                Status.LOADING ->      hideLoading()
                 Status.SUCCESS -> {
                     hideLoading()
                     when (it.message) {
@@ -235,6 +269,14 @@ class InvestmentInfoFragment : BaseFragment<FragmentInvestmentInfoBinding>()  , 
         data["retirementAccount"] = binding.etRetirement.text.toString().toRequestBody()
         data["savings"] = binding.etSavings.text.toString().toRequestBody()
         data["startups"] = binding.etStartUp.text.toString().toRequestBody()
+        data["communityReinvestmentImportance"] = communityReinvestment.toString().toRequestBody()
+        data["DEIImportance"]  = deiImportance.toString().toRequestBody()
+        data["investmentHorizone"] = investmentHorizon.toString().toRequestBody()
+        data["primaryInvestmentGoal"] = primaryGoal.toRequestBody()
+        data["ESGPriority"] = esgPriority.toRequestBody()
+        data["investmentInterests"] = binding.etTopicOfInterest.text.toString().toRequestBody()
+        data["emergencyFund"] = emergencyFund.toRequestBody()
+        data["seekFromInvestment"] =  investment.toRequestBody()
         viewModel.updateProfile(Constants.UPDATE_USER, data, null,null)
     }
 

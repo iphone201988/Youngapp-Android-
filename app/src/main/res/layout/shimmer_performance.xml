@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/_18sdp">
+
+    <View
+        android:id="@+id/viewQuarterly"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:background="#E0E0E0"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/viewTitle"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="@dimen/_18sdp"
+        android:layout_marginTop="@dimen/_18sdp"
+        android:background="#E0E0E0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewQuarterly" />
+
+    <View
+        android:id="@+id/box1"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_80sdp"
+        android:layout_marginTop="@dimen/_13sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="#E0E0E0"
+        app:layout_constraintEnd_toStartOf="@id/box2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewTitle" />
+
+    <View
+        android:id="@+id/box2"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_80sdp"
+        android:background="#E0E0E0"
+        app:layout_constraintBottom_toBottomOf="@id/box1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/box1"
+        app:layout_constraintTop_toTopOf="@id/box1" />
+
+    <View
+        android:id="@+id/box3"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_80sdp"
+        android:layout_marginTop="@dimen/_13sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="#E0E0E0"
+        app:layout_constraintEnd_toStartOf="@id/box4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/box1" />
+
+    <View
+        android:id="@+id/box4"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_80sdp"
+        android:background="#E0E0E0"
+        app:layout_constraintBottom_toBottomOf="@id/box3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/box3"
+        app:layout_constraintTop_toTopOf="@id/box3" />
+
+    <View
+        android:id="@+id/viewTabs"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_45sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:background="#E0E0E0"
+        app:layout_constraintTop_toBottomOf="@id/box3" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

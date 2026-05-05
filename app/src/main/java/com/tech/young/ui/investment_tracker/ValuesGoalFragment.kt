@@ -111,8 +111,7 @@ class ValuesGoalFragment : BaseFragment<FragmentValuesGoalBinding>() {
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer{
             when(it?.status){
                 Status.LOADING -> {
-                    showLoading()
-                }
+              hideLoading()                }
                 Status.SUCCESS -> {
                     hideLoading()
                     when(it.message){
@@ -121,7 +120,7 @@ class ValuesGoalFragment : BaseFragment<FragmentValuesGoalBinding>() {
                             if (myDataModel != null){
                                 if (myDataModel.data != null){
                                     val successMsg = if (viewModel.selectedInvestment.value != null) "Investment updated successfully" else "Investment added successfully"
-                                    showToast(successMsg)
+                                    showToast(it.message)
                                     // Clear selection after success
                                     viewModel.selectedInvestment.value = null
                                 }
@@ -133,6 +132,7 @@ class ValuesGoalFragment : BaseFragment<FragmentValuesGoalBinding>() {
                 }
                 Status.ERROR -> {
                     hideLoading()
+                    showToast(it.message.toString())
                 }
                 else -> {
 

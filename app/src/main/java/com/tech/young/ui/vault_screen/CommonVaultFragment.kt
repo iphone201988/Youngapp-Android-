@@ -70,6 +70,10 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
 
     private lateinit var adapter: ExpandableMenuAdapter
     private lateinit var menuList: MutableList<MenuItem>
+
+    private var pdfUri: Uri? = null
+
+
     // adapter
     private lateinit var adsAdapter: SimpleRecyclerViewAdapter<GetAdsAPiResponse.Data.Ad, AdsItemViewBinding>
     private lateinit var topicBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
@@ -85,6 +89,7 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
     private var selectedPlayer = ArrayList<String>()
 
     private var visibilityMode : String = "public"
+    private var isFoundersRoom : Boolean = true
 
     private var selectedTopicsJson: String = ""
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
@@ -124,6 +129,11 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
         initOnClick()
         // observer
         initObserver()
+
+
+        binding.setFounderDefault.setOnCheckedChangeListener { _, isChecked ->
+            isFoundersRoom = isChecked
+        }
     }
 
     override fun getLayoutResource(): Int {
@@ -371,8 +381,27 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
 
                     if (isEmptyField()){
                         val selectedActualValues = selectedCategory.joinToString(",") { it.actualValue }
+
+                        val parts = mutableListOf<MultipartBody.Part>()
+
+                        // Image
+                        imageUri?.let {
+                            convertImageToMultipart(it)?.let { part ->
+                                parts.add(part)
+                            }
+                        }
+
+                        // PDF
+                        pdfUri?.let {
+                            convertPdfToMultipart(it)?.let { part ->
+                                parts.add(part)
+                            }
+                        }
+
+
                         Log.i("dsadas", "initOnClick: $selectedActualValues")
-                        val multipartImage = imageUri?.let { convertImageToMultipart(it) }
+//                        val multipartImage = imageUri?.let { convertImageToMultipart(it) }
+//                        val multipartPdf = pdfUri?.let { convertPdfToMultipart(it) }
 
                         val data = HashMap<String, RequestBody>()
                         data["title"] = binding.etTitle.text.toString().trim().toRequestBody()
@@ -381,9 +410,13 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
                         data["access"] = visibilityMode.toRequestBody()
                         data["members"] = selectedUserId.toRequestBody()
                         data["category"] = selectedActualValues.toRequestBody()
+                        data["isFoundersRoom"] = isFoundersRoom.toString().toRequestBody()
 
-                        viewModel.createVault(data, Constants.CREATE_VAULT,multipartImage)
-                    }
+                        viewModel.createVault(
+                            data,
+                            Constants.CREATE_VAULT,
+                            parts
+                        )                    }
 
 
                 }
@@ -423,6 +456,7 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
     private val pickPdfLauncher =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
             uri?.let {
+                pdfUri = it
                 showPdfThumbnail(it)
             }
         }
@@ -454,7 +488,23 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
         }
     }
 
+    private fun convertPdfToMultipart(uri: Uri): MultipartBody.Part? {
+        return try {
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+            val file = File(requireContext().cacheDir, "pitch_deck.pdf")
 
+            file.outputStream().use { output ->
+                inputStream?.copyTo(output)
+            }
+
+            val requestFile = file.asRequestBody("application/pdf".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData("pitchDeck", file.name, requestFile)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
 //    private val startForImageResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
 //        try {
 //            val resultCode = result.resultCode
@@ -480,7 +530,7 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when(it?.status){
                 Status.LOADING ->{
-                    showLoading()
+                         showLoading()
                 }
                 Status.SUCCESS ->{
                     hideLoading()

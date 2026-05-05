@@ -99,7 +99,7 @@ class YourInvestmentFragment : BaseFragment<FragmentYourInvestmentBinding>() {
         viewModel.observeMonthlyAnalytics.observe(viewLifecycleOwner , Observer{
             when(it?.status){
                 Status.LOADING -> {
-                    showLoading()
+                         hideLoading()
                 }
                 Status.SUCCESS -> {
                     hideLoading()
@@ -117,19 +117,6 @@ class YourInvestmentFragment : BaseFragment<FragmentYourInvestmentBinding>() {
                 else -> {
 
                 }
-            }
-        })
-
-        // Observe common status for main list loading
-        viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
-            if (it?.status == Status.LOADING && it.message == "getPerformance") {
-                binding.shimmerLayout.visibility = View.VISIBLE
-                binding.shimmerLayout.startShimmer()
-                binding.rvInvestment.visibility = View.GONE
-            } else {
-                binding.shimmerLayout.stopShimmer()
-                binding.shimmerLayout.visibility = View.GONE
-                binding.rvInvestment.visibility = View.VISIBLE
             }
         })
     }
@@ -163,14 +150,15 @@ class YourInvestmentFragment : BaseFragment<FragmentYourInvestmentBinding>() {
                     performanceGraphPopup.binding.symbol = "${m.name} (${m.symbol})"
                     performanceGraphPopup.binding.currentValue = "$${m.currentValue}"
                     performanceGraphPopup.binding.growth =
-                        if (m.percentageGrowth >= 0) "+${m.percentageGrowth}%" else "${m.percentageGrowth}%"
-
+                        m.percentageGrowth?.let {
+                            if (it >= 0) "+${it}%" else "${it}%"
+                        } ?: ""
                     // Reset chart and show popup immediately
                     performanceGraphPopup.binding.lineChart.clear()
                     performanceGraphPopup.show()
 
                     val data = HashMap<String, Any>()
-                    data["investmentId"] = m._id
+                    data["investmentId"] = m._id.toString()
                     viewModel.getMonthlyAnalytics(Constants.MONTHLY_ANALYSIS, data)
                 }
             }
@@ -224,4 +212,3 @@ class YourInvestmentFragment : BaseFragment<FragmentYourInvestmentBinding>() {
 
 
     }
-

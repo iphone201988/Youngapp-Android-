@@ -174,7 +174,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
     private fun initObserver() {
         viewModel.observeCommon.observe(requireActivity()){
             when(it?.status){
-                Status.LOADING -> showLoading()
+                Status.LOADING ->      hideLoading()
                 Status.SUCCESS ->{
                     hideLoading()
                     when(it.message){
@@ -840,7 +840,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
 
     private fun userVerification() {
         // Show loading (optional)
-        showLoading()
+             hideLoading()
         Log.d("Didit", "Verification process started")
 
         // Grab vendor/user ID
