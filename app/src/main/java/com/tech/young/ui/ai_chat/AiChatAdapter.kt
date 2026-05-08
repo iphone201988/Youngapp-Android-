@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.tech.young.R
 import com.tech.young.data.AiChatModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 class AiChatAdapter(private val list: MutableList<AiChatModel>) :
@@ -44,6 +47,11 @@ class AiChatAdapter(private val list: MutableList<AiChatModel>) :
 
         if (holder is RightVH) {
             holder.tv.text = item.message
+
+            val sdf = SimpleDateFormat("MMM d, yyyy hh:mm a", Locale.getDefault())
+            val currentDateTime = sdf.format(Date())
+
+            holder.date.text = currentDateTime
         } else if (holder is LeftVH) {
             if (item.message == "typing...") {
                 holder.tv.visibility = View.GONE
@@ -60,6 +68,10 @@ class AiChatAdapter(private val list: MutableList<AiChatModel>) :
                     .replace("%<br><br>", "%<br><br><br>") 
 
                 holder.tv.text = HtmlCompat.fromHtml(formattedMessage, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                val sdf = SimpleDateFormat("MMM d, yyyy hh:mm a", Locale.getDefault())
+                val currentDateTime = sdf.format(Date())
+
+                holder.date.text = currentDateTime
             }
         }
     }
@@ -80,9 +92,12 @@ class AiChatAdapter(private val list: MutableList<AiChatModel>) :
     class LeftVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tv: TextView = itemView.findViewById(R.id.tvLeftChat)
         val typing: LottieAnimationView = itemView.findViewById(R.id.typingAnimation)
+        val date : TextView = itemView.findViewById(R.id.tvDateLeftChat)
+
     }
 
     class RightVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tv: TextView = itemView.findViewById(R.id.tvRightChat)
+        val date : TextView = itemView.findViewById(R.id.tvDate)
     }
 }

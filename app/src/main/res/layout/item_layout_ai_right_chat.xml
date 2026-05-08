@@ -19,6 +19,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"/>
 
+
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvRightChat"
             style="@style/TextView_500_Medium"
@@ -33,6 +35,18 @@
             android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.?"
             app:layout_constraintTop_toBottomOf="@id/profileImage"
             app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <TextView
+            android:id="@+id/tvDate"
+            style="@style/TextView_400_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:textColor="@color/text_gray"
+            app:layout_constraintTop_toBottomOf="@id/tvRightChat"
+            app:layout_constraintEnd_toEndOf="@id/tvRightChat" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

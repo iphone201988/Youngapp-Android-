@@ -334,7 +334,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
         viewModel.observeCommon.observe(this, Observer {
             when (it?.status) {
                 Status.LOADING -> {
-                         hideLoading()
+                         showLoading()
                 }
 
                 Status.SUCCESS -> {
@@ -782,7 +782,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() , BaseCustomDialog.List
 
                     "Research Engine" -> {
                         displayFragment(AiChatFragment())
-                        updateOtherUI("AI")
+                        updateOtherUI("Research Engine")
                     }
 
                     "Investment Plan" -> {

@@ -1841,6 +1841,72 @@ object BindingUtils {
         view.text = title
     }
 
+
+
+    enum class DocumentVerified(val value: String) {
+
+        VERIFIED("approved"),
+        REJECTED("declined"),
+        IN_REVIEW("in_review"),
+        REJECT("reject"),
+        EXPIRED("expired"),
+        PAID("paid");
+
+        val title: String
+            get() = when (this) {
+                VERIFIED -> "Verified"
+                REJECTED, REJECT -> "Verify yourself"
+                IN_REVIEW -> "In review"
+                EXPIRED -> "Expired"
+                PAID -> "Paid"
+            }
+
+        companion object {
+
+            fun fromValue(value: String?): DocumentVerified {
+                return entries.firstOrNull {
+                    it.value.equals(value, ignoreCase = true)
+                } ?: IN_REVIEW
+            }
+        }
+    }
+
+    @BindingAdapter("documentStatus")
+    @JvmStatic
+    fun documentStatus(button: TextView, statusValue: String?) {
+
+        val status = DocumentVerified.fromValue(statusValue)
+
+        val colorRes = when (status) {
+
+            DocumentVerified.VERIFIED -> {
+                button.text = "Live your Ads"
+                button.isEnabled = true
+                R.color.green
+            }
+
+            DocumentVerified.REJECT,
+            DocumentVerified.REJECTED -> {
+                button.text = "Your ads request rejected"
+                button.isEnabled = false
+                R.color.reject_btn
+            }
+
+            else -> {
+                button.text = status.title
+                button.isEnabled = false
+                R.color.yellow_star
+            }
+        }
+
+        // Keeps rounded corners intact
+        button.backgroundTintList =
+            ColorStateList.valueOf(
+                ContextCompat.getColor(button.context, colorRes)
+            )
+    }
+
+
     @BindingAdapter("checkState")
     @JvmStatic
     fun setCheckState(imageView: AppCompatImageView, isChecked: Boolean?) {
@@ -1852,5 +1918,17 @@ object BindingUtils {
     }
 
 
+    @BindingAdapter("adsPlan")
+    @JvmStatic
+    fun adsPlan(textView: TextView, plan: String?) {
+
+        textView.text = when (plan?.trim()?.lowercase()) {
+
+            "one_month" -> "$250 - 1 Month"
+
+
+            else -> "-"
+        }
+    }
 
 }

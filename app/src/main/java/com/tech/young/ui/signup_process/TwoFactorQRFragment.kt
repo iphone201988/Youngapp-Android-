@@ -73,7 +73,7 @@ class TwoFactorQRFragment : BaseFragment<FragmentTwoFactorQrBinding>() {
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when (it?.status) {
                 Status.LOADING -> {
-                         hideLoading()
+                         showLoading()
                 }
 
                 Status.SUCCESS -> {

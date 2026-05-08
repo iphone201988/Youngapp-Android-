@@ -40,23 +40,22 @@ import com.tech.young.base.utils.showToast
 import com.tech.young.data.DropDownData
 import com.tech.young.data.api.Constants
 import com.tech.young.data.api.SimpleApiResponse
-import com.tech.young.data.model.DummyLists.getAgeList
+import com.tech.young.data.model.Ad
 import com.tech.young.data.model.DummyLists.getPLanList
 import com.tech.young.data.model.GetAdsAPiResponse
+import com.tech.young.data.model.GetMyAdsApiResponse
 import com.tech.young.databinding.AdsItemViewBinding
 import com.tech.young.databinding.BottomSheetCameraGalleryBinding
 import com.tech.young.databinding.BotttomSheetTopicsBinding
 import com.tech.young.databinding.FragmentAdvertiseBinding
+import com.tech.young.databinding.ItemLayoutAdvertiseBinding
 import com.tech.young.databinding.ItemLayoutAdvertisePopupBinding
 import com.tech.young.databinding.ItemLayoutDropDownBinding
-import com.tech.young.ui.home.HomeActivity
-import com.tech.young.ui.signup_process.RegistrationDataHolder
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
-import kotlin.math.log
 
 @AndroidEntryPoint
 class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() , BaseCustomBottomSheet.Listener {
@@ -67,10 +66,11 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() , BaseCustomB
     private lateinit var planBottomSheet : BaseCustomBottomSheet<BotttomSheetTopicsBinding>
     private lateinit var planAdapter : SimpleRecyclerViewAdapter<DropDownData, ItemLayoutDropDownBinding>
 
+    private lateinit var myAdsAdapter : SimpleRecyclerViewAdapter<Ad , ItemLayoutAdvertiseBinding>
+
     private var selectedPlan : String ?= null
 
 
-    private var select = 0
     private var selectedImagePart: MultipartBody.Part? = null
 
     //// camera
@@ -108,19 +108,29 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() , BaseCustomB
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when(it?.status){
                 Status.LOADING ->{
-                              hideLoading()
+                    if (it.message == "getMyAds") {
+                        binding.shimmerLayout.visibility = View.VISIBLE
+                        binding.shimmerLayout.startShimmer()
+                        binding.rvAdvertise.visibility = View.GONE
+                        binding.tvNoDataFound.visibility = View.GONE
+                    } else {
+                        showLoading()
+                    }
                 }
                 Status.SUCCESS ->{
+                    binding.shimmerLayout.stopShimmer()
+                    binding.shimmerLayout.visibility = View.GONE
                     hideLoading()
                     when(it.message){
                         "advertise" ->{
                             val myDataModel : SimpleApiResponse ? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
-                                showToast(myDataModel.message.toString())
-                                val intent = Intent(requireContext(), HomeActivity :: class.java)
-                                startActivity(intent)
-                                requireActivity().finishAffinity()
                                 showDialog()
+
+                                binding.nestedScrollView.visibility = View.GONE
+                                binding.addAdvertise.visibility = View.VISIBLE
+                                binding.rvAdvertise.visibility = View.VISIBLE
+                                viewModel.getMyAds(Constants.GET_MY_ADS)
                             }
                         }
                         "getAds" ->{
@@ -131,9 +141,32 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() , BaseCustomB
                                 }
                             }
                         }
+
+                        "getMyAds" -> {
+
+                            val myDataModel: GetMyAdsApiResponse? =
+                                BindingUtils.parseJson(it.data.toString())
+
+                            val adsList = myDataModel?.data?.ads.orEmpty()
+
+                            if (adsList.isNotEmpty()) {
+
+                                myAdsAdapter.list = adsList
+
+                                binding.rvAdvertise.visibility = View.VISIBLE
+                                binding.tvNoDataFound.visibility = View.GONE
+
+                            } else {
+
+                                binding.rvAdvertise.visibility = View.GONE
+                                binding.tvNoDataFound.visibility = View.VISIBLE
+                            }
+                        }
                     }
                 }
                 Status.ERROR ->{
+                    binding.shimmerLayout.stopShimmer()
+                    binding.shimmerLayout.visibility = View.GONE
                     hideLoading()
                     showToast(it.message.toString())
                 }
@@ -162,14 +195,13 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() , BaseCustomB
 
                         imageUri?.let { uri ->
                             val fileName = getFileNameFromUri(requireContext(), uri)
-                            binding.etUploadFile.setText(fileName)
+                            binding.etFormUploadFile.setText(fileName)
                         }
                         selectedImagePart = BindingUtils.createImageMultipartFromUri(
                             requireContext(),
                             imageUri!!,
-                            "file" // <-- or any string key like "profile", "photo"
+                            "file"
                         )
-                        Log.i("ImageUpload", "galleryLauncher: $imageUri")
                     }
                 }
             }
@@ -216,15 +248,11 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() , BaseCustomB
     private val permissionResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             for (it in permissions.entries) {
-                it.key
                 val isGranted = it.value
                 allGranted = isGranted
             }
-            when {
-                allGranted -> {
-                    selectImage()
-                }
-
+            if (allGranted) {
+                selectImage()
             }
         }
 
@@ -241,22 +269,20 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() , BaseCustomB
             when(it?.id){
                 R.id.ivCheck -> {
                         isChecked = !isChecked
-                        // update UI if using data binding
                         binding.check = isChecked
-
                 }
-                R.id.etUploadFile ->{
-                cameraGalleryBottomSheet.show()
+                R.id.etFormUploadFile ->{
+                    cameraGalleryBottomSheet.show()
                 }
 
-                R.id.tvSubmit->{
+                R.id.tvFormSubmit->{
                     if (isEmptyField()){
                         val data = HashMap<String,RequestBody>()
-                        data["name"] = binding.etName.text.toString().trim().toRequestBody()
-                        data["company"] = binding.etCompany.text.toString().trim().toRequestBody()
-                        data["email"] = binding.etEmail.text.toString().trim().toRequestBody()
-                        data["website"] = binding.etWebsite.text.toString().trim().toRequestBody()
-                        data["adsPlan"] = binding.etPlan.text.toString().trim().toRequestBody()
+                        data["name"] = binding.etFormName.text.toString().trim().toRequestBody()
+                        data["company"] = binding.etFormCompany.text.toString().trim().toRequestBody()
+                        data["email"] = binding.etFormEmail.text.toString().trim().toRequestBody()
+                        data["website"] = binding.etFormWebsite.text.toString().trim().toRequestBody()
+                        data["adsPlan"] = selectedPlan.toString().toRequestBody()
 
                         if (selectedImagePart != null){
                             viewModel.advertise(data,Constants.GET_ADS,selectedImagePart)
@@ -265,12 +291,16 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() , BaseCustomB
                             showToast("Please select image")
                         }
                     }
-
-
-//                    showDialog()
                 }
 
-                R.id.etPlan ->{
+
+                R.id.addAdvertise ->{
+                    binding.nestedScrollView.visibility = View.VISIBLE
+                    binding.addAdvertise.visibility = View.GONE
+                    binding.rvAdvertise.visibility = View.GONE
+                }
+
+                R.id.etFormPlan ->{
                     planBottomSheet.show()
                 }
 
@@ -280,40 +310,29 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() , BaseCustomB
 
     private fun initAdapter() {
         adsAdapter = SimpleRecyclerViewAdapter(R.layout.ads_item_view, BR.bean) { v, m, pos ->
-            when (v.id) {
-
-            }
         }
-        binding.rvAds.adapter = adsAdapter
 
         planAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_drop_down, BR.bean) { v, m, pos ->
             when (v.id) {
                 R.id.consMain, R.id.title -> {
-                    binding.etPlan.setText(m.title)
+                    binding.etFormPlan.setText(m.title)
                     when(m.title){
                         "$250- 1 month" ->{
                             selectedPlan = "one_month"
                         }
-//                        "$1,250- 6 months" ->{
-//                            selectedPlan = "six_month"
-//                        }
-//                        "$2,000- 1 year" ->{
-//                            selectedPlan = "one_year"
-//                        }
-
                     }
-                    Log.i("selectedPlan", "initAdapter: $selectedPlan")
                     planBottomSheet.dismiss()
                 }
             }
         }
         planBottomSheet.binding.rvTopics.adapter = planAdapter
         planAdapter.list = getPLanList()
-    }
 
-    private var getList = listOf(
-        "", "", "", "", ""
-    )
+        myAdsAdapter = SimpleRecyclerViewAdapter(R.layout.item_layout_advertise, BR.bean) { v, m, pos ->
+        }
+        binding.rvAdvertise.adapter = myAdsAdapter
+
+    }
 
     /** dialog **/
     private fun showDialog() {
@@ -378,14 +397,13 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() , BaseCustomB
                     if (photoURI != null) {
                         photoURI?.let { uri ->
                             val fileName = getFileNameFromUri(requireContext(), uri)
-                            binding.etUploadFile.setText(fileName)
+                            binding.etFormUploadFile.setText(fileName)
                         }
                         selectedImagePart = BindingUtils.createImageMultipartFromUri(
                             requireContext(),
                             photoURI!!,
-                            "file" // or appropriate key
+                            "file"
                         )
-                        Log.i("ImageUpload", "cameraLauncher: $photoURI")
                     }
                 } catch (ex: Exception) {
                     ex.printStackTrace()
@@ -419,27 +437,27 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() , BaseCustomB
     }
 
     private fun isEmptyField() : Boolean {
-        if (TextUtils.isEmpty(binding.etName.text.toString().trim())){
+        if (TextUtils.isEmpty(binding.etFormName.text.toString().trim())){
             showToast("Please enter name")
             return false
         }
-        if (TextUtils.isEmpty(binding.etCompany.text.toString().trim())){
+        if (TextUtils.isEmpty(binding.etFormCompany.text.toString().trim())){
             showToast("Please enter company")
             return false
         }
-        if (TextUtils.isEmpty(binding.etEmail.text.toString().trim())){
+        if (TextUtils.isEmpty(binding.etFormEmail.text.toString().trim())){
             showToast("Please enter email")
             return false
         }
-        if (TextUtils.isEmpty(binding.etWebsite.text.toString().trim())){
+        if (TextUtils.isEmpty(binding.etFormWebsite.text.toString().trim())){
             showToast("Please enter website")
             return false
         }
-        if (TextUtils.isEmpty(binding.etUploadFile.text.toString().trim())){
+        if (TextUtils.isEmpty(binding.etFormUploadFile.text.toString().trim())){
             showToast("Please select image")
             return false
         }
-        if (TextUtils.isEmpty(binding.etPlan.text.toString().trim())){
+        if (TextUtils.isEmpty(binding.etFormPlan.text.toString().trim())){
             showToast("Please select plan")
             return false
         }
@@ -455,5 +473,9 @@ class AdvertiseFragment : BaseFragment<FragmentAdvertiseBinding>() , BaseCustomB
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getMyAds(Constants.GET_MY_ADS)
+    }
 
 }

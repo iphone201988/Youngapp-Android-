@@ -5,6 +5,7 @@ import java.util.TimeZone
 
 
 object Constants {
+
     const val BASE_URL = BuildConfig.BASE_URL
     const val BASE_URL_IMAGE = BuildConfig.BASE_URL_IMAGE
 
@@ -105,6 +106,10 @@ object Constants {
 
 
     const val ACCEPT_REJECT_EVENT = "event/respond"
+
+    const val GET_MY_ADS = "ads/getMyAds"
+    const val GET_TRENDING_TOPIC_DETAIL = "post/getPostsByTrendingTopic"
+
 
 
     /*************** Temp value store****************/

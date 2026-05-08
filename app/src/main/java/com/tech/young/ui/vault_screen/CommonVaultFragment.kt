@@ -48,6 +48,7 @@ import com.github.dhaval2404.imagepicker.util.FileUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.tech.young.base.permission.PermissionHandler
 import com.tech.young.base.permission.Permissions
+import com.tech.young.data.model.CreateVaultApiResponse
 import com.tech.young.data.model.GetAdsAPiResponse
 import com.tech.young.data.model.MenuItem
 import com.tech.young.databinding.BottomSheetCameraGalleryBinding
@@ -56,6 +57,7 @@ import com.tech.young.ui.exchange.ExchangeFragment
 import com.tech.young.ui.my_profile_screens.common_ui.EditProfileDetailFragment
 import com.tech.young.ui.share_screen.ExpandableMenuAdapter
 import com.tech.young.ui.vault_screen.people_screen.PeopleFragment
+import com.tech.young.ui.vault_screen.vault_room.VaultRoomFragment
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -88,8 +90,8 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
     private var selectedCategory = ArrayList<DropDownData>()
     private var selectedPlayer = ArrayList<String>()
 
-    private var visibilityMode : String = "public"
-    private var isFoundersRoom : Boolean = true
+    private var visibilityMode : String = "private"
+    private var isFoundersRoom : Boolean = false
 
     private var selectedTopicsJson: String = ""
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
@@ -130,6 +132,14 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
         // observer
         initObserver()
 
+        val role =  sharedPrefManager.getLoginData()?.role
+        val isFounderRole = role in setOf("small_business", "startup", "investor")
+
+        binding.setFounderDefault.visibility =
+            if (isFounderRole) View.VISIBLE else View.GONE
+
+        binding.etFounderMode.visibility =
+            if (isFounderRole) View.VISIBLE else View.GONE
 
         binding.setFounderDefault.setOnCheckedChangeListener { _, isChecked ->
             isFoundersRoom = isChecked
@@ -536,10 +546,23 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
                     hideLoading()
                     when(it.message){
                         "createVault"  ->{
-                            val myDataModel : GetUserApiResponse? = BindingUtils.parseJson(it.data.toString())
+                            val myDataModel : CreateVaultApiResponse? = BindingUtils.parseJson(it.data.toString())
                             if (myDataModel != null){
-                                showToast(myDataModel.message.toString())
-                                requireActivity().onBackPressedDispatcher.onBackPressed()
+                                if (myDataModel.vault != null){
+                                    showToast(myDataModel.message.toString())
+                                    val fragment = VaultRoomFragment().apply {
+                                        arguments = Bundle().apply {
+                                            putString("vaultId", myDataModel.vault._id)
+                                        }
+                                    }
+
+                                    requireActivity().supportFragmentManager.beginTransaction()
+                                        .replace(R.id.frameLayout, fragment)
+                                        .addToBackStack(null)
+                                        .commit()
+                                }
+
+
                             }
                         }
                         "getAds" ->{
@@ -592,15 +615,16 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
                 groupedTopics[roleKey]?.add(child.title)
             }
 
+
             if (groupedTopics.isEmpty()) {
                 selectedTopicsJson = ""
                 binding.etTopic.setText("")
             } else {
-                // Build JSON string manually
-                val jsonEntries = groupedTopics.map { (header, children) ->
-                    "\"$header\": [${children.joinToString(", ") { "\"$it\"" }}]"
-                }
-                selectedTopicsJson = "{ ${jsonEntries.joinToString(", ")} }"
+
+                // Comma separated string
+                selectedTopicsJson = groupedTopics
+                    .flatMap { (_, children) -> children }
+                    .joinToString(",")
 
                 val displayValues = selectedItems.joinToString(", ") { it.title }
                 binding.etTopic.setText(displayValues)
@@ -633,8 +657,8 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
                         header.children.any { it.title.equals(m.title, ignoreCase = true) }
                     }?.title ?: "Other"
 
-                    val roleKey = getHeaderKey(parentHeader)
-                    selectedTopicsJson = "{ \"$roleKey\": [\"${m.title}\"] }"
+//                    val roleKey = getHeaderKey(parentHeader)
+//                    selectedTopicsJson = "{ \"$roleKey\": [\"${m.title}\"] }"
 
                     topicBottomSheet.dismiss()
                 }
@@ -735,10 +759,10 @@ class CommonVaultFragment : BaseFragment<FragmentCommonVaultBinding>()  , BaseCu
             showToast("Please enter description")
             return false
         }
-        if (selectedUserId.isEmpty()){
-            showToast("Please choose users")
-            return false
-        }
+//        if (selectedUserId.isEmpty()){
+//            showToast("Please choose users")
+//            return false
+//        }
 
         return true
     }

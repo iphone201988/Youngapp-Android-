@@ -181,6 +181,9 @@ data class TrendingTopicApiResponse(
     }
 }
 
+
+
+
 /******************* get profile api response ********************/
 @Parcelize
 data class GetProfileApiResponse(
@@ -582,6 +585,8 @@ data class GetSavedPostApiResponse(
 }
 
 
+
+
 /******************* get chat api response ********************/
 //data class GetChatApiResponse(
 //    var `data`: Data?,
@@ -741,6 +746,110 @@ data class GetUserApiResponse(
         var limit: Int?, var page: Int?, var totalPages: Int?
     )
 }
+
+// create vault api response
+
+data class CreateVaultApiResponse(
+    val message: String?,
+    val success: Boolean?,
+    val vault: CreateVaultApiResponseVault?
+)
+
+data class CreateVaultApiResponseVault(
+    val __v: Int?,
+    val _id: String?,
+    val access: String?,
+    val admin: Admin?,
+    val category: List<String?>?,
+    val createdAt: String?,
+    val description: String?,
+    val isDeleted: Boolean?,
+    val isFoundersRoom: Boolean?,
+    val members: List<Any?>?,
+    val title: String?,
+    val topic: List<String?>?,
+    val updatedAt: String?
+)
+
+data class Admin(
+    val DEIImportance: String?,
+    val ESGPriority: String?,
+    val __v: Int?,
+    val _id: String?,
+    val additionalPhotos: List<String?>?,
+    val age: String?,
+    val children: String?,
+    val communityReinvestmentImportance: String?,
+    val countryCode: String?,
+    val createdAt: String?,
+    val cryptoInvestments: String?,
+    val deviceToken: String?,
+    val deviceType: Int?,
+    val email: String?,
+    val emergencyFund: String?,
+    val employmentStatus: String?,
+    val financialExperience: String?,
+    val firstName: String?,
+    val formUpload: List<String?>?,
+    val gender: String?,
+    val goals: String?,
+    val homeOwnerShip: String?,
+    val investValueAlignment: Boolean?,
+    val investmentAccounts: Boolean?,
+    val investmentHorizone: String?,
+    val investmentInterests: String?,
+    val investmentRealEstate: Boolean?,
+    val investments: String?,
+    val is2FAEnabled: Boolean?,
+    val isCrdNumberVerified: Boolean?,
+    val isDeactivated: Boolean?,
+    val isDeactivatedByUser: Boolean?,
+    val isDeleted: Boolean?,
+    val isOnline: Boolean?,
+    val isRegistrationCompleted: Boolean?,
+    val isVerified: Boolean?,
+    val jti: String?,
+    val lastActivityAt: String?,
+    val lastLogin: String?,
+    val lastName: String?,
+    val location: CreateVaultApiResponseLocation?,
+    val maritalStatus: String?,
+    val netWorthEstimate: String?,
+    val objective: String?,
+    val occupation: String?,
+    val otherSecurityInvestments: String?,
+    val otpVerified: Boolean?,
+    val password: String?,
+    val phone: String?,
+    val politicalAffection: String?,
+    val primaryInvestmentGoal: String?,
+    val profileImage: String?,
+    val realEstate: String?,
+    val residenceStatus: String?,
+    val retirement: Boolean?,
+    val retirementAccount: String?,
+    val riskTolerance: String?,
+    val role: String?,
+    val salaryRange: String?,
+    val savings: String?,
+    val secret: String?,
+    val seekFromInvestment: String?,
+    val servicesInterested: String?,
+    val specificCryptoSymbols: String?,
+    val specificStockSymbols: String?,
+    val startups: String?,
+    val stockInvestments: String?,
+    val timezone: String?,
+    val topicsOfInterest: List<String?>?,
+    val updatedAt: String?,
+    val username: String?,
+    val yearsEmployed: String?
+)
+
+data class CreateVaultApiResponseLocation(
+    val coordinates: List<Double?>?,
+    val type: String?
+)
 
 /******************* get chat message   api response ********************/
 data class GetChatMessageApiResponse(
@@ -997,13 +1106,15 @@ data class VaultDetailApiResponse(
             var admin: Admin?,
             var category: List<String?>?,
             var chatId: String?,
+            val isFoundersRoom: Boolean?,
             var createdAt: String?,
             var description: String?,
             var isMember: Boolean?,
             var image: String?,
             var members: List<Member?>?,
             var title: String?,
-            var topic: String?
+            val topic: List<String?>?
+
         ) {
             data class Admin(
                 var _id: String?,
@@ -1023,6 +1134,11 @@ data class VaultDetailApiResponse(
         }
     }
 }
+
+
+
+
+
 
 /******************* get vault detail api  response ********************/
 data class JoinVaultRoomApiResponse(
@@ -2901,5 +3017,35 @@ data class PerformanceDetailApiResponse(
 data class PerformanceDetailApiResponseData(
     val month: String,
     val value: Int
+)
+
+
+
+// get My ads api response
+
+data class GetMyAdsApiResponse(
+    val `data`: GetMyAdsApiResponseData?,
+    val message: String?,
+    val success: Boolean?
+)
+
+data class GetMyAdsApiResponseData(
+    val ads: List<Ad?>?
+)
+
+data class Ad(
+    val __v: Int?,
+    val _id: String?,
+    val approvedAt: String?,
+    val company: String?,
+    val createdAt: String?,
+    val email: String?,
+    val `file`: String?,
+    val name: String?,
+    val status: String?,
+    val updatedAt: String?,
+    val userId: String?,
+    val website: String?,
+    val adsPlan : String?
 )
 

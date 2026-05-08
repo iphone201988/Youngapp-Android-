@@ -35,7 +35,7 @@ class AddPaymentFragment : BaseFragment<FragmentAddPaymentBinding>() {
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when (it?.status) {
                 Status.LOADING -> {
-                         hideLoading()
+                         showLoading()
                 }
 
                 Status.SUCCESS -> {

@@ -296,7 +296,7 @@
                     android:layout_height="@dimen/_30sdp"
                     android:thumb="@drawable/switch_thumb"
                     app:track="@drawable/switch_track"
-                    android:checked="true"
+                    android:checked="false"
                     app:layout_constraintTop_toTopOf="@id/etVisibilityMode"
                     app:layout_constraintBottom_toBottomOf="@id/etVisibilityMode"
                     app:layout_constraintEnd_toEndOf="@id/etVisibilityMode"/>
@@ -339,7 +339,7 @@
                     android:layout_height="@dimen/_30sdp"
                     android:thumb="@drawable/switch_thumb"
                     app:track="@drawable/switch_track"
-                    android:checked="true"
+                    android:checked="false"
                     app:layout_constraintTop_toTopOf="@id/etFounderMode"
                     app:layout_constraintBottom_toBottomOf="@id/etFounderMode"
                     app:layout_constraintEnd_toEndOf="@id/etFounderMode"/>

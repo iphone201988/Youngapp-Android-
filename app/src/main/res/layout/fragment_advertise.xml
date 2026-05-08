@@ -58,290 +58,338 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        android:layout_marginBottom="@dimen/_10sdp"
-        android:fitsSystemWindows="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/clTopBar"
-        app:layout_constraintStart_toStartOf="@id/clTopBar"
-        app:layout_constraintEnd_toEndOf="@id/clTopBar">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvAdvertiseWithUs"
-            style="@style/TextView_600_SemiBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Advertise with us!"
-            android:textSize="@dimen/_14ssp"
-            android:textColor="@color/black"
-            android:layout_marginTop="@dimen/_20sdp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvName"
-            style="@style/TextView_500_Medium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/name"
-            android:layout_marginTop="@dimen/_12sdp"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvAdvertiseWithUs" />
-
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/etName"
-            style="@style/TextView_400_Regular"
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_42sdp"
-            android:layout_marginTop="@dimen/_3sdp"
-            android:background="@drawable/radius_border_gray"
-            android:gravity="start|center"
-            android:hint="Name"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:singleLine="true"
-            android:textColorHint="@color/text_gray"
-            app:layout_constraintTop_toBottomOf="@+id/tvName" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvCompany"
-            style="@style/TextView_500_Medium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/company"
-            android:layout_marginTop="@dimen/_12sdp"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etName" />
-
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/etCompany"
-            style="@style/TextView_400_Regular"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_42sdp"
-            android:layout_marginTop="@dimen/_3sdp"
-            android:background="@drawable/radius_border_gray"
-            android:gravity="start|center"
-            android:inputType="textCapSentences"
-            android:hint="Company"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:singleLine="true"
-            android:textColorHint="@color/text_gray"
-            app:layout_constraintTop_toBottomOf="@+id/tvCompany" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvEmail"
-            style="@style/TextView_500_Medium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/email"
-            android:layout_marginTop="@dimen/_12sdp"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etCompany" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/etEmail"
-            style="@style/TextView_400_Regular"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_42sdp"
-            android:layout_marginTop="@dimen/_3sdp"
-            android:background="@drawable/radius_border_gray"
-            android:gravity="start|center"
-            android:hint="Email"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:singleLine="true"
-            android:textColorHint="@color/text_gray"
-            app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvWebsite"
-            style="@style/TextView_500_Medium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/website"
-            android:layout_marginTop="@dimen/_12sdp"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etEmail" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/etWebsite"
-            style="@style/TextView_400_Regular"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_42sdp"
-            android:layout_marginTop="@dimen/_3sdp"
-            android:background="@drawable/radius_border_gray"
-            android:gravity="start|center"
-            android:inputType="textCapSentences"
-            android:hint="Website"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:singleLine="true"
-            android:textColorHint="@color/text_gray"
-            app:layout_constraintTop_toBottomOf="@+id/tvWebsite" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvPlan"
-            style="@style/TextView_500_Medium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/plan"
-            android:layout_marginTop="@dimen/_12sdp"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etWebsite" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/etPlan"
-            style="@style/TextView_400_Regular"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_42sdp"
-            android:layout_marginTop="@dimen/_3sdp"
-            android:background="@drawable/radius_border_gray"
-            android:gravity="start|center"
-            android:inputType="textCapSentences"
-            android:hint="$250 for 1 month"
-            android:focusable="false"
-            android:onClick="@{v -> vm.onClick(v)}"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:singleLine="true"
-            android:textColorHint="@color/text_gray"
-            app:layout_constraintTop_toBottomOf="@+id/tvPlan" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:src="@drawable/iv_dropdown"
-            app:layout_constraintBottom_toBottomOf="@+id/etPlan"
-            app:layout_constraintEnd_toEndOf="@+id/etPlan"
-            app:layout_constraintTop_toTopOf="@+id/etPlan" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvUploadFile"
-            style="@style/TextView_500_Medium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/upload_file"
-            android:layout_marginTop="@dimen/_12sdp"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etPlan" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/etUploadFile"
-            style="@style/TextView_400_Regular"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_42sdp"
-            android:layout_marginTop="@dimen/_3sdp"
-            android:onClick="@{v -> vm.onClick(v)}"
-            android:focusable="false"
-            android:paddingEnd="@dimen/_40sdp"
-            android:background="@drawable/radius_border_gray"
-            android:gravity="start|center"
-            android:hint="Upload file"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:singleLine="true"
-            android:textColorHint="@color/text_gray"
-            app:layout_constraintTop_toBottomOf="@+id/tvUploadFile" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="@dimen/_16sdp"
-            android:layout_height="@dimen/_16sdp"
-            android:src="@drawable/iv_upload_doc"
-            android:layout_marginEnd="@dimen/_10sdp"
-            app:layout_constraintTop_toTopOf="@id/etUploadFile"
-            app:layout_constraintEnd_toEndOf="@id/etUploadFile"
-            app:layout_constraintBottom_toBottomOf="@id/etUploadFile"/>
-
-        <TextView
-            android:id="@+id/description"
-            style="@style/TextView_400_Regular"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_gray"
-            android:textSize="@dimen/_14ssp"
-            android:text="@string/the_minimum_size_should_be_30_mb_or_1000_x_1000_pixels"
-            app:layout_constraintTop_toBottomOf="@id/etUploadFile"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivCheck"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:onClick="@{v->vm.onClick(v)}"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:src="@{check ? @drawable/ic_check_selected :@drawable/ic_check_unselected}"
-            android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/description"/>
-
-        <TextView
-            android:id="@+id/tvAgreePolicy"
-            style="@style/TextView_400_Regular"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/_14ssp"
-            android:textColor="@color/text_gray"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:text="*Agree to policies and agreements."
-            app:layout_constraintTop_toTopOf="@id/ivCheck"
-            app:layout_constraintStart_toEndOf="@id/ivCheck"
-            app:layout_constraintBottom_toBottomOf="@id/ivCheck"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvSubmit"
-            style="@style/TextView_500_Medium"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_42sdp"
-            android:layout_marginTop="@dimen/_30sdp"
-            android:background="@drawable/corner_radius_10"
-            android:gravity="center"
-            android:onClick="@{v ->vm.onClick(v)}"
-            android:text="@string/submit"
-            android:textColor="@color/white"
-            android:visibility="visible"
-            app:layout_constraintTop_toBottomOf="@id/tvAgreePolicy"/>
-
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvAds"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            style="@style/TextView_600_SemiBold"
+            android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_10sdp"
-            android:text="@string/ads"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvSubmit"
-            />
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvAds"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
-            android:orientation="horizontal"
-            tools:itemCount="5"
-            tools:listitem="@layout/ads_item_view"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@id/tvAds" />
+            app:layout_constraintBottom_toBottomOf="parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/shimmer_item_advertise" />
+                <include layout="@layout/shimmer_item_advertise" />
+                <include layout="@layout/shimmer_item_advertise" />
+
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAdvertise"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/addAdvertise"
+            android:layout_width="@dimen/_44sdp"
+            android:layout_height="@dimen/_44sdp"
+            android:src="@drawable/iv_add_icon"
+            android:layout_marginBottom="@dimen/_30sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:onClick="@{v -> vm.onClick(v)}"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNoDataFound"
+            style="@style/TextView_500_Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_14ssp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textColor="@color/text_gray"
+            android:text="@string/no_existing_ads_found_start_by_creating_a_new_one"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            android:visibility="gone"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:fitsSystemWindows="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clTopBar"
+            app:layout_constraintStart_toStartOf="@id/clTopBar"
+            app:layout_constraintEnd_toEndOf="@id/clTopBar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvAdvertiseWithUs"
+                    style="@style/TextView_600_SemiBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Advertise with us!"
+                    android:textSize="@dimen/_14ssp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvFormNameLabel"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/name"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAdvertiseWithUs" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etFormName"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Name"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFormNameLabel" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvFormCompanyLabel"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/company"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etFormName" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etFormCompany"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:inputType="textCapSentences"
+                    android:hint="Company"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFormCompanyLabel" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvFormEmailLabel"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/email"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etFormCompany" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etFormEmail"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Email"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFormEmailLabel" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvFormWebsiteLabel"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/website"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etFormEmail" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etFormWebsite"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:inputType="textCapSentences"
+                    android:hint="Website"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFormWebsiteLabel" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvFormPlanLabel"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/plan"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etFormWebsite" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etFormPlan"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:inputType="textCapSentences"
+                    android:hint="$250 for 1 month"
+                    android:focusable="false"
+                    android:onClick="@{v -> vm.onClick(v)}"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFormPlanLabel" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/iv_dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/etFormPlan"
+                    app:layout_constraintEnd_toEndOf="@+id/etFormPlan"
+                    app:layout_constraintTop_toTopOf="@+id/etFormPlan" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvFormUploadFileLabel"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/upload_file"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etFormPlan" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etFormUploadFile"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:onClick="@{v -> vm.onClick(v)}"
+                    android:focusable="false"
+                    android:paddingEnd="@dimen/_40sdp"
+                    android:background="@drawable/radius_border_gray"
+                    android:gravity="start|center"
+                    android:hint="Upload file"
+                    android:paddingHorizontal="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/text_gray"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFormUploadFileLabel" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
+                    android:src="@drawable/iv_upload_doc"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    app:layout_constraintTop_toTopOf="@id/etFormUploadFile"
+                    app:layout_constraintEnd_toEndOf="@id/etFormUploadFile"
+                    app:layout_constraintBottom_toBottomOf="@id/etFormUploadFile"/>
+
+                <TextView
+                    android:id="@+id/description"
+                    style="@style/TextView_400_Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_gray"
+                    android:textSize="@dimen/_14ssp"
+                    android:text="@string/the_minimum_size_should_be_30_mb_or_1000_x_1000_pixels"
+                    app:layout_constraintTop_toBottomOf="@id/etFormUploadFile"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivCheck"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:onClick="@{v->vm.onClick(v)}"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:src="@{check ? @drawable/ic_check_selected :@drawable/ic_check_unselected}"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/description"/>
+
+                <TextView
+                    android:id="@+id/tvAgreePolicy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/TextView_400_Regular"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:textColor="@color/text_gray"
+                    android:text="*Agree to policies and agreements."
+                    app:layout_constraintTop_toTopOf="@id/ivCheck"
+                    app:layout_constraintBottom_toBottomOf="@id/ivCheck"
+                    app:layout_constraintStart_toEndOf="@id/ivCheck"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvFormSubmit"
+                    style="@style/TextView_500_Medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:background="@drawable/corner_radius_10"
+                    android:gravity="center"
+                    android:text="@string/submit"
+                    android:onClick="@{v -> vm.onClick(v)}"
+                    android:textColor="@color/white"
+                    app:layout_constraintTop_toBottomOf="@id/tvAgreePolicy"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30sdp"
+                    app:layout_constraintTop_toBottomOf="@id/tvFormSubmit"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

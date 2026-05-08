@@ -47,6 +47,7 @@ import com.tech.young.ui.my_share.MyShareFragment
 import com.tech.young.ui.share_screen.CommonShareFragment
 import com.tech.young.ui.stream_screen.CommonStreamFragment
 import com.tech.young.ui.streaming_activity.StreamActivity
+import com.tech.young.ui.trending_topic_detail.TrendingTopicDetailFragment
 import com.tech.young.ui.vault_screen.CommonVaultFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -684,6 +685,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 when (view.id) {
                     R.id.consMain -> {
                         // Handle click
+                        val fragment = TrendingTopicDetailFragment().apply {
+                            arguments = Bundle().apply {
+                               putString("topic", bean.topic)
+                            }
+                        }
+
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.frameLayout, fragment)
+                            .addToBackStack(null)
+                            .commit()
                     }
                 }
             }

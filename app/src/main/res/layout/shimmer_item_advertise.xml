@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/_10sdp"
+    android:layout_marginBottom="@dimen/_10sdp"
+    android:background="@drawable/profile_share_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/_8sdp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Image placeholder -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:background="#E0E0E0" />
+
+        <!-- Label placeholder -->
+        <View
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_14sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:background="#E0E0E0" />
+
+        <!-- Input placeholder -->
+        <View
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="#E0E0E0" />
+
+        <!-- Label placeholder -->
+        <View
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_14sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:background="#E0E0E0" />
+
+        <!-- Input placeholder -->
+        <View
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="#E0E0E0" />
+
+        <!-- Button placeholder -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_42sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:background="#E0E0E0" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

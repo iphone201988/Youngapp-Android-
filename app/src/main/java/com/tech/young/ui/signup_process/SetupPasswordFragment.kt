@@ -58,7 +58,7 @@ class SetupPasswordFragment : BaseFragment<FragmentSetupPasswordBinding>() {
         viewModel.observeCommon.observe(viewLifecycleOwner, Observer {
             when (it?.status) {
                 Status.LOADING -> {
-                         hideLoading()
+                         showLoading()
                 }
 
                 Status.SUCCESS -> {

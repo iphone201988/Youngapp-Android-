@@ -302,4 +302,7 @@
     <string name="reject">Reject</string>
     <string name="accepted">Accepted</string>
     <string name="your_investment_portfolio">Your Investment Portfolio</string>
+    <string name="no_existing_ads_found_start_by_creating_a_new_one">No existing ads found. \nStart by creating a new one.</string>
+    <string name="don_t_worry_we_have_you_covered">Don’t worry. We have you covered.</string>
+    <string name="disclaimer_this_is_a_research_tool_and_not_an_official_recommendation_by_boom">Disclaimer - this is a research tool and not an official recommendation by Boom.</string>
 </resources>

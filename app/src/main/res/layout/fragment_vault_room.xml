@@ -11,6 +11,8 @@
         <variable
             name="bean"
             type="com.tech.young.data.model.VaultDetailApiResponse.Data" />
+
+        <import type="android.view.View"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -79,6 +81,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvFounderRoom"
+                    style="@style/TextView_600_SemiBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Founder Room"
+                    android:visibility="@{bean.vault.isFoundersRoom ? View.VISIBLE : View.GONE}"
+                    android:textSize="@dimen/_12ssp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="@dimen/_20sdp"/>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_14sdp"
+                    android:layout_height="@dimen/_14sdp"
+                    android:src="@drawable/ic_star"
+                    android:visibility="@{bean.vault.isFoundersRoom ? View.VISIBLE : View.GONE}"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    app:layout_constraintTop_toTopOf="@id/tvFounderRoom"
+                    app:layout_constraintBottom_toBottomOf="@id/tvFounderRoom"
+                    app:layout_constraintEnd_toStartOf="@id/tvFounderRoom"/>
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvTitle"
                     style="@style/TextView_600_SemiBold"
@@ -86,11 +112,11 @@
                     android:layout_height="wrap_content"
                     android:text="@{bean.vault.title}"
                     android:layout_marginEnd="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     app:layout_constraintEnd_toStartOf="@id/ivThreeDots"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/tvFounderRoom" />
 
 
                 <ImageView

@@ -70,7 +70,6 @@ class AiChatFragment : BaseFragment<FragmentAiChatBinding>() {
                     showToast(it.message ?: "Something went wrong")
                 }
                 Status.LOADING -> {
-                    // We don't call showProgress() here anymore because we use the typing animation
                 }
                 else -> {}
             }

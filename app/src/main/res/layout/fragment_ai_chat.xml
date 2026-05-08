@@ -16,7 +16,6 @@
         tools:context=".ui.ai_chat.AiChatFragment">
 
 
-
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etChat"
             style="@style/TextView_400_Regular"
@@ -62,18 +61,19 @@
             android:layout_width="@dimen/_62sdp"
             android:layout_height="@dimen/_62sdp"
             android:src="@drawable/app_logo"
-            android:layout_marginBottom="@dimen/_80sdp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toTopOf="@id/tvDes"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintVertical_bias="0.4"/>
 
 
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvDes"
             style="@style/TextView_500_Medium"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="@dimen/_16ssp"
             android:textColor="@color/colorPrimary"
@@ -81,6 +81,7 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:text="What security, portfolio, company, or other financial topics are on your mind?"
             app:layout_constraintTop_toBottomOf="@id/ivLogo"
+            app:layout_constraintBottom_toTopOf="@id/etChat"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
         
@@ -123,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:textColor="@color/gray"
-                android:text="Disclaimer - this is a research tool and not an official recommendation by Bloom."
+                android:text="@string/disclaimer_this_is_a_research_tool_and_not_an_official_recommendation_by_boom"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/ivInfo"

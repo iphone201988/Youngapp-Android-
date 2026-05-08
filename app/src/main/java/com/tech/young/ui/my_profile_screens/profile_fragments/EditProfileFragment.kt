@@ -118,7 +118,7 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(),BaseCusto
                     editMenuList=showList()
                 }
 
-                "financial_advisor" -> {
+                "financial_advisor", "life_insurance", "broker","investment_managers" -> {
                     // Advisor-specific logic
                     Log.d("RoleCheck", "Financial advisor")
                     editMenuList=showListForFinancialAdvisor()
